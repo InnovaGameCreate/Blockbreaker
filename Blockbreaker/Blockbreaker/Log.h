@@ -1,0 +1,28 @@
+#pragma once
+//ログ関連
+
+#include "MainFunc.h"
+
+//ログの種類(Noに入れる引数)エラー番号的な
+#define LOG_NULL			0x00000000	//分別無し
+
+static const int LOG_INTERVAL = 1000;	//ログを見やすくするために空行を入れるまでの時間(ミリ秒)
+
+
+
+
+/*Log.cpp*/
+extern void Log_Initialize();															//ログ関連の初期化
+extern void Log_print(Log_Type Type, TCHAR *fileName, TCHAR *func, int Line, unsigned int No, const TCHAR* message, ...);	//ログを出力(const TCHAR* messageからはprintfと同じように使用できます)
+extern void Log_setEnable(int b_flag);													//ログの出力を有効・無効にする
+extern void Log_SetThreadID(THREAD thread, DWORD threadID);								//スレッドIDの設定
+
+#ifdef _DEBUG
+																						//お手軽Log出力関数
+extern void Log_p(int value);
+extern void Log_p(double value);
+extern void Log_p(float value);
+extern void Log_p(TCHAR value);
+extern void Log_p(TCHAR *value);
+extern void Log_p(float X, float Y, float Z);
+#endif // _DEBUG
