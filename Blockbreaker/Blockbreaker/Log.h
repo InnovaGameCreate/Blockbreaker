@@ -6,6 +6,17 @@
 //ログの種類(Noに入れる引数)エラー番号的な
 #define LOG_NULL			0x00000000	//分別無し
 
+//Log_printの引数を最小限に抑えたマクロ
+#define printLog_I( fmt, ... )	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, fmt, __VA_ARGS__)
+#define printLog_C( fmt, ... )	Log_print(Log_Type_CAUTION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, fmt, __VA_ARGS__)
+#define printLog_E( fmt, ... )	Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, fmt, __VA_ARGS__)
+#ifdef _DEBUG
+#define printLog_D( fmt, ... )	Log_print(Log_Type_DEBUG, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, fmt, __VA_ARGS__)
+#endif // _DEBUG
+
+
+
+
 static const int LOG_INTERVAL = 1000;	//ログを見やすくするために空行を入れるまでの時間(ミリ秒)
 
 

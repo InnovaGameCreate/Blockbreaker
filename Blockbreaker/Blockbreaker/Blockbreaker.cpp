@@ -162,8 +162,8 @@ static void Draw() {
 	case FAZE_TopMenu:
 		//TopMenu_Draw();
 		break;
-	case FAZE_Stage:
-		//Stage_Draw();
+	case FAZE_GameMain:
+		GameMain_Draw();
 		break;
 	case FAZE_Manual:
 		//Manual_Draw();
@@ -189,13 +189,13 @@ static void Update() {
 
 	switch (faze) {
 	case FAZE_Nothing: //トップメニューに移行
-		Changefaze(FAZE_TopMenu, THREAD_Update);
+		Changefaze(FAZE_GameMain, THREAD_Update);
 		break;
 	case FAZE_TopMenu:
 		//TopMenu_Update();
 		break;
-	case FAZE_Stage:
-		//Stage_Update();
+	case FAZE_GameMain:
+		GameMain_Update();
 		break;
 	case FAZE_Manual:
 		//Manual_Update();
@@ -260,8 +260,8 @@ void Changefaze(FAZE NO, THREAD FLAG, int arg, int b_Wait_Loading) {
 	case FAZE_TopMenu:
 		//TopMenu_UpdateEnd();
 		break;
-	case FAZE_Stage:
-		//Stage_UpdateEnd();
+	case FAZE_GameMain:
+		GameMain_Finalize_Update();
 		break;
 	case FAZE_Manual:
 		//Manual_UpdateEnd();
@@ -273,8 +273,8 @@ void Changefaze(FAZE NO, THREAD FLAG, int arg, int b_Wait_Loading) {
 	case FAZE_TopMenu:
 		//TopMenu_UpdateSetup();
 		break;
-	case FAZE_Stage:
-		//Stage_UpdateSetup();
+	case FAZE_GameMain:
+		GameMain_Init_Update();
 		break;
 	case FAZE_Manual:
 		//Manual_UpdateSetup();
@@ -304,8 +304,8 @@ static void Changefaze_Draw() {
 	case FAZE_TopMenu: //メニュー
 		//TopMenu_DrawEnd();
 		break;
-	case FAZE_Stage:
-		//Stage_DrawEnd();
+	case FAZE_GameMain:
+		GameMain_Finalize_Draw();
 		break;
 	case FAZE_Manual:
 		//Manual_DrawEnd();
@@ -317,8 +317,8 @@ static void Changefaze_Draw() {
 	case FAZE_TopMenu: //メニュー
 		//TopMenu_DrawSetup();
 		break;
-	case FAZE_Stage:
-		//Stage_DrawSetup();
+	case FAZE_GameMain:
+		GameMain_Init_Draw();
 		break;
 	case FAZE_Manual:
 		//Manual_DrawSetup();

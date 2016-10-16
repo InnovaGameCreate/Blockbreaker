@@ -249,6 +249,7 @@
     <ClCompile Include="Calculations.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FpsController.cpp" />
+    <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="SoundEffect.cpp" />

@@ -3,12 +3,23 @@
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //定数・マクロ
 //命名規則：定数はすべて大文字、単語と単語の間は_で区切る
+
+//デバッグ設定の定義(使用しない場合はコメントアウト)
+#ifdef DEBUG
+#define DEBUG_GAMEMAIN	//ゲームメインのデバッグ
+#endif // DEBUG
+
+
 #define GAMEVERSION _T("0.0")		//バージョン名
 
 #define DRAWFPS 60					//描画FPS設定
 #define UPDATEFPS 60				//処理FPS設定
 #define WINDOW_WIDTH 1280			//画面の横幅
 #define WINDOW_HEIGHT 960			//画面の高さ
+#define GAMEWINDOW_PADDINGX 50		//ゲーム画面のX方向のズレ
+#define GAMEWINDOW_PADDINGY 55		//ゲーム画面のY方向のズレ
+#define GAMEWINDOW_WIDTH 700		//ゲーム画面の横幅
+#define GAMEWINDOW_HEIGHT 850		//ゲーム画面の高さ
 #define TITLE _T("Blockbreaker")	//ウィンドウタイトル
 #define PI (acos(-1.0))				//円周率
 #define PIf ((float)acos(-1.0))		//円周率(float)
@@ -107,7 +118,7 @@ enum KEYBIND {
 enum FAZE {
 	FAZE_Nothing,				//何も無し
 	FAZE_TopMenu,				//トップメニュー
-	FAZE_Stage,					//ステージ画面
+	FAZE_GameMain,				//実際のゲームプレイ画面
 	FAZE_Manual,				//説明書画面
 };
 
@@ -286,3 +297,11 @@ extern void SoundEffect_LongSEStop();		//長い効果音の停止
 extern void SoundEffect_LongSEPause();		//長い効果音のポーズ
 extern void SoundEffect_LongSEResume();		//長い効果音のレジューム
 extern void SoundEffect_SafePlay(SE_TYPE type);	//多重で効果音の再生が行われる可能性があるときに使用する効果音の再生関数(1効果音あたり1フレームに一度までしか再生関数が呼ばれなくなる)
+
+/*GameMain.cpp*/
+extern void GameMain_Init_Draw();		//初期化(描画処理)
+extern void GameMain_Init_Update();		//初期化(計算処理)
+extern void GameMain_Draw();			//描画
+extern void GameMain_Update();			//計算処理
+extern void GameMain_Finalize_Draw();	//終了処理(描画処理)
+extern void GameMain_Finalize_Update();	//終了処理(計算処理)
