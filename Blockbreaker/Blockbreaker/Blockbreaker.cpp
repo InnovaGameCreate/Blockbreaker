@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	_tfreopen_s(&fp, _T("CON"), _T("w"), stdout);    // 標準出力の割り当て
 #endif // _DEBUG
 
-	SetOutApplicationLogValidFlag(false);				//DXライブラリのログ出力を行わない
+	SetOutApplicationLogValidFlag(FALSE);				//DXライブラリのログ出力を行わない
 	Log_Initialize();									//ログ関連の初期化(一番最初に実行してください)
 	Log_SetThreadID(THREAD_Draw, GetCurrentThreadId());	//描画スレッドのIDを通知
 	setKeybind();										//キーバインド設定を初期値にする
