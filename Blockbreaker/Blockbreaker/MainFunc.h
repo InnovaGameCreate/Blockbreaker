@@ -20,6 +20,9 @@
 #define GAMEWINDOW_PADDINGY 55		//ゲーム画面のY方向のズレ
 #define GAMEWINDOW_WIDTH 700		//ゲーム画面の横幅
 #define GAMEWINDOW_HEIGHT 850		//ゲーム画面の高さ
+#define BLOCK_SIZE 50				//ブロックの縦横のピクセルサイズ
+#define BLOCK_WIDTHNUM 14			//ブロックの横の個数
+#define BLOCK_HEIGHTNUM 17			//ブロックの横の個数
 #define TITLE _T("Blockbreaker")	//ウィンドウタイトル
 #define PI (acos(-1.0))				//円周率
 #define PIf ((float)acos(-1.0))		//円周率(float)
@@ -305,3 +308,15 @@ extern void GameMain_Draw();			//描画
 extern void GameMain_Update();			//計算処理
 extern void GameMain_Finalize_Draw();	//終了処理(描画処理)
 extern void GameMain_Finalize_Update();	//終了処理(計算処理)
+
+/*設定系*/
+extern int GameMain_CursorX_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
+extern int GameMain_CursorY_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
+extern void GameMain_PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
+
+/*取得系*/
+extern int	GameMain_getCursorX();																			//カーソル位置を取得する
+extern int	GameMain_getCursorY();																			//カーソル位置を取得する
+extern void GameMain_Convert_Block_FromIngame(int blockX, int blockY, double *IngameX, double *IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
+extern int	GameMain_isPaused();																			//ポーズ状態かどうかの取得(TRUEでポーズ)
+

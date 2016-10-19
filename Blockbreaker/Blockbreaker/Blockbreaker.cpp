@@ -175,6 +175,8 @@ static void Draw() {
 	//FPS描画
 	DrawFormatStringToHandle(0, 0, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(D):%.2f %.2fms(%.2f%%)"), fpsController_Draw.GetFPS_Average(), fpsController_Draw.GetWaitTime_Average(), fpsController_Draw.GetWaitTime_Average_Par());
 	DrawFormatStringToHandle(0, 0 + 20, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
+	int DrawStrW = GetDrawFormatStringWidthToHandle(Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
+	if (!isMultiThread())	DrawLine(0, 31, DrawStrW, 31, GetColor(255, 255, 255), 4);
 #endif // _DEBUG
 }
 
@@ -344,10 +346,10 @@ static unsigned __stdcall Thread_Update(void* args) {
 
 //処理ループ
 static void UpdateLoop() {
-	if (isMultiThread())	fpsController_Update.Update_First();
+	fpsController_Update.Update_First();
 	gpUpdateKey();		//キー取得
 	Update();			//描画処理
-	if (isMultiThread())	fpsController_Update.Update_Last();
+	fpsController_Update.Update_Last();
 	if (isMultiThread())	fpsController_Update.Wait();	//待機
 }
 
