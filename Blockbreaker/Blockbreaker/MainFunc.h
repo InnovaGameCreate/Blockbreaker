@@ -1,4 +1,6 @@
 #pragma once
+#include "PhaseController.h"
+#include "Phase_GameMain.h"
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //定数・マクロ
@@ -123,6 +125,7 @@ enum FAZE {
 	FAZE_TopMenu,				//トップメニュー
 	FAZE_GameMain,				//実際のゲームプレイ画面
 	FAZE_Manual,				//説明書画面
+	FAZE_NUM					//フェーズの数
 };
 
 //アナログスティックの操作モードいるか？
@@ -199,6 +202,16 @@ enum SE_TYPE {
 	SE_TYPE_Charge2,			//チャージ攻撃2の効果音
 	SE_TYPE_NUM					//効果音の個数(指定した場合は効果音無し)
 };
+
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/*クラス*/
+
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//クラスのインスタンス(グローバル変数)
+extern Phase_Default phase_Default;		//デフォルトのフェーズ
+extern Phase_GameMain phase_GameMain;	//ゲームメインのフェーズ
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -300,21 +313,3 @@ extern void SoundEffect_LongSEStop();		//長い効果音の停止
 extern void SoundEffect_LongSEPause();		//長い効果音のポーズ
 extern void SoundEffect_LongSEResume();		//長い効果音のレジューム
 extern void SoundEffect_SafePlay(SE_TYPE type);	//多重で効果音の再生が行われる可能性があるときに使用する効果音の再生関数(1効果音あたり1フレームに一度までしか再生関数が呼ばれなくなる)
-
-/*GameMain.cpp*/
-extern void GameMain_Init_Draw();		//初期化(描画処理)
-extern void GameMain_Init_Update();		//初期化(計算処理)
-extern void GameMain_Draw();			//描画
-extern void GameMain_Update();			//計算処理
-extern void GameMain_Finalize_Draw();	//終了処理(描画処理)
-extern void GameMain_Finalize_Update();	//終了処理(計算処理)
-/*設定系*/
-extern int GameMain_CursorX_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
-extern int GameMain_CursorY_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
-extern void GameMain_PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
-/*取得系*/
-extern int	GameMain_getCursorX();																			//カーソル位置を取得する
-extern int	GameMain_getCursorY();																			//カーソル位置を取得する
-extern void GameMain_Convert_Block_FromIngame(int blockX, int blockY, double *IngameX, double *IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
-extern int	GameMain_isPaused();																			//ポーズ状態かどうかの取得(TRUEでポーズ)
-

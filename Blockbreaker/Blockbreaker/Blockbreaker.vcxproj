@@ -240,6 +240,8 @@
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MainFunc.h" />
+    <ClInclude Include="PhaseController.h" />
+    <ClInclude Include="Phase_GameMain.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -249,10 +251,11 @@
     <ClCompile Include="Calculations.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FpsController.cpp" />
-    <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Phase_GameMain.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="Phase_Default.cpp" />
     <ClCompile Include="StartDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

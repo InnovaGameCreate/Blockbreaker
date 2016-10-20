@@ -1,5 +1,9 @@
 //メイン関数
 
+//グローバル変数の定義
+Phase_Default phase_Default;
+Phase_GameMain phase_GameMain;
+
 //変数
 static unsigned int stateKey[256];				//キーボードのキー
 static unsigned int stateKeyJoy[32];			//ゲームパッド(int型より32びっと)
@@ -47,6 +51,9 @@ static int ActiveStateChange(int ActiveState, void *UserData);
 static int gpUpdateKey();
 static void gpUpdateKeyBind();
 static void setWindowModeVirtualFullScreen();
+
+//フェーズごとのクラスのインスタンスへのポインタ
+static PhaseController *phaseController[FAZE_NUM];
 
 
 //メイン関数(ここから始まります)
@@ -135,8 +142,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SoundEffect_init();	//効果音関係の初期化
 	Font_init();		//フォント関係の初期化
 
+	for (auto &data : phaseController) {
+		data = &phase_Default;
+	}
 
-															
+	//フェーズの定義
+	phaseController[FAZE_GameMain] = &phase_GameMain;
+
+
+											
 	if (isMultiThread())	_beginthreadex(NULL, 0, Thread_Update, "計算スレッド", 0, NULL);//マルチスレッドならば新規スレッド作成
 
 
@@ -144,6 +158,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return 0;
 }
+
+#pragma region いじらなくて良い関数群
 
 //描画のメインループ
 static void Draw() {
@@ -157,18 +173,8 @@ static void Draw() {
 	//描画のフェーズ移行
 	Changefaze_Draw(); //フェーズ変更の際にテクスチャなどの読み直し
 
-	switch (faze) {
-	case FAZE_TopMenu:
-		//TopMenu_Draw();
-		break;
-	case FAZE_GameMain:
-		GameMain_Draw();
-		break;
-	case FAZE_Manual:
-		//Manual_Draw();
-		break;
-	}
 
+	phaseController[faze]->Draw();
 
 #ifdef _DEBUG
 	//FPS描画
@@ -188,20 +194,8 @@ static void Update() {
 
 	SoundEffect_update();//フェーズ関係なく動作
 
-	switch (faze) {
-	case FAZE_Nothing: //トップメニューに移行
-		Changefaze(FAZE_GameMain, THREAD_Update);
-		break;
-	case FAZE_TopMenu:
-		//TopMenu_Update();
-		break;
-	case FAZE_GameMain:
-		GameMain_Update();
-		break;
-	case FAZE_Manual:
-		//Manual_Update();
-		break;
-	}
+	phaseController[faze]->Update();
+
 	Flag_NonActivePauseRequest = FALSE;
 
 
@@ -257,30 +251,12 @@ void Changefaze(FAZE NO, THREAD FLAG, int arg, int b_Wait_Loading) {
 	faze_Wait_Loading = b_Wait_Loading;
 	faze_arg = arg;
 	/* フェーズ終了の際に呼び出す関数を記述(メモリの開放など) */
-	switch (faze) {
-	case FAZE_TopMenu:
-		//TopMenu_UpdateEnd();
-		break;
-	case FAZE_GameMain:
-		GameMain_Finalize_Update();
-		break;
-	case FAZE_Manual:
-		//Manual_UpdateEnd();
-		break;
-	}
+
+	phaseController[faze]->Finalize_Update();
 
 	/* フェーズ開始の際に呼び出す関数を記述(テクスチャの読み込みなど) */
-	switch (NO) {
-	case FAZE_TopMenu:
-		//TopMenu_UpdateSetup();
-		break;
-	case FAZE_GameMain:
-		GameMain_Init_Update();
-		break;
-	case FAZE_Manual:
-		//Manual_UpdateSetup();
-		break;
-	}
+
+	phaseController[NO]->Init_Update();
 
 	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("フェーズ変更(%dから%d)"), faze, NO);
 	faze = NO;
@@ -301,38 +277,20 @@ static void Changefaze_Draw() {
 		LoadMenu_Draw();
 	}
 	/* フェーズ終了の際に呼び出す関数を記述(メモリの開放など) */
-	switch (faze_draw) {
-	case FAZE_TopMenu: //メニュー
-		//TopMenu_DrawEnd();
-		break;
-	case FAZE_GameMain:
-		GameMain_Finalize_Draw();
-		break;
-	case FAZE_Manual:
-		//Manual_DrawEnd();
-		break;
-	}
+
+	phaseController[faze_draw]->Finalize_Draw();
 
 	/* フェーズ開始の際に呼び出す関数を記述(テクスチャの読み込みなど) */
-	switch (faze) {
-	case FAZE_TopMenu: //メニュー
-		//TopMenu_DrawSetup();
-		break;
-	case FAZE_GameMain:
-		GameMain_Init_Draw();
-		break;
-	case FAZE_Manual:
-		//Manual_DrawSetup();
-		break;
 
-	}
+	phaseController[faze]->Init_Draw();
+
 	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("フェーズ変更(%dから%d)(描画)"), faze_draw, faze);
 	faze_draw = faze;
 	ChangefazeRequest_Draw = -1;
 	faze_Wait_Loading = FALSE;
 }
 
-#pragma region いじらなくて良い関数群
+
 // スレッド実行する関数(ゲーム処理)
 static unsigned __stdcall Thread_Update(void* args) {
 	Log_SetThreadID(THREAD_Update, GetCurrentThreadId());	//計算スレッドのIDを通知
@@ -486,8 +444,6 @@ static int ActiveStateChange(int ActiveState, void *UserData) {
 	return 0;
 }
 
-#pragma endregion
-
 
 /*値の取得系*/
 //非アクティブになった際にポーズを要求するフラグが立っているかの取得
@@ -551,7 +507,6 @@ unsigned int getFrameCount(THREAD thread) {
 
 //プログラムを終了する
 
-#pragma region いじらなくて良い関数群
 /*値の設定系(ここも通常いじらない)*/
 //キーバインドの設定(NULLで規定値)
 void setKeybind(KeyBind *keyBind) {
