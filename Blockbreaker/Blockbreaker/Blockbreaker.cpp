@@ -174,7 +174,7 @@ static void Draw() {
 	Changefaze_Draw(); //フェーズ変更の際にテクスチャなどの読み直し
 
 
-	phaseController[faze]->Draw();
+	phaseController[faze]->DrawFunc();	//現在のフェーズの描画関数を呼び出し
 
 #ifdef _DEBUG
 	//FPS描画
@@ -194,7 +194,7 @@ static void Update() {
 
 	SoundEffect_update();//フェーズ関係なく動作
 
-	phaseController[faze]->Update();
+	phaseController[faze]->UpdateFunc();	//現在のフェーズの計算関数を呼び出し
 
 	Flag_NonActivePauseRequest = FALSE;
 
