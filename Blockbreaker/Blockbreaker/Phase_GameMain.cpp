@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "Phase_GameMain.h"
 
+//色
+enum COLOR{RED, BLUE, YELLOW, GREEN, PURPLE};
+
+struct field_info {
+	int color;//ブロックの色
+	int fall_flag;//落下中かどうかのフラグ
+	int move_flag;//移動中かどうかのフラグ
+};
+
+struct field_info field[10][16];
 
 Phase_GameMain::Phase_GameMain() {
 }
