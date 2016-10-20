@@ -13,20 +13,20 @@ struct DialogSetting {
 	int Drawing_interval;	//描画間隔
 	int analogstick;		//アナログスティックの操作モード
 	bool Key_Enable;		//キーバインドが有効かどうか
-	int Key_PAUSE;			//キャンセル/ポーズ
-	int Key_PAUSE2;			//キャンセル/ポーズ2
-	int Key_RotateL;		//落下するブロックを反時計回りに回転させる
-	int Key_RotateL2;		//落下するブロックを反時計回りに回転させる2
-	int Key_RotateR;		//落下するブロックを時計回りに回転させる
-	int Key_RotateR2;		//落下するブロックを時計回りに回転させる2
-	int Key_UP;				//項目選択:上
-	int Key_UP2;			//項目選択:上2
-	int Key_DOWN;			//項目選択:下/落下するブロックの加速
-	int Key_DOWN2;			//項目選択:下/落下するブロックの加速2
-	int Key_LEFT;			//項目選択:左/落下するブロックの左移動
-	int Key_LEFT2;			//項目選択:左/落下するブロックの左移動2
-	int Key_ROGHT;			//項目選択:右/落下するブロックの右移動
-	int Key_ROGHT2;			//項目選択:右/落下するブロックの右移動2
+	WPARAM Key_PAUSE;			//キャンセル/ポーズ
+	WPARAM Key_PAUSE2;			//キャンセル/ポーズ2
+	WPARAM Key_RotateL;		//落下するブロックを反時計回りに回転させる
+	WPARAM Key_RotateL2;		//落下するブロックを反時計回りに回転させる2
+	WPARAM Key_RotateR;		//落下するブロックを時計回りに回転させる
+	WPARAM Key_RotateR2;		//落下するブロックを時計回りに回転させる2
+	WPARAM Key_UP;				//項目選択:上
+	WPARAM Key_UP2;			//項目選択:上2
+	WPARAM Key_DOWN;			//項目選択:下/落下するブロックの加速
+	WPARAM Key_DOWN2;			//項目選択:下/落下するブロックの加速2
+	WPARAM Key_LEFT;			//項目選択:左/落下するブロックの左移動
+	WPARAM Key_LEFT2;			//項目選択:左/落下するブロックの左移動2
+	WPARAM Key_ROGHT;			//項目選択:右/落下するブロックの右移動
+	WPARAM Key_ROGHT2;			//項目選択:右/落下するブロックの右移動2
 	unsigned int Joy_Type;	//ジョイパッド入力の種類
 	int Joy_ENTER[4];		//入力ジョイパッドの項目の決定
 	int Joy_PAUSE[4];		//入力ジョイパッドのキャンセル/ポーズ
@@ -80,14 +80,14 @@ static void VerifySaveData();
 static TCHAR *ConvertVerKey(WPARAM VkeyCode);
 static void CreateKeyConfig(KeyBind *kb);
 static void CreateKeyConfigjoy(KeyBindjoy *kb);
-static bool CheckDouble(int defplm, int wParam);
+static bool CheckDouble(int defplm, WPARAM wParam);
 static void joypatEvent();
 static int *getJoySettings(int ItemID);
 static void SetJoyNomalText(HWND hDlg, LPARAM lParam, int ItemID);
 static int EnentJoySetButtonChange(HWND hDlg, WPARAM wParam, LPARAM lParam, int ItemID);
 static TCHAR *ConvertVerJoyKey(int JoyCode);
-static int GetBit(int Val);
-static int SetBitRight(int Val);
+static int GetBit(LPARAM Val);
+static int SetBitRight(LPARAM Val);
 static bool CheckDoubleJoy(int defplm, int wParam);
 
 //初期化
@@ -1234,7 +1234,7 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 			}
 		}
 		if (CheckDouble(keyConfigType, wParam)) break;//キー重複もダメ
-		if (ConvertVirtualKeyToKeyCode(wParam) == 65535)	break;//DXライブラリのキーに変換できないときは無視
+		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXライブラリのキーに変換できないときは無視
 		SetDlgItemText(hDlg, keyConfigType, ConvertVerKey(wParam));
 		SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_UNCHECKED, 0);
 		switch (keyConfigType)
@@ -1290,7 +1290,7 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		if (wParam == VK_SPACE) break;//スペースキーもだめ
 		if (wParam == VK_ADD) break;//+キーもだめ
 		if (CheckDouble(keyConfigType, wParam)) break;//キー重複もダメ
-		if (ConvertVirtualKeyToKeyCode(wParam) == 65535)	break;//DXライブラリのキーに変換できないときは無視
+		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXライブラリのキーに変換できないときは無視
 		SendMessage(GetDlgItem(hDlg, IDC_CHECK1), BM_SETCHECK, BST_UNCHECKED, 0);
 		SetDlgItemText(hDlg, IDC_CHECK1, ConvertVerKey(dialogSetting.Key_RotateL));
 		SendMessage(GetDlgItem(hDlg, IDC_CHECK2), BM_SETCHECK, BST_UNCHECKED, 0);
@@ -1501,7 +1501,7 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 
 		if ((HWND)lParam == GetDlgItem(hDlg, IDC_COMBO1)) {
 			if (HIWORD(wParam) == CBN_SELCHANGE) {//コンボボックスの選択が変更されたとき
-				dialogSetting.Joy_Type = SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, 0, 0);//コンボボックスの選択項目の取得
+				dialogSetting.Joy_Type = (unsigned int)SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, 0, 0);//コンボボックスの選択項目の取得
 
 				//パッド無効の場合は選択肢を選べないようにする
 				{
@@ -1745,49 +1745,49 @@ static void VerifySaveData() {
 	dialogSetting.Key_Enable = (dialogSetting.Key_Enable) ? true : false;
 	//DXライブラリのキーに変換できるかの確認(一応重複してても動くので確認しない)
 	{
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateL) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateL) == 65535) {
 			dialogSetting.Key_RotateL = 'Z';
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateL2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateL2) == 65535) {
 			dialogSetting.Key_RotateL2 = 'Z';
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateR) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateR) == 65535) {
 			dialogSetting.Key_RotateR = VK_SHIFT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateR2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateR2) == 65535) {
 			dialogSetting.Key_RotateR2 = VK_SHIFT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_UP) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_UP) == 65535) {
 			dialogSetting.Key_UP = VK_UP;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_UP2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_UP2) == 65535) {
 			dialogSetting.Key_UP2 = VK_UP;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_DOWN) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_DOWN) == 65535) {
 			dialogSetting.Key_DOWN = VK_DOWN;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_DOWN2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_DOWN2) == 65535) {
 			dialogSetting.Key_DOWN2 = VK_DOWN;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_ROGHT) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_ROGHT) == 65535) {
 			dialogSetting.Key_ROGHT = VK_RIGHT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_ROGHT2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_ROGHT2) == 65535) {
 			dialogSetting.Key_ROGHT2 = VK_RIGHT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_LEFT) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT) == 65535) {
 			dialogSetting.Key_LEFT = VK_LEFT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_LEFT2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT2) == 65535) {
 			dialogSetting.Key_LEFT2 = VK_LEFT;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_LEFT2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT2) == 65535) {
 			dialogSetting.Key_LEFT2 = VK_LEFT;
 		}
 		if (dialogSetting.Key_PAUSE != VK_ESCAPE) {//ここは絶対ESCキー
 			dialogSetting.Key_PAUSE = VK_ESCAPE;
 		}
-		if (ConvertVirtualKeyToKeyCode(dialogSetting.Key_PAUSE2) == 65535) {
+		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_PAUSE2) == 65535) {
 			dialogSetting.Key_PAUSE2 = VK_ESCAPE;
 		}
 	}
@@ -1895,7 +1895,7 @@ static int EnentJoySetButtonChange(HWND hDlg, WPARAM wParam, LPARAM lParam, int 
 //仮想キーコードを文字列に変換する
 static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	//vkey[仮想キーコード]="その内容を表す文字列");
-	unsigned int VK = VkeyCode;
+	WPARAM VK = VkeyCode;
 	TCHAR *vkey[500];
 
 	vkey[0] = _T("NULL");
@@ -2409,20 +2409,20 @@ static void CreateKeyConfig(KeyBind *kb) {
 	//DXライブラリのキーに変換
 	kb->Key_ENTER = KEY_INPUT_RETURN;
 	kb->Key_ENTER2 = KEY_INPUT_RETURN;
-	kb->Key_PAUSE = ConvertVirtualKeyToKeyCode(dialogSetting.Key_PAUSE);
-	kb->Key_PAUSE2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_PAUSE2);
-	kb->Key_RotateL = ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateL);
-	kb->Key_RotateL2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateL2);
-	kb->Key_RotateR = ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateR);
-	kb->Key_RotateR2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_RotateR2);
-	kb->Key_UP = ConvertVirtualKeyToKeyCode(dialogSetting.Key_UP);
-	kb->Key_UP2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_UP2);
-	kb->Key_DOWN = ConvertVirtualKeyToKeyCode(dialogSetting.Key_DOWN);
-	kb->Key_DOWN2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_DOWN2);
-	kb->Key_LEFT = ConvertVirtualKeyToKeyCode(dialogSetting.Key_LEFT);
-	kb->Key_LEFT2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_LEFT2);
-	kb->Key_RIGHT = ConvertVirtualKeyToKeyCode(dialogSetting.Key_ROGHT);
-	kb->Key_RIGHT2 = ConvertVirtualKeyToKeyCode(dialogSetting.Key_ROGHT2);
+	kb->Key_PAUSE = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_PAUSE);
+	kb->Key_PAUSE2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_PAUSE2);
+	kb->Key_RotateL = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateL);
+	kb->Key_RotateL2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateL2);
+	kb->Key_RotateR = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateR);
+	kb->Key_RotateR2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateR2);
+	kb->Key_UP = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_UP);
+	kb->Key_UP2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_UP2);
+	kb->Key_DOWN = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_DOWN);
+	kb->Key_DOWN2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_DOWN2);
+	kb->Key_LEFT = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT);
+	kb->Key_LEFT2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT2);
+	kb->Key_RIGHT = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_ROGHT);
+	kb->Key_RIGHT2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_ROGHT2);
 }
 
 //キーコンフィグに変換(ジョイパッド)
@@ -2481,7 +2481,7 @@ static TCHAR *ConvertVerJoyKey(int JoyCode) {
 }
 
 //キーの重複確認(元々書いてあったキー)(falseで重複無し)
-static bool CheckDouble(int defplm, int wParam) {
+static bool CheckDouble(int defplm, WPARAM wParam) {
 	//if (keyConfigmode == false)	defplm = 0;//キー入力状態出ないとき
 
 	if (defplm != IDC_CHECK1 && dialogSetting.Key_RotateL == wParam)	return true;
@@ -2572,7 +2572,7 @@ static void joypatEvent() {
 }
 
 //キー入力ビット列から一番右を取得(無しは0で1加算)←注意！！！
-static int GetBit(int Val) {
+static int GetBit(LPARAM Val) {
 	for (int i = 0; i < sizeof(Val) * 8; i++) {
 		if (Val & 1) {
 			return i + 1;
@@ -2585,9 +2585,9 @@ static int GetBit(int Val) {
 }
 
 //一番右のビットのみ残し他を0で埋める
-static int SetBitRight(int Val) {
+static int SetBitRight(LPARAM Val) {
 	int base = 1;
-	int V = GetBit(Val);
+	LPARAM V = GetBit(Val);
 	for (int i = 1; i < V; i++) {
 		base *= 2;
 	}
