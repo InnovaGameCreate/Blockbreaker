@@ -1,17 +1,6 @@
 #include "stdafx.h"
 #include "Phase_GameMain.h"
 
-//色
-enum COLOR{RED, BLUE, YELLOW, GREEN, PURPLE};
-
-struct field_info {
-	int color;//ブロックの色
-	int fall_flag;//落下中かどうかのフラグ
-	int move_flag;//移動中かどうかのフラグ
-};
-
-struct field_info field[10][16];
-
 Phase_GameMain::Phase_GameMain() {
 }
 
@@ -27,8 +16,6 @@ void Phase_GameMain::Init_Draw() {
 
 //初期化(計算処理)
 void Phase_GameMain::Init_Update() {
-	CursorX = 0;
-	CursorY = 0;
 	Flag_Pause = FALSE;
 	Flag_pauseRequest = FALSE;
 }
@@ -42,13 +29,19 @@ void Phase_GameMain::Draw() {
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
 	DrawBox(0, 0, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, GetColor(0xb3, 0x65, 0xe5), TRUE);
 
-	//カーソル位置に四角形の枠を描画
-	{//スコープ面倒いので
-		double X, Y;
-		GameMain_Convert_Block_FromIngame(GameMain_getCursorX(), GameMain_getCursorY(), &X, &Y);
-		DrawBox((int)X + 2, (int)Y + 2, (int)(X + BLOCK_SIZE - 2), (int)(Y + BLOCK_SIZE - 2), GetColor(0x07, 0xdb, 0x9d), FALSE);
-		DrawLine((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 2), (int)(Y + BLOCK_SIZE - 2), GetColor(0x07, 0xdb, 0x9d));
-		DrawLine((int)(X + 2), (int)(Y + BLOCK_SIZE - 2), (int)(X + BLOCK_SIZE - 2), (int)(Y + 2), GetColor(0x07, 0xdb, 0x9d));
+	//落下中ブロックの描画
+	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				if (fallBlockInfo.BlockID[x][y] == RED) {//赤ブロック描画
+					double X, Y;
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - 1), fallBlockInfo.PlaceY + (y - 1), &X, &Y);
+					X += BLOCK_SIZE / 2.;
+					Y += BLOCK_SIZE / 2.;
+					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
+				}
+			}
+		}
 	}
 
 	//デバッグ
@@ -88,7 +81,7 @@ void Phase_GameMain::Draw() {
 	}
 #endif // DEBUG_GAMEMAIN
 
-	if (GameMain_isPaused()) {//ポーズ状態の時
+	if (isPaused()) {//ポーズ状態の時
 							  //ポーズ状態と分かるように描画する
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
@@ -106,15 +99,46 @@ void Phase_GameMain::Update() {
 	Flag_Pause = Flag_pauseRequest;//リクエストの反映
 	//ここまで
 
-
 	GameMain_Key();	//キー処理
 
-	if (GameMain_isPaused())	return;//ポーズ処理が入った場合は先に進まない
+	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
+
+
+	//落下ブロックの落下処理
+	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+		fallBlockInfo.Counter++;	//カウンタを加算
+		if (isFallBlock_Falling()) {//落下中の場合
+			fallBlockInfo.FallCount--;
+			if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
+			if (fallBlockInfo.Key_LRMove > 0)		isFallBlock_MoveX(1);			//右移動
+			if (fallBlockInfo.Key_LRMove < 0)		isFallBlock_MoveX(-1);			//左移動
+
+			if (fallBlockInfo.FallCount <= 0) {//カウント0以下で落下
+				fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとisFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
+				/*落下しようとして無理だったらカウントを0にし無効化する方針*/
+				if (isFallBlock_MoveY(1) == 0) {	//落下出来なかった
+					fallBlockInfo.FallCount = 0;	//落下カウントの無効化
+					printLog_I(_T("ブロックの落下終了"));
+					Delete_FallBlock();
+				}
+			}
+		}
+		//キー入力による状態のリセット
+		fallBlockInfo.Key_FlagFirstFall = FALSE;
+		fallBlockInfo.Key_LRMove = 0;
+		fallBlockInfo.Key_LRMove = 0;
+	}
+	else {
+		fallBlockInfo.Counter--;
+	}
+
+	if (getFallBlock_Interval() > 120)	Create_FallBlock();//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
+
 }
 
 //終了処理(描画処理)
 void Phase_GameMain::Finalize_Draw() {
-
+	DeleteGraph(gameWindow);
 }
 
 //終了処理(計算処理)
@@ -127,110 +151,32 @@ void Phase_GameMain::GameMain_Key() {
 
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
-		GameMain_PauseRequest(!GameMain_isPaused());	//ポーズ状態の反転
+		PauseRequest(!isPaused());	//ポーズ状態の反転
 	}
 
-	if (GameMain_isPaused())	return;//ポーズ処理が入った場合は先に進まない
+	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
 
-
-	static int Flag_DOWN = TRUE;	//下移動のSE関連のフラグ
-	static int Flag_UP = TRUE;		//下移動のSE関連のフラグ
-	static int Flag_RIGHT = TRUE;	//下移動のSE関連のフラグ
-	static int Flag_LEFT = TRUE;		//下移動のSE関連のフラグ
-
-										//キー入力なしの場合
-	if (getKeyBind(KEYBIND_DOWN) == 0)	Flag_DOWN = TRUE;
-	if (getKeyBind(KEYBIND_UP) == 0)	Flag_UP = TRUE;
-	if (getKeyBind(KEYBIND_RIGHT) == 0)	Flag_RIGHT = TRUE;
-	if (getKeyBind(KEYBIND_LEFT) == 0)	Flag_LEFT = TRUE;
-
-	if (getKeyBind(KEYBIND_DOWN) == 1 || (getKeyBind(KEYBIND_DOWN) > 20 && getKeyBind(KEYBIND_DOWN) % 3 == 1)) {//下移動
-		if (GameMain_CursorY_add(1) != 0) {
-			SoundEffect_Play(SE_TYPE_ChangeSelect);	//移動した場合
-		}
-		else {
-			if (Flag_DOWN) {
-				SoundEffect_Play(SE_TYPE_Graze);	//移動出来なかったときかつフラグが立っているとき
-				Flag_DOWN = FALSE;					//フラグをFALSEに
-			}
+	if (isFallBlock_Falling()) {
+		if (getKeyBind(KEYBIND_DOWN) > 0) {//高速落下モード
+			fallBlockInfo.Key_FlagFirstFall = TRUE;
 		}
 	}
 
-	if (getKeyBind(KEYBIND_UP) == 1 || (getKeyBind(KEYBIND_UP) > 20 && getKeyBind(KEYBIND_UP) % 3 == 1)) {//上移動
-		if (GameMain_CursorY_add(-1) != 0) {
-			SoundEffect_Play(SE_TYPE_ChangeSelect);	//移動した場合
-		}
-		else {
-			if (Flag_UP) {
-				SoundEffect_Play(SE_TYPE_Graze);	//移動出来なかったときかつフラグが立っているとき
-				Flag_UP = FALSE;					//フラグをFALSEに
-			}
+	if (isFallBlock_Falling()) {
+		if (getKeyBind(KEYBIND_RIGHT) == 1) {//右移動
+			fallBlockInfo.Key_LRMove++;
 		}
 	}
 
-	if (getKeyBind(KEYBIND_RIGHT) == 1 || (getKeyBind(KEYBIND_RIGHT) > 20 && getKeyBind(KEYBIND_RIGHT) % 3 == 1)) {//右移動
-		if (GameMain_CursorX_add(1) != 0) {
-			SoundEffect_Play(SE_TYPE_ChangeSelect);	//移動した場合
-		}
-		else {
-			if (Flag_RIGHT) {
-				SoundEffect_Play(SE_TYPE_Graze);	//移動出来なかったときかつフラグが立っているとき
-				Flag_RIGHT = FALSE;					//フラグをFALSEに
-			}
+	if (isFallBlock_Falling()) {
+		if (getKeyBind(KEYBIND_LEFT) == 1) {//左移動
+			fallBlockInfo.Key_LRMove--;
 		}
 	}
-
-	if (getKeyBind(KEYBIND_LEFT) == 1 || (getKeyBind(KEYBIND_LEFT) > 20 && getKeyBind(KEYBIND_LEFT) % 3 == 1)) {//左移動
-		if (GameMain_CursorX_add(-1) != 0) {
-			SoundEffect_Play(SE_TYPE_ChangeSelect);	//移動した場合
-		}
-		else {
-			if (Flag_LEFT) {
-				SoundEffect_Play(SE_TYPE_Graze);	//移動出来なかったときかつフラグが立っているとき
-				Flag_LEFT = FALSE;					//フラグをFALSEに
-			}
-		}
-	}
-}
-
-//カーソル位置を相対的に移動する
-int Phase_GameMain::GameMain_CursorX_add(int Val) {
-	//仮に移動したことにする
-	int t = CursorX + Val;
-	//画面外に出る場合は端で止まるようにValの値を調整する
-	if (t < 0)	Val = 0 - CursorX;	//画面左側
-	else if (t >= BLOCK_WIDTHNUM)	Val = (BLOCK_WIDTHNUM - 1) - CursorX;	//画面右側
-
-																			//本ちゃん適用
-	CursorX += Val;
-	return Val;
-}
-
-//カーソル位置を相対的に移動する
-int Phase_GameMain::GameMain_CursorY_add(int Val) {
-	//仮に移動したことにする
-	int t = CursorY + Val;
-	//画面外に出る場合は端で止まるようにValの値を調整する
-	if (t < 0)	Val = 0 - CursorY;	//画面上側
-	else if (t >= BLOCK_HEIGHTNUM)	Val = (BLOCK_HEIGHTNUM - 1) - CursorY;	//画面下側
-
-																			//本ちゃん適用
-	CursorY += Val;
-	return Val;
-}
-
-//カーソル位置を取得する
-int Phase_GameMain::GameMain_getCursorX() {
-	return CursorX;
-}
-
-//カーソル位置を取得する
-int Phase_GameMain::GameMain_getCursorY() {
-	return CursorY;
 }
 
 //ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
-void Phase_GameMain::GameMain_Convert_Block_FromIngame(int blockX, int blockY, double *IngameX, double *IngameY) {
+void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double *IngameX, double *IngameY) {
 	if (IngameX != NULL) {
 		*IngameX = blockX * BLOCK_SIZE;
 	}
@@ -240,15 +186,161 @@ void Phase_GameMain::GameMain_Convert_Block_FromIngame(int blockX, int blockY, d
 }
 
 //ポーズ状態かどうかの取得(TRUEでポーズ)
-int Phase_GameMain::GameMain_isPaused() {
+int Phase_GameMain::isPaused() {
 	return Flag_Pause;
 }
 
 //ポーズ状態のリクエスト
-void Phase_GameMain::GameMain_PauseRequest(int b_Flag) {
+void Phase_GameMain::PauseRequest(int b_Flag) {
 	b_Flag = (b_Flag) ? TRUE : FALSE;//不正な引数の対策
 
 	Flag_pauseRequest = b_Flag;
 	if (Flag_pauseRequest)	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【有効】"));
 	else					Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【無効】"));
+}
+
+//落下ブロックが落下中かどうかの取得(TRUEで落下中)
+int Phase_GameMain::isFallBlock_Falling() {
+	if (!isFallBlock_Enable())	return FALSE;
+	return (fallBlockInfo.FallCount > 0) ? TRUE : FALSE;
+}
+
+//落下ブロックが有効かどうかの取得(TRUEで有効)
+int Phase_GameMain::isFallBlock_Enable() {
+	return (fallBlockInfo.Enable) ? TRUE : FALSE;
+}
+
+//落下ブロックを生成する(戻り値:成功でTRUE)
+int Phase_GameMain::Create_FallBlock() {
+	if (isFallBlock_Enable()) {
+		printLog_C(_T("落下中のブロックがすでに存在するため、落下ブロックを新たに追加出来ませんでした"));
+		return FALSE;
+	}
+
+	//落下ブロックの形状を設定する(暫定)
+	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
+	fallBlockInfo.BlockID[0][0] = NO;
+	fallBlockInfo.BlockID[1][0] = RED;
+	fallBlockInfo.BlockID[2][0] = NO;
+
+	fallBlockInfo.BlockID[0][1] = RED;
+	fallBlockInfo.BlockID[1][1] = RED;
+	fallBlockInfo.BlockID[2][1] = RED;
+
+	fallBlockInfo.BlockID[0][2] = NO;
+	fallBlockInfo.BlockID[1][2] = RED;
+	fallBlockInfo.BlockID[2][2] = NO;
+
+	//落下カウントを60に設定
+	fallBlockInfo.FallCount = 60;
+
+	//落下ブロックのその他の情報の初期化
+	fallBlockInfo.PlaceX = BLOCK_WIDTHNUM / 2;
+	fallBlockInfo.PlaceY = 1;
+	fallBlockInfo.Counter = 0;
+	fallBlockInfo.Key_LRMove = 0;
+	fallBlockInfo.Key_FlagFirstFall = FALSE;
+
+	//有効
+	fallBlockInfo.Enable = TRUE;
+
+	printLog_I(_T("落下ブロックの【新規生成】"));
+	return TRUE;
+}
+
+//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
+int Phase_GameMain::getFallBlock_Interval() {
+	if (isFallBlock_Enable())	return 0;
+	return (-fallBlockInfo.Counter);
+}
+
+//落下ブロックの無効化
+void Phase_GameMain::Delete_FallBlock() {
+	if (!isFallBlock_Enable())	return;	//そもそも有効で無い時は無視
+
+	fallBlockInfo.Counter = 0;		//カウンタを0にもどす
+	fallBlockInfo.Enable = FALSE;	//落下ブロックの無効化
+
+	printLog_I(_T("落下ブロックの【消去】"));
+}
+
+//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+int Phase_GameMain::isFallBlock_MoveX(int MoveVal) {
+	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
+
+	//方針:だんだんMoveValを制限していき最も小さい値を加算する
+
+	while (abs(MoveVal) != 0) {/*無限ループ*/
+		//擬似的に移動したことにする
+		int pX = fallBlockInfo.PlaceX + MoveVal;
+
+		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
+		int Flag = FALSE;	//重なり無し
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(pX + (x - 1), fallBlockInfo.PlaceY + (y - 1), RED) != NO) {
+						Flag = TRUE;
+						break;
+					}
+				}
+			}
+		}
+
+		if (!Flag)	break;//重なり無しの場合はループを抜ける
+		else		MoveVal = (MoveVal > 0) ? MoveVal - 1 : MoveVal + 1;//0に近づけループの先頭へ
+	}
+
+	//ずらしの反映
+	fallBlockInfo.PlaceX += MoveVal;
+
+	return MoveVal;
+}
+
+//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+int Phase_GameMain::isFallBlock_MoveY(int MoveVal) {
+	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
+
+	//方針:だんだんMoveValを制限していき最も小さい値を加算する
+
+	//すべて無効ブロックだと判定は常に移動可能が出力されます
+
+	while (abs(MoveVal) != 0) {/*無限ループ*/
+							   //擬似的に移動したことにする
+		int pY = fallBlockInfo.PlaceY + MoveVal;
+
+		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
+		int Flag = FALSE;	//重なり無し
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - 1), pY + (y - 1), RED) != NO) {
+						Flag = TRUE;
+						break;
+					}
+				}
+			}
+		}
+
+		if (!Flag)	break;//重なり無しの場合はループを抜ける
+		else		MoveVal = (MoveVal > 0) ? MoveVal - 1 : MoveVal + 1;//0に近づけループの先頭へ
+	}
+
+	//ずらしの反映
+	fallBlockInfo.PlaceY += MoveVal;
+
+	return MoveVal;
+}
+
+//指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
+Phase_GameMain::COLOR Phase_GameMain::getBlockColor(int X, int Y, COLOR OutGameBlock) {
+
+	//画面外処理
+	if (X < 0 || BLOCK_WIDTHNUM <= X)	return OutGameBlock;
+	if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return OutGameBlock;
+
+
+	//画面内のブロックの情報は未完成なので何も無い判定を返す
+	return NO;
+
 }

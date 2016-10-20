@@ -4,7 +4,7 @@
 #include "MainFunc.h"
 
 //ログの種類(Noに入れる引数)エラー番号的な
-#define LOG_NULL			0x00000000	//分別無し
+#define LOG_NULL			0x00000000U	//分別無し
 
 //Log_printの引数を最小限に抑えたマクロ
 #define printLog_I( fmt, ... )	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, fmt, __VA_ARGS__)

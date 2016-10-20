@@ -75,7 +75,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	setUSEGAMEPAD();									//使用するゲームパッドの設定を初期値にする
 	SetAnalogueStickMode();								//アナログスティックの操作モードを初期値にする
 
-
 	//コンパイル時刻などを出力
 	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("最終コンパイル時刻は%s %sです"), _T(__DATE__), _T(__TIME__));
 	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("コンパイルに使用したDXライブラリのバージョンは%sです"), DXLIB_VERSION_STR_T);
