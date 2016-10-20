@@ -1,8 +1,5 @@
 //フォント関係
 
-
-#include "MainFunc.h"
-
 static int GenJyuuGothicLHeavy_Edge25;//源桑ゴシックL Heavyエッジ付きサイズ25
 static int GenJyuuGothicLHeavy_Edge30;//源桑ゴシックL Heavyエッジ付きサイズ30
 static int GenJyuuGothicLHeavy_Edge35;//源桑ゴシックL Heavyエッジ付きサイズ35

@@ -1,7 +1,5 @@
 //ロード画面関係
 
-#include "MainFunc.h"
-
 static int LoadScreen;//ロード画面
 static int LoadScreen2;//ロード画面
 

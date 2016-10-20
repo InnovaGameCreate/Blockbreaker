@@ -1,5 +1,4 @@
 //メイン関数
-#include "MainFunc.h"
 
 //変数
 static unsigned int stateKey[256];				//キーボードのキー

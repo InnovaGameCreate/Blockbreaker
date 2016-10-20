@@ -308,12 +308,10 @@ extern void GameMain_Draw();			//描画
 extern void GameMain_Update();			//計算処理
 extern void GameMain_Finalize_Draw();	//終了処理(描画処理)
 extern void GameMain_Finalize_Update();	//終了処理(計算処理)
-
 /*設定系*/
 extern int GameMain_CursorX_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
 extern int GameMain_CursorY_add(int Val);			//カーソル位置を相対的に移動する(戻り値:実際に移動した量)
 extern void GameMain_PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
-
 /*取得系*/
 extern int	GameMain_getCursorX();																			//カーソル位置を取得する
 extern int	GameMain_getCursorY();																			//カーソル位置を取得する

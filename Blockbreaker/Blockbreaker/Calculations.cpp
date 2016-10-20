@@ -3,8 +3,6 @@
 //author:Kisogawa(2016/10/15)
 #pragma endregion 
 
-#include "MainFunc.h"
-
 //”’l‚Ì”ÍˆÍ‚ğ•Ê‚Ì”ÍˆÍ‚É•ÏŠ·‚·‚é
 double map(double v, double sx, double sn, double dx, double dn) {
 	return (v - sn) * (dx - dn) / (sx - sn) + dn;
