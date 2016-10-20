@@ -4,6 +4,9 @@
 #define PHASECONTROLLER_H_
 class PhaseController
 {
+private:
+	virtual void Draw() = 0;			//描画処理
+	virtual void Update() = 0;			//計算処理
 public:
 	PhaseController() {};			//コンストラクタ
 	virtual ~PhaseController() {};	//デストラクタ
@@ -11,8 +14,6 @@ public:
 	//純粋仮想関数(必ずオーバーライドすること！！)
 	virtual void Init_Draw() = 0;		//初期化(描画処理)
 	virtual void Init_Update() = 0;		//初期化(計算処理)
-	virtual void Draw() = 0;			//描画処理
-	virtual void Update() = 0;			//計算処理
 	virtual void Finalize_Draw() = 0;	//終了処理(描画処理)
 	virtual void Finalize_Update() = 0;	//終了処理(計算処理)
 

@@ -19,14 +19,14 @@ private:
 
 
 
+	void Draw();
+	void Update();
 	void GameMain_Key();
 public:
 	Phase_GameMain();
 	~Phase_GameMain();
 	void Init_Draw();
 	void Init_Update();
-	void Draw();
-	void Update();
 	void Finalize_Draw();
 	void Finalize_Update();
 
