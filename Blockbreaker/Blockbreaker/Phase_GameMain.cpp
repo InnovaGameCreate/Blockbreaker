@@ -33,7 +33,7 @@ void Phase_GameMain::Draw() {
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] == RED) {//赤ブロック描画
+				if (fallBlockInfo.BlockID[x][y] == BROCK_TYPE_RED) {//赤ブロック描画
 					double X, Y;
 					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
 					X += BLOCK_SIZE / 2.;
@@ -253,17 +253,17 @@ int Phase_GameMain::Create_FallBlock() {
 
 	//落下ブロックの形状を設定する(暫定)
 	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
-	fallBlockInfo.BlockID[0][0] = NO;
-	fallBlockInfo.BlockID[1][0] = NO;
-	fallBlockInfo.BlockID[2][0] = NO;
+	fallBlockInfo.BlockID[0][0] = BROCK_TYPE_NO;
+	fallBlockInfo.BlockID[1][0] = BROCK_TYPE_NO;
+	fallBlockInfo.BlockID[2][0] = BROCK_TYPE_NO;
 
-	fallBlockInfo.BlockID[0][1] = NO;
-	fallBlockInfo.BlockID[1][1] = RED;
-	fallBlockInfo.BlockID[2][1] = RED;
+	fallBlockInfo.BlockID[0][1] = BROCK_TYPE_NO;
+	fallBlockInfo.BlockID[1][1] = BROCK_TYPE_RED;
+	fallBlockInfo.BlockID[2][1] = BROCK_TYPE_RED;
 
-	fallBlockInfo.BlockID[0][2] = NO;
-	fallBlockInfo.BlockID[1][2] = NO;
-	fallBlockInfo.BlockID[2][2] = NO;
+	fallBlockInfo.BlockID[0][2] = BROCK_TYPE_NO;
+	fallBlockInfo.BlockID[1][2] = BROCK_TYPE_NO;
+	fallBlockInfo.BlockID[2][2] = BROCK_TYPE_NO;
 
 	//落下カウントを60に設定
 	fallBlockInfo.FallCount = 60;
@@ -320,8 +320,8 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), RED) != NO) {
+				if (fallBlockInfo.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), BROCK_TYPE_RED) != BROCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -364,8 +364,8 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
 															//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), RED) != NO) {
+				if (fallBlockInfo.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), BROCK_TYPE_RED) != BROCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -403,7 +403,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	int FLAG = FALSE;
 	for (int i = 0; i < RotaVal; i++) {
 		//擬似的に回転したことにする
-		COLOR RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
+		BROCK_TYPE RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
 		if (Minus) {//反時計回りに90度
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
@@ -422,8 +422,8 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (RotaBlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), RED) != NO) {
+				if (RotaBlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), BROCK_TYPE_RED) != BROCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -457,7 +457,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 }
 
 //指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
-Phase_GameMain::COLOR Phase_GameMain::getBlockColor(int X, int Y, COLOR OutGameBlock) {
+Phase_GameMain::BROCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, BROCK_TYPE OutGameBlock) {
 
 	//画面外処理
 	if (X < 0 || BLOCK_WIDTHNUM <= X)	return OutGameBlock;
@@ -465,6 +465,6 @@ Phase_GameMain::COLOR Phase_GameMain::getBlockColor(int X, int Y, COLOR OutGameB
 
 
 	//画面内のブロックの情報は未完成なので何も無い判定を返す
-	return NO;
+	return BROCK_TYPE_NO;
 
 }

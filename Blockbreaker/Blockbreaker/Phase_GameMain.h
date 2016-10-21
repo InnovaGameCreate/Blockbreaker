@@ -17,18 +17,18 @@ public://定数とかの宣言
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
 
 	//色
-	enum COLOR {
-		NO,
-		RED,
-		BLUE,
-		YELLOW,
-		GREEN,
-		PURPLE
+	enum BROCK_TYPE {
+		BROCK_TYPE_NO,
+		BROCK_TYPE_RED,
+		BROCK_TYPE_BLUE,
+		BROCK_TYPE_YELLOW,
+		BROCK_TYPE_GREEN,
+		BROCK_TYPE_PURPLE
 	};
 
 private:
 	struct field_info {
-		int color;//ブロックの色
+		BROCK_TYPE color;//ブロックの色
 		int fall_flag;//落下中かどうかのフラグ
 		int move_flag;//移動中かどうかのフラグ
 	};
@@ -43,7 +43,7 @@ private:
 
 		int Enable;			//落下中かどうか(TRUEで落下ブロック有効)
 
-		COLOR BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
+		BROCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int FallCount;			//落下カウントダウン(0で落下する)
 		
@@ -53,7 +53,7 @@ private:
 		int Key_LRRota;			//回転移動(-1反時計回り、0回転無し、1時計回り)
 	};
 
-	field_info field[10][16];
+	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
@@ -93,6 +93,6 @@ public:
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
-	COLOR getBlockColor(int X, int Y, COLOR OutGameBlock);	//指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
+	BROCK_TYPE getBlockColor(int X, int Y, BROCK_TYPE OutGameBlock);	//指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
 };
 
