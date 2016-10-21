@@ -71,11 +71,14 @@ private:
 
 	void Draw();
 	void Update();
+	void Update_FallBlock();			//落下ブロックの落下処理
 	void GameMain_Key();
 
 	int FallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_MoveY(int MoveVal);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
+	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
+	void Block_Gravity();					//フィールドブロックを重力で落下させる
 public:
 
 

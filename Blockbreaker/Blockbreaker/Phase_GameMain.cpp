@@ -106,8 +106,8 @@ void Phase_GameMain::Draw() {
 					break;
 				}
 				if (fallBlockInfo.fallblock.BlockID[x][y] == BROCK_TYPE_RED) {
-					
-					
+
+
 				}
 			}
 		}
@@ -177,6 +177,7 @@ void Phase_GameMain::Draw() {
 //計算処理
 void Phase_GameMain::Update() {
 	//計算処理の最初に行いたい処理(多くなったら関数化？)
+
 	//リクエストの反映
 
 	Flag_Pause = Flag_pauseRequest;//リクエストの反映
@@ -188,54 +189,69 @@ void Phase_GameMain::Update() {
 
 
 	//落下ブロックの落下処理
-	if (isFallBlock_Enable()) {//落下ブロックが有効な時
-		fallBlockInfo.Counter++;	//カウンタを加算
-		if (isFallBlock_Falling()) {//落下中の場合
-			fallBlockInfo.FallCount--;
-			if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
-			if (fallBlockInfo.Key_LRMove > 0) {
-				//右移動
-				if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
-				else							SoundEffect_Play(SE_TYPE_Graze);
+	Update_FallBlock();
 
-			}
-			if (fallBlockInfo.Key_LRMove < 0) {
-				//左移動
-				if (FallBlock_MoveX(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
-				else						SoundEffect_Play(SE_TYPE_Graze);
-			}
-			if (fallBlockInfo.Key_LRRota > 0) {
-				//時計回りに回転
-				if (FallBlock_Rotate(1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
-				else						SoundEffect_Play(SE_TYPE_Graze);
-			}
-			if (fallBlockInfo.Key_LRRota < 0) {
-				//反時計回りに回転
-				if (FallBlock_Rotate(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
-				else						SoundEffect_Play(SE_TYPE_Graze);
-			}
+	//ブロックを重力で落下させる
+	
 
-			if (fallBlockInfo.FallCount <= 0) {//カウント0以下で落下
-				fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
-				/*落下しようとして無理だったらカウントを0にし無効化する方針*/
-				if (FallBlock_MoveY(1) == 0) {	//落下出来なかった
-					fallBlockInfo.FallCount = 0;	//落下カウントの無効化
-					printLog_I(_T("ブロックの落下終了"));
-					Delete_FallBlock();
-					SoundEffect_Play(SE_TYPE_DecisionSelect);
-				}
-			}
-		}
-		//キー入力による状態のリセット
-		fallBlockInfo.Key_FlagFirstFall = FALSE;
-		fallBlockInfo.Key_LRMove = 0;
-		fallBlockInfo.Key_LRRota = 0;
-	}
-	else {
-		fallBlockInfo.Counter--;
-	}
 
 	if (getFallBlock_Interval() > 120)	Create_FallBlock(NULL);//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
+
+}
+
+//落下ブロックの落下処理
+void Phase_GameMain::Update_FallBlock() {
+	if (!isFallBlock_Enable()) {
+		//無効の時はインターバルカウントを加算し終了
+		fallBlockInfo.Counter--;
+		return;
+	}
+
+	//以下有効なとき
+	fallBlockInfo.Counter++;	//カウンタを加算
+
+	if (isFallBlock_Falling()) {//落下中の場合
+		fallBlockInfo.FallCount--;
+		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
+		if (fallBlockInfo.Key_LRMove > 0) {
+			//右移動
+			if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else							SoundEffect_Play(SE_TYPE_Graze);
+
+		}
+		if (fallBlockInfo.Key_LRMove < 0) {
+			//左移動
+			if (FallBlock_MoveX(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else						SoundEffect_Play(SE_TYPE_Graze);
+		}
+		if (fallBlockInfo.Key_LRRota > 0) {
+			//時計回りに回転
+			if (FallBlock_Rotate(1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else						SoundEffect_Play(SE_TYPE_Graze);
+		}
+		if (fallBlockInfo.Key_LRRota < 0) {
+			//反時計回りに回転
+			if (FallBlock_Rotate(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else						SoundEffect_Play(SE_TYPE_Graze);
+		}
+
+		if (fallBlockInfo.FallCount <= 0) {//カウント0以下で落下
+			fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
+											/*落下しようとして無理だったらカウントを0にし無効化する方針*/
+			if (FallBlock_MoveY(1) == 0) {	//落下出来なかった
+				fallBlockInfo.FallCount = 0;	//落下カウントの無効化
+				printLog_I(_T("ブロックの落下終了"));
+				FallBlock_addField();	//フィールドに落下ブロックを設置
+				SoundEffect_Play(SE_TYPE_DecisionSelect);
+				Block_Gravity();		//重力によるブロックの落下を設定
+			}
+		}
+	}
+
+	//キー入力による状態のリセット
+	fallBlockInfo.Key_FlagFirstFall = FALSE;
+	fallBlockInfo.Key_LRMove = 0;
+	fallBlockInfo.Key_LRRota = 0;
 
 }
 
@@ -315,7 +331,7 @@ int Phase_GameMain::isFallBlock_Enable() {
 
 //落下ブロックを生成する(戻り値:成功でTRUE)
 int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
-	if (fallblock_Pack == NULL)	return FALSE;
+	//if (fallblock_Pack == NULL)	return FALSE;
 
 	if (isFallBlock_Enable()) {
 		printLog_C(_T("落下中のブロックがすでに存在するため、落下ブロックを新たに追加出来ませんでした"));
@@ -527,10 +543,36 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	return RotaVal;
 }
 
+//落下ブロックをフィールドブロックに変換する(つまり設置)
+void Phase_GameMain::FallBlock_addField() {
+	if (!isFallBlock_Enable())	return;	//そもそも有効で無い時は無視
+
+	//何も無しブロック以外はフィールドブロックに順次変換を行う
+	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+			if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {
+				int fX, fY;		//ブロックのフィールド上の位置
+				BROCK_TYPE fB;	//設置するブロックの種類
+				fX = fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER);
+				fY = fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER);
+				fB = fallBlockInfo.fallblock.BlockID[x][y];
+
+				add_FraldBlock(fX, fY, fB);
+
+			}
+		}
+	}
+	printLog_I(_T("落下ブロックの【設置】"));
+
+	//落下ブロックの無効化処理
+	Delete_FallBlock();
+
+}
+
 //フィールドにブロックを追加する(成功でTRUE,失敗でFALSE)(上書き禁止)
 int Phase_GameMain::add_FraldBlock(int X, int Y, BROCK_TYPE brock_type) {
 	//ブロック無しブロックは設置不可
-	if(brock_type == BROCK_TYPE_NO)					return FALSE;
+	if (brock_type == BROCK_TYPE_NO)					return FALSE;
 
 	//ブロックの上書きは失敗にする(画面外もブロック有りと判定が出る設定にする)
 	if (getBlockColor(X, Y, TRUE) != BROCK_TYPE_NO)	return FALSE;
@@ -554,4 +596,27 @@ Phase_GameMain::BROCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOu
 
 	return field[X][Y].color;
 
+}
+
+//フィールドブロックを重力で落下させる
+void Phase_GameMain::Block_Gravity() {
+	
+
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		//列ごとにブロック情報をコピーする
+		field_info t[BLOCK_HEIGHTNUM];
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			t[y] = field[x][y];
+			field[x][y].color = BROCK_TYPE_NO;
+		}
+		int Count = BLOCK_HEIGHTNUM - 1;
+		//下の段から存在するブロックを並べ直す(逆順回し)
+		for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
+			if (t[y].color != BROCK_TYPE_NO) {
+				field[x][Count] = t[y];
+				Count--;
+			}
+		}
+	}
+	printLog_I(_T("ブロックに重力計算を行いました"));
 }
