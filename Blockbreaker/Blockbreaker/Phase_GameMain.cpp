@@ -46,12 +46,26 @@ void Phase_GameMain::Draw() {
 
 	//デバッグ
 #ifdef DEBUG_GAMEMAIN
-	//縦横70間隔で線を描画する
+	//縦横BLOCK_SIZE間隔で線を描画する
 	for (int i = 1; i < BLOCK_WIDTHNUM; i++) {
 		DrawLine(i * BLOCK_SIZE, 0, i * BLOCK_SIZE, GAMEWINDOW_HEIGHT, GetColor(0xff, 0xbf, 0x74));
 	}
 	for (int i = 1; i < BLOCK_HEIGHTNUM; i++) {
 		DrawLine(0, i * BLOCK_SIZE, GAMEWINDOW_WIDTH, i * BLOCK_SIZE, GetColor(0xff, 0xbf, 0x74));
+	}
+
+	//落下ブロックの範囲を描画する
+	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+				double X, Y;
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 50);
+				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), TRUE);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), FALSE);
+			}
+		}
 	}
 #endif // DEBUG_GAMEMAIN
 

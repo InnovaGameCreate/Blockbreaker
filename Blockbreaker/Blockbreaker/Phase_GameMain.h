@@ -14,7 +14,7 @@ public://定数とかの宣言
 	static const int BLOCK_WIDTHNUM = 14;	//ブロックの横の個数
 	static const int BLOCK_HEIGHTNUM = 17;	//ブロックの縦の個数
 	static const int FALLBLOCK_SIZE = 3;	//落下するブロックの大きさ
-	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心位置
+	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
 
 	//色
 	enum COLOR {
