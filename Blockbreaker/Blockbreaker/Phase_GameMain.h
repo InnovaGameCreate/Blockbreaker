@@ -23,7 +23,7 @@ public://定数とかの宣言
 		BROCK_TYPE_BLUE,
 		BROCK_TYPE_YELLOW,
 		BROCK_TYPE_GREEN,
-		BROCK_TYPE_PURPLE
+		BROCK_TYPE_PURPLE,
 	};
 
 private:
@@ -31,6 +31,11 @@ private:
 		BROCK_TYPE color;//ブロックの色
 		int fall_flag;//落下中かどうかのフラグ
 		int move_flag;//移動中かどうかのフラグ
+	};
+
+	struct Fallblock_Pack {
+		BROCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
+
 	};
 
 	//落下ブロックの情報
@@ -41,9 +46,9 @@ private:
 		}
 		int Counter;			//落下ブロックのカウンタ(常に有効な変数です！！)(負の数でブロックが消滅してからの経過フレーム、正の数でブロックが生成されてからの時間)
 
-		int Enable;			//落下中かどうか(TRUEで落下ブロック有効)
-
-		BROCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
+		int Enable;				//落下中かどうか(TRUEで落下ブロック有効)
+		struct Fallblock_Pack fallblock;	//落下ブロック本体の情報
+		
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int FallCount;			//落下カウントダウン(0で落下する)
 		
@@ -81,7 +86,7 @@ public:
 	void Finalize_Draw();
 	void Finalize_Update();
 
-	int Create_FallBlock();		//落下ブロックを生成する(戻り値:成功でTRUE)
+	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
 
 	/*設定系*/
 	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト

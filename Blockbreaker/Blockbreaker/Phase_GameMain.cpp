@@ -33,12 +33,42 @@ void Phase_GameMain::Draw() {
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] == BROCK_TYPE_RED) {//赤ブロック描画
-					double X, Y;
+				double X, Y;
+				switch (fallBlockInfo.fallblock.BlockID[x][y]) {
+				case BROCK_TYPE_RED:	//赤ブロック描画
 					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
 					X += BLOCK_SIZE / 2.;
 					Y += BLOCK_SIZE / 2.;
 					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
+					break;
+				case BROCK_TYPE_BLUE:	//青ブロック描画
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+					X += BLOCK_SIZE / 2.;
+					Y += BLOCK_SIZE / 2.;
+					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 0, 255));
+					break;
+				case BROCK_TYPE_GREEN:	//緑ブロック描画
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+					X += BLOCK_SIZE / 2.;
+					Y += BLOCK_SIZE / 2.;
+					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 255, 0));
+					break;
+				case BROCK_TYPE_PURPLE:	//紫ブロック描画
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+					X += BLOCK_SIZE / 2.;
+					Y += BLOCK_SIZE / 2.;
+					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 255));
+					break;
+				case BROCK_TYPE_YELLOW:	//黄色ブロック描画
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+					X += BLOCK_SIZE / 2.;
+					Y += BLOCK_SIZE / 2.;
+					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 255, 0));
+					break;
+				}
+				if (fallBlockInfo.fallblock.BlockID[x][y] == BROCK_TYPE_RED) {
+					
+					
 				}
 			}
 		}
@@ -166,7 +196,7 @@ void Phase_GameMain::Update() {
 		fallBlockInfo.Counter--;
 	}
 
-	if (getFallBlock_Interval() > 120)	Create_FallBlock();//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
+	if (getFallBlock_Interval() > 120)	Create_FallBlock(NULL);//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
 
 }
 
@@ -245,7 +275,9 @@ int Phase_GameMain::isFallBlock_Enable() {
 }
 
 //落下ブロックを生成する(戻り値:成功でTRUE)
-int Phase_GameMain::Create_FallBlock() {
+int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
+	if (fallblock_Pack == NULL)	return FALSE;
+
 	if (isFallBlock_Enable()) {
 		printLog_C(_T("落下中のブロックがすでに存在するため、落下ブロックを新たに追加出来ませんでした"));
 		return FALSE;
@@ -253,17 +285,17 @@ int Phase_GameMain::Create_FallBlock() {
 
 	//落下ブロックの形状を設定する(暫定)
 	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
-	fallBlockInfo.BlockID[0][0] = BROCK_TYPE_NO;
-	fallBlockInfo.BlockID[1][0] = BROCK_TYPE_NO;
-	fallBlockInfo.BlockID[2][0] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][0] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[1][0] = BROCK_TYPE_YELLOW;
+	fallBlockInfo.fallblock.BlockID[2][0] = BROCK_TYPE_NO;
 
-	fallBlockInfo.BlockID[0][1] = BROCK_TYPE_NO;
-	fallBlockInfo.BlockID[1][1] = BROCK_TYPE_RED;
-	fallBlockInfo.BlockID[2][1] = BROCK_TYPE_RED;
+	fallBlockInfo.fallblock.BlockID[0][1] = BROCK_TYPE_PURPLE;
+	fallBlockInfo.fallblock.BlockID[1][1] = BROCK_TYPE_RED;
+	fallBlockInfo.fallblock.BlockID[2][1] = BROCK_TYPE_GREEN;
 
-	fallBlockInfo.BlockID[0][2] = BROCK_TYPE_NO;
-	fallBlockInfo.BlockID[1][2] = BROCK_TYPE_NO;
-	fallBlockInfo.BlockID[2][2] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][2] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[1][2] = BROCK_TYPE_BLUE;
+	fallBlockInfo.fallblock.BlockID[2][2] = BROCK_TYPE_NO;
 
 	//落下カウントを60に設定
 	fallBlockInfo.FallCount = 60;
@@ -320,7 +352,7 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+				if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
 					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), BROCK_TYPE_RED) != BROCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
@@ -364,7 +396,7 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
 															//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+				if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
 					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), BROCK_TYPE_RED) != BROCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
@@ -407,14 +439,14 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 		if (Minus) {//反時計回りに90度
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-					RotaBlockID[y][(FALLBLOCK_SIZE - 1) - x] = fallBlockInfo.BlockID[x][y];
+					RotaBlockID[y][(FALLBLOCK_SIZE - 1) - x] = fallBlockInfo.fallblock.BlockID[x][y];
 				}
 			}
 		}
 		else {//時計回りに90度
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-					RotaBlockID[(FALLBLOCK_SIZE - 1) - y][x] = fallBlockInfo.BlockID[x][y];
+					RotaBlockID[(FALLBLOCK_SIZE - 1) - y][x] = fallBlockInfo.fallblock.BlockID[x][y];
 				}
 			}
 		}
@@ -441,7 +473,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 			//回転を確定する
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-					fallBlockInfo.BlockID[x][y] = RotaBlockID[x][y];
+					fallBlockInfo.fallblock.BlockID[x][y] = RotaBlockID[x][y];
 				}
 			}
 		}
