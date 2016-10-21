@@ -13,7 +13,8 @@ public://定数とかの宣言
 	static const int BLOCK_SIZE = 50;		//ブロックの縦横のピクセルサイズ
 	static const int BLOCK_WIDTHNUM = 14;	//ブロックの横の個数
 	static const int BLOCK_HEIGHTNUM = 17;	//ブロックの縦の個数
-
+	static const int FALLBLOCK_SIZE = 3;	//落下するブロックの大きさ
+	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心位置
 
 	//色
 	enum COLOR {
@@ -42,13 +43,14 @@ private:
 
 		int Enable;			//落下中かどうか(TRUEで落下ブロック有効)
 
-		COLOR BlockID[3][3];	//縦横3ずつのブロック領域としてブロックの位置情報を記録する
+		COLOR BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int FallCount;			//落下カウントダウン(0で落下する)
 		
 		//キー入力による状態の保存用
-		int Key_FlagFirstFall;			//高速落下モード(TRUEで有効)
-		int Key_LRMove;				//左右移動(-1左、0移動無し、1右移動)
+		int Key_FlagFirstFall;	//高速落下モード(TRUEで有効)
+		int Key_LRMove;			//左右移動(-1左、0移動無し、1右移動)
+		int Key_LRRota;			//回転移動(-1反時計回り、0回転無し、1時計回り)
 	};
 
 	field_info field[10][16];
@@ -66,8 +68,9 @@ private:
 	void Update();
 	void GameMain_Key();
 
-	int isFallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-	int isFallBlock_MoveY(int MoveVal);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_MoveY(int MoveVal);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 public:
 
 

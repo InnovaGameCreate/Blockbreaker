@@ -31,11 +31,11 @@ void Phase_GameMain::Draw() {
 
 	//落下中ブロックの描画
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.BlockID[x][y] == RED) {//赤ブロック描画
 					double X, Y;
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - 1), fallBlockInfo.PlaceY + (y - 1), &X, &Y);
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
 					X += BLOCK_SIZE / 2.;
 					Y += BLOCK_SIZE / 2.;
 					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
@@ -110,23 +110,43 @@ void Phase_GameMain::Update() {
 		if (isFallBlock_Falling()) {//落下中の場合
 			fallBlockInfo.FallCount--;
 			if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
-			if (fallBlockInfo.Key_LRMove > 0)		isFallBlock_MoveX(1);			//右移動
-			if (fallBlockInfo.Key_LRMove < 0)		isFallBlock_MoveX(-1);			//左移動
+			if (fallBlockInfo.Key_LRMove > 0) {
+				//右移動
+				if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+				else							SoundEffect_Play(SE_TYPE_Graze);
+
+			}
+			if (fallBlockInfo.Key_LRMove < 0) {
+				//左移動
+				if (FallBlock_MoveX(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
+				else						SoundEffect_Play(SE_TYPE_Graze);
+			}
+			if (fallBlockInfo.Key_LRRota > 0) {
+				//時計回りに回転
+				if (FallBlock_Rotate(1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
+				else						SoundEffect_Play(SE_TYPE_Graze);
+			}
+			if (fallBlockInfo.Key_LRRota < 0) {
+				//反時計回りに回転
+				if (FallBlock_Rotate(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);		
+				else						SoundEffect_Play(SE_TYPE_Graze);
+			}
 
 			if (fallBlockInfo.FallCount <= 0) {//カウント0以下で落下
-				fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとisFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
+				fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
 				/*落下しようとして無理だったらカウントを0にし無効化する方針*/
-				if (isFallBlock_MoveY(1) == 0) {	//落下出来なかった
+				if (FallBlock_MoveY(1) == 0) {	//落下出来なかった
 					fallBlockInfo.FallCount = 0;	//落下カウントの無効化
 					printLog_I(_T("ブロックの落下終了"));
 					Delete_FallBlock();
+					SoundEffect_Play(SE_TYPE_DecisionSelect);
 				}
 			}
 		}
 		//キー入力による状態のリセット
 		fallBlockInfo.Key_FlagFirstFall = FALSE;
 		fallBlockInfo.Key_LRMove = 0;
-		fallBlockInfo.Key_LRMove = 0;
+		fallBlockInfo.Key_LRRota = 0;
 	}
 	else {
 		fallBlockInfo.Counter--;
@@ -160,17 +180,17 @@ void Phase_GameMain::GameMain_Key() {
 		if (getKeyBind(KEYBIND_DOWN) > 0) {//高速落下モード
 			fallBlockInfo.Key_FlagFirstFall = TRUE;
 		}
-	}
-
-	if (isFallBlock_Falling()) {
 		if (getKeyBind(KEYBIND_RIGHT) == 1) {//右移動
 			fallBlockInfo.Key_LRMove++;
 		}
-	}
-
-	if (isFallBlock_Falling()) {
 		if (getKeyBind(KEYBIND_LEFT) == 1) {//左移動
 			fallBlockInfo.Key_LRMove--;
+		}
+		if (getKeyBind(KEYBIND_ROTAL) == 1) {//反時計回り
+			fallBlockInfo.Key_LRRota--;
+		}
+		if (getKeyBind(KEYBIND_ROTAR) == 1) {//時計回り
+			fallBlockInfo.Key_LRRota++;
 		}
 	}
 }
@@ -220,15 +240,15 @@ int Phase_GameMain::Create_FallBlock() {
 	//落下ブロックの形状を設定する(暫定)
 	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
 	fallBlockInfo.BlockID[0][0] = NO;
-	fallBlockInfo.BlockID[1][0] = RED;
+	fallBlockInfo.BlockID[1][0] = NO;
 	fallBlockInfo.BlockID[2][0] = NO;
 
-	fallBlockInfo.BlockID[0][1] = RED;
+	fallBlockInfo.BlockID[0][1] = NO;
 	fallBlockInfo.BlockID[1][1] = RED;
 	fallBlockInfo.BlockID[2][1] = RED;
 
 	fallBlockInfo.BlockID[0][2] = NO;
-	fallBlockInfo.BlockID[1][2] = RED;
+	fallBlockInfo.BlockID[1][2] = NO;
 	fallBlockInfo.BlockID[2][2] = NO;
 
 	//落下カウントを60に設定
@@ -239,6 +259,7 @@ int Phase_GameMain::Create_FallBlock() {
 	fallBlockInfo.PlaceY = 1;
 	fallBlockInfo.Counter = 0;
 	fallBlockInfo.Key_LRMove = 0;
+	fallBlockInfo.Key_LRRota = 0;
 	fallBlockInfo.Key_FlagFirstFall = FALSE;
 
 	//有効
@@ -265,30 +286,41 @@ void Phase_GameMain::Delete_FallBlock() {
 }
 
 //落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-int Phase_GameMain::isFallBlock_MoveX(int MoveVal) {
+int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
 
-	//方針:だんだんMoveValを制限していき最も小さい値を加算する
+	//方針:だんだんMoveValを大きくしていく
+	int Minus = FALSE;//マイナスフラグ
+	if (MoveVal < 0) {
+		//符号反転
+		MoveVal = -MoveVal;
+		Minus = TRUE;
+	}
 
-	while (abs(MoveVal) != 0) {/*無限ループ*/
+	for (int i = 0; i < MoveVal; i++) {
 		//擬似的に移動したことにする
-		int pX = fallBlockInfo.PlaceX + MoveVal;
+		int pX = 0;
+		if (Minus)	pX = fallBlockInfo.PlaceX - (i + 1);	//負の方向
+		else		pX = fallBlockInfo.PlaceX + (i + 1);	//正の方向
 
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
-		int Flag = FALSE;	//重なり無し
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(pX + (x - 1), fallBlockInfo.PlaceY + (y - 1), RED) != NO) {
-						Flag = TRUE;
-						break;
+					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), RED) != NO) {
+						//他のブロックと重なっていた場合はループを抜ける
+						x = FALLBLOCK_SIZE;
+						y = FALLBLOCK_SIZE;
+						MoveVal = i;//最外のループも抜ける
 					}
 				}
 			}
 		}
+	}
 
-		if (!Flag)	break;//重なり無しの場合はループを抜ける
-		else		MoveVal = (MoveVal > 0) ? MoveVal - 1 : MoveVal + 1;//0に近づけループの先頭へ
+	//符号を元に戻す
+	if (Minus) {
+		MoveVal = -MoveVal;
 	}
 
 	//ずらしの反映
@@ -298,38 +330,116 @@ int Phase_GameMain::isFallBlock_MoveX(int MoveVal) {
 }
 
 //落下ブロックをY軸方向に移動(戻り値は実際の移動量)
-int Phase_GameMain::isFallBlock_MoveY(int MoveVal) {
+int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
 	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
 
-	//方針:だんだんMoveValを制限していき最も小さい値を加算する
+												//方針:だんだんMoveValを大きくしていく
+	int Minus = FALSE;//マイナスフラグ
+	if (MoveVal < 0) {
+		//符号反転
+		MoveVal = -MoveVal;
+		Minus = TRUE;
+	}
 
-	//すべて無効ブロックだと判定は常に移動可能が出力されます
+	for (int i = 0; i < MoveVal; i++) {
+		//擬似的に移動したことにする
+		int pY = 0;
+		if (Minus)	pY = fallBlockInfo.PlaceY - (i + 1);	//負の方向
+		else		pY = fallBlockInfo.PlaceY + (i + 1);	//正の方向
 
-	while (abs(MoveVal) != 0) {/*無限ループ*/
-							   //擬似的に移動したことにする
-		int pY = fallBlockInfo.PlaceY + MoveVal;
-
-		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
-		int Flag = FALSE;	//重なり無し
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
+															//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.BlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - 1), pY + (y - 1), RED) != NO) {
-						Flag = TRUE;
-						break;
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), RED) != NO) {
+						//他のブロックと重なっていた場合はループを抜ける
+						x = FALLBLOCK_SIZE;
+						y = FALLBLOCK_SIZE;
+						MoveVal = i;//最外のループも抜ける
 					}
 				}
 			}
 		}
+	}
 
-		if (!Flag)	break;//重なり無しの場合はループを抜ける
-		else		MoveVal = (MoveVal > 0) ? MoveVal - 1 : MoveVal + 1;//0に近づけループの先頭へ
+	//符号を元に戻す
+	if (Minus) {
+		MoveVal = -MoveVal;
 	}
 
 	//ずらしの反映
 	fallBlockInfo.PlaceY += MoveVal;
 
 	return MoveVal;
+}
+
+//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
+int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
+	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
+
+												//方針:だんだんMoveValを大きくしていく
+	int Minus = FALSE;//マイナスフラグ
+	if (RotaVal < 0) {
+		//符号反転
+		RotaVal = -RotaVal;
+		Minus = TRUE;
+	}
+
+
+	int FLAG = FALSE;
+	for (int i = 0; i < RotaVal; i++) {
+		//擬似的に回転したことにする
+		COLOR RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
+		if (Minus) {//反時計回りに90度
+			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+					RotaBlockID[y][(FALLBLOCK_SIZE - 1) - x] = fallBlockInfo.BlockID[x][y];
+				}
+			}
+		}
+		else {//時計回りに90度
+			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+					RotaBlockID[(FALLBLOCK_SIZE - 1) - y][x] = fallBlockInfo.BlockID[x][y];
+				}
+			}
+		}
+
+		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+				if (RotaBlockID[x][y] != NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), RED) != NO) {
+						//他のブロックと重なっていた場合はループを抜ける
+						x = FALLBLOCK_SIZE;
+						y = FALLBLOCK_SIZE;
+						RotaVal = i;
+						FLAG = TRUE;//最外のループも抜ける
+					}
+				}
+			}
+		}
+
+		if (FLAG) {
+			break;
+		}
+		else {
+			//回転を確定する
+			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+					fallBlockInfo.BlockID[x][y] = RotaBlockID[x][y];
+				}
+			}
+		}
+
+	}
+
+	//符号を元に戻す
+	if (Minus) {
+		RotaVal = -RotaVal;
+	}
+
+	return RotaVal;
 }
 
 //指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
