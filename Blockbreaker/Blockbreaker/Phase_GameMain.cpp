@@ -244,6 +244,7 @@ void Phase_GameMain::Update_FallBlock() {
 				FallBlock_addField();	//フィールドに落下ブロックを設置
 				SoundEffect_Play(SE_TYPE_DecisionSelect);
 				Block_Gravity();		//重力によるブロックの落下を設定
+				while (Block_Delete() != 0);	//隣接ブロックの削除	
 			}
 		}
 	}
@@ -619,4 +620,81 @@ void Phase_GameMain::Block_Gravity() {
 		}
 	}
 	printLog_I(_T("ブロックに重力計算を行いました"));
+}
+
+//フィールドブロックを直接削除する(重力計算を行うかどうかのフラグ)
+void Phase_GameMain::Block_Delete_Direct(int X, int Y, int CallGravityFlag) {
+	//画面外処理(画面外ブロックが定義されていないので、赤ブロックが設置されていることにする)
+	if (X < 0 || BLOCK_WIDTHNUM <= X)	return;
+	if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return;
+
+	field[X][Y].color = BROCK_TYPE_NO;
+	printLog_I(_T("ブロックの【削除】[%d][%d]"), X, Y);
+
+	if (CallGravityFlag)	Block_Gravity();
+}
+
+//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
+int Phase_GameMain::Block_Delete() {
+	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
+	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BROCK_TYPE_NO) {//除外ブロック
+				DeleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
+			}
+			else {
+				DeleteFlag[x][y] = -1;
+			}
+		}
+	}
+
+	//隣接ブロックの計算を行う
+	int Counter[BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM];	//IDごとの隣接カウント数
+	int ID = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (DeleteFlag[x][y] == -1) {//未探索ブロック
+				Counter[ID] = 0;
+				SequenceCount(x, y, ID, DeleteFlag, &(Counter[ID]));
+				ID++;
+			}
+		}
+	}
+
+	
+
+	//4以上隣接しているブロックは削除する
+	int DelCount = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
+				if (Counter[DeleteFlag[x][y]] >= 3) {
+					//削除
+					Block_Delete_Direct(x, y, FALSE);
+					DelCount++;
+				}
+			}
+		}
+	}
+
+	printLog_I(_T("隣接ブロックの削除計算を行いました(%dブロック)"), DelCount);
+
+	//重力計算
+	Block_Gravity();
+
+	return DelCount;
+}
+
+//隣接する同色ブロックにマーカーを付ける
+void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter) {
+	if (deleteFlag[x][y] != -1)	return;		//未探索ブロックじゃない場合
+	BROCK_TYPE bt = field[x][y].color;      //ブロックの種類を記録する
+	deleteFlag[x][y] = ID;					//探索済み(探索IDを設定する)
+	(*Counter)++;							
+
+	if (x + 1<BLOCK_WIDTHNUM	&& field[x + 1][y].color == bt) SequenceCount(x + 1, y, ID, deleteFlag, Counter);
+	if (y + 1<BLOCK_HEIGHTNUM	&& field[x][y + 1].color == bt) SequenceCount(x, y + 1, ID, deleteFlag, Counter);
+	if (x - 1 >= 0				&& field[x - 1][y].color == bt) SequenceCount(x - 1, y, ID, deleteFlag, Counter);
+	if (y - 1 >= 0				&& field[x][y - 1].color == bt) SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
