@@ -87,6 +87,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
+	int add_FraldBlock(int X, int Y, BROCK_TYPE brock_type);							//フィールドにブロックを追加する
 
 	/*設定系*/
 	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
@@ -98,6 +99,6 @@ public:
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
-	BROCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE);	//指定した座標のブロックの取得(第3引数は画面外のブロックを使用するかどうか)
+	BROCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうか)
 };
 

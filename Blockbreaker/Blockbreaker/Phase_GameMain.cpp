@@ -29,6 +29,45 @@ void Phase_GameMain::Draw() {
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
 	DrawBox(0, 0, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, GetColor(0xb3, 0x65, 0xe5), TRUE);
 
+	//フィールドブロックの描画
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			double X, Y;
+			switch (field[x][y].color) {
+			case BROCK_TYPE_RED:	//赤ブロック描画
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
+				break;
+			case BROCK_TYPE_BLUE:	//青ブロック描画
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 0, 255));
+				break;
+			case BROCK_TYPE_GREEN:	//緑ブロック描画
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 255, 0));
+				break;
+			case BROCK_TYPE_PURPLE:	//紫ブロック描画
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 255));
+				break;
+			case BROCK_TYPE_YELLOW:	//黄色ブロック描画
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 255, 0));
+				break;
+			}
+		}
+	}
+
 	//落下中ブロックの描画
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
@@ -488,15 +527,31 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	return RotaVal;
 }
 
-//指定した座標のブロックの取得(第3引数は画面外のブロックを判定したときの戻り値)
+//フィールドにブロックを追加する(成功でTRUE,失敗でFALSE)(上書き禁止)
+int Phase_GameMain::add_FraldBlock(int X, int Y, BROCK_TYPE brock_type) {
+	//ブロック無しブロックは設置不可
+	if(brock_type == BROCK_TYPE_NO)					return FALSE;
+
+	//ブロックの上書きは失敗にする(画面外もブロック有りと判定が出る設定にする)
+	if (getBlockColor(X, Y, TRUE) != BROCK_TYPE_NO)	return FALSE;
+
+	//ブロックの設置
+	field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+	field[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+	field[X][Y].color = brock_type;	//ブロックの置き換え
+
+	printLog_I(_T("フィールドブロックの新規生成[%d][%d](type=%d)"), X, Y, brock_type);
+
+	return TRUE;
+}
+
+//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうか)
 Phase_GameMain::BROCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock) {
 
-	//画面外処理
-	if (X < 0 || BLOCK_WIDTHNUM <= X)	return BROCK_TYPE_RED;
-	if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return BROCK_TYPE_RED;
+	//画面外処理(画面外ブロックが定義されていないので、赤ブロックが設置されていることにする)
+	if (X < 0 || BLOCK_WIDTHNUM <= X)	return (useOutScreenBlock) ? BROCK_TYPE_RED : BROCK_TYPE_NO;
+	if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return (useOutScreenBlock) ? BROCK_TYPE_RED : BROCK_TYPE_NO;
 
-
-	//画面内のブロックの情報は未完成なので何も無い判定を返す
-	return BROCK_TYPE_NO;
+	return field[X][Y].color;
 
 }
