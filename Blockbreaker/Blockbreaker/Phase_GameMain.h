@@ -100,6 +100,8 @@ private:
 	int Tex_BlockGREEN;		//緑ブロック
 	int Tex_BlockPURPLE;	//紫ブロック
 
+	int BGM;				//BGM
+
 
 	int Flag_Pause;			//ポーズ状態かどうか(ゲームの進行がすべて停止します)(TRUEでポーズ)
 	int Flag_pauseRequest;	//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)

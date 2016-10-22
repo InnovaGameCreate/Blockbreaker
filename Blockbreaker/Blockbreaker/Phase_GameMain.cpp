@@ -19,12 +19,17 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
 	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
 
+	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
+	SetLoopTimePosSoundMem(9768, BGM);
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+
 }
 
 //初期化(計算処理)
 void Phase_GameMain::Init_Update() {
 	Flag_Pause = FALSE;
 	Flag_pauseRequest = FALSE;
+
 }
 
 //描画処理
@@ -203,6 +208,7 @@ void Phase_GameMain::Update() {
 		//隣接ブロックの削除
 		if (Block_Delete() > 0) {
 			//消去されたブロックが存在すれば重力計算
+			SoundEffect_Play(SE_TYPE_ButtonCancel);
 			Block_Gravity();
 			gameCycle = GameCycle_Gravity;
 		}
