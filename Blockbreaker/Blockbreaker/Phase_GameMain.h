@@ -27,16 +27,37 @@ public://定数とかの宣言
 	};
 
 private:
+	//移動モーションのデータ
+	struct BlockMoveMotion {
+		BlockMoveMotion() {
+			Enable = FALSE;
+		}
+		int Enable;			//移動モーションが有効かどうか
+		int FromX, FromY;	//移動元座標
+		int ToX, ToY;		//移動先座標
+		int Count;			//移動カウント(0起算)
+		double a;			//加速度
+		double MaxSpeed;	//最高速度
+	};
 	struct field_info {
 		BROCK_TYPE color;//ブロックの色
 		int fall_flag;//落下中かどうかのフラグ
 		int move_flag;//移動中かどうかのフラグ
+
+		BlockMoveMotion blockMoveMotion;	//落下モーション
 	};
 
 	struct Fallblock_Pack {
 		BROCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
-
 	};
+
+	//ゲームサイクルの識別
+	enum GameCycle {
+		GameCycle_FALL,		//ブロックの落下
+		GameCycle_Gravity,	//ブロックに重力を判定する
+		GameCycle_Delete,	//ブロックの消去判定
+	};
+
 
 	//落下ブロックの情報
 	struct FallBlockInfo {
@@ -69,9 +90,11 @@ private:
 	
 	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
 
+	GameCycle gameCycle;		//ゲームサイクル
+
 	void Draw();
 	void Update();
-	void Update_FallBlock();			//落下ブロックの落下処理
+	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
 
 	int FallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
@@ -82,6 +105,7 @@ private:
 	void Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ)
 	int Block_Delete();						//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
+	void Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
 public:
 
 
@@ -106,5 +130,6 @@ public:
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
 	BROCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうか)
+	int isBlock_PlayMotion();		//モーション中のブロックが存在するかどうかの取得(TRUE存在)
 };
 

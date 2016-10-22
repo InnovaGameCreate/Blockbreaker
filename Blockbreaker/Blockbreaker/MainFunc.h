@@ -273,7 +273,8 @@ extern int			collision_line2(PolygonPoints2 *polygon, double pointX1, double poi
 extern int			collisionLC(double X1, double Y1, double X2, double Y2, double  circleX, double circleY, double circleR, Vec *ans1, Vec *ans2);//円と直線の交点
 /*その他*/
 extern double		getRotation(double X1, double Y1, double X2, double Y2);			//2点間の角度の取得(度)
-extern double		getDistance(double X1, double Y1, double X2, double Y2);			//2点間の距離を求める																						
+extern double		getDistance(double X1, double Y1, double X2, double Y2);			//2点間の距離を求める
+extern double		getMoveDistance(double a, double MaxSpeed, int Count);				//加速度、最大速度、移動開始からの経過時間から現在の移動距離を計算する
 extern double		Cross_product(Vec *a, Vec *b);										//外積の計算
 extern Vec			Vector_component(double x, double y, double pointX, double pointY); //ベクトルの成分計算
 extern long long	powi64(long long _Left, int _Yx);									//long long型のpow関数(_Yx < 0は非対応)

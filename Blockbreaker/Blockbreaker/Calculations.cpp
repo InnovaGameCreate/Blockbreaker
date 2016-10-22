@@ -782,3 +782,23 @@ int Pot(int inSize) {
 	while (outSize < inSize) outSize <<= 1;
 	return outSize;
 }
+
+//加速度、最大速度、移動開始からの経過時間から現在の移動距離を計算する
+double getMoveDistance(double a, double MaxSpeed, int Count) {
+	//vtグラフの面積を計算すれば良い
+
+	//現在のカウント数で最大速度に到達しているかの確認
+	double MaxSpeedCount = MaxSpeed / a;
+	if (MaxSpeedCount >= Count) {//加速中
+								 /*x=(1/2)*at^2*/
+		double D = (1 / 2.)*a*Count*Count;
+		return D;
+	}
+	else {
+
+		//最大速度に到達した場所でのカウントを取得する
+		double aD = (1 / 2.)*a*MaxSpeedCount*MaxSpeedCount;	//加速中に移動した距離を計算する
+		double nD = MaxSpeed * (Count - MaxSpeedCount);		//最大速度で等速直線運動
+		return aD + nD;
+	}
+}
