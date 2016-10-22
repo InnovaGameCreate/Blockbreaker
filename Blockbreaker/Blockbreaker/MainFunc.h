@@ -8,7 +8,7 @@
 
 //デバッグ設定の定義(使用しない場合はコメントアウト)
 #ifdef DEBUG
-//#define DEBUG_GAMEMAIN	//ゲームメインのデバッグ
+#define DEBUG_GAMEMAIN	//ゲームメインのデバッグ
 #endif // DEBUG
 
 
@@ -18,10 +18,6 @@
 #define UPDATEFPS 60				//処理FPS設定
 #define WINDOW_WIDTH 1280			//画面の横幅
 #define WINDOW_HEIGHT 960			//画面の高さ
-#define GAMEWINDOW_PADDINGX 50		//ゲーム画面のX方向のズレ
-#define GAMEWINDOW_PADDINGY 55		//ゲーム画面のY方向のズレ
-#define GAMEWINDOW_WIDTH 700		//ゲーム画面の横幅
-#define GAMEWINDOW_HEIGHT 850		//ゲーム画面の高さ
 #define TITLE _T("Blockbreaker")	//ウィンドウタイトル
 #define PI (acos(-1.0))				//円周率
 #define PIf ((float)acos(-1.0))		//円周率(float)
