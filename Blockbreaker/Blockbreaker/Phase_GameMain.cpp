@@ -12,6 +12,13 @@ Phase_GameMain::~Phase_GameMain() {
 void Phase_GameMain::Init_Draw() {
 	//ゲーム画面の生成(後でシェーダを使いたいので2のn乗のサイズで作成します)
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
+
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
+
 }
 
 //初期化(計算処理)
@@ -52,24 +59,8 @@ void Phase_GameMain::Draw() {
 			//中心座標に変換
 			X += BLOCK_SIZE / 2.;
 			Y += BLOCK_SIZE / 2.;
+			DrawBlock(X, Y, field[x][y].color);
 
-			switch (field[x][y].color) {
-			case BROCK_TYPE_RED:	//赤ブロック描画
-				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
-				break;
-			case BROCK_TYPE_BLUE:	//青ブロック描画
-				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 0, 255));
-				break;
-			case BROCK_TYPE_GREEN:	//緑ブロック描画
-				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 255, 0));
-				break;
-			case BROCK_TYPE_PURPLE:	//紫ブロック描画
-				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 255));
-				break;
-			case BROCK_TYPE_YELLOW:	//黄色ブロック描画
-				DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 255, 0));
-				break;
-			}
 		}
 	}
 
@@ -78,42 +69,10 @@ void Phase_GameMain::Draw() {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
-				switch (fallBlockInfo.fallblock.BlockID[x][y]) {
-				case BROCK_TYPE_RED:	//赤ブロック描画
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
-					X += BLOCK_SIZE / 2.;
-					Y += BLOCK_SIZE / 2.;
-					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 0));
-					break;
-				case BROCK_TYPE_BLUE:	//青ブロック描画
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
-					X += BLOCK_SIZE / 2.;
-					Y += BLOCK_SIZE / 2.;
-					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 0, 255));
-					break;
-				case BROCK_TYPE_GREEN:	//緑ブロック描画
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
-					X += BLOCK_SIZE / 2.;
-					Y += BLOCK_SIZE / 2.;
-					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(0, 255, 0));
-					break;
-				case BROCK_TYPE_PURPLE:	//紫ブロック描画
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
-					X += BLOCK_SIZE / 2.;
-					Y += BLOCK_SIZE / 2.;
-					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 0, 255));
-					break;
-				case BROCK_TYPE_YELLOW:	//黄色ブロック描画
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
-					X += BLOCK_SIZE / 2.;
-					Y += BLOCK_SIZE / 2.;
-					DrawCircle((int)X, (int)Y, BLOCK_SIZE / 2, GetColor(255, 255, 0));
-					break;
-				}
-				if (fallBlockInfo.fallblock.BlockID[x][y] == BROCK_TYPE_RED) {
-
-
-				}
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+				X += BLOCK_SIZE / 2.;
+				Y += BLOCK_SIZE / 2.;
+				DrawBlock(X, Y, fallBlockInfo.fallblock.BlockID[x][y]);
 			}
 		}
 	}
@@ -176,6 +135,27 @@ void Phase_GameMain::Draw() {
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		if (getFrameCount(THREAD_Update) % 120 > 40)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+	}
+}
+
+//ブロックを描画する(インゲーム座標)
+void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BROCK_TYPE type) {
+	switch (type) {
+	case BROCK_TYPE_RED:	//赤ブロック描画
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRED, TRUE);
+		break;
+	case BROCK_TYPE_BLUE:	//青ブロック描画
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBLUE, TRUE);
+		break;
+	case BROCK_TYPE_GREEN:	//緑ブロック描画
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockGREEN, TRUE);
+		break;
+	case BROCK_TYPE_PURPLE:	//紫ブロック描画
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockPURPLE, TRUE);
+		break;
+	case BROCK_TYPE_YELLOW:	//黄色ブロック描画
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockYELLOW, TRUE);
+		break;
 	}
 }
 
@@ -264,6 +244,7 @@ int Phase_GameMain::Update_FallBlock() {
 	if (isFallBlock_Falling()) {//落下中の場合
 		fallBlockInfo.FallCount--;
 		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
+		if (fallBlockInfo.FallCount < 0)		fallBlockInfo.FallCount = 0;	//落下カウントが0以下だと都合が悪いので
 		if (fallBlockInfo.Key_LRMove > 0) {
 			//右移動
 			if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
@@ -290,7 +271,7 @@ int Phase_GameMain::Update_FallBlock() {
 			fallBlockInfo.FallCount = 60;	//カウントを戻す(ここで戻さないとFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
 											/*落下しようとして無理だったらカウントを0にし無効化する方針*/
 			if (FallBlock_MoveY(1) == 0) {	//落下出来なかった
-				fallBlockInfo.FallCount = 0;	//落下カウントの無効化
+				fallBlockInfo.FallCount = -1;	//落下カウントの無効化
 				printLog_I(_T("ブロックの落下終了"));
 				FallBlock_addField();	//フィールドに落下ブロックを設置
 				SoundEffect_Play(SE_TYPE_DecisionSelect);
@@ -309,6 +290,12 @@ int Phase_GameMain::Update_FallBlock() {
 //終了処理(描画処理)
 void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(gameWindow);
+
+	DeleteGraph(Tex_BlockRED);
+	DeleteGraph(Tex_BlockBLUE);
+	DeleteGraph(Tex_BlockYELLOW);
+	DeleteGraph(Tex_BlockGREEN);
+	DeleteGraph(Tex_BlockPURPLE);
 }
 
 //終了処理(計算処理)
@@ -372,7 +359,7 @@ void Phase_GameMain::PauseRequest(int b_Flag) {
 //落下ブロックが落下中かどうかの取得(TRUEで落下中)
 int Phase_GameMain::isFallBlock_Falling() {
 	if (!isFallBlock_Enable())	return FALSE;
-	return (fallBlockInfo.FallCount > 0) ? TRUE : FALSE;
+	return (fallBlockInfo.FallCount >= 0) ? TRUE : FALSE;
 }
 
 //落下ブロックが有効かどうかの取得(TRUEで有効)

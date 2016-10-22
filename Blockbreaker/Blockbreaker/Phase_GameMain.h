@@ -83,6 +83,12 @@ private:
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
+	int Tex_BlockRED;		//赤ブロック
+	int Tex_BlockBLUE;		//青ブロック
+	int Tex_BlockYELLOW;	//黄色ブロック
+	int Tex_BlockGREEN;		//緑ブロック
+	int Tex_BlockPURPLE;	//紫ブロック
+
 
 	int Flag_Pause;			//ポーズ状態かどうか(ゲームの進行がすべて停止します)(TRUEでポーズ)
 	int Flag_pauseRequest;	//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)
@@ -93,6 +99,7 @@ private:
 	GameCycle gameCycle;		//ゲームサイクル
 
 	void Draw();
+	void DrawBlock(double CenterX, double CenterY, BROCK_TYPE type);	//ブロックを描画する(インゲーム座標)
 	void Update();
 	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
