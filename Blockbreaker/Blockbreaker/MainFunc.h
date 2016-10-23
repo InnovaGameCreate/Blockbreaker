@@ -92,12 +92,8 @@ typedef struct {
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //enum定義
-//スレッド関係
 //命名規則："enum名"+_+"大文字で始まる要素名"
-enum THREAD {
-	THREAD_Draw,			//描画スレッド
-	THREAD_Update			//処理スレッド
-};
+
 
 //キーバインド
 enum KEYBIND {
@@ -129,15 +125,6 @@ enum ANALOGSTICKMODE {
 	ANALOGSTICKMODE_NUM		//要素の個数
 };
 
-//ログの種類
-enum Log_Type {
-	Log_Type_INFORMATION,	//情報
-	Log_Type_CAUTION,		//警告(プログラム自体は動くがあまりよろしくない状態)
-	Log_Type_ERROR,			//エラー(プログラムの実行に影響が出るもの)
-#ifdef _DEBUG
-	Log_Type_DEBUG			//デバッグ用に仮に出力するもの
-#endif // _DEBUG
-};
 
 //フォントの種類
 //追加の命名規則："大文字で始まる要素名"の部分は"フォント名_フォントの設定(エッジ付き、フォントサイズなど)"になっています

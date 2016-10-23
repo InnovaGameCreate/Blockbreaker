@@ -1,5 +1,5 @@
 #pragma once
-
+#include "PhaseController.h"
 
 #ifndef PHASECONTROLLER_H_
 #error PhaseController.hをIncludeしてください
@@ -70,9 +70,11 @@ private:
 
 	//ゲームサイクルの識別
 	enum GameCycle {
-		GameCycle_FALL,		//ブロックの落下
-		GameCycle_Gravity,	//ブロックに重力を判定する
-		GameCycle_Delete,	//ブロックの消去判定
+		GameCycle_FALL,			//ブロックの落下
+		GameCycle_BeforeFALL,	//ブロックの落下開始前
+		GameCycle_Motion,		//ブロックのモーション中
+		GameCycle_Delete,		//ブロックの消去判定
+		GameCycle_NUM			//ゲームサイクルの個数(設定無し)
 	};
 
 
@@ -105,6 +107,7 @@ private:
 	int Tex_BlockYELLOW;	//黄色ブロック
 	int Tex_BlockGREEN;		//緑ブロック
 	int Tex_BlockPURPLE;	//紫ブロック
+	int Tex_BlockTREE;		//樹木の形ブロック
 
 	int BGM;				//BGM
 
@@ -116,6 +119,9 @@ private:
 	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
+	GameCycle NextgameCycle;	//次のゲームサイクル(モーション終了後に移動するサイクル)
+
+	RandomTable randomTable;	//乱数テーブル
 
 	void Draw();
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type);	//ブロックを描画する(インゲーム座標)
@@ -128,10 +134,12 @@ private:
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
-	void Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ)
+	int Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ)
+	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int CallGravityFlag = TRUE);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
+	void setGameCycle(GameCycle gameCycle, GameCycle NextgameCycle = GameCycle_NUM);	//ゲームサイクルを設定する(第2引数はゲームサイクルがモーションの場合のモーション終了後に移動するサイクル※モーション以外は無視されます)
 public:
 
 
@@ -143,7 +151,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type);							//フィールドにブロックを追加する
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type);			//フィールドにブロックを追加する
 
 	/*設定系*/
 	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト

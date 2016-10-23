@@ -15,11 +15,14 @@
 #include <locale.h>
 #include <time.h>
 #include <iostream>
+#include <random>
 
 #include "resource.h"
 
 #include "Log.h"
 #include "FpsController.h"
+
+#include "RandomTable.h"
 
 
 

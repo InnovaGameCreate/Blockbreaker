@@ -1,7 +1,25 @@
 #pragma once
 //ログ関連
 
-#include "MainFunc.h"
+//#include "MainFunc.h"
+
+
+//ログの種類
+enum Log_Type {
+	Log_Type_INFORMATION,	//情報
+	Log_Type_CAUTION,		//警告(プログラム自体は動くがあまりよろしくない状態)
+	Log_Type_ERROR,			//エラー(プログラムの実行に影響が出るもの)
+#ifdef _DEBUG
+	Log_Type_DEBUG			//デバッグ用に仮に出力するもの
+#endif // _DEBUG
+};
+
+//スレッド関係
+enum THREAD {
+	THREAD_Draw,			//描画スレッド
+	THREAD_Update			//処理スレッド
+};
+
 
 //ログの種類(Noに入れる引数)エラー番号的な
 #define LOG_NULL			0x00000000U	//分別無し
