@@ -26,15 +26,21 @@ public://定数とかの宣言
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
 
-	//色
-	enum BROCK_TYPE {
-		BROCK_TYPE_NO,
-		BROCK_TYPE_RED,
-		BROCK_TYPE_BLUE,
-		BROCK_TYPE_YELLOW,
-		BROCK_TYPE_GREEN,
-		BROCK_TYPE_PURPLE,
-		BROCK_TYPE_NUM		//ブロックの種類の数(画面外ブロック)
+	//ブロックの種類
+	enum BLOCK_TYPE {
+		BLOCK_TYPE_NO,//なし
+		BLOCK_TYPE_RED,//赤
+		BLOCK_TYPE_BLUE,//青
+		BLOCK_TYPE_YELLOW,//黄
+		BLOCK_TYPE_GREEN,//緑
+		BLOCK_TYPE_PURPLE,//紫
+		BLOCK_TYPE_TREE, //樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
+		BLOCK_TYPE_BLACK,//黒色のブロック：置くまで色がわからない
+		BLOCK_TYPE_NOROUND,//枠で囲われたブロック（回せない）
+		BLOCK_TYPE_RAINBOW,//虹色のブロック(下のブロックと同じ色になる)
+		BLOCK_TYPE_BOM,//爆弾(問答無用で周囲のブロック破壊)
+		BLOCK_TYPE_DOWNMARK,//下矢印マークのブロック(下に2段移動させる)
+		BLOCK_TYPE_NUM		//ブロックの種類の数(画面外ブロック)
 	};
 
 private:
@@ -51,7 +57,7 @@ private:
 		double MaxSpeed;	//最高速度
 	};
 	struct field_info {
-		BROCK_TYPE color;//ブロックの色
+		BLOCK_TYPE color;//ブロックの色
 		int fall_flag;//落下中かどうかのフラグ
 		int move_flag;//移動中かどうかのフラグ
 
@@ -59,7 +65,7 @@ private:
 	};
 
 	struct Fallblock_Pack {
-		BROCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
+		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
 	};
 
 	//ゲームサイクルの識別
@@ -112,7 +118,7 @@ private:
 	GameCycle gameCycle;		//ゲームサイクル
 
 	void Draw();
-	void DrawBlock(double CenterX, double CenterY, BROCK_TYPE type);	//ブロックを描画する(インゲーム座標)
+	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type);	//ブロックを描画する(インゲーム座標)
 	void Update();
 	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
@@ -137,7 +143,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BROCK_TYPE brock_type);							//フィールドにブロックを追加する
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type);							//フィールドにブロックを追加する
 
 	/*設定系*/
 	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
@@ -149,7 +155,7 @@ public:
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
-	BROCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
+	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 	int isBlock_PlayMotion();		//モーション中のブロックが存在するかどうかの取得(TRUE存在)
 };
 

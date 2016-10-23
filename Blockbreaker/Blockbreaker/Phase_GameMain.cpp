@@ -48,7 +48,7 @@ void Phase_GameMain::Draw() {
 	//フィールドブロックの描画
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BROCK_TYPE_NO)		continue;//無効ブロックは描画しない
+			if (field[x][y].color == BLOCK_TYPE_NO)		continue;//無効ブロックは描画しない
 			//描画先の座標を計算する
 			double X, Y;
 			if (field[x][y].blockMoveMotion.Enable) {
@@ -154,21 +154,21 @@ void Phase_GameMain::Draw() {
 }
 
 //ブロックを描画する(インゲーム座標)
-void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BROCK_TYPE type) {
+void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type) {
 	switch (type) {
-	case BROCK_TYPE_RED:	//赤ブロック描画
+	case BLOCK_TYPE_RED:	//赤ブロック描画
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRED, TRUE);
 		break;
-	case BROCK_TYPE_BLUE:	//青ブロック描画
+	case BLOCK_TYPE_BLUE:	//青ブロック描画
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBLUE, TRUE);
 		break;
-	case BROCK_TYPE_GREEN:	//緑ブロック描画
+	case BLOCK_TYPE_GREEN:	//緑ブロック描画
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockGREEN, TRUE);
 		break;
-	case BROCK_TYPE_PURPLE:	//紫ブロック描画
+	case BLOCK_TYPE_PURPLE:	//紫ブロック描画
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockPURPLE, TRUE);
 		break;
-	case BROCK_TYPE_YELLOW:	//黄色ブロック描画
+	case BLOCK_TYPE_YELLOW:	//黄色ブロック描画
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockYELLOW, TRUE);
 		break;
 	}
@@ -394,17 +394,17 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 
 	//落下ブロックの形状を設定する(暫定)
 	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
-	fallBlockInfo.fallblock.BlockID[0][0] = BROCK_TYPE_NO;
-	fallBlockInfo.fallblock.BlockID[1][0] = BROCK_TYPE_YELLOW;
-	fallBlockInfo.fallblock.BlockID[2][0] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][0] = BLOCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[1][0] = BLOCK_TYPE_YELLOW;
+	fallBlockInfo.fallblock.BlockID[2][0] = BLOCK_TYPE_NO;
 
-	fallBlockInfo.fallblock.BlockID[0][1] = BROCK_TYPE_PURPLE;
-	fallBlockInfo.fallblock.BlockID[1][1] = BROCK_TYPE_RED;
-	fallBlockInfo.fallblock.BlockID[2][1] = BROCK_TYPE_GREEN;
+	fallBlockInfo.fallblock.BlockID[0][1] = BLOCK_TYPE_PURPLE;
+	fallBlockInfo.fallblock.BlockID[1][1] = BLOCK_TYPE_RED;
+	fallBlockInfo.fallblock.BlockID[2][1] = BLOCK_TYPE_GREEN;
 
-	fallBlockInfo.fallblock.BlockID[0][2] = BROCK_TYPE_NO;
-	fallBlockInfo.fallblock.BlockID[1][2] = BROCK_TYPE_BLUE;
-	fallBlockInfo.fallblock.BlockID[2][2] = BROCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_BLUE;
+	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
 
 	//落下カウントを60に設定
 	fallBlockInfo.FallCount = 60;
@@ -461,9 +461,9 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {
+				if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {
 					//ブロック有りの場合、フィールドブロックとの重なりを確認する
-					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BROCK_TYPE_NO) {
+					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -506,8 +506,8 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
 															//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BROCK_TYPE_NO) {
+				if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -545,7 +545,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	int FLAG = FALSE;
 	for (int i = 0; i < RotaVal; i++) {
 		//擬似的に回転したことにする
-		BROCK_TYPE RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
+		BLOCK_TYPE RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
 		if (Minus) {//反時計回りに90度
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
@@ -564,8 +564,8 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 		//他のブロックとの重なりを計算する(枠外もブロックがあると考える)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (RotaBlockID[x][y] != BROCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BROCK_TYPE_NO) {
+				if (RotaBlockID[x][y] != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
+					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -605,9 +605,9 @@ void Phase_GameMain::FallBlock_addField() {
 	//何も無しブロック以外はフィールドブロックに順次変換を行う
 	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-			if (fallBlockInfo.fallblock.BlockID[x][y] != BROCK_TYPE_NO) {
+			if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {
 				int fX, fY;		//ブロックのフィールド上の位置
-				BROCK_TYPE fB;	//設置するブロックの種類
+				BLOCK_TYPE fB;	//設置するブロックの種類
 				fX = fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER);
 				fY = fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER);
 				fB = fallBlockInfo.fallblock.BlockID[x][y];
@@ -625,12 +625,12 @@ void Phase_GameMain::FallBlock_addField() {
 }
 
 //フィールドにブロックを追加する(成功でTRUE,失敗でFALSE)(上書き禁止)
-int Phase_GameMain::add_FraldBlock(int X, int Y, BROCK_TYPE brock_type) {
+int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type) {
 	//ブロック無しブロックは設置不可
-	if (brock_type == BROCK_TYPE_NO)					return FALSE;
+	if (brock_type == BLOCK_TYPE_NO)					return FALSE;
 
 	//ブロックの上書きは失敗にする(画面外もブロック有りと判定が出る設定にする)
-	if (getBlockColor(X, Y, TRUE) != BROCK_TYPE_NO)		return FALSE;
+	if (getBlockColor(X, Y, TRUE) != BLOCK_TYPE_NO)		return FALSE;
 
 	//ブロックの設置
 	field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
@@ -643,18 +643,18 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BROCK_TYPE brock_type) {
 }
 
 //指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
-Phase_GameMain::BROCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
+Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
 
 	//画面外処理
 	if (InGame) {
 		//実際の描画エリアで判定
-		if (X < BLOCK_PADDINGLEFT || (BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT) <= X)	return (useOutScreenBlock) ? BROCK_TYPE_NUM : BROCK_TYPE_NO;
-		if (Y < BLOCK_PADDINGUP || (BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN) <= Y)	return (useOutScreenBlock) ? BROCK_TYPE_NUM : BROCK_TYPE_NO;
+		if (X < BLOCK_PADDINGLEFT || (BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT) <= X)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
+		if (Y < BLOCK_PADDINGUP || (BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN) <= Y)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 	}
 	else {
 		//フィールド情報から判定する
-		if (X < 0 || BLOCK_WIDTHNUM <= X)	return (useOutScreenBlock) ? BROCK_TYPE_NUM : BROCK_TYPE_NO;
-		if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return (useOutScreenBlock) ? BROCK_TYPE_NUM : BROCK_TYPE_NO;
+		if (X < 0 || BLOCK_WIDTHNUM <= X)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
+		if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 	}
 
 	return field[X][Y].color;
@@ -679,12 +679,12 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 		field_info t[BLOCK_HEIGHTNUM];
 		for (int y = sY; y < eY; y++) {
 			t[y] = field[x][y];
-			field[x][y].color = BROCK_TYPE_NO;
+			field[x][y].color = BLOCK_TYPE_NO;
 		}
 		int Count = eY - 1;
 		//下の段から存在するブロックを並べ直す(逆順回し)
 		for (int y = eY - 1; y >= sY; y--) {
-			if (t[y].color != BROCK_TYPE_NO) {
+			if (t[y].color != BLOCK_TYPE_NO) {
 				field[x][Count] = t[y];
 				//落下モーション(カウントが移動先、yが移動元になる)
 				Block_SetMotion(x, Count, x, y, x, Count, 0.3, 15);
@@ -702,7 +702,7 @@ void Phase_GameMain::Block_Delete_Direct(int X, int Y, int CallGravityFlag) {
 	if (X < 0 || BLOCK_WIDTHNUM <= X)	return;
 	if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return;
 
-	field[X][Y].color = BROCK_TYPE_NO;
+	field[X][Y].color = BLOCK_TYPE_NO;
 	printLog_I(_T("ブロックの【削除】[%d][%d]"), X, Y);
 
 	if (CallGravityFlag)	Block_Gravity();
@@ -714,7 +714,7 @@ int Phase_GameMain::Block_Delete() {
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BROCK_TYPE_NO) {//除外ブロック
+			if (field[x][y].color == BLOCK_TYPE_NO) {//除外ブロック
 				DeleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
 			}
 			else {
@@ -761,7 +761,7 @@ int Phase_GameMain::Block_Delete() {
 //隣接する同色ブロックにマーカーを付ける
 void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter) {
 	if (deleteFlag[x][y] != -1)	return;		//未探索ブロックじゃない場合
-	BROCK_TYPE bt = field[x][y].color;      //ブロックの種類を記録する
+	BLOCK_TYPE bt = field[x][y].color;      //ブロックの種類を記録する
 	deleteFlag[x][y] = ID;					//探索済み(探索IDを設定する)
 	(*Counter)++;
 
@@ -773,7 +773,7 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 
 //フィールドのブロックにモーションを設定する
 void Phase_GameMain::Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed) {
-	if (getBlockColor(x, y, FALSE, FALSE) == BROCK_TYPE_NO)	return;	//ブロックが無効の場合は処理をしない
+	if (getBlockColor(x, y, FALSE, FALSE) == BLOCK_TYPE_NO)	return;	//ブロックが無効の場合は処理をしない
 	if (FromX == ToX && FromY == ToY)			return;	//移動無しの場合も処理をしない
 	if (a <= 0)									return;	//加速度が負の数の場合も処理をしない
 	if (MaxSpeed <= 0)							return;	//最大速度が負の数の場合も処理をしない
@@ -800,7 +800,7 @@ void Phase_GameMain::Block_SetMotion(int x, int y, int FromX, int FromY, int ToX
 int Phase_GameMain::isBlock_PlayMotion() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color != BROCK_TYPE_NO && field[x][y].blockMoveMotion.Enable) {
+			if (field[x][y].color != BLOCK_TYPE_NO && field[x][y].blockMoveMotion.Enable) {
 				return TRUE;
 			}
 		}
