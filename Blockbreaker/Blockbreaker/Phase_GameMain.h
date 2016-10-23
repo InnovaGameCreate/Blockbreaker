@@ -136,6 +136,7 @@ private:
 
 	GameCycle gameCycle;		//ゲームサイクル
 	GameCycle NextgameCycle;	//次のゲームサイクル(モーション終了後に移動するサイクル)
+	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
 	RandomTable randomTable;	//乱数テーブル
 
@@ -153,8 +154,8 @@ private:
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
-	int Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ)
-	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int CallGravityFlag = TRUE);	//指定した座標が指定したブロックだった場合に削除
+	int Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE, int PlayMotion = FALSE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ(モーション再生を行うかどうか)
+	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int CallGravityFlag = TRUE, int PlayMotionn = FALSE);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
