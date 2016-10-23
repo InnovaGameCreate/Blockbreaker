@@ -18,7 +18,9 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
 	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
 	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
@@ -70,7 +72,19 @@ void Phase_GameMain::Draw() {
 			//中心座標に変換
 			X += BLOCK_SIZE / 2.;
 			Y += BLOCK_SIZE / 2.;
-			DrawBlock(X, Y, field[x][y].color);
+			if (field[x][y].blockChangeMotion.Enable) {
+				//変化モーション有り
+				DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
+				//変化量に応じて半透明で描画する
+				int Alpha = (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
+				DrawBlock(X, Y, field[x][y].blockChangeMotion.To);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+			}
+			else {
+				DrawBlock(X, Y, field[x][y].color);
+			}
 
 		}
 	}
@@ -138,7 +152,7 @@ void Phase_GameMain::Draw() {
 		Width /= 2;
 		DrawFormatStringToHandle(GAMEWINDOW_PADDINGX + (i - BLOCK_PADDINGLEFT)*BLOCK_SIZE + Width, 30
 			, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%d"), i);
-	}
+}
 	for (int i = BLOCK_PADDINGUP; i < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; i++) {
 		DrawFormatStringToHandle(20, GAMEWINDOW_PADDINGY + (i - BLOCK_PADDINGUP) * BLOCK_SIZE + 15,
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
@@ -176,6 +190,12 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type) 
 	case BLOCK_TYPE_TREE:	//樹木ブロック
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockTREE, TRUE);
 		break;
+	case BLOCK_TYPE_BLACK:	//黒ブロック
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBLACK, TRUE);
+		break;
+	case BLOCK_TYPE_RAINBOW://虹色ブロック
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRAINBOW, TRUE);
+		break;
 	}
 }
 
@@ -202,12 +222,17 @@ void Phase_GameMain::Update() {
 		if (Update_FallBlock()) {
 			//落下完了後は重力サイクルへ
 			Block_Gravity();		//重力によるブロックの落下を設定
-			setGameCycle(GameCycle_Motion, GameCycle_Delete);
-		
+			setGameCycle(GameCycle_Motion, GameCycle_BlockFunc);
+
 		}
 		break;
 	case GameCycle_Motion:
-		if (!isBlock_PlayMotion())	setGameCycle(NextgameCycle);
+		if (!isBlock_PlayMoveMotion() && !isBlock_PlayChangeMotion())	setGameCycle(NextgameCycle);
+		break;
+	case GameCycle_BlockFunc:
+		Block_Black_Func();		//黒ブロックの色変更
+		Block_Rainbow_Func();	//虹色ブロックの色を変更
+		setGameCycle(GameCycle_Motion, GameCycle_Delete);
 		break;
 	case GameCycle_Delete:
 		//隣接ブロックの削除
@@ -223,7 +248,7 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 		//ランダムで一番上の段に木ブロックを設置する
-		while(add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT),1 , BLOCK_TYPE_TREE) == FALSE);
+		while (add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, BLOCK_TYPE_TREE) == FALSE);
 		Block_Gravity();
 		setGameCycle(GameCycle_Motion, GameCycle_FALL);
 		break;
@@ -231,9 +256,11 @@ void Phase_GameMain::Update() {
 
 
 
-	//移動モーションのカウントアップと移動終了は無効化する処理
+	//移動・変化モーションのカウントアップと移動終了は無効化する処理
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+
+			//移動モーション
 			if (field[x][y].blockMoveMotion.Enable) {
 				field[x][y].blockMoveMotion.Count++;//カウントアップ
 				//移動する距離の計算
@@ -244,7 +271,14 @@ void Phase_GameMain::Update() {
 				double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離
 				if (FMD <= MD) {//移動完了
 					field[x][y].blockMoveMotion.Enable = FALSE;//移動を無効化
-					continue;
+				}
+			}
+
+			//変化モーション
+			if (field[x][y].blockChangeMotion.Enable) {
+				field[x][y].blockChangeMotion.Count++;//カウントアップ
+				if (field[x][y].blockChangeMotion.Count > field[x][y].blockChangeMotion.Length) {//移動完了
+					field[x][y].blockChangeMotion.Enable = FALSE;//移動を無効化
 				}
 			}
 		}
@@ -321,6 +355,11 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockYELLOW);
 	DeleteGraph(Tex_BlockGREEN);
 	DeleteGraph(Tex_BlockPURPLE);
+	DeleteGraph(Tex_BlockTREE);
+	DeleteGraph(Tex_BlockBLACK);
+	DeleteGraph(Tex_BlockRAINBOW);
+
+	DeleteSoundMem(BGM);
 }
 
 //終了処理(計算処理)
@@ -403,18 +442,18 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 
 	//落下ブロックの形状を設定する(暫定)
 	/*十時マークそして0は無効、1は有効(赤ブロックになるように設定)*/
-	fallBlockInfo.fallblock.BlockID[0][0] = BLOCK_TYPE_NO;
-	fallBlockInfo.fallblock.BlockID[1][0] = BLOCK_TYPE_YELLOW;
-	fallBlockInfo.fallblock.BlockID[2][0] = BLOCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][0] = BLOCK_TYPE_YELLOW;
+	fallBlockInfo.fallblock.BlockID[1][0] = BLOCK_TYPE_BLACK;
+	fallBlockInfo.fallblock.BlockID[2][0] = BLOCK_TYPE_RED;
 
 	fallBlockInfo.fallblock.BlockID[0][1] = BLOCK_TYPE_PURPLE;
-	fallBlockInfo.fallblock.BlockID[1][1] = BLOCK_TYPE_RED;
+	fallBlockInfo.fallblock.BlockID[1][1] = BLOCK_TYPE_BLUE;
 	fallBlockInfo.fallblock.BlockID[2][1] = BLOCK_TYPE_GREEN;
 
 	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
-	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_BLUE;
+	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_RAINBOW;
 	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
-	
+
 	//fallBlockInfo.fallblock = waitBlockinfo[1].fallblock;
 	//Create_Wait_Block();
 
@@ -656,6 +695,56 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type) {
 	return TRUE;
 }
 
+//フィールドに存在する黒色ブロックの色を決定する
+void Phase_GameMain::Block_Black_Func() {
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BLOCK_TYPE_BLACK) {//黒ブロックの時
+				//確率でブロックのIDを書き換える
+				int Val = (int)randomTable.getRand(0, 100);
+				if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//赤色ブロック
+				else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//青色ブロック
+				else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//黄色ブロック
+				else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//緑色ブロック
+				else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//紫色ブロック
+
+				//変化モーションの設定
+				Block_SetChangeMotion(x, y, BLOCK_TYPE_BLACK, field[x][y].color, 60);
+			}
+		}
+	}
+}
+
+//フィールドに存在する虹色ブロックの色を決定する
+void Phase_GameMain::Block_Rainbow_Func() {
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BLOCK_TYPE_RAINBOW) {//虹色ブロックの時
+				if (getBlockColor(x, y + 1) == BLOCK_TYPE_NO) {
+					//下にブロックが無い
+					//確率でブロックのIDを書き換える
+					int Val = (int)randomTable.getRand(0, 100);
+					if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//赤色ブロック
+					else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//青色ブロック
+					else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//黄色ブロック
+					else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//緑色ブロック
+					else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//紫色ブロック
+
+				}
+				else {
+					//下にブロックがある場合
+					field[x][y].color = getBlockColor(x, y + 1);
+				}
+
+				//変化モーションの設定
+				Block_SetChangeMotion(x, y, BLOCK_TYPE_RAINBOW, field[x][y].color, 60);
+
+
+			}
+		}
+	}
+}
+
 //指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
 
@@ -701,7 +790,7 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 			if (t[y].color != BLOCK_TYPE_NO) {
 				field[x][Count] = t[y];
 				//落下モーション(カウントが移動先、yが移動元になる)
-				Block_SetMotion(x, Count, x, y, x, Count, 0.3, 15);
+				Block_SetMoveMotion(x, Count, x, y, x, Count, 0.3, 15);
 				Count--;
 			}
 		}
@@ -736,7 +825,11 @@ int Phase_GameMain::Block_Delete() {
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_NO || field[x][y].color == BLOCK_TYPE_NUM || field[x][y].color == BLOCK_TYPE_TREE) {//除外ブロック
+			if (field[x][y].color == BLOCK_TYPE_NO ||
+				field[x][y].color == BLOCK_TYPE_NUM ||
+				field[x][y].color == BLOCK_TYPE_TREE ||
+				field[x][y].color == BLOCK_TYPE_BLACK ||
+				field[x][y].color == BLOCK_TYPE_RAINBOW) {//除外ブロック
 				DeleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
 			}
 			else {
@@ -757,8 +850,6 @@ int Phase_GameMain::Block_Delete() {
 			}
 		}
 	}
-
-
 
 	//4以上隣接しているブロックは削除する
 	int DelCount = 0;
@@ -799,8 +890,8 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 	if (y - 1 >= 0 && field[x][y - 1].color == bt) SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
 
-//フィールドのブロックにモーションを設定する
-void Phase_GameMain::Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed) {
+//フィールドのブロック移動にモーションを設定する
+void Phase_GameMain::Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed) {
 	if (getBlockColor(x, y, FALSE, FALSE) == BLOCK_TYPE_NO)	return;	//ブロックが無効の場合は処理をしない
 	if (FromX == ToX && FromY == ToY)			return;	//移動無しの場合も処理をしない
 	if (a <= 0)									return;	//加速度が負の数の場合も処理をしない
@@ -824,8 +915,8 @@ void Phase_GameMain::Block_SetMotion(int x, int y, int FromX, int FromY, int ToX
 	printLog_I(_T("ブロックに【移動モーション】を設定"));
 }
 
-//モーション中のブロックが存在するかどうかの取得(TRUE存在)
-int Phase_GameMain::isBlock_PlayMotion() {
+//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
+int Phase_GameMain::isBlock_PlayMoveMotion() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (field[x][y].color != BLOCK_TYPE_NO && field[x][y].blockMoveMotion.Enable) {
@@ -833,7 +924,39 @@ int Phase_GameMain::isBlock_PlayMotion() {
 			}
 		}
 	}
+	return FALSE;
+}
 
+//フィールドのブロックに変化モーションを設定する
+void Phase_GameMain::Block_SetChangeMotion(int x, int y, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength) {
+	if (getBlockColor(x, y, FALSE, FALSE) == BLOCK_TYPE_NO)	return;	//ブロックが無効の場合は処理をしない
+	if (From == To)											return;	//変化無しの場合も処理をしない
+	if (MotionLength <= 0)									return;	//長さが負の数の場合も処理をしない
+
+	if (field[x][y].blockChangeMotion.Enable) {
+		printLog_C(_T("ブロック変化モーションを上書きします"));
+		field[x][y].blockChangeMotion.Enable = FALSE;
+	}
+
+	field[x][y].blockChangeMotion.To = To;
+	field[x][y].blockChangeMotion.From = From;
+	field[x][y].blockChangeMotion.Length = MotionLength;
+	field[x][y].blockChangeMotion.Count = 0;
+
+	field[x][y].blockChangeMotion.Enable = TRUE;
+
+	printLog_I(_T("ブロックに【変化モーション】を設定"));
+}
+
+//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
+int Phase_GameMain::isBlock_PlayChangeMotion() {
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color != BLOCK_TYPE_NO && field[x][y].blockChangeMotion.Enable) {
+				return TRUE;
+			}
+		}
+	}
 	return FALSE;
 }
 
@@ -868,9 +991,8 @@ void Phase_GameMain::Create_Wait_Block() {
 	if (wait_block_patern == 0) {//縦
 		for (i = 0; i < 2; i++) {
 			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
-			switch (wait_block_type)
-			{
-			
+			switch (wait_block_type) {
+
 			case 1:
 				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_RED;//赤
 				break;
@@ -891,8 +1013,7 @@ void Phase_GameMain::Create_Wait_Block() {
 	else {//if (wait_block_patern == 1) {//横
 		for (i = 0; i < 2; i++) {
 			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
-			switch (wait_block_type)
-			{
+			switch (wait_block_type) {
 			case 0:
 
 				break;
@@ -920,7 +1041,7 @@ BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
 	switch (h)
 	{
 	case 0:
-		
+
 		break;
 	case 1:
 		return BLOCK_TYPE_RED;//赤
