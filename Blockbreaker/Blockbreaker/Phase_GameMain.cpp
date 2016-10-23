@@ -29,7 +29,8 @@ void Phase_GameMain::Init_Draw() {
 void Phase_GameMain::Init_Update() {
 	Flag_Pause = FALSE;
 	Flag_pauseRequest = FALSE;
-
+	Create_Wait_Block();
+	Create_Wait_Block();
 }
 
 //ï`âÊèàóù
@@ -405,6 +406,9 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
 	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_BLUE;
 	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
+	
+	//fallBlockInfo.fallblock = waitBlockinfo[1].fallblock;
+	//Create_Wait_Block();
 
 	//óéâ∫ÉJÉEÉìÉgÇ60Ç…ê›íË
 	fallBlockInfo.FallCount = 60;
@@ -808,3 +812,87 @@ int Phase_GameMain::isBlock_PlayMotion() {
 
 	return FALSE;
 }
+
+void Phase_GameMain::Create_Wait_Block() {
+	waitBlockinfo[1].fallblock = waitBlockinfo[0].fallblock;
+	int i, j;
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			waitBlockinfo[0].fallblock.BlockID[i][j] = BLOCK_TYPE_NO;
+		}
+	}
+	int wait_block_patern = rand() % 2;
+	if (wait_block_patern == 0) {//èc
+		for (i = 0; i < 2; i++) {
+			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
+			switch (wait_block_type)
+			{
+			
+			case 1:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_RED;//ê‘
+				break;
+			case 2:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_BLUE;//ê¬
+				break;
+			case 3:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_YELLOW;//â©
+				break;
+			case 4:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_GREEN;//óŒ
+				break;
+			case 5:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_PURPLE;//éá
+			}
+		}
+	}
+	else {//if (wait_block_patern == 1) {//â°
+		for (i = 0; i < 2; i++) {
+			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
+			switch (wait_block_type)
+			{
+			case 0:
+
+				break;
+			case 1:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_RED;//ê‘
+				break;
+			case 2:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_BLUE;//ê¬
+				break;
+			case 3:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_YELLOW;//â©
+				break;
+			case 4:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_GREEN;//óŒ
+				break;
+			case 5:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_PURPLE;//éá
+			}
+		}
+	}
+}
+
+/*
+BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
+	switch (h)
+	{
+	case 0:
+		
+		break;
+	case 1:
+		return BLOCK_TYPE_RED;//ê‘
+	case 2:
+		return BLOCK_TYPE_BLUE;//ê¬
+	case 3:
+		return BLOCK_TYPE_YELLOW;//â©
+	case 4:
+		return BLOCK_TYPE_GREEN;//óŒ
+
+	case 5:
+		return BLOCK_TYPE_PURPLE;//éá
+
+
+	}
+	return BLOCK_TYPE_NO;
+}
+*/

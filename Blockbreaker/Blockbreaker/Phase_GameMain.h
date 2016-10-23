@@ -114,6 +114,7 @@ private:
 
 	
 	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
+	FallBlockInfo waitBlockinfo[2];//待機ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
 
@@ -132,6 +133,8 @@ private:
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
+	void Create_Wait_Block();//待機ブロックの生成
+	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 
 
