@@ -30,7 +30,8 @@ void Phase_GameMain::Init_Draw() {
 void Phase_GameMain::Init_Update() {
 	Flag_Pause = FALSE;
 	Flag_pauseRequest = FALSE;
-
+	Create_Wait_Block();
+	Create_Wait_Block();
 }
 
 //描画処理
@@ -413,6 +414,9 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
 	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_BLUE;
 	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
+	
+	//fallBlockInfo.fallblock = waitBlockinfo[1].fallblock;
+	//Create_Wait_Block();
 
 	//落下カウントを60に設定
 	fallBlockInfo.FallCount = 60;
@@ -851,3 +855,87 @@ void  Phase_GameMain::setGameCycle(GameCycle gamecycle, GameCycle Nextgamecycle)
 
 	printLog_I(_T("ゲームサイクルの変更(%d→%d)"), old, gameCycle);
 }
+
+void Phase_GameMain::Create_Wait_Block() {
+	waitBlockinfo[1].fallblock = waitBlockinfo[0].fallblock;
+	int i, j;
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			waitBlockinfo[0].fallblock.BlockID[i][j] = BLOCK_TYPE_NO;
+		}
+	}
+	int wait_block_patern = rand() % 2;
+	if (wait_block_patern == 0) {//縦
+		for (i = 0; i < 2; i++) {
+			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
+			switch (wait_block_type)
+			{
+			
+			case 1:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_RED;//赤
+				break;
+			case 2:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_BLUE;//青
+				break;
+			case 3:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_YELLOW;//黄
+				break;
+			case 4:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_GREEN;//緑
+				break;
+			case 5:
+				waitBlockinfo[0].fallblock.BlockID[1][i] = BLOCK_TYPE_PURPLE;//紫
+			}
+		}
+	}
+	else {//if (wait_block_patern == 1) {//横
+		for (i = 0; i < 2; i++) {
+			int wait_block_type = (rand() % BLOCK_TYPE_PURPLE) + 1;
+			switch (wait_block_type)
+			{
+			case 0:
+
+				break;
+			case 1:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_RED;//赤
+				break;
+			case 2:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_BLUE;//青
+				break;
+			case 3:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_YELLOW;//黄
+				break;
+			case 4:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_GREEN;//緑
+				break;
+			case 5:
+				waitBlockinfo[0].fallblock.BlockID[i][1] = BLOCK_TYPE_PURPLE;//紫
+			}
+		}
+	}
+}
+
+/*
+BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
+	switch (h)
+	{
+	case 0:
+		
+		break;
+	case 1:
+		return BLOCK_TYPE_RED;//赤
+	case 2:
+		return BLOCK_TYPE_BLUE;//青
+	case 3:
+		return BLOCK_TYPE_YELLOW;//黄
+	case 4:
+		return BLOCK_TYPE_GREEN;//緑
+
+	case 5:
+		return BLOCK_TYPE_PURPLE;//紫
+
+
+	}
+	return BLOCK_TYPE_NO;
+}
+*/

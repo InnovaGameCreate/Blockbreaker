@@ -117,6 +117,7 @@ private:
 
 	
 	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
+	FallBlockInfo waitBlockinfo[2];//待機ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
 	GameCycle NextgameCycle;	//次のゲームサイクル(モーション終了後に移動するサイクル)
@@ -140,6 +141,8 @@ private:
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
 	void setGameCycle(GameCycle gameCycle, GameCycle NextgameCycle = GameCycle_NUM);	//ゲームサイクルを設定する(第2引数はゲームサイクルがモーションの場合のモーション終了後に移動するサイクル※モーション以外は無視されます)
+	void Create_Wait_Block();//待機ブロックの生成
+	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 
 
