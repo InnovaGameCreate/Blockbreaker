@@ -54,7 +54,6 @@ void Phase_GameMain::Draw() {
 	//フィールドブロックの描画
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//if (field[x][y].color == BLOCK_TYPE_NO)		continue;//無効ブロックは描画しない
 			//描画先の座標を計算する
 			double X, Y;
 			if (field[x][y].blockMoveMotion.Enable) {
@@ -152,11 +151,16 @@ void Phase_GameMain::Draw() {
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
-	DrawGraph(0,0,haikei,FALSE);
+	DrawGraph(0, 0, haikei, FALSE);
 
 
-	//ゲーム画面を描画する
+	//ゲーム画面を描画する(デバッグモードの場合は、全ブロック領域を描画する)
+#ifdef DEBUG_GAMEMAIN
+	DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
+#else
 	DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
+#endif // DEBUG_GAMEMAIN
+
 
 	//デバッグ
 #ifdef DEBUG_GAMEMAIN
@@ -492,9 +496,9 @@ void Phase_GameMain::GameMain_Key() {
 	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
-		add_FraldBlock(0,18,BLOCK_TYPE_BLUE, TRUE);
+		add_FraldBlock(0, 18, BLOCK_TYPE_BLUE, TRUE);
 		printLog_D(_T("押した"));
-		
+
 	}
 
 	if (isFallBlock_Falling()) {

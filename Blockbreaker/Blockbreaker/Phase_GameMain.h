@@ -1,9 +1,14 @@
 #pragma once
 #include "PhaseController.h"
+#include "MainFunc.h"
 
 #ifndef PHASECONTROLLER_H_
 #error PhaseController.hをIncludeしてください
 #endif // !PHASECONTROLLER_H_
+
+#ifdef DEBUG_GAMEMAIN
+
+#endif // DEBUG_GAMEMAIN
 
 
 
@@ -18,10 +23,10 @@ public://定数とかの宣言
 	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
 	static const int BLOCK_PADDINGRIGHT = 0;	//描画するブロックの開始位置(右)
 
-	static const int  GAMEWINDOW_PADDINGX = 50;		//ゲーム画面のX方向のズレ
-	static const int  GAMEWINDOW_PADDINGY = 55;		//ゲーム画面のY方向のズレ
-	static const int  GAMEWINDOW_WIDTH = (BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT))*BLOCK_SIZE;		//ゲーム画面の横幅
-	static const int  GAMEWINDOW_HEIGHT = (BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN))*BLOCK_SIZE;		//ゲーム画面の高さ
+	static const int GAMEWINDOW_PADDINGX = 50;		//ゲーム画面のX方向のズレ
+	static const int GAMEWINDOW_PADDINGY = 55;		//ゲーム画面のY方向のズレ
+	static const int GAMEWINDOW_WIDTH = (BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT))*BLOCK_SIZE;		//ゲーム画面の横幅
+	static const int GAMEWINDOW_HEIGHT = (BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN))*BLOCK_SIZE;		//ゲーム画面の高さ
 
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
