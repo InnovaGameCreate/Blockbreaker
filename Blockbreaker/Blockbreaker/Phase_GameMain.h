@@ -126,6 +126,7 @@ private:
 	int Tex_BlockBLACK;		//黒ブロック
 	int Tex_BlockRAINBOW;	//虹色ブロック
 	int Tex_BlockBOMB;		//爆弾ブロック
+	int haikei;				//背景
 
 	int BGM;				//BGM
 

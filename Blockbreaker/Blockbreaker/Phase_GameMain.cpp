@@ -22,6 +22,7 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
 
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
@@ -151,7 +152,7 @@ void Phase_GameMain::Draw() {
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
-	DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0x5b, 0x8e, 0xda), TRUE);
+	DrawGraph(0,0,haikei,FALSE);
 
 
 	//ゲーム画面を描画する
@@ -470,6 +471,7 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockTREE);
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
+	DeleteGraph(haikei);
 
 	DeleteSoundMem(BGM);
 }
