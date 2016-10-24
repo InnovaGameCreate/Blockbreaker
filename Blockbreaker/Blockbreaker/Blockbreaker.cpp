@@ -1,4 +1,5 @@
 //メイン関数
+#include "MainFunc.h"
 
 //グローバル変数の定義
 Phase_Default phase_Default;

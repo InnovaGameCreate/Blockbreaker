@@ -1,4 +1,5 @@
 //ƒƒOŠÖ˜A
+#include "MainFunc.h"
 
 #include "Log.h"
 

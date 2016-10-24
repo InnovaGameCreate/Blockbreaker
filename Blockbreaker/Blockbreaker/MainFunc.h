@@ -8,7 +8,7 @@
 
 //デバッグ設定の定義(使用しない場合はコメントアウト)
 #ifdef DEBUG
-#define DEBUG_GAMEMAIN	//ゲームメインのデバッグ
+//#define DEBUG_GAMEMAIN	//ゲームメインのデバッグ
 #endif // DEBUG
 
 
@@ -18,10 +18,6 @@
 #define UPDATEFPS 60				//処理FPS設定
 #define WINDOW_WIDTH 1280			//画面の横幅
 #define WINDOW_HEIGHT 960			//画面の高さ
-#define GAMEWINDOW_PADDINGX 50		//ゲーム画面のX方向のズレ
-#define GAMEWINDOW_PADDINGY 55		//ゲーム画面のY方向のズレ
-#define GAMEWINDOW_WIDTH 700		//ゲーム画面の横幅
-#define GAMEWINDOW_HEIGHT 850		//ゲーム画面の高さ
 #define TITLE _T("Blockbreaker")	//ウィンドウタイトル
 #define PI (acos(-1.0))				//円周率
 #define PIf ((float)acos(-1.0))		//円周率(float)
@@ -96,12 +92,8 @@ typedef struct {
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //enum定義
-//スレッド関係
 //命名規則："enum名"+_+"大文字で始まる要素名"
-enum THREAD {
-	THREAD_Draw,			//描画スレッド
-	THREAD_Update			//処理スレッド
-};
+
 
 //キーバインド
 enum KEYBIND {
@@ -133,15 +125,6 @@ enum ANALOGSTICKMODE {
 	ANALOGSTICKMODE_NUM		//要素の個数
 };
 
-//ログの種類
-enum Log_Type {
-	Log_Type_INFORMATION,	//情報
-	Log_Type_CAUTION,		//警告(プログラム自体は動くがあまりよろしくない状態)
-	Log_Type_ERROR,			//エラー(プログラムの実行に影響が出るもの)
-#ifdef _DEBUG
-	Log_Type_DEBUG			//デバッグ用に仮に出力するもの
-#endif // _DEBUG
-};
 
 //フォントの種類
 //追加の命名規則："大文字で始まる要素名"の部分は"フォント名_フォントの設定(エッジ付き、フォントサイズなど)"になっています
@@ -273,7 +256,8 @@ extern int			collision_line2(PolygonPoints2 *polygon, double pointX1, double poi
 extern int			collisionLC(double X1, double Y1, double X2, double Y2, double  circleX, double circleY, double circleR, Vec *ans1, Vec *ans2);//円と直線の交点
 /*その他*/
 extern double		getRotation(double X1, double Y1, double X2, double Y2);			//2点間の角度の取得(度)
-extern double		getDistance(double X1, double Y1, double X2, double Y2);			//2点間の距離を求める																						
+extern double		getDistance(double X1, double Y1, double X2, double Y2);			//2点間の距離を求める
+extern double		getMoveDistance(double a, double MaxSpeed, int Count);				//加速度、最大速度、移動開始からの経過時間から現在の移動距離を計算する
 extern double		Cross_product(Vec *a, Vec *b);										//外積の計算
 extern Vec			Vector_component(double x, double y, double pointX, double pointY); //ベクトルの成分計算
 extern long long	powi64(long long _Left, int _Yx);									//long long型のpow関数(_Yx < 0は非対応)
