@@ -883,7 +883,7 @@ void Phase_GameMain::Block_BOMB_Func() {
 					if (Block_Delete_Direct(x, y + 1, TRUE))	DeleteNum++;
 				}
 				if (getBlockColor(x, y + 2) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x, y + 1, TRUE))	DeleteNum++;
+					if (Block_Delete_Direct(x, y + 2, TRUE))	DeleteNum++;
 				}
 				if (getBlockColor(x, y - 1) != BLOCK_TYPE_BOM) {
 					if (Block_Delete_Direct(x, y - 1, TRUE))	DeleteNum++;
