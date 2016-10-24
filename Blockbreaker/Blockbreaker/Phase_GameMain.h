@@ -6,10 +6,6 @@
 #error PhaseController.h‚ðInclude‚µ‚Ä‚­‚¾‚³‚¢
 #endif // !PHASECONTROLLER_H_
 
-#ifdef DEBUG_GAMEMAIN
-
-#endif // DEBUG_GAMEMAIN
-
 
 
 class Phase_GameMain : public PhaseController

@@ -117,7 +117,7 @@ void Phase_GameMain::Draw() {
 	}
 
 	//デバッグ
-#ifdef DEBUG_GAMEMAIN
+#ifdef _DEBUG_GAMEMAIN_
 	//縦横BLOCK_SIZE間隔で線を描画する
 	for (int i = BLOCK_PADDINGLEFT + 1; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++) {
 		DrawLine(i * BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE,
@@ -143,7 +143,7 @@ void Phase_GameMain::Draw() {
 			}
 		}
 	}
-#endif // DEBUG_GAMEMAIN
+#endif // _DEBUG_GAMEMAIN_
 
 
 
@@ -155,15 +155,16 @@ void Phase_GameMain::Draw() {
 
 
 	//ゲーム画面を描画する(デバッグモードの場合は、全ブロック領域を描画する)
-#ifdef DEBUG_GAMEMAIN
-	DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
-#else
-	DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
-#endif // DEBUG_GAMEMAIN
+	if (DEBUG_GAMEMAIN) {
+		DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
+	}
+	else {
+		DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
+	}
 
 
 	//デバッグ
-#ifdef DEBUG_GAMEMAIN
+#ifdef _DEBUG_GAMEMAIN_
 	//マス目の番号を描画
 	for (int i = BLOCK_PADDINGLEFT; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++) {
 		int Width = -GetDrawFormatStringWidthToHandle(Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%d"), i);
@@ -176,7 +177,7 @@ void Phase_GameMain::Draw() {
 		DrawFormatStringToHandle(20, GAMEWINDOW_PADDINGY + (i - BLOCK_PADDINGUP) * BLOCK_SIZE + 15,
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
 	}
-#endif // DEBUG_GAMEMAIN
+#endif // _DEBUG_GAMEMAIN_
 
 	if (isPaused()) {//ポーズ状態の時
 							  //ポーズ状態と分かるように描画する
