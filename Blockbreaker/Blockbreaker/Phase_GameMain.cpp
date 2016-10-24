@@ -491,6 +491,12 @@ void Phase_GameMain::GameMain_Key() {
 
 	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
 
+	if (getKeyBind(KEYBIND_UP) == 1) {
+		add_FraldBlock(0,18,BLOCK_TYPE_BLUE, TRUE);
+		printLog_D(_T("押した"));
+		
+	}
+
 	if (isFallBlock_Falling()) {
 		if (getKeyBind(KEYBIND_DOWN) > 0) {//高速落下モード
 			fallBlockInfo.Key_FlagFirstFall = TRUE;
@@ -790,19 +796,20 @@ void Phase_GameMain::FallBlock_addField() {
 }
 
 //フィールドにブロックを追加する(成功でTRUE,失敗でFALSE)(上書き禁止)
-int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type) {
+int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int OutScreen) {
 	//ブロック無しブロックは設置不可
 	if (brock_type == BLOCK_TYPE_NO)					return FALSE;
 	//画面外ブロックも設置不可
 	if (brock_type == BLOCK_TYPE_NUM)					return FALSE;
 
 	//ブロックの上書きは失敗にする(画面外もブロック有りと判定が出る設定にする)
-	if (getBlockColor(X, Y, TRUE) != BLOCK_TYPE_NO)		return FALSE;
+	if (getBlockColor(X, Y, TRUE, !OutScreen) != BLOCK_TYPE_NO)		return FALSE;
 
 	//ブロックの設置
 	field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
 	field[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
 	field[X][Y].color = brock_type;	//ブロックの置き換え
+
 
 	printLog_I(_T("フィールドブロックの新規生成[%d][%d](type=%d)"), X, Y, brock_type);
 

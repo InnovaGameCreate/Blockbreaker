@@ -12,9 +12,9 @@ class Phase_GameMain : public PhaseController
 public://定数とかの宣言
 	static const int BLOCK_SIZE = 50;			//ブロックの縦横のピクセルサイズ
 	static const int BLOCK_WIDTHNUM = 14;		//実際のブロックの横の個数
-	static const int BLOCK_HEIGHTNUM = 18;		//実際のブロックの縦の個数
+	static const int BLOCK_HEIGHTNUM = 19;		//実際のブロックの縦の個数
 	static const int BLOCK_PADDINGUP = 1;		//描画するブロックの開始位置(上)
-	static const int BLOCK_PADDINGDOWN = 0;		//描画するブロックの開始位置(下)
+	static const int BLOCK_PADDINGDOWN = 1;		//描画するブロックの開始位置(下)
 	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
 	static const int BLOCK_PADDINGRIGHT = 0;	//描画するブロックの開始位置(右)
 
@@ -182,7 +182,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type);			//フィールドにブロックを追加する
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int OutScreen = FALSE);			//フィールドにブロックを追加する
 
 	/*設定系*/
 	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
