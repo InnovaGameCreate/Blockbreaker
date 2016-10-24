@@ -21,6 +21,7 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
 	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
 
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
@@ -165,7 +166,7 @@ void Phase_GameMain::Draw() {
 		Width /= 2;
 		DrawFormatStringToHandle(GAMEWINDOW_PADDINGX + (i - BLOCK_PADDINGLEFT)*BLOCK_SIZE + Width, 30
 			, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%d"), i);
-}
+	}
 	for (int i = BLOCK_PADDINGUP; i < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; i++) {
 		DrawFormatStringToHandle(20, GAMEWINDOW_PADDINGY + (i - BLOCK_PADDINGUP) * BLOCK_SIZE + 15,
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
@@ -209,6 +210,9 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type) 
 	case BLOCK_TYPE_RAINBOW://虹色ブロック
 		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRAINBOW, TRUE);
 		break;
+	case BLOCK_TYPE_BOM://爆弾ブロック
+		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBOMB, TRUE);
+		break;
 	}
 }
 
@@ -233,88 +237,19 @@ void Phase_GameMain::Update() {
 		if (getFallBlock_Interval() > 30)	Create_FallBlock(NULL);//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
 		//落下ブロックの落下処理
 		if (Update_FallBlock()) {
-			//落下完了後は重力サイクルへ
-			Block_Gravity();		//重力によるブロックの落下を設定
-			setGameCycle(GameCycle_Motion, GameCycle_BlockFunc);
-
-		}
-		break;
-	case GameCycle_Motion:
-		//変化モーションのカウントアップと移動終了は無効化する処理
-		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-
-				//変化モーション
-				if (field[x][y].blockChangeMotion.Enable) {
-					field[x][y].blockChangeMotion.Count++;//カウントアップ
-					if (field[x][y].blockChangeMotion.Count > field[x][y].blockChangeMotion.Length) {//移動完了
-						field[x][y].blockChangeMotion.Enable = FALSE;//移動を無効化
-					}
-				}
-			}
-		}
-
-		if (!isBlock_PlayChangeMotion()) {
-			//変化モーション無し
-			//移動モーションのカウントアップと移動終了は無効化する処理
-			for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-				for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-
-					//移動モーション
-					if (field[x][y].blockMoveMotion.Enable) {
-						field[x][y].blockMoveMotion.Count++;//カウントアップ
-															//移動する距離の計算
-						double fX, fY, tX, tY;
-						Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &fX, &fY);
-						Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY, &tX, &tY);
-						double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
-						double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離
-						if (FMD <= MD) {//移動完了
-							field[x][y].blockMoveMotion.Enable = FALSE;//移動を無効化
-						}
-					}
-
-
-				}
-			}
-
-			if (!isBlock_PlayMoveMotion())	setGameCycle(NextgameCycle);
-		}
-
-		
-		break;
-	case GameCycle_BlockFunc:
-		Block_Black_Func();		//黒ブロックの色変更
-		Block_Rainbow_Func();	//虹色ブロックの色を変更
-		setGameCycle(GameCycle_Motion, GameCycle_Delete);
-		break;
-	case GameCycle_Delete:
-		//隣接ブロックの削除
-		if (Block_Delete() > 0) {
-			//消去されたブロックが存在すれば重力計算
-			SoundEffect_Play(SE_TYPE_ButtonCancel);
-			Block_Gravity();
-			setGameCycle(GameCycle_Motion, GameCycle_Delete);
-		}
-		else {
-			setGameCycle(GameCycle_BeforeFALL);
+			//落下完了後は計算を行う
+			UpdateBlockRequest(GameCycle_BeforeFALL);
 		}
 		break;
 	case GameCycle_BeforeFALL:
 		//ランダムで一番上の段に木ブロックを設置する
 		for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, BLOCK_TYPE_TREE) == FALSE && i < 10; i++);
-		Block_Gravity();
-		setGameCycle(GameCycle_Motion, GameCycle_FALL);
+		UpdateBlockRequest(GameCycle_FALL);
+		break;
+	case GameCycle_Update://ブロックの計算
+		Update_FieldBlock();
 		break;
 	}
-
-
-
-	
-
-
-
-
 }
 
 //落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
@@ -372,6 +307,155 @@ int Phase_GameMain::Update_FallBlock() {
 	fallBlockInfo.Key_LRMove = 0;
 	fallBlockInfo.Key_LRRota = 0;
 	return FALSE;
+}
+
+//フィールドブロックの細々とした計算ループ
+int Phase_GameMain::Update_FieldBlock() {
+	/*
+	ゲーム更新ループ
+	0.初期化処理(最初の1度のみ実行)
+	1.重力計算
+	2.移動モーション
+	3.ブロックの特殊効果
+	4.変化モーション
+	5.重力計算
+	6.移動モーション
+	7.ブロックの消去判定→消去ブロック無しの場合は11へ
+	8.変化モーション
+	9.重力計算
+	10.移動モーションから7へ
+	11.更新ループ終了
+	*/
+
+	switch (Loop_No) {
+	case 0://初期化
+		Loop_No = 1;
+		printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 1://重力計算
+		Block_Gravity();//重力計算を行う
+		Loop_No = 2;
+		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 2://移動モーション
+		if (Update_MoveMotion() == FALSE) {
+			//移動がなかった場合
+			Loop_No = 3;
+			printLog_I(_T("ブロックの特殊効果へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 3://ブロックの特殊効果
+		Block_Black_Func();		//黒ブロックの色変更
+		Block_Rainbow_Func();	//虹色ブロックの色を変更
+		Block_BOMB_Func();		//爆弾ブロックの処理
+		Loop_No = 4;
+		printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 4://変化モーション
+		if (Update_ChangeMotion() == FALSE) {
+			//変化がなかった場合
+			Loop_No = 5;
+			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 5://重力計算
+		Block_Gravity();//重力計算を行う
+		Loop_No = 6;
+		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 6://移動モーション
+		if (Update_MoveMotion() == FALSE) {
+			//移動がなかった場合
+			Loop_No = 7;
+			printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 7://ブロックの消去判定
+		if (Block_Delete() > 0) {
+			//ブロックの消去判定が入れば
+			SoundEffect_Play(SE_TYPE_ButtonCancel);
+			Loop_No = 8;
+			printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
+		}
+		else {
+			Loop_No = 11;
+			printLog_I(_T("終了処理へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 8://変化モーション
+		if (Update_ChangeMotion() == FALSE) {
+			//変化がなかった場合
+			Loop_No = 9;
+			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 9://重力計算
+		Block_Gravity();//重力計算を行う
+		Loop_No = 10;
+		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 10://移動モーション
+		if (Update_MoveMotion() == FALSE) {
+			//移動がなかった場合
+			Loop_No = 7;
+			printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+		}
+		break;
+	case 11://終了
+		Loop_No = -1;
+		printLog_I(_T("ブロック計算ループの終了"));
+		setGameCycle(Loop_Next);
+		break;
+	default:
+		printLog_E(_T("不明なLoop_Noが指定されました(無限ループ)(Loop_No=%d)"), Loop_No);
+		break;
+	}
+	return 0;
+}
+
+//移動モーションの更新(移動モーションが行われたときはTRUE)
+int Phase_GameMain::Update_MoveMotion() {
+	int count = 0;//変化処理を行ったブロックの数
+
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			//移動モーション
+			if (field[x][y].blockMoveMotion.Enable) {
+				field[x][y].blockMoveMotion.Count++;//カウントアップ
+													//移動する距離の計算
+				double fX, fY, tX, tY;
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &fX, &fY);
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY, &tX, &tY);
+				double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
+				double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離
+				if (FMD <= MD) {//移動完了
+					field[x][y].blockMoveMotion.Enable = FALSE;//移動を無効化
+				}
+				count++;	//移動した
+			}
+		}
+	}
+	return ((count > 0) ? TRUE : FALSE);
+}
+
+//変化モーションの更新(変化モーションが行われたときはTRUE)
+int Phase_GameMain::Update_ChangeMotion() {
+	int count = 0;//移動処理を行ったブロックの数
+
+	//変化モーションのカウントアップ
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			//変化モーション
+			if (field[x][y].blockChangeMotion.Enable) {
+				field[x][y].blockChangeMotion.Count++;//カウントアップ
+				if (field[x][y].blockChangeMotion.Count > field[x][y].blockChangeMotion.Length) {//移動完了
+					field[x][y].blockChangeMotion.Enable = FALSE;//移動を無効化
+				}
+				count++;
+			}
+		}
+	}
+	return ((count > 0) ? TRUE : FALSE);
 }
 
 //終了処理(描画処理)
@@ -478,7 +562,7 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	fallBlockInfo.fallblock.BlockID[1][1] = BLOCK_TYPE_BLUE;
 	fallBlockInfo.fallblock.BlockID[2][1] = BLOCK_TYPE_GREEN;
 
-	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
+	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_BOM;
 	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_RAINBOW;
 	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
 
@@ -773,6 +857,62 @@ void Phase_GameMain::Block_Rainbow_Func() {
 	}
 }
 
+//フィールドに存在する爆弾ブロックを爆破する
+void Phase_GameMain::Block_BOMB_Func() {
+	int DeleteNum = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BLOCK_TYPE_BOM) {//爆弾ブロックの時
+				//自身の削除
+				if (Block_Delete_Direct(x, y, TRUE))	DeleteNum++;
+
+				//周囲のブロックを削除する(爆弾ブロックは削除しない)
+				if (getBlockColor(x + 1, y) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x + 1, y, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x + 2, y) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x + 2, y, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x - 1, y) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x - 1, y, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x - 2, y) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x - 2, y, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x, y + 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x, y + 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x, y + 2) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x, y + 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x, y - 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x, y - 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x, y - 2) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x, y - 2, TRUE))	DeleteNum++;
+				}
+
+
+				if (getBlockColor(x - 1, y - 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x - 1, y - 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x + 1, y - 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x + 1, y - 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x + 1, y + 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x + 1, y + 1, TRUE))	DeleteNum++;
+				}
+				if (getBlockColor(x - 1, y + 1) != BLOCK_TYPE_BOM) {
+					if (Block_Delete_Direct(x - 1, y + 1, TRUE))	DeleteNum++;
+				}
+			}
+		}
+	}
+
+	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Bulletfire5);
+
+}
+
 //指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
 
@@ -827,31 +967,26 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 	printLog_I(_T("ブロックに重力計算を行いました"));
 }
 
-//フィールドブロックを直接削除する(重力計算を行うかどうかのフラグ)(削除されたらTRUE)
-int Phase_GameMain::Block_Delete_Direct(int X, int Y, int CallGravityFlag, int PlayMotion) {
+//フィールドブロックを直接削除する(削除されたらTRUE)
+int Phase_GameMain::Block_Delete_Direct(int X, int Y, int PlayMotion) {
 	//画面外処理
 	BLOCK_TYPE t = getBlockColor(X, Y);
 	if (t == BLOCK_TYPE_NO)	return FALSE;//ないので削除しない
 
-
 	field[X][Y].color = BLOCK_TYPE_NO;
 	printLog_I(_T("ブロックの【削除】[%d][%d]"), X, Y);
 
-	
+	if (PlayMotion)			Block_SetChangeMotion(X, Y, t, BLOCK_TYPE_NO, 40);	//モーションの生成
+	else					field[X][Y].blockChangeMotion.Enable = FALSE;		//モーションの削除
 
-	if (PlayMotion)			Block_SetChangeMotion(X, Y, t, BLOCK_TYPE_NO, 90);	//モーションの生成
-	//else					field[X][Y].blockChangeMotion.Enable = FALSE;		//モーションの削除
-
-	if (CallGravityFlag)	Block_Gravity();
-
-	return FALSE;
+	return TRUE;
 }
 
 //指定した座標が指定したブロックだった場合に削除(削除されたらTRUE)
-int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int CallGravityFlag, int PlayMotion) {
+int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int PlayMotion) {
 	if (getBlockColor(X, Y) != type)	return FALSE;//違うブロックの場合は削除しない
 
-	return Block_Delete_Direct(X, Y, CallGravityFlag, PlayMotion);
+	return Block_Delete_Direct(X, Y, PlayMotion);
 }
 
 //連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
@@ -864,7 +999,8 @@ int Phase_GameMain::Block_Delete() {
 				field[x][y].color == BLOCK_TYPE_NUM ||
 				field[x][y].color == BLOCK_TYPE_TREE ||
 				field[x][y].color == BLOCK_TYPE_BLACK ||
-				field[x][y].color == BLOCK_TYPE_RAINBOW) {//除外ブロック
+				field[x][y].color == BLOCK_TYPE_RAINBOW ||
+				field[x][y].color == BLOCK_TYPE_BOM) {//除外ブロック
 				DeleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
 			}
 			else {
@@ -893,13 +1029,13 @@ int Phase_GameMain::Block_Delete() {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
 				if (Counter[DeleteFlag[x][y]] >= 3) {
 					//削除
-					Block_Delete_Direct(x, y, FALSE, FALSE);
+					Block_Delete_Direct(x, y, TRUE);
 					DelCount++;
 					//ついでに隣接する樹木ブロックも削除
-					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, FALSE, FALSE))	DelCount++;//上
-					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, FALSE, FALSE))	DelCount++;//下
-					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, FALSE, FALSE))	DelCount++;//左
-					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, FALSE, FALSE))	DelCount++;//右
+					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, TRUE))	DelCount++;//上
+					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, TRUE))	DelCount++;//下
+					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, TRUE))	DelCount++;//左
+					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, TRUE))	DelCount++;//右
 
 				}
 			}
@@ -995,24 +1131,43 @@ int Phase_GameMain::isBlock_PlayChangeMotion() {
 	return FALSE;
 }
 
-//ゲームサイクルを設定する(第2引数はゲームサイクルがモーションの場合のモーション終了後に移動するサイクル※モーション以外は無視されます)
-void  Phase_GameMain::setGameCycle(GameCycle gamecycle, GameCycle Nextgamecycle) {
-	if (gameCycle == GameCycle_NUM) {
+//ゲームサイクルを設定する
+void Phase_GameMain::setGameCycle(GameCycle gamecycle) {
+	if (gamecycle == GameCycle_NUM) {
 		printLog_E(_T("無効なゲームサイクルが指定されました"));
-		return;
-	}
-
-	if (gamecycle == GameCycle_Motion && Nextgamecycle == GameCycle_NUM) {
-		printLog_E(_T("モーションのゲームサイクルを指定する場合は、第2引数も指定してください"));
 		return;
 	}
 
 	GameCycle old = gameCycle;
 	gameCycle = gamecycle;
-	NextgameCycle = Nextgamecycle;
 
 	printLog_I(_T("ゲームサイクルの変更(%d→%d)"), old, gameCycle);
 	gameCycleFirstCallFlag = TRUE;
+}
+
+//ブロック情報を更新するようにリクエスト
+void Phase_GameMain::UpdateBlockRequest(GameCycle Next) {
+	if (Next == GameCycle_NUM || Next == GameCycle_Update) {
+		printLog_E(_T("引数が不正です"));
+		return;
+	}
+
+	if (gameCycle = GameCycle_Update) {
+		//すでに実行されている
+		printLog_E(_T("現在ブロック情報の更新を行ってるためリクエストは無視されます"));
+	}
+
+	//ブロック計算サイクルへ移行
+	setGameCycle(GameCycle_Update);
+
+	//移行先のゲームサイクルを記録する
+	Loop_Next = Next;
+
+	//計算ループの処理位置を設定
+	Loop_No = 0;
+
+	printLog_I(_T("ブロック計算ループに入ります(終了後=%d)"), Loop_Next);
+
 }
 
 void Phase_GameMain::Create_Wait_Block() {

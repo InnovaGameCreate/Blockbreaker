@@ -84,9 +84,7 @@ private:
 	enum GameCycle {
 		GameCycle_FALL,			//ブロックの落下
 		GameCycle_BeforeFALL,	//ブロックの落下開始前
-		GameCycle_Motion,		//ブロックのモーション中
-		GameCycle_BlockFunc,	//ブロック効果(黒・虹色ブロックの色判定)
-		GameCycle_Delete,		//ブロックの消去判定
+		GameCycle_Update,		//ブロックの計算ループ
 		GameCycle_NUM			//ゲームサイクルの個数(設定無し)
 	};
 
@@ -113,6 +111,10 @@ private:
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
+	//ブロックの計算ループで使用する変数
+	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
+	GameCycle Loop_Next;	//計算ループ後に移行するゲームサイクル
+
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
 	int Tex_BlockRED;		//赤ブロック
@@ -123,6 +125,7 @@ private:
 	int Tex_BlockTREE;		//樹木の形ブロック
 	int Tex_BlockBLACK;		//黒ブロック
 	int Tex_BlockRAINBOW;	//虹色ブロック
+	int Tex_BlockBOMB;		//爆弾ブロック
 
 	int BGM;				//BGM
 
@@ -135,32 +138,36 @@ private:
 	FallBlockInfo waitBlockinfo[2];//待機ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
-	GameCycle NextgameCycle;	//次のゲームサイクル(モーション終了後に移動するサイクル)
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
 	RandomTable randomTable;	//乱数テーブル
 
 	void Draw();
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type);	//ブロックを描画する(インゲーム座標)
+	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
+	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
+	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
 	void Update();
 	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
 
 	void Block_Black_Func();		//フィールドに存在する黒色ブロックの色を決定する
 	void Block_Rainbow_Func();		//フィールドに存在する虹色ブロックの色を決定する
+	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
 
 	int FallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_MoveY(int MoveVal);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
-	int Block_Delete_Direct(int X, int Y, int CallGravityFlag = TRUE, int PlayMotion = FALSE);		//フィールドブロックを削除する(重力計算を行うかどうかのフラグ(モーション再生を行うかどうか)
-	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int CallGravityFlag = TRUE, int PlayMotionn = FALSE);	//指定した座標が指定したブロックだった場合に削除
+	int Block_Delete_Direct(int X, int Y, int PlayMotion = FALSE);		//フィールドブロックを削除する(モーション再生を行うかどうか)
+	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int PlayMotionn = FALSE);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
 	void Block_SetChangeMotion(int x, int y, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);					//フィールドのブロック移動にモーションを設定する
-	void setGameCycle(GameCycle gameCycle, GameCycle NextgameCycle = GameCycle_NUM);	//ゲームサイクルを設定する(第2引数はゲームサイクルがモーションの場合のモーション終了後に移動するサイクル※モーション以外は無視されます)
+	void setGameCycle(GameCycle gameCycle);	//ゲームサイクルを設定する
+	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
 	void Create_Wait_Block();//待機ブロックの生成
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:
