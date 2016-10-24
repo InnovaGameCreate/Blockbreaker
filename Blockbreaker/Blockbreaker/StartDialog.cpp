@@ -1,4 +1,5 @@
 //ゲーム起動時の設定画面ダイアログ関係
+#include "MainFunc.h"
 
 #define WM_USER_JOYDOWN (WM_USER+1)	//ジョイスティックのキーが押されたとき
 

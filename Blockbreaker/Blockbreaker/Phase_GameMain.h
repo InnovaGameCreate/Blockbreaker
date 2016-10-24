@@ -18,11 +18,13 @@ public://定数とかの宣言
 	static const int BLOCK_PADDINGDOWN = 1;		//描画するブロックの開始位置(下)
 	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
 	static const int BLOCK_PADDINGRIGHT = 0;	//描画するブロックの開始位置(右)
+	static const int BLOCK_WIDTHNUM_INGAME = BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT);		//画面内の横のブロックの個数
+	static const int BLOCK_HEIGHTNUM_INGAME = BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN);		//画面内の縦のブロックの個数
 
-	static const int GAMEWINDOW_PADDINGX = 50;		//ゲーム画面のX方向のズレ
-	static const int GAMEWINDOW_PADDINGY = 55;		//ゲーム画面のY方向のズレ
-	static const int GAMEWINDOW_WIDTH = (BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT))*BLOCK_SIZE;		//ゲーム画面の横幅
-	static const int GAMEWINDOW_HEIGHT = (BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN))*BLOCK_SIZE;		//ゲーム画面の高さ
+	static const int GAMEWINDOW_PADDINGX = 50;	//ゲーム画面のX方向のズレ
+	static const int GAMEWINDOW_PADDINGY = 55;	//ゲーム画面のY方向のズレ
+	static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の横幅
+	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
@@ -116,6 +118,9 @@ private:
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
 	GameCycle Loop_Next;	//計算ループ後に移行するゲームサイクル
 
+	//ブロックの全体移動で使用する変数
+	BlockMoveMotion Block_AllMovedata;	//
+
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
 	int Tex_BlockRED;		//赤ブロック
@@ -157,8 +162,8 @@ private:
 	void Block_Rainbow_Func();		//フィールドに存在する虹色ブロックの色を決定する
 	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
 
-	int FallBlock_MoveX(int MoveVal);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-	int FallBlock_MoveY(int MoveVal);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
@@ -168,8 +173,10 @@ private:
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
 	void Block_SetChangeMotion(int x, int y, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);					//フィールドのブロック移動にモーションを設定する
-	void setGameCycle(GameCycle gameCycle);	//ゲームサイクルを設定する
+	void setGameCycle(GameCycle gameCycle);			//ゲームサイクルを設定する
 	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
+	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
+	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
 	void Create_Wait_Block();//待機ブロックの生成
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:

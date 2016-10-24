@@ -51,6 +51,18 @@ void Phase_GameMain::Draw() {
 		GAMEWINDOW_WIDTH + BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_HEIGHT + BLOCK_PADDINGUP*BLOCK_SIZE,
 		GetColor(0xb3, 0x65, 0xe5), TRUE);
 
+	//フィールド全体のズレを計算する
+	double Field_PaddingX = 0;
+	double Field_PaddingY = 0;
+	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
+		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+		//上の計算結果より、描画座標の計算
+		Field_PaddingX += D * cos(deg_to_rad(Rota));
+		Field_PaddingY += D * sin(deg_to_rad(Rota));
+	}
+
+
 	//フィールドブロックの描画
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -69,6 +81,11 @@ void Phase_GameMain::Draw() {
 				//移動モーション無し
 				Convert_Ingame_FromBlock(x, y, &X, &Y);
 			}
+
+			//全体ずらしの分描画座標をずらす
+			X += Field_PaddingX;
+			Y += Field_PaddingY;
+
 
 			//中心座標に変換
 			X += BLOCK_SIZE / 2.;
@@ -109,6 +126,7 @@ void Phase_GameMain::Draw() {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
 				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+
 				X += BLOCK_SIZE / 2.;
 				Y += BLOCK_SIZE / 2.;
 				DrawBlock(X, Y, fallBlockInfo.fallblock.BlockID[x][y]);
@@ -235,6 +253,23 @@ void Phase_GameMain::Update() {
 
 	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
 
+	//ブロック全体移動が有効な場合は、通常の処理を実行せず、全体移動のカウントアップのみ行うようにする
+	if (Block_AllMovedata.Enable == TRUE) {
+		Block_AllMovedata.Count++;//カウントアップ
+		//移動する距離の計算
+		double fX, fY, tX, tY;
+		Convert_Ingame_FromBlock(Block_AllMovedata.FromX, Block_AllMovedata.FromY, &fX, &fY);
+		Convert_Ingame_FromBlock(Block_AllMovedata.ToX, Block_AllMovedata.ToY, &tX, &tY);
+		double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
+		double MD = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離
+		if (FMD <= MD) {//移動完了
+			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+			Block_AllMovedata.Enable = FALSE;//移動を無効化
+			UpdateBlockRequest(gameCycle);	//現在のゲームサイクルに割り込む形でブロックのアップデートを入れる
+		}
+
+		return;
+	}
 
 
 
@@ -335,6 +370,7 @@ int Phase_GameMain::Update_FieldBlock() {
 
 	switch (Loop_No) {
 	case 0://初期化
+		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
 		Loop_No = 1;
 		printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
 		break;
@@ -346,8 +382,14 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 2://移動モーション
 		if (Update_MoveMotion() == FALSE) {
 			//移動がなかった場合
-			Loop_No = 3;
-			printLog_I(_T("ブロックの特殊効果へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 3;
+				printLog_I(_T("ブロックの特殊効果へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 3://ブロックの特殊効果
@@ -360,8 +402,14 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 4://変化モーション
 		if (Update_ChangeMotion() == FALSE) {
 			//変化がなかった場合
-			Loop_No = 5;
-			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 5;
+				printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 5://重力計算
@@ -372,8 +420,14 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 6://移動モーション
 		if (Update_MoveMotion() == FALSE) {
 			//移動がなかった場合
-			Loop_No = 7;
-			printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 7;
+				printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 7://ブロックの消去判定
@@ -384,15 +438,27 @@ int Phase_GameMain::Update_FieldBlock() {
 			printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
 		}
 		else {
-			Loop_No = 11;
-			printLog_I(_T("終了処理へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 11;
+				printLog_I(_T("終了処理へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 8://変化モーション
 		if (Update_ChangeMotion() == FALSE) {
 			//変化がなかった場合
-			Loop_No = 9;
-			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 9;
+				printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 9://重力計算
@@ -403,14 +469,26 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 10://移動モーション
 		if (Update_MoveMotion() == FALSE) {
 			//移動がなかった場合
-			Loop_No = 7;
-			printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 7;
+				printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
+			}
 		}
 		break;
 	case 11://終了
-		Loop_No = -1;
-		printLog_I(_T("ブロック計算ループの終了"));
-		setGameCycle(Loop_Next);
+		if (gameCycleFirstCallFlag) {
+			Loop_No = 0;
+			printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+		}
+		else {
+			Loop_No = -1;
+			printLog_I(_T("ブロック計算ループの終了"));
+			setGameCycle(Loop_Next);
+		}
 		break;
 	default:
 		printLog_E(_T("不明なLoop_Noが指定されました(無限ループ)(Loop_No=%d)"), Loop_No);
@@ -497,7 +575,9 @@ void Phase_GameMain::GameMain_Key() {
 	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
+		//ブロックの設置
 		add_FraldBlock(0, 18, BLOCK_TYPE_BLUE, TRUE);
+		Block_AllMoveRequest(0, -1);	//ブロック全体を移動
 		printLog_D(_T("押した"));
 
 	}
@@ -617,7 +697,7 @@ void Phase_GameMain::Delete_FallBlock() {
 }
 
 //落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
+int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
 
 	//方針:だんだんMoveValを大きくしていく
@@ -639,11 +719,21 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {
 					//ブロック有りの場合、フィールドブロックとの重なりを確認する
-					if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
-						//他のブロックと重なっていた場合はループを抜ける
-						x = FALLBLOCK_SIZE;
-						y = FALLBLOCK_SIZE;
-						MoveVal = i;//最外のループも抜ける
+					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
+						if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+							//他のブロックと重なっていた場合はループを抜ける
+							x = FALLBLOCK_SIZE;
+							y = FALLBLOCK_SIZE;
+							MoveVal = i;//最外のループも抜ける
+						}
+					}
+					else {
+						if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+							//画面外ブロックと重なっていた場合はループを抜ける
+							x = FALLBLOCK_SIZE;
+							y = FALLBLOCK_SIZE;
+							MoveVal = i;//最外のループも抜ける
+						}
 					}
 				}
 			}
@@ -662,7 +752,7 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal) {
 }
 
 //落下ブロックをY軸方向に移動(戻り値は実際の移動量)
-int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
+int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
 
 												//方針:だんだんMoveValを大きくしていく
@@ -683,11 +773,21 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
-						//他のブロックと重なっていた場合はループを抜ける
-						x = FALLBLOCK_SIZE;
-						y = FALLBLOCK_SIZE;
-						MoveVal = i;//最外のループも抜ける
+					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
+						if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+							//他のブロックと重なっていた場合はループを抜ける
+							x = FALLBLOCK_SIZE;
+							y = FALLBLOCK_SIZE;
+							MoveVal = i;//最外のループも抜ける
+						}
+					}
+					else {
+						if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+							//画面外ブロックと重なっていた場合はループを抜ける
+							x = FALLBLOCK_SIZE;
+							y = FALLBLOCK_SIZE;
+							MoveVal = i;//最外のループも抜ける
+						}
 					}
 				}
 			}
@@ -1005,11 +1105,15 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int PlayMot
 
 //連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 int Phase_GameMain::Block_Delete() {
+	//画面内の存在するブロックのみで計算する
+
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_NO ||
+			if (x < BLOCK_PADDINGLEFT || BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT - 1 < x ||	//画面外
+				y < BLOCK_PADDINGUP || BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 1 < y ||	//画面外
+				field[x][y].color == BLOCK_TYPE_NO ||
 				field[x][y].color == BLOCK_TYPE_NUM ||
 				field[x][y].color == BLOCK_TYPE_TREE ||
 				field[x][y].color == BLOCK_TYPE_BLACK ||
@@ -1161,26 +1265,160 @@ void Phase_GameMain::setGameCycle(GameCycle gamecycle) {
 
 //ブロック情報を更新するようにリクエスト
 void Phase_GameMain::UpdateBlockRequest(GameCycle Next) {
-	if (Next == GameCycle_NUM || Next == GameCycle_Update) {
+	if (Next == GameCycle_NUM) {
 		printLog_E(_T("引数が不正です"));
 		return;
 	}
 
-	if (gameCycle == GameCycle_Update) {
-		//すでに実行されている
-		printLog_E(_T("現在ブロック情報の更新を行ってるためリクエストは無視されます"));
+
+	if (gameCycle != GameCycle_Update) {	//ブロック更新サイクルを実行中でない場合は、
+		//計算ループの処理位置を設定
+		Loop_No = 0;
 	}
 
-	//ブロック計算サイクルへ移行
+	//ブロック計算サイクルへ移行(ループの再設定)
 	setGameCycle(GameCycle_Update);
 
-	//移行先のゲームサイクルを記録する
-	Loop_Next = Next;
+	//移行先のゲームサイクルを記録する(ブロック更新が指定された場合は移行先を設定しない)
+	if (Next != GameCycle_Update) {
+		Loop_Next = Next;
+	}
 
-	//計算ループの処理位置を設定
-	Loop_No = 0;
+
 
 	printLog_I(_T("ブロック計算ループに入ります(終了後=%d)"), Loop_Next);
+
+}
+
+//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
+void Phase_GameMain::Block_AllMoveRequest(int X, int Y) {
+
+	if (Block_AllMovedata.Enable)	return;//すでにブロックが移動中の場合、無視する
+
+
+	Block_AllMovedata.ToX = X;
+	Block_AllMovedata.ToY = Y;
+	Block_AllMovedata.FromX = 0;
+	Block_AllMovedata.FromY = 0;
+	Block_AllMovedata.a = 0.1;
+	Block_AllMovedata.MaxSpeed = 2;
+	Block_AllMovedata.Count = 0;
+
+	Block_AllMovedata.Enable = TRUE;
+
+
+	printLog_I(_T("ブロック全体移動が設定されました(%d,%d)"), X, Y);
+}
+
+//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
+void Phase_GameMain::Block_AllMove(int X, int Y) {
+	//処理に無駄が多い…
+
+	//一時変数
+	field_info t[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
+	//実際にブロックをすべて移動させる
+
+	//左上移動
+	if (X <= 0 && Y <= 0) {
+		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
+					//範囲内なら普通にコピーする
+					field[x][y] = field[x - X][y - Y];
+					if (field[x][y].blockMoveMotion.Enable) {//移動モーションが有効な場合は移動モーションに補正をかける
+						field[x][y].blockMoveMotion.FromX += X;
+						field[x][y].blockMoveMotion.FromY += Y;
+						field[x][y].blockMoveMotion.ToX += X;
+						field[x][y].blockMoveMotion.ToY += Y;
+					}
+				}
+				else {
+					//範囲外ならブロックの消去
+					field[x][y].color = BLOCK_TYPE_NO;
+					field[x][y].blockChangeMotion.Enable = FALSE;
+					field[x][y].blockMoveMotion.Enable = FALSE;
+				}
+			}
+		}
+		printLog_I(_T("ブロック全体を左上にずらしました(%d,%d)"), X, Y);
+	}
+	//左下移動
+	else if(X <= 0 && Y >= 0){
+		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+			for (int y = BLOCK_HEIGHTNUM-1; y >= 0; y--) {
+				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
+					//範囲内なら普通にコピーする
+					field[x][y] = field[x - X][y - Y];
+					if (field[x][y].blockMoveMotion.Enable) {//移動モーションが有効な場合は移動モーションに補正をかける
+						field[x][y].blockMoveMotion.FromX += X;
+						field[x][y].blockMoveMotion.FromY += Y;
+						field[x][y].blockMoveMotion.ToX += X;
+						field[x][y].blockMoveMotion.ToY += Y;
+					}
+				}
+				else {
+					//範囲外ならブロックの消去
+					field[x][y].color = BLOCK_TYPE_NO;
+					field[x][y].blockChangeMotion.Enable = FALSE;
+					field[x][y].blockMoveMotion.Enable = FALSE;
+				}
+			}
+		}
+		printLog_I(_T("ブロック全体を左下にずらしました(%d,%d)"), X, Y);
+	}
+	//右上移動
+	else if (X >= 0 && Y <= 0) {
+		for (int x = BLOCK_WIDTHNUM-1; x >= 0; x--) {
+			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
+					//範囲内なら普通にコピーする
+					field[x][y] = field[x - X][y - Y];
+					if (field[x][y].blockMoveMotion.Enable) {//移動モーションが有効な場合は移動モーションに補正をかける
+						field[x][y].blockMoveMotion.FromX += X;
+						field[x][y].blockMoveMotion.FromY += Y;
+						field[x][y].blockMoveMotion.ToX += X;
+						field[x][y].blockMoveMotion.ToY += Y;
+					}
+				}
+				else {
+					//範囲外ならブロックの消去
+					field[x][y].color = BLOCK_TYPE_NO;
+					field[x][y].blockChangeMotion.Enable = FALSE;
+					field[x][y].blockMoveMotion.Enable = FALSE;
+				}
+			}
+		}
+		printLog_I(_T("ブロック全体を右上にずらしました(%d,%d)"), X, Y);
+	}
+	//右下移動
+	else if (X >= 0 && Y >= 0) {
+		for (int x = BLOCK_WIDTHNUM - 1; x >= 0; x--) {
+			for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
+				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
+					//範囲内なら普通にコピーする
+					field[x][y] = field[x - X][y - Y];
+					if (field[x][y].blockMoveMotion.Enable) {//移動モーションが有効な場合は移動モーションに補正をかける
+						field[x][y].blockMoveMotion.FromX += X;
+						field[x][y].blockMoveMotion.FromY += Y;
+						field[x][y].blockMoveMotion.ToX += X;
+						field[x][y].blockMoveMotion.ToY += Y;
+					}
+				}
+				else {
+					//範囲外ならブロックの消去
+					field[x][y].color = BLOCK_TYPE_NO;
+					field[x][y].blockChangeMotion.Enable = FALSE;
+					field[x][y].blockMoveMotion.Enable = FALSE;
+				}
+			}
+		}
+		printLog_I(_T("ブロック全体を右下にずらしました(%d,%d)"), X, Y);
+	}
+
+	//落下中ブロックも移動する(画面外には行きません)
+	FallBlock_MoveX(X, FALSE);
+	FallBlock_MoveY(Y, FALSE);
+
 
 }
 
