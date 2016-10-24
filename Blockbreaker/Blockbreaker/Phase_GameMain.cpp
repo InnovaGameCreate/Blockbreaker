@@ -1152,7 +1152,7 @@ void Phase_GameMain::UpdateBlockRequest(GameCycle Next) {
 		return;
 	}
 
-	if (gameCycle = GameCycle_Update) {
+	if (gameCycle == GameCycle_Update) {
 		//すでに実行されている
 		printLog_E(_T("現在ブロック情報の更新を行ってるためリクエストは無視されます"));
 	}
