@@ -237,6 +237,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MainFunc.h" />

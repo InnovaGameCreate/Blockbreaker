@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "MainFunc.h"
-#include "SelectItem.h"
 
 //コンストラクタ
 SelectItem::SelectItem(double x, double y)
@@ -15,6 +13,7 @@ SelectItem::SelectItem(double x, double y)
 	Select_Enable = true;
 	SelectType = 0;
 	Haba = 150;
+	Centering = -1;
 }
 
 
@@ -23,7 +22,7 @@ SelectItem::~SelectItem()
 }
 
 //項目の追加
-int SelectItem::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected func, Callback_Draw drawfunc) {
+int SelectItem::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected func, Callback_Draw drawfunc, FONTTYPE font) {
 	int free = -1;
 	for (int i = 0; i < 20; i++) {
 		if (data[i].enable == false) {
@@ -40,6 +39,7 @@ int SelectItem::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected fun
 	data[free].func_Callback_Draw = drawfunc;
 	data[free].Alpha = 0;
 	data[free].SelectEnable = true;
+	data[free].font = font;
 	data[free].enable = true;
 	return 0;
 }
@@ -97,6 +97,19 @@ void SelectItem::sethaba(double haba) {
 	Haba = haba;
 }
 
+//項目の中央位置の設定(-1で左、0で中央、1で右)
+void SelectItem::setCenteringMode(int centeringMode) {
+	if (centeringMode < 0) {
+		Centering = -1;
+	}
+	else if(centeringMode > 0){
+		Centering = 1;
+	}
+	else {
+		Centering = 0;
+	}
+}
+
 //項目の描画
 void SelectItem::Draw() {
 	double x = X;
@@ -109,16 +122,27 @@ void SelectItem::Draw() {
 			if (i == SelectedItem && Enable)	color = GetColor(224, (unsigned int)(160 * getGraph_Triangle(120)), (unsigned int)(160 * getGraph_Triangle(120)));
 			if (abs(getZettaichi(i)) == 2)							alpha = 128;
 			else if (abs(getZettaichi(i)) == 1 && SelectType == 0)	alpha = 194;
-			else if (i == SelectedItem)							alpha = 255;
-			if (i != SelectedItem && Select_Enable == false)	alpha = 64;
-			if (Enable == false)								alpha = 128;
+			else if (i == SelectedItem)								alpha = 255;
+			if (i != SelectedItem && Select_Enable == false)		alpha = 64;
+			if (Enable == false)									alpha = 128;
 			if (abs(getZettaichi(i)) >= 3 && SelectType == 0)		alpha = 0;
 			if (SelectType == 0)	y = Y + (getZettaichi(i) * Haba);
-			else				y = Y + (Count * Haba);
+			else					y = Y + (Count * Haba);
 			data[i].Alpha = alpha;
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-			DrawStringFToHandle((float)x + 4, (float)(y + 4), data[i].str, GetColor(30, 30, 30), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge60));
-			DrawStringFToHandle((float)x, (float)y, data[i].str, color, Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge60));
+			int Place_X = 0;
+			if (Centering < 0) {
+				Place_X = 0;
+			}
+			else if(Centering > 0){
+				//描画予定の文字列の幅を取得する
+				Place_X = -GetDrawStringWidthToHandle(data[i].str, ARRAY_LENGTH(data[i].str), Font_getHandle(data[i].font));
+			}
+			else {
+				Place_X = -GetDrawStringWidthToHandle(data[i].str, ARRAY_LENGTH(data[i].str), Font_getHandle(data[i].font))/2;
+			}
+			DrawStringFToHandle((float)(Place_X + x + 4), (float)(y + 4), data[i].str, GetColor(30, 30, 30), Font_getHandle(data[i].font));
+			DrawStringFToHandle((float)(Place_X + x), (float)y, data[i].str, color, Font_getHandle(data[i].font));
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			if (i == SelectedItem && data[i].func_Callback_Draw != NULL)	data[i].func_Callback_Draw();
 			Count++;

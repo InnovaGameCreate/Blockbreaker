@@ -1,6 +1,6 @@
 #pragma once
 #include "SelectItem.h"
-
+#include "Define.h"
 
 class Phase_GameMain : public PhaseController
 {
@@ -108,7 +108,7 @@ private:
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
-	SelectItem pauseMenu = SelectItem(20, 20);	//ポーズメニューの項目
+	SelectItem pauseMenu = SelectItem(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)

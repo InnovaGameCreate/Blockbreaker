@@ -14,16 +14,16 @@ void Phase_GameMain::Init_Draw() {
 	if ((gameBlockWindow = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
 	if ((gameBlockWindowMask = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
 
-	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
-	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
-	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
-	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
-	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
-	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
-	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
-	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
 	if ((Mask_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffectMask.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffectMask.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
@@ -34,8 +34,13 @@ void Phase_GameMain::Init_Draw() {
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 	//ポーズメニューの項目を作成
-	pauseMenu.addItem(_T("項目1"), 3, NULL, NULL);
-	pauseMenu.setEnable(FALSE);
+	pauseMenu.addItem(_T("再開"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	pauseMenu.addItem(_T("やり直す"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	pauseMenu.addItem(_T("ゲーム終了"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	pauseMenu.setScrolltype(1);
+	pauseMenu.sethaba(50);
+	pauseMenu.setCenteringMode(0);
+	pauseMenu.setEnable(TRUE);
 
 
 
@@ -242,6 +247,10 @@ void Phase_GameMain::Draw() {
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		if (getFrameCount(THREAD_Update) % 120 > 40)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+
+		//選択肢の項目の描画
+		pauseMenu.Draw();
+
 	}
 }
 
@@ -289,7 +298,11 @@ void Phase_GameMain::Update() {
 
 	GameMain_Key();	//キー処理
 
-	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
+	if (isPaused()) {
+		//選択肢の項目の描画
+		pauseMenu.Update();
+		return;//ポーズ処理が入った場合は先に進まない
+	}
 
 	//ブロック全体移動が有効な場合は、通常の処理を実行せず、全体移動のカウントアップのみ行うようにする
 	if (Block_AllMovedata.Enable == TRUE) {
