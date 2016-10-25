@@ -1,4 +1,5 @@
 //Œø‰Ê‰¹ŠÖŒW
+#include "MainFunc.h"
 
 //Œø‰Ê‰¹‚Ìó‘Ô
 struct SE_STATE {

@@ -1,8 +1,6 @@
 #pragma once
 //ƒƒOŠÖ˜A
 
-//#include "MainFunc.h"
-
 
 //ƒƒO‚Ìí—Ş
 enum Log_Type {

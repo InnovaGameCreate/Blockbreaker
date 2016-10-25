@@ -1,4 +1,3 @@
-#include "Phase_GameMain.h"
 #include "MainFunc.h"
 
 Phase_GameMain::Phase_GameMain() {
@@ -33,6 +32,12 @@ void Phase_GameMain::Init_Draw() {
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+
+	//ポーズメニューの項目を作成
+	pauseMenu.addItem(_T("項目1"), 3, NULL, NULL);
+	pauseMenu.setEnable(FALSE);
+
+
 
 }
 
