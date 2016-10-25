@@ -12,17 +12,23 @@ Phase_GameMain::~Phase_GameMain() {
 void Phase_GameMain::Init_Draw() {
 	//ゲーム画面の生成(後でシェーダを使いたいので2のn乗のサイズで作成します)
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
+	if ((gameBlockWindow = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
+	if ((gameBlockWindowMask = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
 
-	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
-	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
-	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
-	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
-	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
-	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
-	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
-	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
+	if ((Mask_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffectMask.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffectMask.png)"));
+
+	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
+
 
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
@@ -90,6 +96,7 @@ void Phase_GameMain::Draw() {
 			//中心座標に変換
 			X += BLOCK_SIZE / 2.;
 			Y += BLOCK_SIZE / 2.;
+			SetUseSetDrawScreenSettingReset(FALSE);
 			if (field[x][y].blockChangeMotion.Enable) {
 				//変化モーション有り
 				int Alpha = (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255);
@@ -97,11 +104,28 @@ void Phase_GameMain::Draw() {
 				if (field[x][y].blockChangeMotion.To == BLOCK_TYPE_NO) {
 					//変化先のブロックが無効ブロックの場合は変化元を薄くする
 
-					Alpha = 255 - Alpha;	//アルファ値反転
-
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
+					int placeY = (int)(((field[x][y].blockChangeMotion.Length - field[x][y].blockChangeMotion.Count) / (double)field[x][y].blockChangeMotion.Length) * BLOCK_SIZE * 2) - BLOCK_SIZE;
 					DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					//下側を黒くする
+					int dY = Y + placeY;
+					if (placeY < -(BLOCK_SIZE / 2))	dY = Y -(BLOCK_SIZE / 2);
+					DrawBox(X - BLOCK_SIZE / 2, dY, X - BLOCK_SIZE / 2 + BLOCK_SIZE, Y + BLOCK_SIZE, GetColor(0, 0, 0), TRUE);
+					SetDrawScreen(gameBlockWindow); // 描画先ブロック画面にする
+					ClearDrawScreen();
+					DrawBlock(BLOCK_SIZE / 2, BLOCK_SIZE / 2, field[x][y].blockChangeMotion.From);
+					DrawGraph(0, 0, Tex_BlockFireEffect, TRUE);
+
+					SetDrawScreen(gameBlockWindowMask); // 描画先ブロック画面にする
+					ClearDrawScreen();
+					//炎の位置
+					DrawGraph(0, placeY, Mask_BlockFireEffect, TRUE);
+
+					SetDrawScreen(gameWindow);
+					GraphBlend(gameBlockWindow, gameBlockWindowMask, 255, DX_GRAPH_BLEND_RGBA_SELECT_MIX, DX_RGBA_SELECT_SRC_R, DX_RGBA_SELECT_SRC_G, DX_RGBA_SELECT_SRC_B, DX_RGBA_SELECT_BLEND_A);
+					// 描画可能画像を画面に描画
+					DrawGraph(X - BLOCK_SIZE / 2, Y - BLOCK_SIZE / 2, gameBlockWindow, TRUE);
+
+
 				}
 				else {
 					//普通に描画
@@ -116,6 +140,7 @@ void Phase_GameMain::Draw() {
 			else {
 				DrawBlock(X, Y, field[x][y].color);
 			}
+			SetUseSetDrawScreenSettingReset(TRUE);
 
 		}
 	}
@@ -126,6 +151,14 @@ void Phase_GameMain::Draw() {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
 				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+
+				//全体ずらしの分描画座標をずらす
+				X += Field_PaddingX;
+				Y += Field_PaddingY;
+
+				if (Y < (y + BLOCK_PADDINGUP)*BLOCK_SIZE) {
+					Y = (y + BLOCK_PADDINGUP)*BLOCK_SIZE;
+				}
 
 				X += BLOCK_SIZE / 2.;
 				Y += BLOCK_SIZE / 2.;
@@ -554,7 +587,10 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockTREE);
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
+	DeleteGraph(Tex_BlockFireEffect);
 	DeleteGraph(haikei);
+
+	DeleteMask(Mask_BlockFireEffect);
 
 	DeleteSoundMem(BGM);
 }
@@ -582,7 +618,7 @@ void Phase_GameMain::GameMain_Key() {
 
 	}
 
-	if (isFallBlock_Falling()) {
+	if (isFallBlock_Falling() && !Block_AllMovedata.Enable) {
 		if (getKeyBind(KEYBIND_DOWN) > 0) {//高速落下モード
 			fallBlockInfo.Key_FlagFirstFall = TRUE;
 		}
@@ -1343,9 +1379,9 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 		printLog_I(_T("ブロック全体を左上にずらしました(%d,%d)"), X, Y);
 	}
 	//左下移動
-	else if(X <= 0 && Y >= 0){
+	else if (X <= 0 && Y >= 0) {
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-			for (int y = BLOCK_HEIGHTNUM-1; y >= 0; y--) {
+			for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
 					//範囲内なら普通にコピーする
 					field[x][y] = field[x - X][y - Y];
@@ -1368,7 +1404,7 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 	}
 	//右上移動
 	else if (X >= 0 && Y <= 0) {
-		for (int x = BLOCK_WIDTHNUM-1; x >= 0; x--) {
+		for (int x = BLOCK_WIDTHNUM - 1; x >= 0; x--) {
 			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
 					//範囲内なら普通にコピーする

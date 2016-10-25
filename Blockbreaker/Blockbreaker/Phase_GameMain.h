@@ -123,15 +123,19 @@ private:
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
-	int Tex_BlockRED;		//赤ブロック
-	int Tex_BlockBLUE;		//青ブロック
-	int Tex_BlockYELLOW;	//黄色ブロック
-	int Tex_BlockGREEN;		//緑ブロック
-	int Tex_BlockPURPLE;	//紫ブロック
-	int Tex_BlockTREE;		//樹木の形ブロック
-	int Tex_BlockBLACK;		//黒ブロック
-	int Tex_BlockRAINBOW;	//虹色ブロック
-	int Tex_BlockBOMB;		//爆弾ブロック
+	int gameBlockWindow;	//ブロックを描画するハンドル
+	int gameBlockWindowMask;	//ブロックを描画するハンドル
+	int Tex_BlockRED;			//赤ブロック
+	int Tex_BlockBLUE;			//青ブロック
+	int Tex_BlockYELLOW;		//黄色ブロック
+	int Tex_BlockGREEN;			//緑ブロック
+	int Tex_BlockPURPLE;		//紫ブロック
+	int Tex_BlockTREE;			//樹木の形ブロック
+	int Tex_BlockBLACK;			//黒ブロック
+	int Tex_BlockRAINBOW;		//虹色ブロック
+	int Tex_BlockBOMB;			//爆弾ブロック
+	int Tex_BlockFireEffect;	//炎エフェクトブロック
+	int Mask_BlockFireEffect;	//炎エフェクトブロックのマスク画像
 	int haikei;				//背景
 
 	int BGM;				//BGM

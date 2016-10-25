@@ -1,4 +1,5 @@
 //規定のフェーズ
+#include "MainFunc.h"
 
 Phase_Default::Phase_Default() {};
 
