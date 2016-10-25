@@ -506,6 +506,9 @@ unsigned int getFrameCount(THREAD thread) {
 }
 
 //プログラムを終了する
+void ExitGameRequest() {
+	exit(0);
+}
 
 /*値の設定系(ここも通常いじらない)*/
 //キーバインドの設定(NULLで規定値)

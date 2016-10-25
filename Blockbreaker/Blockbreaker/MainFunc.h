@@ -106,6 +106,7 @@ extern void SetModeCursor(int Mode, int WinMode);								//マウスカーソルの設定(
 extern void SetModeMultiThread(int Mode);										//マルチスレッドでの動作の設定(0から項目順)
 extern void SetTextureCut(int Mode);											//テクスチャの分割の設定(0から項目順)
 extern void setKeybindjoy(KeyBindjoy *keyBindjoy);								//キーバインド設定(ゲームパッド)(NULLで規定値を設定)
+extern void ExitGameRequest();													//プログラムを終了する
 
 extern int	isMultiThread();						//マルチスレッドで動作するかどうかの取得(FALSEシングル)
 extern int	gettUSEGAMEPAD();						//使用するゲームパッドの取得

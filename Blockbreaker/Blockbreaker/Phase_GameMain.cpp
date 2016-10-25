@@ -1,5 +1,9 @@
 #include "MainFunc.h"
 
+static void Phase_GameMain_pauseMenu_Cannel();
+static void Phase_GameMain_pauseMenu_ReStart();
+static void Phase_GameMain_pauseMenu_End();
+
 Phase_GameMain::Phase_GameMain() {
 }
 
@@ -34,9 +38,9 @@ void Phase_GameMain::Init_Draw() {
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 	//ポーズメニューの項目を作成
-	pauseMenu.addItem(_T("再開"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-	pauseMenu.addItem(_T("やり直す"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-	pauseMenu.addItem(_T("ゲーム終了"), 3, NULL, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	pauseMenu.addItem(_T("再開"), 3, &Phase_GameMain_pauseMenu_Cannel, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("やり直す"), 3, Phase_GameMain_pauseMenu_ReStart, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ゲーム終了"), 3, Phase_GameMain_pauseMenu_End, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	pauseMenu.setScrolltype(1);
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
@@ -48,10 +52,39 @@ void Phase_GameMain::Init_Draw() {
 
 //初期化(計算処理)
 void Phase_GameMain::Init_Update() {
+	Create_Wait_Block();
+	Create_Wait_Block();
+	Restart();	//リスタート
+
+}
+
+//リスタート
+void Phase_GameMain::Restart() {
 	Flag_Pause = FALSE;
 	Flag_pauseRequest = FALSE;
-	Create_Wait_Block();
-	Create_Wait_Block();
+	//落下中ブロックの削除
+	Delete_FallBlock();
+
+
+	//ブロックの削除を行う
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			field[x][y].color = BLOCK_TYPE_NO;
+			field[x][y].blockChangeMotion.Enable = FALSE;
+			field[x][y].blockMoveMotion.Enable = FALSE;
+			field[x][y].fall_flag = 0;
+			field[x][y].move_flag = 0;
+		}
+	}
+
+	//ゲームサイクルをブロック落下に設定
+	setGameCycle(GameCycle_FALL);
+
+	//BGMを最初から再生し直す
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+
+
+	printLog_I(_T("ステージを最初からやり直しました(Restart)"));
 }
 
 //描画処理
@@ -623,6 +656,8 @@ void Phase_GameMain::GameMain_Key() {
 
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
+		if(isPaused())	SoundEffect_Play(SE_TYPE_ButtonCancel);
+		else			pauseMenu.setSelecedtItem(0);
 		PauseRequest(!isPaused());	//ポーズ状態の反転
 	}
 
@@ -677,6 +712,8 @@ void Phase_GameMain::PauseRequest(int b_Flag) {
 	Flag_pauseRequest = b_Flag;
 	if (Flag_pauseRequest)	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【有効】"));
 	else					Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【無効】"));
+
+	if (Flag_pauseRequest)	SoundEffect_Play(SE_TYPE_Pause);
 }
 
 //落下ブロックが落下中かどうかの取得(TRUEで落下中)
@@ -1557,3 +1594,21 @@ BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
 	return BLOCK_TYPE_NO;
 }
 */
+
+//ポーズ解除ボタンが押されたとき(強行突破)
+static void Phase_GameMain_pauseMenu_Cannel() {
+	phase_GameMain.PauseRequest(FALSE);
+
+}
+
+//やり直すボタンが押されたとき(強行突破)
+static void Phase_GameMain_pauseMenu_ReStart() {
+	phase_GameMain.Restart();
+
+}
+
+//ゲーム終了ボタンが押されたとき(強行突破)
+static void Phase_GameMain_pauseMenu_End() {
+	ExitGameRequest();
+
+}
