@@ -977,10 +977,10 @@ void Phase_GameMain::Block_Black_Func() {
 	}
 }
 
-//フィールドに存在する虹色ブロックの色を決定する
+//フィールドに存在する虹色ブロックの色を決定する(下から順に)
 void Phase_GameMain::Block_Rainbow_Func() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+		for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
 			if (field[x][y].color == BLOCK_TYPE_RAINBOW) {//虹色ブロックの時
 				if (getBlockColor(x, y + 1) == BLOCK_TYPE_NO) {
 					//下にブロックが無い
