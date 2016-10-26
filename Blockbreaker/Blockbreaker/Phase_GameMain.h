@@ -40,6 +40,14 @@ public://定数とかの宣言
 		BLOCK_TYPE_NUM		//ブロックの種類の数(画面外ブロック)
 	};
 
+	//ポーズの種類
+	enum PauseMode {
+		PauseMode_NO,		//ポーズ状態になっていない(通常)
+		PauseMode_NOMAL,	//通常の尾イーズ(escでポーズするやつ)
+		PauseMode_GameOver,	//ゲームオーバー
+		PauseMode_NUM		//個数(リクエスト無し)
+	};
+
 private:
 	//移動モーションのデータ
 	struct BlockMoveMotion {
@@ -137,8 +145,8 @@ private:
 	int BGM;				//BGM
 
 
-	int Flag_Pause;			//ポーズ状態かどうか(ゲームの進行がすべて停止します)(TRUEでポーズ)
-	int Flag_pauseRequest;	//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)
+	PauseMode Flag_Pause;				//ポーズ状態かどうか(ゲームの進行がすべて停止します)
+	PauseMode Flag_pauseRequest;		//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)
 
 	
 	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
@@ -170,6 +178,7 @@ private:
 	int Block_Delete_Direct(int X, int Y, int PlayMotion = FALSE);		//フィールドブロックを削除する(モーション再生を行うかどうか)
 	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int PlayMotionn = FALSE);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
+	int Block_Delete_OutScreen();				//画面外のブロックをすべて削除する(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
 	void Block_SetChangeMotion(int x, int y, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);					//フィールドのブロック移動にモーションを設定する
@@ -177,6 +186,7 @@ private:
 	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
 	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
 	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
+	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
 	void Create_Wait_Block();//待機ブロックの生成
 	void pauseMenu_Cannel();						//ポーズ解除ボタンが押されたとき
 	void pauseMenu_ReStart();						//やり直すボタンが押されたとき
@@ -193,15 +203,15 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int OutScreen = FALSE);			//フィールドにブロックを追加する
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int MotionInit = TRUE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL);			//フィールドにブロックを追加する
 
 	/*設定系*/
-	void PauseRequest(int b_Flag);		//ポーズ状態のリクエスト
-	void Delete_FallBlock();			//落下ブロックの無効化
+	void PauseRequest(PauseMode pauseMode);	//ポーズ状態のリクエスト
+	void Delete_FallBlock();				//落下ブロックの無効化
 
 	/*取得系*/
 	void Convert_Ingame_FromBlock(int blockX, int blockY, double *IngameX, double *IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
-	int	isPaused();					//ポーズ状態かどうかの取得(TRUEでポーズ)
+	PauseMode isPaused();			//ポーズ状態の取得
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)

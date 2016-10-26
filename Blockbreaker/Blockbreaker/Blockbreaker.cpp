@@ -507,6 +507,7 @@ unsigned int getFrameCount(THREAD thread) {
 
 //プログラムを終了する
 void ExitGameRequest() {
+	printLog_I(_T("ゲームを終了します"));
 	exit(0);
 }
 

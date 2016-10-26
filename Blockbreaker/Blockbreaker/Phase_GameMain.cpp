@@ -59,8 +59,8 @@ void Phase_GameMain::Init_Update() {
 
 //リスタート
 void Phase_GameMain::Restart() {
-	Flag_Pause = FALSE;
-	Flag_pauseRequest = FALSE;
+	Flag_Pause = PauseMode_NO;
+	Flag_pauseRequest = PauseMode_NO;
 	//落下中ブロックの削除
 	Delete_FallBlock();
 
@@ -272,8 +272,9 @@ void Phase_GameMain::Draw() {
 	}
 #endif // _DEBUG_GAMEMAIN_
 
-	if (isPaused()) {//ポーズ状態の時
-							  //ポーズ状態と分かるように描画する
+	switch (isPaused()) {
+	case PauseMode_NOMAL:
+		//ポーズ状態と分かるように描画する
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -282,7 +283,17 @@ void Phase_GameMain::Draw() {
 
 		//選択肢の項目の描画
 		pauseMenu.Draw();
+		break;
+	case PauseMode_GameOver:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(150, 0, 0), TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+		if (getFrameCount(THREAD_Update) % 120 > 40)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("GAME OVER"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+
+		//選択肢の項目の描画
+		pauseMenu.Draw();
+		break;
 	}
 }
 
@@ -325,15 +336,22 @@ void Phase_GameMain::Update() {
 
 	//リクエストの反映
 
-	Flag_Pause = Flag_pauseRequest;//リクエストの反映
-	//ここまで
+	if (Flag_pauseRequest != PauseMode_NUM) {
+		Flag_Pause = Flag_pauseRequest;//リクエストの反映
+		Flag_pauseRequest = PauseMode_NUM;
+	}
 
 	GameMain_Key();	//キー処理
 
-	if (isPaused()) {
-		//選択肢の項目の描画
+	//ポーズ時の処理をしてこの先には進まない
+	switch (isPaused()) {
+	case PauseMode_NOMAL:
+		//選択肢の項目の更新
 		pauseMenu.Update();
-		return;//ポーズ処理が入った場合は先に進まない
+		return;
+	case PauseMode_GameOver:
+		pauseMenu.Update();
+		return;
 	}
 
 	//ブロック全体移動が有効な場合は、通常の処理を実行せず、全体移動のカウントアップのみ行うようにする
@@ -346,8 +364,14 @@ void Phase_GameMain::Update() {
 		double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
 		double MD = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離
 		if (FMD <= MD) {//移動完了
+
 			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
 			Block_AllMovedata.Enable = FALSE;//移動を無効化
+			//ゲームオーバーの判定を行う
+			if (JudgeGameOver() != 0) {
+				PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
+			}
+
 			UpdateBlockRequest(gameCycle);	//現在のゲームサイクルに割り込む形でブロックのアップデートを入れる
 		}
 
@@ -454,8 +478,18 @@ int Phase_GameMain::Update_FieldBlock() {
 	switch (Loop_No) {
 	case 0://初期化
 		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
-		Loop_No = 1;
-		printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+		
+		//ゲームオーバーの判定を行う
+		if (JudgeGameOver() != 0) {
+			PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
+		}
+		//画面外ブロックを削除する
+		Block_Delete_OutScreen();
+
+		if (!gameCycleFirstCallFlag) {
+			Loop_No = 1;
+			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+		}
 		break;
 	case 1://重力計算
 		Block_Gravity();//重力計算を行う
@@ -655,16 +689,24 @@ void Phase_GameMain::GameMain_Key() {
 
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
-		if(isPaused())	SoundEffect_Play(SE_TYPE_ButtonCancel);
-		else			pauseMenu.setSelecedtItem(0);
-		PauseRequest(!isPaused());	//ポーズ状態の反転
+		if (isPaused() == PauseMode_NOMAL) {
+			//ポーズ状態解除
+			SoundEffect_Play(SE_TYPE_ButtonCancel);
+			PauseRequest(PauseMode_NO);	//ポーズ状態
+		}
+		else if (isPaused() == PauseMode_NO) {
+			//ポーズに
+			pauseMenu.setSelecedtItem(0);
+			SoundEffect_Play(SE_TYPE_Pause);
+			PauseRequest(PauseMode_NOMAL);	//ポーズ状態
+		}
 	}
 
-	if (isPaused())	return;//ポーズ処理が入った場合は先に進まない
+	if (isPaused() != PauseMode_NO)	return;//ポーズ処理が入った場合はこの先は処理をしない
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
-		add_FraldBlock(0, 18, BLOCK_TYPE_BLUE, TRUE);
+		add_FraldBlock(0, 18, BLOCK_TYPE_BLUE, FALSE, TRUE, TRUE);
 		Block_AllMoveRequest(0, -1);	//ブロック全体を移動
 		printLog_D(_T("押した"));
 
@@ -699,20 +741,30 @@ void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double *In
 	}
 }
 
-//ポーズ状態かどうかの取得(TRUEでポーズ)
-int Phase_GameMain::isPaused() {
+//ポーズ状態の取得
+Phase_GameMain::PauseMode Phase_GameMain::isPaused() {
 	return Flag_Pause;
 }
 
 //ポーズ状態のリクエスト
-void Phase_GameMain::PauseRequest(int b_Flag) {
-	b_Flag = (b_Flag) ? TRUE : FALSE;//不正な引数の対策
+void Phase_GameMain::PauseRequest(PauseMode pauseMode) {
 
-	Flag_pauseRequest = b_Flag;
-	if (Flag_pauseRequest)	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【有効】"));
-	else					Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ポーズリクエスト【無効】"));
-
-	if (Flag_pauseRequest)	SoundEffect_Play(SE_TYPE_Pause);
+	switch (pauseMode) {
+	case PauseMode_NO:
+		printLog_I(_T("【ポーズ解除】リクエスト"));
+		break;
+	case PauseMode_NOMAL:
+		//ゲームオーバーのリクエストがある場合は上書きしない
+		if (Flag_pauseRequest == PauseMode_NUM)	return;
+		printLog_I(_T("【通常ポーズ】リクエスト"));
+		pauseMenu.setItemEnable(TRUE, 0);	//項目0を有効
+		break;
+	case PauseMode_GameOver:
+		printLog_I(_T("【ゲームオーバーポーズ】リクエスト"));
+		pauseMenu.setItemEnable(FALSE, 0);	//項目0を無効化
+		break;
+	}
+	Flag_pauseRequest = pauseMode;
 }
 
 //落下ブロックが落下中かどうかの取得(TRUEで落下中)
@@ -990,23 +1042,56 @@ void Phase_GameMain::FallBlock_addField() {
 
 }
 
-//フィールドにブロックを追加する(成功でTRUE,失敗でFALSE)(上書き禁止)
-int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int OutScreen) {
-	//ブロック無しブロックは設置不可
-	if (brock_type == BLOCK_TYPE_NO)					return FALSE;
-	//画面外ブロックも設置不可
-	if (brock_type == BLOCK_TYPE_NUM)					return FALSE;
+//フィールドにブロックを追加(削除)する
+/*
+引数
+	Override:TRUEでブロック上書きを許可する(消すときはTRUEにしないとブロックは消えないよ)
+	MotionInit:TRUEでモーションデータも初期化する
+	OutScreen:TRUEで画面外にブロックを設置することを許可
+	Before:前に設置されていたブロック
+戻り値
+	TRUEで設置(削除)成功
+*/
+int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int MotionInit, int OutScreen, BLOCK_TYPE *Before) {
+	if (Before != NULL)	*Before = BLOCK_TYPE_NO;
+	//画面外ブロックは設置不可
+	if (brock_type == BLOCK_TYPE_NUM)	return FALSE;
+	//ブロック無しブロックが指定された場合は削除処理を行う
 
-	//ブロックの上書きは失敗にする(画面外もブロック有りと判定が出る設定にする)
-	if (getBlockColor(X, Y, TRUE, !OutScreen) != BLOCK_TYPE_NO)		return FALSE;
+
+	//ブロックを設置しようとしている位置の現在のブロックを取得する(捜査対象外は画面外ブロックになります)
+	BLOCK_TYPE bt = getBlockColor(X, Y, TRUE, !OutScreen);
+	if (Override) {
+		//上書きが有効な場合
+		if (bt == BLOCK_TYPE_NUM)	return FALSE;//画面外ブロックの時のみ失敗
+	}
+	else {
+		//上書き無効の場合
+		if (bt != BLOCK_TYPE_NO)	return FALSE;//ブロック無しと出ない場合は失敗
+	}
+
+	//現在のブロックを記録する
+	if (Before != NULL)	*Before = field[X][Y].color;
 
 	//ブロックの設置
 	field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
 	field[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
 	field[X][Y].color = brock_type;	//ブロックの置き換え
 
+	if (MotionInit) {
+		//モーションの初期化が有効な場合は初期化する
+		field[X][Y].blockChangeMotion.Enable = FALSE;
+		field[X][Y].blockMoveMotion.Enable = FALSE;
+	}
 
-	printLog_I(_T("フィールドブロックの新規生成[%d][%d](type=%d)"), X, Y, brock_type);
+	if (brock_type == BLOCK_TYPE_NO) {
+		//この場合はブロック削除なので
+		printLog_I(_T("フィールドブロックの【削除】[%d][%d]"), X, Y);
+	}
+	else {
+		printLog_I(_T("フィールドブロックの【新規生成】[%d][%d](type=%d)"), X, Y, brock_type);
+	}
+	
 
 	return TRUE;
 }
@@ -1173,17 +1258,16 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 
 //フィールドブロックを直接削除する(削除されたらTRUE)
 int Phase_GameMain::Block_Delete_Direct(int X, int Y, int PlayMotion) {
-	//画面外処理
-	BLOCK_TYPE t = getBlockColor(X, Y);
-	if (t == BLOCK_TYPE_NO)	return FALSE;//ないので削除しない
 
-	field[X][Y].color = BLOCK_TYPE_NO;
-	printLog_I(_T("ブロックの【削除】[%d][%d]"), X, Y);
+	if (getBlockColor(X, Y, FALSE, FALSE) == BLOCK_TYPE_NO)	return FALSE;//ブロックがそもそも存在しない場合は何もしない
 
-	if (PlayMotion)			Block_SetChangeMotion(X, Y, t, BLOCK_TYPE_NO, 40);	//モーションの生成
-	else					field[X][Y].blockChangeMotion.Enable = FALSE;		//モーションの削除
+	BLOCK_TYPE t;
+	//ブロックの削除を行う
+	int flag = add_FraldBlock(X, Y, BLOCK_TYPE_NO, TRUE, !PlayMotion, TRUE, &t);
 
-	return TRUE;
+	if (PlayMotion && flag)		Block_SetChangeMotion(X, Y, t, BLOCK_TYPE_NO, 40);	//モーションの生成
+
+	return ((flag) ? TRUE : FALSE);
 }
 
 //指定した座標が指定したブロックだった場合に削除(削除されたらTRUE)
@@ -1254,6 +1338,26 @@ int Phase_GameMain::Block_Delete() {
 
 
 	return DelCount;
+}
+
+//画面外のブロックをすべて削除する(消去したブロックの数)
+int Phase_GameMain::Block_Delete_OutScreen() {
+	int count = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (getBlockColor(x, y, TRUE, TRUE) == BLOCK_TYPE_NUM) {
+				//画面外ブロックの場合は削除
+				if (Block_Delete_Direct(x, y, FALSE)) {
+					count++;
+				}
+			}
+		}
+	}
+
+	printLog_I(_T("画面外のブロックをすべて削除(%d個)"), count);
+
+
+	return count;
 }
 
 //隣接する同色ブロックにマーカーを付ける
@@ -1509,7 +1613,24 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 	FallBlock_MoveX(X, FALSE);
 	FallBlock_MoveY(Y, FALSE);
 
+}
 
+//ゲームオーバーになっているかどうかの確認
+/*
+戻り値
+0:ゲームオーバーでは無い
+1:ブロックが上まで積み上がっていまってゲームオーバー
+2:落下ブロックが既存ブロックと重なってしまってゲームオーバー
+*/
+int Phase_GameMain::JudgeGameOver() {
+	printLog_I(_T("ゲームオーバーかどうかの判定を行います"));
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		if (getBlockColor(x, 0, FALSE, FALSE) != BLOCK_TYPE_NO) {
+			//0列目(画面上の見えない部分)にブロックが侵入した
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void Phase_GameMain::Create_Wait_Block() {
@@ -1596,7 +1717,7 @@ BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
 
 //ポーズ解除ボタンが押されたとき
 void Phase_GameMain::pauseMenu_Cannel() {
-	phase_GameMain.PauseRequest(FALSE);
+	phase_GameMain.PauseRequest(PauseMode_NO);
 
 }
 
