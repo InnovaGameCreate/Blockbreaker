@@ -108,7 +108,7 @@ private:
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
-	SelectItem pauseMenu = SelectItem(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
+	SelectItem<Phase_GameMain> pauseMenu = SelectItem<Phase_GameMain>(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
@@ -178,6 +178,9 @@ private:
 	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
 	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
 	void Create_Wait_Block();//待機ブロックの生成
+	void pauseMenu_Cannel();						//ポーズ解除ボタンが押されたとき
+	void pauseMenu_ReStart();						//やり直すボタンが押されたとき
+	void pauseMenu_End();							//ゲーム終了ボタンが押されたとき
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 

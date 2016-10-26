@@ -1,7 +1,13 @@
 #include "MainFunc.h"
 
+
+
+// 明示的テンプレートのインスタンス化
+template class SelectItem<Phase_GameMain>;
+
 //コンストラクタ
-SelectItem::SelectItem(double x, double y)
+template <typename T>
+SelectItem<T>::SelectItem(double x, double y)
 {
 	SelectedItem = 0;
 	for (int i = 0; i < 20; i++) {
@@ -16,13 +22,9 @@ SelectItem::SelectItem(double x, double y)
 	Centering = -1;
 }
 
-
-SelectItem::~SelectItem()
-{
-}
-
 //項目の追加
-int SelectItem::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected func, Callback_Draw drawfunc, FONTTYPE font) {
+template <typename T>
+int SelectItem<T>::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected func, Callback_Draw drawfunc, FONTTYPE font) {
 	int free = -1;
 	for (int i = 0; i < 20; i++) {
 		if (data[i].enable == false) {
@@ -45,26 +47,30 @@ int SelectItem::addItem(TCHAR *str, size_t len, Callback_SelectItem_Selected fun
 }
 
 //選択を有効・無効にする(キーで操作して項目を変えれない)
-void SelectItem::setSelectEnable(int b_flag) {
+template <typename T>
+void SelectItem<T>::setSelectEnable(int b_flag) {
 	Select_Enable = (b_flag) ? true : false;
 	if (Select_Enable)	printLog_I(_T("SelectItemの選択を【有効】に設定しました"));
 	else				printLog_I(_T("SelectItemの選択を【無効】に設定しました"));
 }
 
 //選択肢自体を無効化
-void SelectItem::setEnable(int b_flag) {
+template <typename T>
+void SelectItem<T>::setEnable(int b_flag) {
 	Enable = (b_flag) ? true : false;
 	if (Enable)	printLog_I(_T("SelectItemを【有効】に設定しました"));
 	else		printLog_I(_T("SelectItemを【無効】に設定しました"));
 }
 
 //選択の状態を設定(0でスクロール1でスクロールしないやつ)
-void SelectItem::setScrolltype(int type) {
+template <typename T>
+void SelectItem<T>::setScrolltype(int type) {
 	SelectType = type;
 }
 
 //特定の選択肢を選択可能にするかどうか(trueで可能)
-void SelectItem::setItemEnable(bool b_Enable, int No) {
+template <typename T>
+void SelectItem<T>::setItemEnable(bool b_Enable, int No) {
 	if (isEnableItem(No)) {//項目が存在する場合
 		data[No].SelectEnable = (b_Enable) ? true : false;
 		if (data[No].SelectEnable == false && SelectedItem == No) {//無効にした場合かつ選択している場合、選択肢の位置を調整する
@@ -93,12 +99,20 @@ void SelectItem::setItemEnable(bool b_Enable, int No) {
 }
 
 //アイテムの幅を設定する
-void SelectItem::sethaba(double haba) {
+template <typename T>
+void SelectItem<T>::sethaba(double haba) {
 	Haba = haba;
 }
 
+//呼び出し元のインスタンスを設定する
+template <typename T>
+void SelectItem<T>::setinstance(T *instance) {
+	classObject = instance;
+}
+
 //項目の中央位置の設定(-1で左、0で中央、1で右)
-void SelectItem::setCenteringMode(int centeringMode) {
+template <typename T>
+void SelectItem<T>::setCenteringMode(int centeringMode) {
 	if (centeringMode < 0) {
 		Centering = -1;
 	}
@@ -111,7 +125,8 @@ void SelectItem::setCenteringMode(int centeringMode) {
 }
 
 //項目の描画
-void SelectItem::Draw() {
+template <typename T>
+void SelectItem<T>::Draw() {
 	double x = X;
 	double y = Y;
 	int Count = 0;//アイテムのカウント数
@@ -144,14 +159,18 @@ void SelectItem::Draw() {
 			DrawStringFToHandle((float)(Place_X + x + 4), (float)(y + 4), data[i].str, GetColor(30, 30, 30), Font_getHandle(data[i].font));
 			DrawStringFToHandle((float)(Place_X + x), (float)y, data[i].str, color, Font_getHandle(data[i].font));
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			if (i == SelectedItem && data[i].func_Callback_Draw != NULL)	data[i].func_Callback_Draw();
+			if (i == SelectedItem && data[i].func_Callback_Draw != NULL && classObject != NULL) {
+				Callback_Draw rr = data[i].func_Callback_Draw;
+				(classObject->*rr)();
+			}
 			Count++;
 		}
 	}
 }
 
 //実際に選択している項目と現在描画している項目との実際の見た目の差を取得(選択無効項目を考慮した差になっているか取得)
-int SelectItem::getZettaichi(int No) {
+template <typename T>
+int SelectItem<T>::getZettaichi(int No) {
 	//選択項目との絶対値の計算
 	if (No == SelectedItem)	return 0;//選択している項目の場合は差0
 	int Count = 0;
@@ -171,7 +190,8 @@ int SelectItem::getZettaichi(int No) {
 }
 
 //項目の更新(キー判定とか)
-void SelectItem::Update() {
+template <typename T>
+void SelectItem<T>::Update() {
 	if (Select_Enable == false)	return;
 	if (Enable == false)		return;
 	if (getKeyBind(KEYBIND_UP) == 1) {
@@ -196,17 +216,23 @@ void SelectItem::Update() {
 	}
 	else if (getKeyBind(KEYBIND_SELECT) == 1 ) {
 		SoundEffect_Play(SE_TYPE_DecisionSelect);
-		if (data[SelectedItem].func_SelectItem_Selected != NULL)	data[SelectedItem].func_SelectItem_Selected();
+		if (data[SelectedItem].func_SelectItem_Selected != NULL && classObject != NULL) {
+			Callback_SelectItem_Selected rr = data[SelectedItem].func_SelectItem_Selected;
+			(classObject->*rr)();
+
+		}
 	}
 }
 
 //選択している項目の取得
-int SelectItem::getSelecedtItem() {
+template <typename T>
+int SelectItem<T>::getSelecedtItem() {
 	return SelectedItem;
 }
 
 //項目の選択
-void SelectItem::setSelecedtItem(int No) {
+template <typename T>
+void SelectItem<T>::setSelecedtItem(int No) {
 	if (isEnableItem(No)) {
 		SelectedItem = No;
 		printLog_I(_T("SelectItemの初期選択を【%d】に設定しました"), SelectedItem);
@@ -214,13 +240,15 @@ void SelectItem::setSelecedtItem(int No) {
 }
 
 //指定された番号に項目が存在するかどうかの取得
-bool SelectItem::isEnableItem(int No) {
+template <typename T>
+bool SelectItem<T>::isEnableItem(int No) {
 	if (No < 0 || 20 <= No)	return false;
 	return data[No].enable;
 }
 
 //最後に描画したときのα値を取得
-int SelectItem::getItemAlpha(int No) {
+template <typename T>
+int SelectItem<T>::getItemAlpha(int No) {
 	if (isEnableItem(No)) {
 		return data[No].Alpha;
 	}

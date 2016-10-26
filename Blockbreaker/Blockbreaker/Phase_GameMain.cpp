@@ -1,8 +1,6 @@
 #include "MainFunc.h"
 
-static void Phase_GameMain_pauseMenu_Cannel();
-static void Phase_GameMain_pauseMenu_ReStart();
-static void Phase_GameMain_pauseMenu_End();
+
 
 Phase_GameMain::Phase_GameMain() {
 }
@@ -38,10 +36,11 @@ void Phase_GameMain::Init_Draw() {
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 	//ポーズメニューの項目を作成
-	pauseMenu.addItem(_T("再開"), 3, &Phase_GameMain_pauseMenu_Cannel, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("やり直す"), 3, Phase_GameMain_pauseMenu_ReStart, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("ゲーム終了"), 3, Phase_GameMain_pauseMenu_End, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("再開"), 3, &Phase_GameMain::pauseMenu_Cannel, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("やり直す"), 3, &Phase_GameMain::pauseMenu_ReStart, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ゲーム終了"), 3, &Phase_GameMain::pauseMenu_End, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	pauseMenu.setScrolltype(1);
+	pauseMenu.setinstance(this);
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
 	pauseMenu.setEnable(TRUE);
@@ -1595,20 +1594,20 @@ BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
 }
 */
 
-//ポーズ解除ボタンが押されたとき(強行突破)
-static void Phase_GameMain_pauseMenu_Cannel() {
+//ポーズ解除ボタンが押されたとき
+void Phase_GameMain::pauseMenu_Cannel() {
 	phase_GameMain.PauseRequest(FALSE);
 
 }
 
-//やり直すボタンが押されたとき(強行突破)
-static void Phase_GameMain_pauseMenu_ReStart() {
+//やり直すボタンが押されたとき
+void Phase_GameMain::pauseMenu_ReStart() {
 	phase_GameMain.Restart();
 
 }
 
-//ゲーム終了ボタンが押されたとき(強行突破)
-static void Phase_GameMain_pauseMenu_End() {
+//ゲーム終了ボタンが押されたとき
+void Phase_GameMain::pauseMenu_End() {
 	ExitGameRequest();
 
 }
