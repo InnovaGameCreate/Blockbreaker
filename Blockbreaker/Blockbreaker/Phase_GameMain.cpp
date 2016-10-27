@@ -40,7 +40,7 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
 	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
-	if ((Mask_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffectMask.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffectMask.png)"));
+	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
 
@@ -168,7 +168,7 @@ void Phase_GameMain::Draw() {
 			case BlockChangeMotionType_EXPLOSION:
 				//爆発(シェーダに頑張ってもらう)
 				ShaderBackGround_DeleteBlock(X, Y, field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length
-					, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Mask_BlockFireEffect);
+					, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Tex_BlockFireEffect2);
 				break;
 			case BlockChangeMotionType_SMALL:
 				//小さくなる
@@ -285,7 +285,7 @@ void Phase_GameMain::Draw() {
 		pauseMenu.Draw();
 		break;
 	}
-			}
+}
 
 //ブロックを描画する(インゲーム座標)
 void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale) {
@@ -312,6 +312,26 @@ int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 		return Tex_BlockGREEN;
 	case BLOCK_TYPE_PURPLE:	//紫ブロック描画
 		return Tex_BlockPURPLE;
+	case BLOCK_TYPE_RED_ARROW_X://赤(平行矢印)
+		return Tex_BlockRED_ARROW_X;
+	case BLOCK_TYPE_RED_ARROW_Y://赤(垂直矢印)
+		return Tex_BlockRED_ARROW_Y;
+	case BLOCK_TYPE_BLUE_ARROW_X://青(平行矢印)
+		return Tex_BlockBLUE_ARROW_X;
+	case BLOCK_TYPE_BLUE_ARROW_Y://青(垂直矢印)
+		return Tex_BlockBLUE_ARROW_Y;
+	case BLOCK_TYPE_YELLOW_ARROW_X://黄(平行矢印)
+		return Tex_BlockYELLOW_ARROW_X;
+	case BLOCK_TYPE_YELLOW_ARROW_Y://黄(垂直矢印)
+		return Tex_BlockYELLOW_ARROW_Y;
+	case BLOCK_TYPE_GREEN_ARROW_X://緑(平行矢印)
+		return Tex_BlockGREEN_ARROW_X;
+	case BLOCK_TYPE_GREEN_ARROW_Y://緑(垂直矢印)
+		return Tex_BlockGREEN_ARROW_Y;
+	case BLOCK_TYPE_PURPLE_ARROW_X://紫(平行矢印)
+		return Tex_BlockPURPLE_ARROW_X;
+	case BLOCK_TYPE_PURPLE_ARROW_Y://紫(垂直矢印)
+		return Tex_BlockPURPLE_ARROW_Y;
 	case BLOCK_TYPE_YELLOW:	//黄色ブロック描画
 		return Tex_BlockYELLOW;
 	case BLOCK_TYPE_TREE:	//樹木ブロック
@@ -392,12 +412,28 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 	{
-		BLOCK_TYPE bt = (randomTable.getRand(0, 100) > 5) ? BLOCK_TYPE_TREE : BLOCK_TYPE_BOM;
+		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
+		int swi = (int)(randomTable.getRand(0, 119) / 10.);
+		switch (swi) {
+		case 0:		bt = BLOCK_TYPE_RED_ARROW_X;	break;
+		case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;	break;
+		case 2:		bt = BLOCK_TYPE_BLUE_ARROW_X;	break;
+		case 3:		bt = BLOCK_TYPE_BLUE_ARROW_Y;	break;
+		case 4:		bt = BLOCK_TYPE_YELLOW_ARROW_X;	break;
+		case 5:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;	break;
+		case 6:		bt = BLOCK_TYPE_GREEN_ARROW_X;	break;
+		case 7:		bt = BLOCK_TYPE_GREEN_ARROW_Y;	break;
+		case 8:		bt = BLOCK_TYPE_PURPLE_ARROW_X;	break;
+		case 9:		bt = BLOCK_TYPE_PURPLE_ARROW_Y;	break;
+		case 10:	bt = BLOCK_TYPE_TREE;	break;
+		case 11:	bt = BLOCK_TYPE_BOM;	break;
+		}
+		
 		//ランダムで一番上の段に木ブロックを設置する
 		for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, bt) == FALSE && i < 10; i++);
 		UpdateBlockRequest(GameCycle_FALL);
 	}
-		break;
+	break;
 	case GameCycle_Update://ブロックの計算
 		Update_FieldBlock();
 		break;
@@ -701,7 +737,7 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockFireEffect);
 	DeleteGraph(haikei);
 
-	DeleteMask(Mask_BlockFireEffect);
+	DeleteMask(Tex_BlockFireEffect2);
 
 	DeleteSoundMem(BGM);
 }
@@ -1110,7 +1146,7 @@ void Phase_GameMain::FallBlock_addField() {
 */
 int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BlockChangeMotionType MotionType, int MotionLengh, BLOCK_TYPE *Before) {
 	if (Before != NULL)	*Before = BLOCK_TYPE_NO;	//前のブロックを指定する
-	BLOCK_TYPE before= BLOCK_TYPE_NO;	//消去前のブロック
+	BLOCK_TYPE before = BLOCK_TYPE_NO;	//消去前のブロック
 	//画面外ブロックは設置不可
 	if (brock_type == BLOCK_TYPE_NUM)	return FALSE;
 	//ブロック無しブロックが指定された場合は削除処理を行う
@@ -1140,7 +1176,7 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 		Block_SetChangeMotion_NOMAL(X, Y, brock_type, MotionLengh);	//削除時のみは設定不可(内部処理)
 		break;
 	case Phase_GameMain::BlockChangeMotionType_EXPLOSION:
-		if(brock_type == BLOCK_TYPE_NO) Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh);	//削除時のみ設定可能
+		if (brock_type == BLOCK_TYPE_NO) Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh);	//削除時のみ設定可能
 		break;
 	case Phase_GameMain::BlockChangeMotionType_SMALL:
 		if (brock_type == BLOCK_TYPE_NO) Block_SetChangeMotion_SMALL(X, Y, MotionLengh);	//削除時のみ設定可能
@@ -1340,7 +1376,7 @@ int Phase_GameMain::Block_Delete_Direct(int X, int Y, BlockChangeMotionType Play
 		if (PlayMotion == BlockChangeMotionType_EXPLOSION) {
 			Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh);	//モーションの生成
 		}
-		else if(PlayMotion == BlockChangeMotionType_SMALL){
+		else if (PlayMotion == BlockChangeMotionType_SMALL) {
 			Block_SetChangeMotion_SMALL(X, Y, MotionLengh);	//モーションの生成
 		}
 	}
@@ -1355,9 +1391,10 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChange
 	return Block_Delete_Direct(X, Y, PlayMotion, MotionLengh);
 }
 
-//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
+//連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
 int Phase_GameMain::Block_Delete() {
 	//画面内の存在するブロックのみで計算する
+	const int DELETE_LEN = 3;//削除するために必要な隣接するブロックの個数
 
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
@@ -1379,6 +1416,14 @@ int Phase_GameMain::Block_Delete() {
 		}
 	}
 
+	//削除前のブロックの一覧を作成する
+	BLOCK_TYPE old[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			old[x][y] = getBlockColor(x, y);
+		}
+	}
+
 	//隣接ブロックの計算を行う
 	int Counter[BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM];	//IDごとの隣接カウント数
 	int ID = 0;
@@ -1392,20 +1437,56 @@ int Phase_GameMain::Block_Delete() {
 		}
 	}
 
-	//4以上隣接しているブロックは削除する
+	//矢印ブロックの効果を先に発動する
 	int DelCount = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
-				if (Counter[DeleteFlag[x][y]] >= 3) {
+				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
+					//水平の矢印の場合
+					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_X ||
+						old[x][y] == BLOCK_TYPE_GREEN_ARROW_X ||
+						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_X ||
+						old[x][y] == BLOCK_TYPE_RED_ARROW_X ||
+						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
+						//左端から右端までの一列を一括消去
+						for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
+							if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+						}
+					}
+					//垂直の矢印の場合
+					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_Y ||
+						old[x][y] == BLOCK_TYPE_GREEN_ARROW_Y ||
+						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_Y ||
+						old[x][y] == BLOCK_TYPE_RED_ARROW_Y ||
+						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
+						//左端から右端までの一列を一括消去
+						for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
+							if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+						}
+					}
+				}
+			}
+		}
+	}
+	//この時点で削除があった(つまり矢印ブロックで消された)
+	if (DelCount > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
+
+	//隣接しているブロックを削除する
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
+				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
 					//削除
-					Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15);
-					DelCount++;
+					if(Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15))	DelCount++;
+
 					//ついでに隣接する樹木ブロックも削除
 					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//上
 					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//下
 					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//左
 					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//右
+
+
 
 				}
 			}
@@ -1445,10 +1526,84 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 	deleteFlag[x][y] = ID;					//探索済み(探索IDを設定する)
 	(*Counter)++;
 
-	if (x + 1 < BLOCK_WIDTHNUM	&& field[x + 1][y].color == bt) SequenceCount(x + 1, y, ID, deleteFlag, Counter);
-	if (y + 1 < BLOCK_HEIGHTNUM	&& field[x][y + 1].color == bt) SequenceCount(x, y + 1, ID, deleteFlag, Counter);
-	if (x - 1 >= 0 && field[x - 1][y].color == bt) SequenceCount(x - 1, y, ID, deleteFlag, Counter);
-	if (y - 1 >= 0 && field[x][y - 1].color == bt) SequenceCount(x, y - 1, ID, deleteFlag, Counter);
+	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(field[x + 1][y].color, bt, TRUE))	SequenceCount(x + 1, y, ID, deleteFlag, Counter);
+	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(field[x][y + 1].color, bt, TRUE))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
+	if (x - 1 >= 0				&& isSameColorBlock(field[x - 1][y].color, bt, TRUE))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
+	if (y - 1 >= 0				&& isSameColorBlock(field[x][y - 1].color, bt, TRUE))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
+}
+
+//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)
+int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag) {
+	if (!FirstFlag) {//簡略計算でないとき
+		//色の概念の無いブロックの場合
+		if (type1 == BLOCK_TYPE_NO)			return FALSE;
+		if (type1 == BLOCK_TYPE_TREE)		return FALSE;
+		if (type1 == BLOCK_TYPE_BLACK)		return FALSE;
+		if (type1 == BLOCK_TYPE_NOROUND)	return FALSE;
+		if (type1 == BLOCK_TYPE_RAINBOW)	return FALSE;
+		if (type1 == BLOCK_TYPE_BOM)		return FALSE;
+		if (type1 == BLOCK_TYPE_NUM)		return FALSE;
+		if (type2 == BLOCK_TYPE_NO)			return FALSE;
+		if (type2 == BLOCK_TYPE_TREE)		return FALSE;
+		if (type2 == BLOCK_TYPE_BLACK)		return FALSE;
+		if (type2 == BLOCK_TYPE_NOROUND)	return FALSE;
+		if (type2 == BLOCK_TYPE_RAINBOW)	return FALSE;
+		if (type2 == BLOCK_TYPE_BOM)		return FALSE;
+		if (type2 == BLOCK_TYPE_NUM)		return FALSE;
+	}
+
+	//同色判定(同一ブロックの場合)
+	if (type1 == type2)	return TRUE;
+
+	//同色判定(基本ブロックに直して考えます)
+	switch (type1) {
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_Y:
+		type1 = BLOCK_TYPE_RED;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_Y:
+		type1 = BLOCK_TYPE_BLUE;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_Y:
+		type1 = BLOCK_TYPE_YELLOW;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_Y:
+		type1 = BLOCK_TYPE_GREEN;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_Y:
+		type1 = BLOCK_TYPE_PURPLE;
+		break;
+	}
+	switch (type2) {
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_Y:
+		type2 = BLOCK_TYPE_RED;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_Y:
+		type2 = BLOCK_TYPE_BLUE;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_Y:
+		type2 = BLOCK_TYPE_YELLOW;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_Y:
+		type2 = BLOCK_TYPE_GREEN;
+		break;
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_X:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_Y:
+		type2 = BLOCK_TYPE_PURPLE;
+		break;
+	}
+	//同色判定
+	if (type1 == type2)	return TRUE;
+
+	return FALSE;
 }
 
 //フィールドのブロック移動にモーションを設定する
@@ -1740,7 +1895,7 @@ int Phase_GameMain::JudgeGameOver() {
 			return 1;
 		}
 	}
-	
+
 	if (isFallBlock_Enable()) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {

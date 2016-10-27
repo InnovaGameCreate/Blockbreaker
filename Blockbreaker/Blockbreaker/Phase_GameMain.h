@@ -165,7 +165,7 @@ private:
 	int Tex_BlockRAINBOW;			//虹色ブロック
 	int Tex_BlockBOMB;				//爆弾ブロック
 	int Tex_BlockFireEffect;		//炎エフェクトブロック
-	int Mask_BlockFireEffect;		//炎エフェクトブロックのマスク画像
+	int Tex_BlockFireEffect2;		//炎エフェクトブロックのマスク画像
 	int haikei;				//背景
 
 	int BGM;				//BGM
@@ -207,9 +207,10 @@ private:
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
 	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);		//フィールドブロックを削除する
 	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
-	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
+	int Block_Delete();							//連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
 	int Block_Delete_OutScreen();				//画面外のブロックをすべて削除する(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
+	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUEで簡略計算します)
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
 	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);	//フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
 	void Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength);				//フィールドのブロックに変化モーション(通常)を設定する
