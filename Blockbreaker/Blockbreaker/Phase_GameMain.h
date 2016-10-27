@@ -48,6 +48,14 @@ public://定数とかの宣言
 		PauseMode_NUM		//個数(リクエスト無し)
 	};
 
+	//ブロック変化モーションの種類
+	enum BlockChangeMotionType {
+		BlockChangeMotionType_NO,		//モーション無し
+		BlockChangeMotionType_NOMAL,	//通常(fromからtoへ)
+		BlockChangeMotionType_EXPLOSION,//爆発(消滅)
+		BlockChangeMotionType_SMALL,	//小さくなって消える
+	};
+
 private:
 	//移動モーションのデータ
 	struct BlockMoveMotion {
@@ -64,13 +72,13 @@ private:
 	//ブロック変化モーションのデータ
 	struct BlockChangeMotion {
 		BlockChangeMotion() {
-			Enable = FALSE;
+			Type = BlockChangeMotionType_NO;
 		}
-		int Enable;			//ブロック変化モーションが有効かどうか
-		BLOCK_TYPE From;	//ブロック変化元ブロック
-		BLOCK_TYPE To;		//ブロック変化先ブロック
-		int Count;			//ブロック変化カウント(0起算)
-		int Length;			//ブロック変化モーションを行う時間
+		BlockChangeMotionType Type;	//ブロック変化モーションの種類
+		BLOCK_TYPE From;			//ブロック変化元ブロック
+		BLOCK_TYPE To;				//ブロック変化先ブロック
+		int Count;					//ブロック変化カウント(0起算)
+		int Length;					//ブロック変化モーションを行う時間
 	};
 	struct field_info {
 		BLOCK_TYPE color;//ブロックの色
@@ -161,7 +169,7 @@ private:
 	int Count_Pause;		//ポーズ時のカウンタ
 
 	void Draw();
-	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type);	//ブロックを描画する(インゲーム座標)
+	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
 	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
@@ -179,13 +187,17 @@ private:
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
-	int Block_Delete_Direct(int X, int Y, int PlayMotion = FALSE);		//フィールドブロックを削除する(モーション再生を行うかどうか)
-	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, int PlayMotionn = FALSE);	//指定した座標が指定したブロックだった場合に削除
+	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);		//フィールドブロックを削除する
+	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでにお邪魔ブロックの処理も行う)(消去したブロックの数)
 	int Block_Delete_OutScreen();				//画面外のブロックをすべて削除する(消去したブロックの数)
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
-	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);	//フィールドのブロックにモーションを設定する
-	void Block_SetChangeMotion(int x, int y, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);					//フィールドのブロック移動にモーションを設定する
+	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
+	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength);	//フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
+	void Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength);				//フィールドのブロックに変化モーション(通常)を設定する
+	void Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength);			//フィールドのブロックに変化モーション(通常)を設定する(変化元指定)
+	void Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength);							//フィールドのブロックに変化モーション(爆発)を設定する
+	void Block_SetChangeMotion_SMALL(int x, int y, int MotionLength);								//フィールドのブロックに変化モーション(小さくなって消える)を設定する
 	void setGameCycle(GameCycle gameCycle);			//ゲームサイクルを設定する
 	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
 	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
@@ -208,7 +220,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int MotionInit = TRUE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL);			//フィールドにブロックを追加する
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BlockChangeMotionType MotionType = BlockChangeMotionType_NO, int MotionLengh = 40, BLOCK_TYPE *Before = NULL);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
 
 	/*設定系*/
 	void PauseRequest(PauseMode pauseMode);	//ポーズ状態のリクエスト
