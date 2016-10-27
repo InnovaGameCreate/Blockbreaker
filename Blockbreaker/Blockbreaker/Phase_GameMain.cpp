@@ -15,32 +15,42 @@ void Phase_GameMain::Init_Draw() {
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
 
 	//ブロック画像
-	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
-	if ((Tex_BlockRED_ARROW_X = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_X.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_X.png)"));
-	if ((Tex_BlockRED_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_Y.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_Y.png)"));
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)								printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockRED_ARROW_X = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_X.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_X.png)"));
+	if ((Tex_BlockRED_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_Y.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_Y.png)"));
+	if ((Tex_BlockRED_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_XY.png)"));
+	if ((Tex_BlockRED_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY2.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_XY2.png)"));
 
-	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
-	if ((Tex_BlockBLUE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_X.png)"));
-	if ((Tex_BlockBLUE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_Y.png)"));
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockBLUE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_X.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_X.png)"));
+	if ((Tex_BlockBLUE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_Y.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_Y.png)"));
+	if ((Tex_BlockBLUE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_XY.png)"));
+	if ((Tex_BlockBLUE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY2.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_XY2.png)"));
 
-	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
-	if ((Tex_BlockYELLOW_ARROW_X = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_X.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_X.png)"));
-	if ((Tex_BlockYELLOW_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_Y.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_Y.png)"));
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockYELLOW_ARROW_X = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_X.png)"));
+	if ((Tex_BlockYELLOW_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_Y.png)"));
+	if ((Tex_BlockYELLOW_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_XY.png)"));
+	if ((Tex_BlockYELLOW_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY2.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_XY2.png)"));
 
-	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
-	if ((Tex_BlockGREEN_ARROW_X = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_X.png)"));
-	if ((Tex_BlockGREEN_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_Y.png)"));
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockGREEN_ARROW_X = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_X.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_X.png)"));
+	if ((Tex_BlockGREEN_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_Y.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_Y.png)"));
+	if ((Tex_BlockGREEN_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_XY.png)"));
+	if ((Tex_BlockGREEN_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY2.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_XY2.png)"));
 
-	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockPURPLE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_X.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_X.png)"));
-	if ((Tex_BlockPURPLE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_Y.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_Y.png)"));
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
+	if ((Tex_BlockPURPLE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_X.png)"));
+	if ((Tex_BlockPURPLE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_Y.png)"));
+	if ((Tex_BlockPURPLE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_XY.png)"));
+	if ((Tex_BlockPURPLE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY2.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_XY2.png)"));
 
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
-	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
-	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
-	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
-	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
+	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
 
@@ -304,34 +314,54 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, 
 //ブロックタイプよりテクスチャハンドルの取得
 int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 	switch (type) {
-	case BLOCK_TYPE_RED:	//赤ブロック描画
+	case BLOCK_TYPE_RED:	//赤ブロック
 		return Tex_BlockRED;
-	case BLOCK_TYPE_BLUE:	//青ブロック描画
+	case BLOCK_TYPE_BLUE:	//青ブロック
 		return Tex_BlockBLUE;
-	case BLOCK_TYPE_GREEN:	//緑ブロック描画
+	case BLOCK_TYPE_GREEN:	//緑ブロック
 		return Tex_BlockGREEN;
-	case BLOCK_TYPE_PURPLE:	//紫ブロック描画
+	case BLOCK_TYPE_PURPLE:	//紫ブロック
 		return Tex_BlockPURPLE;
 	case BLOCK_TYPE_RED_ARROW_X://赤(平行矢印)
 		return Tex_BlockRED_ARROW_X;
 	case BLOCK_TYPE_RED_ARROW_Y://赤(垂直矢印)
 		return Tex_BlockRED_ARROW_Y;
+	case BLOCK_TYPE_RED_ARROW_XY://赤(斜め右上)
+		return Tex_BlockRED_ARROW_XY;
+	case BLOCK_TYPE_RED_ARROW_XY2://赤(斜め右下)
+		return Tex_BlockRED_ARROW_XY2;
 	case BLOCK_TYPE_BLUE_ARROW_X://青(平行矢印)
 		return Tex_BlockBLUE_ARROW_X;
 	case BLOCK_TYPE_BLUE_ARROW_Y://青(垂直矢印)
 		return Tex_BlockBLUE_ARROW_Y;
+	case BLOCK_TYPE_BLUE_ARROW_XY://青(斜め右上)
+		return Tex_BlockBLUE_ARROW_XY;
+	case BLOCK_TYPE_BLUE_ARROW_XY2://青(斜め右下)
+		return Tex_BlockBLUE_ARROW_XY2;
 	case BLOCK_TYPE_YELLOW_ARROW_X://黄(平行矢印)
 		return Tex_BlockYELLOW_ARROW_X;
 	case BLOCK_TYPE_YELLOW_ARROW_Y://黄(垂直矢印)
 		return Tex_BlockYELLOW_ARROW_Y;
+	case BLOCK_TYPE_YELLOW_ARROW_XY://黄(斜め右上)
+		return Tex_BlockYELLOW_ARROW_XY;
+	case BLOCK_TYPE_YELLOW_ARROW_XY2://黄(斜め右下)
+		return Tex_BlockYELLOW_ARROW_XY2;
 	case BLOCK_TYPE_GREEN_ARROW_X://緑(平行矢印)
 		return Tex_BlockGREEN_ARROW_X;
 	case BLOCK_TYPE_GREEN_ARROW_Y://緑(垂直矢印)
 		return Tex_BlockGREEN_ARROW_Y;
+	case BLOCK_TYPE_GREEN_ARROW_XY://緑(斜め右上)
+		return Tex_BlockGREEN_ARROW_XY;
+	case BLOCK_TYPE_GREEN_ARROW_XY2://緑(斜め右下)
+		return Tex_BlockGREEN_ARROW_XY2;
 	case BLOCK_TYPE_PURPLE_ARROW_X://紫(平行矢印)
 		return Tex_BlockPURPLE_ARROW_X;
 	case BLOCK_TYPE_PURPLE_ARROW_Y://紫(垂直矢印)
 		return Tex_BlockPURPLE_ARROW_Y;
+	case BLOCK_TYPE_PURPLE_ARROW_XY://紫(斜め右上)
+		return Tex_BlockPURPLE_ARROW_XY;
+	case BLOCK_TYPE_PURPLE_ARROW_XY2://紫(斜め右下)
+		return Tex_BlockPURPLE_ARROW_XY2;
 	case BLOCK_TYPE_YELLOW:	//黄色ブロック描画
 		return Tex_BlockYELLOW;
 	case BLOCK_TYPE_TREE:	//樹木ブロック
@@ -413,20 +443,30 @@ void Phase_GameMain::Update() {
 	case GameCycle_BeforeFALL:
 	{
 		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
-		int swi = (int)(randomTable.getRand(0, 119) / 10.);
+		int swi = (int)(randomTable.getRand(0, 219) / 10.);
 		switch (swi) {
-		case 0:		bt = BLOCK_TYPE_RED_ARROW_X;	break;
-		case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;	break;
-		case 2:		bt = BLOCK_TYPE_BLUE_ARROW_X;	break;
-		case 3:		bt = BLOCK_TYPE_BLUE_ARROW_Y;	break;
-		case 4:		bt = BLOCK_TYPE_YELLOW_ARROW_X;	break;
-		case 5:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;	break;
-		case 6:		bt = BLOCK_TYPE_GREEN_ARROW_X;	break;
-		case 7:		bt = BLOCK_TYPE_GREEN_ARROW_Y;	break;
-		case 8:		bt = BLOCK_TYPE_PURPLE_ARROW_X;	break;
-		case 9:		bt = BLOCK_TYPE_PURPLE_ARROW_Y;	break;
-		case 10:	bt = BLOCK_TYPE_TREE;	break;
-		case 11:	bt = BLOCK_TYPE_BOM;	break;
+		case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
+		case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
+		case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
+		case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
+		case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
+		case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
+		case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
+		case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
+		case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
+		case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
+		case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
+		case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
+		case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
+		case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
+		case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
+		case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
+		case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
+		case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
+		case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
+		case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
+		case 20:	bt = BLOCK_TYPE_TREE;				break;
+		case 21:	bt = BLOCK_TYPE_BOM;				break;
 		}
 		
 		//ランダムで一番上の段に木ブロックを設置する
@@ -719,18 +759,28 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockRED);
 	DeleteGraph(Tex_BlockRED_ARROW_X);
 	DeleteGraph(Tex_BlockRED_ARROW_Y);
+	DeleteGraph(Tex_BlockRED_ARROW_XY);
+	DeleteGraph(Tex_BlockRED_ARROW_XY2);
 	DeleteGraph(Tex_BlockBLUE);
 	DeleteGraph(Tex_BlockBLUE_ARROW_X);
 	DeleteGraph(Tex_BlockBLUE_ARROW_Y);
+	DeleteGraph(Tex_BlockBLUE_ARROW_XY);
+	DeleteGraph(Tex_BlockBLUE_ARROW_XY2);
 	DeleteGraph(Tex_BlockYELLOW);
 	DeleteGraph(Tex_BlockYELLOW_ARROW_X);
 	DeleteGraph(Tex_BlockYELLOW_ARROW_Y);
+	DeleteGraph(Tex_BlockYELLOW_ARROW_XY);
+	DeleteGraph(Tex_BlockYELLOW_ARROW_XY2);
 	DeleteGraph(Tex_BlockGREEN);
 	DeleteGraph(Tex_BlockGREEN_ARROW_X);
 	DeleteGraph(Tex_BlockGREEN_ARROW_Y);
+	DeleteGraph(Tex_BlockGREEN_ARROW_XY);
+	DeleteGraph(Tex_BlockGREEN_ARROW_XY2);
 	DeleteGraph(Tex_BlockPURPLE);
 	DeleteGraph(Tex_BlockPURPLE_ARROW_X);
 	DeleteGraph(Tex_BlockPURPLE_ARROW_Y);
+	DeleteGraph(Tex_BlockPURPLE_ARROW_XY);
+	DeleteGraph(Tex_BlockPURPLE_ARROW_XY2);
 	DeleteGraph(Tex_BlockTREE);
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
@@ -1465,6 +1515,30 @@ int Phase_GameMain::Block_Delete() {
 							if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
 						}
 					}
+					//右上の矢印の場合
+					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY ||
+						old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY ||
+						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY ||
+						old[x][y] == BLOCK_TYPE_RED_ARROW_XY ||
+						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
+						//斜めに一括消去
+						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
+							if (Block_Delete_Direct(x+i, y-i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x-i, y+i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+						}
+					}
+					//右下の矢印の場合
+					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY2 ||
+						old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY2 ||
+						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY2 ||
+						old[x][y] == BLOCK_TYPE_RED_ARROW_XY2 ||
+						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
+						//斜めに一括消去
+						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
+							if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+						}
+					}
 				}
 			}
 		}
@@ -1559,44 +1633,64 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Fir
 	switch (type1) {
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_XY2:
 		type1 = BLOCK_TYPE_RED;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_XY2:
 		type1 = BLOCK_TYPE_BLUE;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_XY2:
 		type1 = BLOCK_TYPE_YELLOW;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_XY2:
 		type1 = BLOCK_TYPE_GREEN;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_XY2:
 		type1 = BLOCK_TYPE_PURPLE;
 		break;
 	}
 	switch (type2) {
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_XY2:
 		type2 = BLOCK_TYPE_RED;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_BLUE_ARROW_XY2:
 		type2 = BLOCK_TYPE_BLUE;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_YELLOW_ARROW_XY2:
 		type2 = BLOCK_TYPE_YELLOW;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_GREEN_ARROW_XY2:
 		type2 = BLOCK_TYPE_GREEN;
 		break;
 	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_Y:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_XY:
+	case Phase_GameMain::BLOCK_TYPE_PURPLE_ARROW_XY2:
 		type2 = BLOCK_TYPE_PURPLE;
 		break;
 	}

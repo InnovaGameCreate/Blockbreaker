@@ -32,16 +32,26 @@ public://定数とかの宣言
 		BLOCK_TYPE_GREEN,//緑
 		BLOCK_TYPE_PURPLE,//紫
 		//ここから特殊ブロック↓
-		BLOCK_TYPE_RED_ARROW_X,//赤(平行矢印)
-		BLOCK_TYPE_RED_ARROW_Y,//赤(垂直矢印)
-		BLOCK_TYPE_BLUE_ARROW_X,//青(平行矢印)
-		BLOCK_TYPE_BLUE_ARROW_Y,//青(垂直矢印)
-		BLOCK_TYPE_YELLOW_ARROW_X,//黄(平行矢印)
-		BLOCK_TYPE_YELLOW_ARROW_Y,//黄(垂直矢印)
-		BLOCK_TYPE_GREEN_ARROW_X,//緑(平行矢印)
-		BLOCK_TYPE_GREEN_ARROW_Y,//緑(垂直矢印)
-		BLOCK_TYPE_PURPLE_ARROW_X,//紫(平行矢印)
-		BLOCK_TYPE_PURPLE_ARROW_Y,//紫(垂直矢印)
+		BLOCK_TYPE_RED_ARROW_X,		//赤(平行矢印)
+		BLOCK_TYPE_RED_ARROW_Y,		//赤(垂直矢印)
+		BLOCK_TYPE_RED_ARROW_XY,	//赤(斜め右上)
+		BLOCK_TYPE_RED_ARROW_XY2,	//赤(斜め右下)
+		BLOCK_TYPE_BLUE_ARROW_X,	//青(平行矢印)
+		BLOCK_TYPE_BLUE_ARROW_Y,	//青(垂直矢印)
+		BLOCK_TYPE_BLUE_ARROW_XY,	//青(斜め右上)
+		BLOCK_TYPE_BLUE_ARROW_XY2,	//青(斜め右下)
+		BLOCK_TYPE_YELLOW_ARROW_X,	//黄(平行矢印)
+		BLOCK_TYPE_YELLOW_ARROW_Y,	//黄(垂直矢印)
+		BLOCK_TYPE_YELLOW_ARROW_XY,	//黄(斜め右上)
+		BLOCK_TYPE_YELLOW_ARROW_XY2,//黄(斜め右下)
+		BLOCK_TYPE_GREEN_ARROW_X,	//緑(平行矢印)
+		BLOCK_TYPE_GREEN_ARROW_Y,	//緑(垂直矢印)
+		BLOCK_TYPE_GREEN_ARROW_XY,	//緑(斜め右上)
+		BLOCK_TYPE_GREEN_ARROW_XY2,	//緑(斜め右下)
+		BLOCK_TYPE_PURPLE_ARROW_X,	//紫(平行矢印)
+		BLOCK_TYPE_PURPLE_ARROW_Y,	//紫(垂直矢印)
+		BLOCK_TYPE_PURPLE_ARROW_XY,	//紫(垂直矢印)
+		BLOCK_TYPE_PURPLE_ARROW_XY2,//紫(垂直矢印)
 		BLOCK_TYPE_TREE, //樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 		BLOCK_TYPE_BLACK,//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
 		BLOCK_TYPE_NOROUND,//枠で囲われたブロック（回せない）
@@ -148,18 +158,28 @@ private:
 	int Tex_BlockRED;				//赤ブロック
 	int Tex_BlockRED_ARROW_X;		//赤ブロック(平行矢印)
 	int Tex_BlockRED_ARROW_Y;		//赤ブロック(垂直矢印)
+	int Tex_BlockRED_ARROW_XY;		//赤ブロック(斜め右上)
+	int Tex_BlockRED_ARROW_XY2;		//赤ブロック(斜め右下)
 	int Tex_BlockBLUE;				//青ブロック
 	int Tex_BlockBLUE_ARROW_X;		//青ブロック(平行矢印)
 	int Tex_BlockBLUE_ARROW_Y;		//青ブロック(垂直矢印)
+	int Tex_BlockBLUE_ARROW_XY;		//青ブロック(斜め右上)
+	int Tex_BlockBLUE_ARROW_XY2;	//青ブロック(斜め右下)
 	int Tex_BlockYELLOW;			//黄色ブロック
 	int Tex_BlockYELLOW_ARROW_X;	//黄色ブロック(平行矢印)
 	int Tex_BlockYELLOW_ARROW_Y;	//黄色ブロック(垂直矢印)
+	int Tex_BlockYELLOW_ARROW_XY;	//黄色ブロック(斜め右上)
+	int Tex_BlockYELLOW_ARROW_XY2;	//黄色ブロック(斜め右下)
 	int Tex_BlockGREEN;				//緑ブロック
 	int Tex_BlockGREEN_ARROW_X;		//緑ブロック(平行矢印)
 	int Tex_BlockGREEN_ARROW_Y;		//緑ブロック(垂直矢印)
+	int Tex_BlockGREEN_ARROW_XY;	//緑ブロック(斜め右上)
+	int Tex_BlockGREEN_ARROW_XY2;	//緑ブロック(斜め右下)
 	int Tex_BlockPURPLE;			//紫ブロック
 	int Tex_BlockPURPLE_ARROW_X;	//紫ブロック(平行矢印)
 	int Tex_BlockPURPLE_ARROW_Y;	//紫ブロック(垂直矢印)
+	int Tex_BlockPURPLE_ARROW_XY;	//紫ブロック(斜め右上)
+	int Tex_BlockPURPLE_ARROW_XY2;	//紫ブロック(斜め右下)
 	int Tex_BlockTREE;				//樹木の形ブロック
 	int Tex_BlockBLACK;				//黒ブロック
 	int Tex_BlockRAINBOW;			//虹色ブロック
