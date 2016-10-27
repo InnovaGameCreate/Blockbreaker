@@ -31,12 +31,22 @@ public://定数とかの宣言
 		BLOCK_TYPE_YELLOW,//黄
 		BLOCK_TYPE_GREEN,//緑
 		BLOCK_TYPE_PURPLE,//紫
+		//ここから特殊ブロック↓
+		BLOCK_TYPE_RED_ARROW_X,//赤(平行矢印)
+		BLOCK_TYPE_RED_ARROW_Y,//赤(垂直矢印)
+		BLOCK_TYPE_BLUE_ARROW_X,//青(平行矢印)
+		BLOCK_TYPE_BLUE_ARROW_Y,//青(垂直矢印)
+		BLOCK_TYPE_YELLOW_ARROW_X,//黄(平行矢印)
+		BLOCK_TYPE_YELLOW_ARROW_Y,//黄(垂直矢印)
+		BLOCK_TYPE_GREEN_ARROW_X,//緑(平行矢印)
+		BLOCK_TYPE_GREEN_ARROW_Y,//緑(垂直矢印)
+		BLOCK_TYPE_PURPLE_ARROW_X,//紫(平行矢印)
+		BLOCK_TYPE_PURPLE_ARROW_Y,//紫(垂直矢印)
 		BLOCK_TYPE_TREE, //樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 		BLOCK_TYPE_BLACK,//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
 		BLOCK_TYPE_NOROUND,//枠で囲われたブロック（回せない）
 		BLOCK_TYPE_RAINBOW,//虹色のブロック(下のブロックと同じ色になる)
 		BLOCK_TYPE_BOM,//爆弾(問答無用で周囲のブロック破壊)
-		BLOCK_TYPE_DOWNMARK,//下矢印マークのブロック(下に2段移動させる)
 		BLOCK_TYPE_NUM		//ブロックの種類の数(画面外ブロック)
 	};
 
