@@ -282,7 +282,7 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, 
 	int X = (int)(CenterX + BLOCK_SIZE / 2.);
 	int Y = (int)(CenterY + BLOCK_SIZE / 2.);
 
-	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, getBlockTexture(type), TRUE, FALSE);
+	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, getBlockTexture(type), TRUE, FALSE);
 
 	//DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, getBlockTexture(type), TRUE);
 }
@@ -377,9 +377,12 @@ void Phase_GameMain::Update() {
 		}
 		break;
 	case GameCycle_BeforeFALL:
+	{
+		BLOCK_TYPE bt = (randomTable.getRand(0, 100) > 5) ? BLOCK_TYPE_TREE : BLOCK_TYPE_BOM;
 		//ランダムで一番上の段に木ブロックを設置する
-		for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, BLOCK_TYPE_TREE) == FALSE && i < 10; i++);
+		for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, bt) == FALSE && i < 10; i++);
 		UpdateBlockRequest(GameCycle_FALL);
+	}
 		break;
 	case GameCycle_Update://ブロックの計算
 		Update_FieldBlock();
@@ -412,18 +415,18 @@ int Phase_GameMain::Update_FallBlock() {
 		}
 		if (fallBlockInfo.Key_LRMove < 0) {
 			//左移動
-			if (FallBlock_MoveX(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
-			else						SoundEffect_Play(SE_TYPE_Graze);
+			if (FallBlock_MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 		if (fallBlockInfo.Key_LRRota > 0) {
 			//時計回りに回転
-			if (FallBlock_Rotate(1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
-			else						SoundEffect_Play(SE_TYPE_Graze);
+			if (FallBlock_Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 		if (fallBlockInfo.Key_LRRota < 0) {
 			//反時計回りに回転
-			if (FallBlock_Rotate(-1))	SoundEffect_Play(SE_TYPE_Bulletfire2);
-			else						SoundEffect_Play(SE_TYPE_Graze);
+			if (FallBlock_Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 
 		if (fallBlockInfo.FallCount <= 0) {//カウント0以下で落下
@@ -797,7 +800,7 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	fallBlockInfo.fallblock.BlockID[1][1] = BLOCK_TYPE_BLUE;
 	fallBlockInfo.fallblock.BlockID[2][1] = BLOCK_TYPE_GREEN;
 
-	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_BOM;
+	fallBlockInfo.fallblock.BlockID[0][2] = BLOCK_TYPE_NO;
 	fallBlockInfo.fallblock.BlockID[1][2] = BLOCK_TYPE_RAINBOW;
 	fallBlockInfo.fallblock.BlockID[2][2] = BLOCK_TYPE_NO;
 
@@ -817,6 +820,10 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 
 	//有効
 	fallBlockInfo.Enable = TRUE;
+
+	if (JudgeGameOver() != 0) {
+		PauseRequest(PauseMode_GameOver);
+	}
 
 	printLog_I(_T("落下ブロックの【新規生成】"));
 	return TRUE;
@@ -890,6 +897,14 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 	//ずらしの反映
 	fallBlockInfo.PlaceX += MoveVal;
 
+
+	//回転が入った場合は死亡判定をする
+	if (MoveVal != 0) {
+		if (JudgeGameOver() != 0) {
+			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+		}
+	}
+
 	return MoveVal;
 }
 
@@ -943,6 +958,14 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 
 	//ずらしの反映
 	fallBlockInfo.PlaceY += MoveVal;
+
+	//移動が入った場合は死亡判定をする
+	if (MoveVal != 0) {
+		if (JudgeGameOver() != 0) {
+			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+		}
+	}
+
 
 	return MoveVal;
 }
@@ -1011,6 +1034,13 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	//符号を元に戻す
 	if (Minus) {
 		RotaVal = -RotaVal;
+	}
+
+	//回転が入った場合は死亡判定をする
+	if (RotaVal != 0) {
+		if (JudgeGameOver() != 0) {
+			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+		}
 	}
 
 	return RotaVal;
@@ -1127,7 +1157,7 @@ void Phase_GameMain::Block_Black_Func() {
 				else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//紫色ブロック
 
 				//変化モーションの設定
-				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_BLACK, 60);
+				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_BLACK, 20);
 			}
 		}
 	}
@@ -1155,7 +1185,7 @@ void Phase_GameMain::Block_Rainbow_Func() {
 				}
 
 				//変化モーションの設定
-				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_RAINBOW, 60);
+				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_RAINBOW, 20);
 
 
 			}
@@ -1682,9 +1712,27 @@ int Phase_GameMain::JudgeGameOver() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		if (getBlockColor(x, 0, FALSE, FALSE) != BLOCK_TYPE_NO) {
 			//0列目(画面上の見えない部分)にブロックが侵入した
+			printLog_I(_T("ブロックが上まで積み上がっていまってゲームオーバー"));
 			return 1;
 		}
 	}
+	
+	if (isFallBlock_Enable()) {
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+				if (fallBlockInfo.fallblock.BlockID[x][y] != BLOCK_TYPE_NO) {
+					int fX = fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER);
+					int fY = fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER);
+					BLOCK_TYPE fB = getBlockColor(fX, fY, TRUE);	//ブロックの種類取得
+					if (fB != BLOCK_TYPE_NO) {
+						printLog_I(_T("落下ブロックが既存ブロックと重なってしまってゲームオーバー"));
+						return 2;	//落下ブロックの下の位置に通常ブロックがある
+					}
+				}
+			}
+		}
+	}
+
 	return 0;
 }
 
