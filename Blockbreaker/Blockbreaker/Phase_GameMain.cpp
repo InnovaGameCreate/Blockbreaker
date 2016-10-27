@@ -13,20 +13,34 @@ Phase_GameMain::~Phase_GameMain() {
 void Phase_GameMain::Init_Draw() {
 	//ゲーム画面の生成(後でシェーダを使いたいので2のn乗のサイズで作成します)
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
-	if ((gameBlockWindow = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
-	if ((gameBlockWindowMask = MakeScreen(BLOCK_SIZE, BLOCK_SIZE, TRUE)) == -1)		printLog_E(_T("ウィンドウ作成に失敗しました"));
 
-	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
-	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
-	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
-	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
-	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
-	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
-	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
-	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
-	if ((Mask_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffectMask.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffectMask.png)"));
+	//ブロック画像
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockRED_ARROW_X = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_X.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_X.png)"));
+	if ((Tex_BlockRED_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_Y.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RED_ARROW_Y.png)"));
+
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockBLUE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_X.png)"));
+	if ((Tex_BlockBLUE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLUE_ARROW_Y.png)"));
+
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockYELLOW_ARROW_X = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_X.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_X.png)"));
+	if ((Tex_BlockYELLOW_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_Y.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_YELLOW_ARROW_Y.png)"));
+
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockGREEN_ARROW_X = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_X.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_X.png)"));
+	if ((Tex_BlockGREEN_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_Y.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_GREEN_ARROW_Y.png)"));
+
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE.png)"));
+	if ((Tex_BlockPURPLE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_X.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_X.png)"));
+	if ((Tex_BlockPURPLE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_Y.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_PURPLE_ARROW_Y.png)"));
+
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)			printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
+	if ((Mask_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffectMask.png"))) == -1)		printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffectMask.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
 
@@ -667,10 +681,20 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(gameWindow);
 
 	DeleteGraph(Tex_BlockRED);
+	DeleteGraph(Tex_BlockRED_ARROW_X);
+	DeleteGraph(Tex_BlockRED_ARROW_Y);
 	DeleteGraph(Tex_BlockBLUE);
+	DeleteGraph(Tex_BlockBLUE_ARROW_X);
+	DeleteGraph(Tex_BlockBLUE_ARROW_Y);
 	DeleteGraph(Tex_BlockYELLOW);
+	DeleteGraph(Tex_BlockYELLOW_ARROW_X);
+	DeleteGraph(Tex_BlockYELLOW_ARROW_Y);
 	DeleteGraph(Tex_BlockGREEN);
+	DeleteGraph(Tex_BlockGREEN_ARROW_X);
+	DeleteGraph(Tex_BlockGREEN_ARROW_Y);
 	DeleteGraph(Tex_BlockPURPLE);
+	DeleteGraph(Tex_BlockPURPLE_ARROW_X);
+	DeleteGraph(Tex_BlockPURPLE_ARROW_Y);
 	DeleteGraph(Tex_BlockTREE);
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
