@@ -92,6 +92,9 @@
     <ClCompile Include="SelectItem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderBackGround.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Dxlib1.rc">
@@ -102,5 +105,8 @@
     <Image Include="icon1.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DeleteEffect.hlsl" />
   </ItemGroup>
 </Project>

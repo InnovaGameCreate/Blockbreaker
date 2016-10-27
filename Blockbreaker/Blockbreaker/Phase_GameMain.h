@@ -157,11 +157,15 @@ private:
 
 	RandomTable randomTable;	//乱数テーブル
 
+	int Count_PlayTime;		//経過フレーム数(ポーズ、一時停止などでカウントアップが一時停止する)
+	int Count_Pause;		//ポーズ時のカウンタ
+
 	void Draw();
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type);	//ブロックを描画する(インゲーム座標)
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
 	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
+	void Update_Counter();			//カウンタのカウントアップ
 	void Update();
 	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
@@ -187,6 +191,7 @@ private:
 	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
 	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
+	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
 	void Create_Wait_Block();//待機ブロックの生成
 	void pauseMenu_Cannel();						//ポーズ解除ボタンが押されたとき
 	void pauseMenu_ReStart();						//やり直すボタンが押されたとき
@@ -211,7 +216,7 @@ public:
 
 	/*取得系*/
 	void Convert_Ingame_FromBlock(int blockX, int blockY, double *IngameX, double *IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
-	PauseMode isPaused();			//ポーズ状態の取得
+	PauseMode getPauseMode();		//ポーズ状態の取得
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
@@ -219,5 +224,6 @@ public:
 	int isBlock_PlayMoveMotion();		//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	int isBlock_PlayChangeMotion();		//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	void Restart();						//リスタート
+	void RestoreGraphCallback();		//フルスクリーンに復帰時に呼ばれる
 };
 

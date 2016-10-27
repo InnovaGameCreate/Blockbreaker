@@ -49,6 +49,7 @@ static unsigned __stdcall Thread_Update(void* args);
 static void UpdateLoop();
 static int Thread_Draw(void* args);
 static int ActiveStateChange(int ActiveState, void *UserData);
+static void RestoreGraphCallback();
 static int gpUpdateKey();
 static void gpUpdateKeyBind();
 static void setWindowModeVirtualFullScreen();
@@ -115,13 +116,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetUseDXArchiveFlag(1);									//DXライブラリアーカイブを使用する
 #endif // _DEBUG
 
-	SetUseDirect3DVersion(DX_DIRECT3D_9EX);					//シェーダモデル3を使用するためDirectX9を使用するように指定する
+	SetUseDirect3DVersion(DX_DIRECT3D_9);					//シェーダモデル3を使用するためDirectX9を使用するように指定する
 
 	if (DxLib_Init() == -1)	return -1;						//DXライブラリの初期化(ウィンドウ表示)
 
 	fpsController_Draw.SetVSyncMode(GetWaitVSyncFlag());	//垂直同期を使用してゲームを停止するかどうかの設定
 															
 	SetActiveStateChangeCallBackFunction(ActiveStateChange, NULL);	// ウインドウのアクティブ状態に変化があったときに呼ばれるコールバック関数を登録
+	SetRestoreGraphCallback(RestoreGraphCallback);			//フルスクリーンに復帰する際のテクスチャ等の再ロードを行う
 	
 
 
@@ -139,8 +141,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 	//ここで各モジュールの初期化処理を行う
-	SoundEffect_init();	//効果音関係の初期化
-	Font_init();		//フォント関係の初期化
+	SoundEffect_init();				//効果音関係の初期化
+	Font_init();					//フォント関係の初期化
+	ShaderBackGround_Initialize();	//シェーダ関連初期化
 
 	for (auto &data : phaseController) {
 		data = &phase_Default;
@@ -442,6 +445,12 @@ static int ActiveStateChange(int ActiveState, void *UserData) {
 
 	// 終了
 	return 0;
+}
+
+//フルスクリーンから復帰したときのグラフィックハンドル復元関数
+static void RestoreGraphCallback() {
+	ReloadFileGraphAll();//画像をすべて読み直す
+	phase_GameMain.RestoreGraphCallback();
 }
 
 

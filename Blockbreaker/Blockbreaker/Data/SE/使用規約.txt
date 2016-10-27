@@ -113,3 +113,7 @@ ShotHit2.wav
 Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|
 TimeoutÅATimeout2
 http://www.kurage-kosho.info/system.html
+Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|
+small_explosion1.wav
+http://taira-komori.jpn.org/arms01.html
+è¨îöî≠ÇP

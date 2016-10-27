@@ -44,9 +44,11 @@ void Phase_GameMain::Init_Draw() {
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
 	pauseMenu.setEnable(TRUE);
+}
 
-
-
+//フルスクリーンに復帰時に呼ばれる
+void Phase_GameMain::RestoreGraphCallback() {
+	//テクスチャの読み直し
 }
 
 //初期化(計算処理)
@@ -61,6 +63,8 @@ void Phase_GameMain::Init_Update() {
 void Phase_GameMain::Restart() {
 	Flag_Pause = PauseMode_NO;
 	Flag_pauseRequest = PauseMode_NO;
+	Count_PlayTime = 0;
+	Count_Pause = 0;
 	//落下中ブロックの削除
 	Delete_FallBlock();
 
@@ -134,43 +138,41 @@ void Phase_GameMain::Draw() {
 			X += Field_PaddingX;
 			Y += Field_PaddingY;
 
-
-			//中心座標に変換
-			X += BLOCK_SIZE / 2.;
-			Y += BLOCK_SIZE / 2.;
-			SetUseSetDrawScreenSettingReset(FALSE);
 			if (field[x][y].blockChangeMotion.Enable) {
 				//変化モーション有り
-				int Alpha = (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255);
+				double Val = field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length;
 
 				if (field[x][y].blockChangeMotion.To == BLOCK_TYPE_NO) {
 					//変化先のブロックが無効ブロックの場合は変化元を薄くする
 
-					int placeY = (int)(((field[x][y].blockChangeMotion.Length - field[x][y].blockChangeMotion.Count) / (double)field[x][y].blockChangeMotion.Length) * BLOCK_SIZE * 2) - BLOCK_SIZE;
-					DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
-					//下側を黒くする
-					int dY = Y + placeY;
-					if (placeY < -(BLOCK_SIZE / 2))	dY = Y -(BLOCK_SIZE / 2);
-					DrawBox(X - BLOCK_SIZE / 2, dY, X - BLOCK_SIZE / 2 + BLOCK_SIZE, Y + BLOCK_SIZE, GetColor(0, 0, 0), TRUE);
-					SetDrawScreen(gameBlockWindow); // 描画先ブロック画面にする
-					ClearDrawScreen();
-					DrawBlock(BLOCK_SIZE / 2, BLOCK_SIZE / 2, field[x][y].blockChangeMotion.From);
-					DrawGraph(0, 0, Tex_BlockFireEffect, TRUE);
+					ShaderBackGround_DeleteBlock(X, Y, Val, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Mask_BlockFireEffect);
 
-					SetDrawScreen(gameBlockWindowMask); // 描画先ブロック画面にする
-					ClearDrawScreen();
-					//炎の位置
-					DrawGraph(0, placeY, Mask_BlockFireEffect, TRUE);
+					//int placeY = (int)(((field[x][y].blockChangeMotion.Length - field[x][y].blockChangeMotion.Count) / (double)field[x][y].blockChangeMotion.Length) * BLOCK_SIZE * 2) - BLOCK_SIZE;
+					//DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
+					////下側を黒くする
+					//int dY = Y + placeY;
+					//if (placeY < -(BLOCK_SIZE / 2))	dY = Y - (BLOCK_SIZE / 2);
+					//DrawBox(X - BLOCK_SIZE / 2, dY, X - BLOCK_SIZE / 2 + BLOCK_SIZE, Y + BLOCK_SIZE, GetColor(0, 0, 0), TRUE);
+					//SetDrawScreen(gameBlockWindow); // 描画先ブロック画面にする
+					//ClearDrawScreen();
+					//DrawBlock(BLOCK_SIZE / 2, BLOCK_SIZE / 2, field[x][y].blockChangeMotion.From);
+					//DrawGraph(0, 0, Tex_BlockFireEffect, TRUE);
 
-					SetDrawScreen(gameWindow);
-					GraphBlend(gameBlockWindow, gameBlockWindowMask, 255, DX_GRAPH_BLEND_RGBA_SELECT_MIX, DX_RGBA_SELECT_SRC_R, DX_RGBA_SELECT_SRC_G, DX_RGBA_SELECT_SRC_B, DX_RGBA_SELECT_BLEND_A);
-					// 描画可能画像を画面に描画
-					DrawGraph(X - BLOCK_SIZE / 2, Y - BLOCK_SIZE / 2, gameBlockWindow, TRUE);
+					//SetDrawScreen(gameBlockWindowMask); // 描画先ブロック画面にする
+					//ClearDrawScreen();
+					////炎の位置
+					//DrawGraph(0, placeY, Mask_BlockFireEffect, TRUE);
+
+					//SetDrawScreen(gameWindow);
+					//GraphBlend(gameBlockWindow, gameBlockWindowMask, 255, DX_GRAPH_BLEND_RGBA_SELECT_MIX, DX_RGBA_SELECT_SRC_R, DX_RGBA_SELECT_SRC_G, DX_RGBA_SELECT_SRC_B, DX_RGBA_SELECT_BLEND_A);
+					//// 描画可能画像を画面に描画
+					//DrawGraph(X - BLOCK_SIZE / 2, Y - BLOCK_SIZE / 2, gameBlockWindow, TRUE);
 
 
 				}
 				else {
 					//普通に描画
+					int Alpha = (int)(Val * 255);
 					DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
 					//変化量に応じて半透明で描画する
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
@@ -182,7 +184,6 @@ void Phase_GameMain::Draw() {
 			else {
 				DrawBlock(X, Y, field[x][y].color);
 			}
-			SetUseSetDrawScreenSettingReset(TRUE);
 
 		}
 	}
@@ -202,8 +203,6 @@ void Phase_GameMain::Draw() {
 					Y = (y + BLOCK_PADDINGUP)*BLOCK_SIZE;
 				}
 
-				X += BLOCK_SIZE / 2.;
-				Y += BLOCK_SIZE / 2.;
 				DrawBlock(X, Y, fallBlockInfo.fallblock.BlockID[x][y]);
 			}
 		}
@@ -272,14 +271,14 @@ void Phase_GameMain::Draw() {
 	}
 #endif // _DEBUG_GAMEMAIN_
 
-	switch (isPaused()) {
+	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
 		//ポーズ状態と分かるように描画する
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
+		//DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		if (getFrameCount(THREAD_Update) % 120 > 40)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+		if (Count_Pause % 120 <= 80)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
 
 		//選択肢の項目の描画
 		pauseMenu.Draw();
@@ -289,7 +288,7 @@ void Phase_GameMain::Draw() {
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(150, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		if (getFrameCount(THREAD_Update) % 120 > 40)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("GAME OVER"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+		if (Count_Pause % 120 <= 80)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("GAME OVER"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
 
 		//選択肢の項目の描画
 		pauseMenu.Draw();
@@ -299,35 +298,42 @@ void Phase_GameMain::Draw() {
 
 //ブロックを描画する(インゲーム座標)
 void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type) {
+
+	if (type == BLOCK_TYPE_NO)	return;
+
+	//中心座標に変換
+	int X = (int)(CenterX + BLOCK_SIZE / 2.);
+	int Y = (int)(CenterY + BLOCK_SIZE / 2.);
+
+	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE/2, BLOCK_SIZE/2, 1, 0, getBlockTexture(type), TRUE, FALSE);
+
+	//DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, getBlockTexture(type), TRUE);
+}
+
+//ブロックタイプよりテクスチャハンドルの取得
+int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 	switch (type) {
 	case BLOCK_TYPE_RED:	//赤ブロック描画
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRED, TRUE);
-		break;
+		return Tex_BlockRED;
 	case BLOCK_TYPE_BLUE:	//青ブロック描画
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBLUE, TRUE);
-		break;
+		return Tex_BlockBLUE;
 	case BLOCK_TYPE_GREEN:	//緑ブロック描画
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockGREEN, TRUE);
-		break;
+		return Tex_BlockGREEN;
 	case BLOCK_TYPE_PURPLE:	//紫ブロック描画
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockPURPLE, TRUE);
-		break;
+		return Tex_BlockPURPLE;
 	case BLOCK_TYPE_YELLOW:	//黄色ブロック描画
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockYELLOW, TRUE);
-		break;
+		return Tex_BlockYELLOW;
 	case BLOCK_TYPE_TREE:	//樹木ブロック
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockTREE, TRUE);
-		break;
+		return Tex_BlockTREE;
 	case BLOCK_TYPE_BLACK:	//黒ブロック
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBLACK, TRUE);
-		break;
+		return Tex_BlockBLACK;
 	case BLOCK_TYPE_RAINBOW://虹色ブロック
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockRAINBOW, TRUE);
-		break;
+		return Tex_BlockRAINBOW;
 	case BLOCK_TYPE_BOM://爆弾ブロック
-		DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, Tex_BlockBOMB, TRUE);
-		break;
+		return Tex_BlockBOMB;
 	}
+	printLog_E(_T("テクスチャ番号を取得できませんでした(BLOCK_TYPE=%d)"), type);
+	return -1;	//エラー
 }
 
 //計算処理
@@ -335,16 +341,20 @@ void Phase_GameMain::Update() {
 	//計算処理の最初に行いたい処理(多くなったら関数化？)
 
 	//リクエストの反映
-
 	if (Flag_pauseRequest != PauseMode_NUM) {
 		Flag_Pause = Flag_pauseRequest;//リクエストの反映
 		Flag_pauseRequest = PauseMode_NUM;
+		Count_Pause = 0;
 	}
+
+	//カウンタの加算
+	Update_Counter();
+
 
 	GameMain_Key();	//キー処理
 
 	//ポーズ時の処理をしてこの先には進まない
-	switch (isPaused()) {
+	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
 		//選択肢の項目の更新
 		pauseMenu.Update();
@@ -398,6 +408,8 @@ void Phase_GameMain::Update() {
 		Update_FieldBlock();
 		break;
 	}
+
+
 }
 
 //落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
@@ -478,7 +490,7 @@ int Phase_GameMain::Update_FieldBlock() {
 	switch (Loop_No) {
 	case 0://初期化
 		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
-		
+
 		//ゲームオーバーの判定を行う
 		if (JudgeGameOver() != 0) {
 			PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
@@ -659,6 +671,17 @@ int Phase_GameMain::Update_ChangeMotion() {
 	return ((count > 0) ? TRUE : FALSE);
 }
 
+//カウンタのカウントアップ
+void Phase_GameMain::Update_Counter() {
+
+	//ステージ経過時間のカウントアップ(通常プレイ時に加算する)
+	if (getPauseMode() == PauseMode_NO && Block_AllMovedata.Enable == FALSE)	Count_PlayTime++;
+
+	//ポーズ時のカウンタ
+	if (getPauseMode() != PauseMode_NO)	Count_Pause++;
+}
+
+
 //終了処理(描画処理)
 void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(gameWindow);
@@ -689,12 +712,12 @@ void Phase_GameMain::GameMain_Key() {
 
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
-		if (isPaused() == PauseMode_NOMAL) {
+		if (getPauseMode() == PauseMode_NOMAL) {
 			//ポーズ状態解除
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
 			PauseRequest(PauseMode_NO);	//ポーズ状態
 		}
-		else if (isPaused() == PauseMode_NO) {
+		else if (getPauseMode() == PauseMode_NO) {
 			//ポーズに
 			pauseMenu.setSelecedtItem(0);
 			SoundEffect_Play(SE_TYPE_Pause);
@@ -702,7 +725,7 @@ void Phase_GameMain::GameMain_Key() {
 		}
 	}
 
-	if (isPaused() != PauseMode_NO)	return;//ポーズ処理が入った場合はこの先は処理をしない
+	if (getPauseMode() != PauseMode_NO)	return;//ポーズ処理が入った場合はこの先は処理をしない
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
@@ -742,7 +765,7 @@ void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double *In
 }
 
 //ポーズ状態の取得
-Phase_GameMain::PauseMode Phase_GameMain::isPaused() {
+Phase_GameMain::PauseMode Phase_GameMain::getPauseMode() {
 	return Flag_Pause;
 }
 
@@ -755,7 +778,7 @@ void Phase_GameMain::PauseRequest(PauseMode pauseMode) {
 		break;
 	case PauseMode_NOMAL:
 		//ゲームオーバーのリクエストがある場合は上書きしない
-		if (Flag_pauseRequest == PauseMode_NUM)	return;
+		if (Flag_pauseRequest == PauseMode_GameOver)	return;
 		printLog_I(_T("【通常ポーズ】リクエスト"));
 		pauseMenu.setItemEnable(TRUE, 0);	//項目0を有効
 		break;
@@ -1091,7 +1114,7 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 	else {
 		printLog_I(_T("フィールドブロックの【新規生成】[%d][%d](type=%d)"), X, Y, brock_type);
 	}
-	
+
 
 	return TRUE;
 }
@@ -1198,7 +1221,7 @@ void Phase_GameMain::Block_BOMB_Func() {
 		}
 	}
 
-	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Bulletfire5);
+	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 
 }
 
