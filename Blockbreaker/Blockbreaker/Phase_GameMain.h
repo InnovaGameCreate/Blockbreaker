@@ -205,6 +205,7 @@ private:
 
 	int Count_PlayTime;		//経過フレーム数(ポーズ、一時停止などでカウントアップが一時停止する)
 	int Count_Pause;		//ポーズ時のカウンタ
+	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
 	void Draw();
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
@@ -228,7 +229,8 @@ private:
 	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);		//フィールドブロックを削除する
 	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete();							//連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
-	int Block_Delete_OutScreen();				//画面外のブロックをすべて削除する(消去したブロックの数)
+	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
+	void under_Block();							//下からブロックがわいてくる
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
 	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUEで簡略計算します)
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
