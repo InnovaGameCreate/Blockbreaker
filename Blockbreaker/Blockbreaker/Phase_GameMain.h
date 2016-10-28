@@ -205,6 +205,7 @@ private:
 
 	int Count_PlayTime;		//経過フレーム数(ポーズ、一時停止などでカウントアップが一時停止する)
 	int Count_Pause;		//ポーズ時のカウンタ
+	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
 	void Draw();
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)

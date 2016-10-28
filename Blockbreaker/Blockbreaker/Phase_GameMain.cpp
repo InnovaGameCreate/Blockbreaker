@@ -89,6 +89,7 @@ void Phase_GameMain::Restart() {
 	Flag_pauseRequest = PauseMode_NO;
 	Count_PlayTime = 0;
 	Count_Pause = 0;
+	Count_Turn = 0;
 	//落下中ブロックの削除
 	Delete_FallBlock();
 
@@ -433,7 +434,10 @@ void Phase_GameMain::Update() {
 
 	switch (gameCycle) {
 	case GameCycle_FALL:
-		if (getFallBlock_Interval() > 30)	Create_FallBlock(NULL);//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
+		if (getFallBlock_Interval() > 30) {
+			Count_Turn++;
+			Create_FallBlock(NULL);//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
+		}
 		//落下ブロックの落下処理
 		if (Update_FallBlock()) {
 			//落下完了後は計算を行う
@@ -442,35 +446,41 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 	{
-		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
-		int swi = (int)(randomTable.getRand(0, 219) / 10.);
-		switch (swi) {
-		case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
-		case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
-		case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
-		case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
-		case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
-		case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
-		case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
-		case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
-		case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
-		case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
-		case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
-		case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
-		case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
-		case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
-		case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
-		case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
-		case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
-		case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
-		case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
-		case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
-		case 20:	bt = BLOCK_TYPE_TREE;				break;
-		case 21:	bt = BLOCK_TYPE_BOM;				break;
+
+		if (Count_Turn % 3 == 0) {
+			under_Block();
 		}
-		
-		//ランダムで一番上の段に木ブロックを設置する
-		for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, bt) == FALSE && i < 10; i++);
+		else {
+			BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
+			int swi = (int)(randomTable.getRand(0, 219) / 10.);
+			switch (swi) {
+			case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
+			case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
+			case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
+			case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
+			case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
+			case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
+			case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
+			case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
+			case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
+			case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
+			case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
+			case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
+			case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
+			case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
+			case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
+			case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
+			case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
+			case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
+			case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
+			case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
+			case 20:	bt = BLOCK_TYPE_TREE;				break;
+			case 21:	bt = BLOCK_TYPE_BOM;				break;
+			}
+
+			//ランダムで一番上の段に木ブロックを設置する
+			for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, bt) == FALSE && i < 10; i++);
+		}
 		UpdateBlockRequest(GameCycle_FALL);
 	}
 	break;
@@ -1293,6 +1303,7 @@ void Phase_GameMain::under_Block() {
 			case 25:	bt = BLOCK_TYPE_PURPLE;				break;
 			}
 		} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, bu));
+
 
 
 
