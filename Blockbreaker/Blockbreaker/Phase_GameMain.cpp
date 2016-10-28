@@ -856,7 +856,16 @@ void Phase_GameMain::GameMain_Key() {
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
-		under_Block();
+		//一番上の行にブロックが存在しない場合(自殺してしまうため)
+		int Flag = TRUE;//上にブロックがあったらFALSEになる
+		for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
+			if (getBlockColor(x, BLOCK_PADDINGUP) != BLOCK_TYPE_NO) {
+				//なんかブロックがある場合
+				Flag = FALSE;
+				break;
+			}
+		}
+		if(Flag)	under_Block();//上にブロックがない場合に実行される
 
 
 	}
@@ -1530,7 +1539,7 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChange
 //連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
 int Phase_GameMain::Block_Delete() {
 	//画面内の存在するブロックのみで計算する
-	const int DELETE_LEN = 3;//削除するために必要な隣接するブロックの個数
+	const int DELETE_LEN = 4;//削除するために必要な隣接するブロックの個数
 
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
