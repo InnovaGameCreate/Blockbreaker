@@ -819,9 +819,8 @@ void Phase_GameMain::GameMain_Key() {
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
-		add_FraldBlock(0, 18, BLOCK_TYPE_BLUE, FALSE, TRUE);
-		Block_AllMoveRequest(0, -1);	//ブロック全体を移動
-		printLog_D(_T("押した"));
+		under_Block();
+		
 
 	}
 
@@ -1251,6 +1250,59 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 
 	if (Before != NULL)	*Before = before;	//前のブロックを指定する
 	return TRUE;
+}
+
+
+//下からブロックがわいてくる
+void Phase_GameMain::under_Block() {
+	for (int i = BLOCK_PADDINGLEFT; BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT > i; i++) {
+		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
+		
+
+		BLOCK_TYPE bl = getBlockColor(i - 1, 18, FALSE, FALSE);//左側のブロック
+		BLOCK_TYPE bu= getBlockColor(i, 18 - 1, FALSE, FALSE);//上側のブロック
+
+		do{
+			int swi = (int)(randomTable.getRand(0, 259) / 10.);
+			switch (swi) {
+			case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
+			case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
+			case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
+			case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
+			case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
+			case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
+			case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
+			case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
+			case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
+			case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
+			case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
+			case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
+			case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
+			case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
+			case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
+			case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
+			case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
+			case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
+			case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
+			case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
+			case 20:	bt = BLOCK_TYPE_TREE;				break;
+			case 21:	bt = BLOCK_TYPE_RED;				break;
+			case 22:	bt = BLOCK_TYPE_BLUE;				break;
+			case 23:	bt = BLOCK_TYPE_YELLOW;				break;
+			case 24:	bt = BLOCK_TYPE_GREEN;				break;
+			case 25:	bt = BLOCK_TYPE_PURPLE;				break;
+			}
+		} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, bu));
+
+
+
+		
+
+		add_FraldBlock(i, 18, bt, FALSE, TRUE);
+	}
+	
+	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
+	printLog_D(_T("押した"));
 }
 
 //フィールドに存在する黒色ブロックの色を決定する
