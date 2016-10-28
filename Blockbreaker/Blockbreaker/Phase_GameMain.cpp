@@ -118,9 +118,9 @@ void Phase_GameMain::Restart() {
 //描画処理
 void Phase_GameMain::Draw() {
 
+
 	//描画先をゲーム画面にする
 	SetDrawScreen(gameWindow);
-
 	ClearDrawScreen();
 
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
@@ -128,41 +128,13 @@ void Phase_GameMain::Draw() {
 		GAMEWINDOW_WIDTH + BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_HEIGHT + BLOCK_PADDINGUP*BLOCK_SIZE,
 		GetColor(0xb3, 0x65, 0xe5), TRUE);
 
-	//フィールド全体のズレを計算する
-	double Field_PaddingX = 0;
-	double Field_PaddingY = 0;
-	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
-		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
-		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-		//上の計算結果より、描画座標の計算
-		Field_PaddingX += D * cos(deg_to_rad(Rota));
-		Field_PaddingY += D * sin(deg_to_rad(Rota));
-	}
-
-
 	//フィールドブロックの描画
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//描画先の座標を計算する
+			//描画先の座標を取得
 			double X, Y;
-			if (field[x][y].blockMoveMotion.Enable) {
-				//移動モーション有り
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &X, &Y);	//移動元座標の計算
-				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離の計算
-				double Rota = getRotation(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY);
-				//上の計算結果より、描画座標の計算
-				X += D * cos(deg_to_rad(Rota));
-				Y += D * sin(deg_to_rad(Rota));
-			}
-			else {
-				//移動モーション無し
-				Convert_Ingame_FromBlock(x, y, &X, &Y);
-			}
-
-			//全体ずらしの分描画座標をずらす
-			X += Field_PaddingX;
-			Y += Field_PaddingY;
-
+			X = field[x][y].DrawPlaceX;
+			Y = field[x][y].DrawPlaceY;
 			switch (field[x][y].blockChangeMotion.Type) {
 			case BlockChangeMotionType_NO:
 				//変化モーション無しの場合は無難に描画する
@@ -189,6 +161,16 @@ void Phase_GameMain::Draw() {
 		}
 	}
 
+	//フィールド全体のズレを計算する
+	double Field_PaddingX = 0;
+	double Field_PaddingY = 0;
+	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
+		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+		//上の計算結果より、描画座標の計算
+		Field_PaddingX += D * cos(deg_to_rad(Rota));
+		Field_PaddingY += D * sin(deg_to_rad(Rota));
+	}
 	//落下中ブロックの描画
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
@@ -197,8 +179,10 @@ void Phase_GameMain::Draw() {
 				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
 
 				//全体ずらしの分描画座標をずらす
-				X += Field_PaddingX;
-				Y += Field_PaddingY;
+				if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+					X += Field_PaddingX;
+					Y += Field_PaddingY;
+				}
 
 				if (Y < (y + BLOCK_PADDINGUP)*BLOCK_SIZE) {
 					Y = (y + BLOCK_PADDINGUP)*BLOCK_SIZE;
@@ -392,7 +376,6 @@ void Phase_GameMain::Update() {
 	//カウンタの加算
 	Update_Counter();
 
-
 	GameMain_Key();	//キー処理
 
 	//ポーズ時の処理をしてこの先には進まない
@@ -418,7 +401,8 @@ void Phase_GameMain::Update() {
 		if (FMD <= MD) {//移動完了
 
 			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-			Block_AllMovedata.Enable = FALSE;//移動を無効化
+			Block_AllMovedata.Enable = FALSE;//移動を無効化(Block_AllMoveしてからすること！)
+
 			//ゲームオーバーの判定を行う
 			if (JudgeGameOver() != 0) {
 				PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
@@ -426,11 +410,8 @@ void Phase_GameMain::Update() {
 
 			UpdateBlockRequest(gameCycle);	//現在のゲームサイクルに割り込む形でブロックのアップデートを入れる
 		}
-
 		return;
 	}
-
-
 
 	switch (gameCycle) {
 	case GameCycle_FALL:
@@ -488,6 +469,8 @@ void Phase_GameMain::Update() {
 		Update_FieldBlock();
 		break;
 	}
+
+
 
 
 }
@@ -761,6 +744,50 @@ void Phase_GameMain::Update_Counter() {
 	if (getPauseMode() != PauseMode_NO)	Count_Pause++;
 }
 
+//Update後に呼ばれる
+void Phase_GameMain::Update_Final() {
+	/*描画スレッド用の座標を計算する*/
+
+	//フィールド全体のズレを計算
+	double Field_PaddingX = 0;
+	double Field_PaddingY = 0;
+	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
+		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+		//上の計算結果より、描画座標の計算
+		Field_PaddingX += D * cos(deg_to_rad(Rota));
+		Field_PaddingY += D * sin(deg_to_rad(Rota));
+	}
+	//フィールドブロックの座標計算
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			//描画先の座標を計算する
+			double X, Y;
+			if (field[x][y].blockMoveMotion.Enable) {
+				//移動モーション有り
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &X, &Y);	//移動元座標の計算
+				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離の計算
+				double Rota = getRotation(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY);
+				//上の計算結果より、描画座標の計算
+				X += D * cos(deg_to_rad(Rota));
+				Y += D * sin(deg_to_rad(Rota));
+			}
+			else {
+				//移動モーション無し
+				Convert_Ingame_FromBlock(x, y, &X, &Y);
+			}
+
+			//全体ずらしの分描画座標をずらす
+			X += Field_PaddingX;
+			Y += Field_PaddingY;
+
+			//座標の記録
+			field[x][y].DrawPlaceX = X;
+			field[x][y].DrawPlaceY = Y;
+		}
+	}
+
+}
 
 //終了処理(描画処理)
 void Phase_GameMain::Finalize_Draw() {
@@ -830,7 +857,7 @@ void Phase_GameMain::GameMain_Key() {
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
 		under_Block();
-		
+
 
 	}
 
@@ -1267,12 +1294,12 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 void Phase_GameMain::under_Block() {
 	for (int i = BLOCK_PADDINGLEFT; BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT > i; i++) {
 		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
-		
+
 
 		BLOCK_TYPE bl = getBlockColor(i - 1, 18, FALSE, FALSE);//左側のブロック
-		BLOCK_TYPE bu= getBlockColor(i, 18 - 1, FALSE, FALSE);//上側のブロック
+		BLOCK_TYPE bu = getBlockColor(i, 18 - 1, FALSE, FALSE);//上側のブロック
 
-		do{
+		do {
 			int swi = (int)(randomTable.getRand(0, 259) / 10.);
 			switch (swi) {
 			case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
@@ -1307,11 +1334,11 @@ void Phase_GameMain::under_Block() {
 
 
 
-		
+
 
 		add_FraldBlock(i, 18, bt, FALSE, TRUE);
 	}
-	
+
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
 	printLog_D(_T("押した"));
 }
@@ -1586,8 +1613,8 @@ int Phase_GameMain::Block_Delete() {
 						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
 						//斜めに一括消去
 						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-							if (Block_Delete_Direct(x+i, y-i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
-							if (Block_Delete_Direct(x-i, y+i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
 						}
 					}
 					//右下の矢印の場合
@@ -1615,7 +1642,7 @@ int Phase_GameMain::Block_Delete() {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
 				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
 					//削除
-					if(Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15))	DelCount++;
+					if (Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15))	DelCount++;
 
 					//ついでに隣接する樹木ブロックも削除
 					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//上
@@ -1665,8 +1692,8 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 
 	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(field[x + 1][y].color, bt, TRUE))	SequenceCount(x + 1, y, ID, deleteFlag, Counter);
 	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(field[x][y + 1].color, bt, TRUE))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
-	if (x - 1 >= 0				&& isSameColorBlock(field[x - 1][y].color, bt, TRUE))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
-	if (y - 1 >= 0				&& isSameColorBlock(field[x][y - 1].color, bt, TRUE))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
+	if (x - 1 >= 0 && isSameColorBlock(field[x - 1][y].color, bt, TRUE))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
+	if (y - 1 >= 0 && isSameColorBlock(field[x][y - 1].color, bt, TRUE))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
 
 //指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)
@@ -1928,7 +1955,6 @@ void Phase_GameMain::Block_AllMoveRequest(int X, int Y) {
 	Block_AllMovedata.Count = 0;
 
 	Block_AllMovedata.Enable = TRUE;
-
 
 	printLog_I(_T("ブロック全体移動が設定されました(%d,%d)"), X, Y);
 }

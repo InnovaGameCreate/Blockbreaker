@@ -105,6 +105,8 @@ private:
 		int fall_flag;//落下中かどうかのフラグ
 		int move_flag;//移動中かどうかのフラグ
 
+
+		double DrawPlaceX, DrawPlaceY;			//描画位置[インゲーム座標](マルチだと描画位置がずれる問題があったので)
 		BlockMoveMotion blockMoveMotion;		//落下モーション
 		BlockChangeMotion blockChangeMotion;	//ブロック変化モーション
 	};
@@ -151,7 +153,7 @@ private:
 	GameCycle Loop_Next;	//計算ループ後に移行するゲームサイクル
 
 	//ブロックの全体移動で使用する変数
-	BlockMoveMotion Block_AllMovedata;	//
+	BlockMoveMotion Block_AllMovedata;
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
@@ -214,6 +216,7 @@ private:
 	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
 	void Update_Counter();			//カウンタのカウントアップ
 	void Update();
+	void Update_Final();			//Update後に呼ばれる
 	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
 

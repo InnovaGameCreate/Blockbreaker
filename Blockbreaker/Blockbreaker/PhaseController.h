@@ -7,6 +7,7 @@ class PhaseController
 private:
 	virtual void Draw() = 0;			//描画処理
 	virtual void Update() = 0;			//計算処理
+	virtual void Update_Final() {};		//Update後に呼ばれる
 public:
 	PhaseController() {};			//コンストラクタ
 	virtual ~PhaseController() {};	//デストラクタ
@@ -26,6 +27,7 @@ public:
 	//描画際に呼ばれる描画関数
 	virtual void UpdateFunc() final {
 		Update();
+		Update_Final();
 	}
 
 };
