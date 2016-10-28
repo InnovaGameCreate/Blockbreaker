@@ -116,6 +116,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetUseDXArchiveFlag(1);									//DXライブラリアーカイブを使用する
 #endif // _DEBUG
 
+	SetDXArchiveExtension(_T("gmdt"));						//DXライブラリアーカイブの拡張子を変更する
+
+	TCHAR pass[] = _T("r5mnnE2Knn");						//パスワード用の文字列の元
+	for (int i = 0; i < 10; i++) {
+		pass[i] += (i + 1);//文字列をずらす
+	}
+
+	SetDXArchiveKeyString(pass);							//DXライブラリアーカイブの鍵文字列を設定する
+
 	SetUseDirect3DVersion(DX_DIRECT3D_9);					//シェーダモデル3を使用するためDirectX9を使用するように指定する
 
 	if (DxLib_Init() == -1)	return -1;						//DXライブラリの初期化(ウィンドウ表示)

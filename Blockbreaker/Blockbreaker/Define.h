@@ -6,7 +6,7 @@
 
 //デバッグ設定の定義(使用しない場合はコメントアウト)
 #ifdef DEBUG
-//#define _DEBUG_GAMEMAIN_			//ゲームメインのデバッグ
+#define _DEBUG_GAMEMAIN_			//ゲームメインのデバッグ
 #endif // DEBUG
 
 
@@ -18,7 +18,7 @@ const int DEBUG_GAMEMAIN = FALSE;	//ゲームメインのデバッグ(変数版)
 
 
 
-#define GAMEVERSION _T("0.0")		//バージョン名
+#define GAMEVERSION _T("0.1")		//バージョン名
 
 #define DRAWFPS 60					//描画FPS設定
 #define UPDATEFPS 60				//処理FPS設定

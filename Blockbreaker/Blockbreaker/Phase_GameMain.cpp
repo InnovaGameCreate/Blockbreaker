@@ -1296,8 +1296,8 @@ void Phase_GameMain::under_Block() {
 		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
 
 
-		BLOCK_TYPE bl = getBlockColor(i - 1, 18, FALSE, FALSE);//左側のブロック
-		BLOCK_TYPE bu = getBlockColor(i, 18 - 1, FALSE, FALSE);//上側のブロック
+		BLOCK_TYPE bl = getBlockColor(i - 1, 15, FALSE, FALSE);//左側のブロック
+		BLOCK_TYPE bu = getBlockColor(i, 15 - 1, FALSE, FALSE);//上側のブロック
 
 		do {
 			int swi = (int)(randomTable.getRand(0, 259) / 10.);
@@ -1333,14 +1333,10 @@ void Phase_GameMain::under_Block() {
 
 
 
-
-
-
-		add_FraldBlock(i, 18, bt, FALSE, TRUE);
+		add_FraldBlock(i, 15, bt, FALSE, TRUE);
 	}
 
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
-	printLog_D(_T("押した"));
 }
 
 //フィールドに存在する黒色ブロックの色を決定する

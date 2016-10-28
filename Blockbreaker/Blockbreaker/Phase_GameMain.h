@@ -5,9 +5,9 @@
 class Phase_GameMain : public PhaseController
 {
 public://定数とかの宣言
-	static const int BLOCK_SIZE = 50;			//ブロックの縦横のピクセルサイズ
-	static const int BLOCK_WIDTHNUM = 14;		//実際のブロックの横の個数
-	static const int BLOCK_HEIGHTNUM = 19;		//実際のブロックの縦の個数
+	static const int BLOCK_SIZE = 64;			//ブロックの縦横のピクセルサイズ
+	static const int BLOCK_WIDTHNUM = 11;		//実際のブロックの横の個数
+	static const int BLOCK_HEIGHTNUM = 16;		//実際のブロックの縦の個数
 	static const int BLOCK_PADDINGUP = 1;		//描画するブロックの開始位置(上)
 	static const int BLOCK_PADDINGDOWN = 1;		//描画するブロックの開始位置(下)
 	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
@@ -15,8 +15,8 @@ public://定数とかの宣言
 	static const int BLOCK_WIDTHNUM_INGAME = BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT);		//画面内の横のブロックの個数
 	static const int BLOCK_HEIGHTNUM_INGAME = BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN);		//画面内の縦のブロックの個数
 
-	static const int GAMEWINDOW_PADDINGX = 50;	//ゲーム画面のX方向のズレ
-	static const int GAMEWINDOW_PADDINGY = 55;	//ゲーム画面のY方向のズレ
+	static const int GAMEWINDOW_PADDINGX = 70;	//ゲーム画面のX方向のズレ
+	static const int GAMEWINDOW_PADDINGY = 32;	//ゲーム画面のY方向のズレ
 	static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の横幅
 	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
