@@ -155,6 +155,9 @@ private:
 	//ブロックの全体移動で使用する変数
 	BlockMoveMotion Block_AllMovedata;
 
+	//フライテキスト表示クラス
+	FlyText flyText;
+
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
 	int Tex_BlockRED;				//赤ブロック
@@ -271,7 +274,7 @@ public:
 	void Delete_FallBlock();				//落下ブロックの無効化
 
 	/*取得系*/
-	void Convert_Ingame_FromBlock(int blockX, int blockY, double *IngameX, double *IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
+	void Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double * IngameX, double * IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
 	PauseMode getPauseMode();		//ポーズ状態の取得
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)

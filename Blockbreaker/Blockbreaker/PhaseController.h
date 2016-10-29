@@ -26,8 +26,8 @@ public:
 
 	//•`‰æÛ‚ÉŒÄ‚Î‚ê‚é•`‰æŠÖ”
 	virtual void UpdateFunc() final {
-		Update();
 		Update_Final();
+		Update();
 	}
 
 };

@@ -84,14 +84,14 @@ void Font_init() {
 		LiadFlag = 1;
 	}
 
-	GenJyuuGothicLHeavy_Edge25 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge30 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 30, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge35 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge40 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 40, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge50 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 50, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge60 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 60, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge70 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 70, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	GenJyuuGothicLHeavy_Edge80 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 80, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+	GenJyuuGothicLHeavy_Edge25 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 25, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge30 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 30, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge35 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 35, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge40 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 40, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge50 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge60 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 60, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge70 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge80 = CreateFontToHandle(_T("åπåKÉSÉVÉbÉNL Heavy"), 80, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
 
 	SFSquareHeadCondensed_Edge15 = CreateFontToHandle(_T("SF Square Head Condensed"), 15, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge25 = CreateFontToHandle(_T("SF Square Head Condensed"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);

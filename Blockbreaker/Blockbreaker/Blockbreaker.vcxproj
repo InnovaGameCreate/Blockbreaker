@@ -275,6 +275,7 @@
   <ItemGroup>
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="FlyText.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MainFunc.h" />
@@ -289,6 +290,7 @@
   <ItemGroup>
     <ClCompile Include="Blockbreaker.cpp" />
     <ClCompile Include="Calculations.cpp" />
+    <ClCompile Include="FlyText.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="LoadMenu.cpp" />

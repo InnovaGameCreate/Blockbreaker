@@ -176,7 +176,7 @@ void Phase_GameMain::Draw() {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, 0, &X, &Y);
 
 				//全体ずらしの分描画座標をずらす
 				if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
@@ -192,6 +192,10 @@ void Phase_GameMain::Draw() {
 			}
 		}
 	}
+
+	//フライテキストを描画する
+	flyText.Draw();
+
 
 	//デバッグ
 #ifdef _DEBUG_GAMEMAIN_
@@ -389,13 +393,16 @@ void Phase_GameMain::Update() {
 		return;
 	}
 
+	//フライテキストの更新
+	flyText.Update();
+
 	//ブロック全体移動が有効な場合は、通常の処理を実行せず、全体移動のカウントアップのみ行うようにする
 	if (Block_AllMovedata.Enable == TRUE) {
 		Block_AllMovedata.Count++;//カウントアップ
 		//移動する距離の計算
 		double fX, fY, tX, tY;
-		Convert_Ingame_FromBlock(Block_AllMovedata.FromX, Block_AllMovedata.FromY, &fX, &fY);
-		Convert_Ingame_FromBlock(Block_AllMovedata.ToX, Block_AllMovedata.ToY, &tX, &tY);
+		Convert_Ingame_FromBlock(Block_AllMovedata.FromX, Block_AllMovedata.FromY, 0, 0, &fX, &fY);
+		Convert_Ingame_FromBlock(Block_AllMovedata.ToX, Block_AllMovedata.ToY, 0, 0, &tX, &tY);
 		double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
 		double MD = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離
 		if (FMD <= MD) {//移動完了
@@ -700,8 +707,8 @@ int Phase_GameMain::Update_MoveMotion() {
 				field[x][y].blockMoveMotion.Count++;//カウントアップ
 													//移動する距離の計算
 				double fX, fY, tX, tY;
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &fX, &fY);
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY, &tX, &tY);
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0, 0, &fX, &fY);
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY, 0, 0, &tX, &tY);
 				double FMD = getDistance(fX, fY, tX, tY);	//最終的な移動距離
 				double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離
 				if (FMD <= MD) {//移動完了
@@ -765,7 +772,7 @@ void Phase_GameMain::Update_Final() {
 			double X, Y;
 			if (field[x][y].blockMoveMotion.Enable) {
 				//移動モーション有り
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, &X, &Y);	//移動元座標の計算
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0, 0, &X, &Y);	//移動元座標の計算
 				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離の計算
 				double Rota = getRotation(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY);
 				//上の計算結果より、描画座標の計算
@@ -774,7 +781,7 @@ void Phase_GameMain::Update_Final() {
 			}
 			else {
 				//移動モーション無し
-				Convert_Ingame_FromBlock(x, y, &X, &Y);
+				Convert_Ingame_FromBlock(x, y, 0, 0, &X, &Y);
 			}
 
 			//全体ずらしの分描画座標をずらす
@@ -889,13 +896,13 @@ void Phase_GameMain::GameMain_Key() {
 	}
 }
 
-//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
-void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double *IngameX, double *IngameY) {
+//ブロックの座標？からインゲームの座標を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
+void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double *IngameX, double *IngameY) {
 	if (IngameX != NULL) {
-		*IngameX = blockX * BLOCK_SIZE;
+		*IngameX = blockX * BLOCK_SIZE + XVal*BLOCK_SIZE;
 	}
 	if (IngameY != NULL) {
-		*IngameY = blockY * BLOCK_SIZE;
+		*IngameY = blockY * BLOCK_SIZE + YVal*BLOCK_SIZE;
 	}
 }
 
@@ -1596,7 +1603,13 @@ int Phase_GameMain::Block_Delete() {
 						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
 						//左端から右端までの一列を一括消去
 						for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
-							if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
 						}
 					}
 					//垂直の矢印の場合
@@ -1607,7 +1620,13 @@ int Phase_GameMain::Block_Delete() {
 						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
 						//左端から右端までの一列を一括消去
 						for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
-							if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
 						}
 					}
 					//右上の矢印の場合
@@ -1618,8 +1637,20 @@ int Phase_GameMain::Block_Delete() {
 						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
 						//斜めに一括消去
 						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-							if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
-							if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
+							if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
 						}
 					}
 					//右下の矢印の場合
@@ -1630,8 +1661,20 @@ int Phase_GameMain::Block_Delete() {
 						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
 						//斜めに一括消去
 						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-							if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
-							if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) DelCount++;
+							if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
+							if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
+								//フライテキストの生成
+								double X, Y;
+								Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
+								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								DelCount++;
+							}
 						}
 					}
 				}
@@ -1647,13 +1690,43 @@ int Phase_GameMain::Block_Delete() {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
 				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
 					//削除
-					if (Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15))	DelCount++;
+					if (Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15)) {
+						//フライテキストの生成
+						double X, Y;
+						Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
+						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+100"));
+						DelCount++;
+					}
 
 					//ついでに隣接する樹木ブロックも削除
-					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//上
-					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//下
-					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//左
-					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15))	DelCount++;//右
+					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+						//フライテキストの生成
+						double X, Y;
+						Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
+						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						DelCount++;//上
+					}
+					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+						//フライテキストの生成
+						double X, Y;
+						Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
+						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						DelCount++;//下
+					}
+					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+						//フライテキストの生成
+						double X, Y;
+						Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
+						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						DelCount++;//左
+					}
+					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+						//フライテキストの生成
+						double X, Y;
+						Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
+						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						DelCount++;//右
+					}
 
 
 

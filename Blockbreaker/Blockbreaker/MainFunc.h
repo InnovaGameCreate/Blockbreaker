@@ -196,3 +196,5 @@ extern void SoundEffect_SafePlay(SE_TYPE type);	//多重で効果音の再生が行われる可
 /*ShaderBackGround.cpp*/
 extern void ShaderBackGround_Initialize();		//シェーダ関連初期化
 extern void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage, int Effect1, int Effect2);	//シェーダを利用して消滅するブロックを描画する
+
+/*FlyText.cpp*/

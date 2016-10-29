@@ -22,6 +22,7 @@
 
 #include "Log.h"
 #include "FpsController.h"
+#include "FlyText.h"
 
 #include "RandomTable.h"
 
