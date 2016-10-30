@@ -167,6 +167,7 @@ private:
 		
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int FallCount;			//落下カウントダウン(0で落下する)
+		int Flag_Rotate;		//回転可能かどうか(TRUEで回転可能)
 		
 		//キー入力による状態の保存用
 		int Key_FlagFirstFall;	//高速落下モード(TRUEで有効)

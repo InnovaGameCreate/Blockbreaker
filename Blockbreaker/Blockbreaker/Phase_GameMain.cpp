@@ -992,6 +992,7 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	fallBlockInfo.Key_LRMove = 0;
 	fallBlockInfo.Key_LRRota = 0;
 	fallBlockInfo.Key_FlagFirstFall = FALSE;
+	fallBlockInfo.Flag_Rotate = TRUE;
 
 	//有効
 	fallBlockInfo.Enable = TRUE;
@@ -1148,6 +1149,8 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 //落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	if (!isFallBlock_Falling())		return 0;	//そもそも落下中で無い時は無視
+
+	if (fallBlockInfo.Flag_Rotate == FALSE)	return 0;//回転が無効の場合は回転しない
 
 												//方針:だんだんMoveValを大きくしていく
 	int Minus = FALSE;//マイナスフラグ
