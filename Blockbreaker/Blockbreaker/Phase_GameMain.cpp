@@ -564,8 +564,11 @@ int Phase_GameMain::Update_FieldBlock() {
 	11.更新ループ終了
 	*/
 
+
 	switch (Loop_No) {
 	case 0://初期化
+
+		ChainCount = 0;	//連鎖カウントをリセットする
 		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
 
 		////ゲームオーバーの判定を行う
@@ -639,6 +642,11 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 7://ブロックの消去判定
 		if (Block_Delete() > 0) {
 			//ブロックの消去判定が入れば
+			ChainCount++;	//連鎖カウントを加算する
+			//連鎖カウントを描画する(フライテキスト)
+			if(ChainCount >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH/2., GAMEWINDOW_HEIGHT/2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%d連鎖！！"), ChainCount);
+
+
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
 			Loop_No = 8;
 			printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
@@ -1565,7 +1573,6 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChange
 //連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
 int Phase_GameMain::Block_Delete() {
 	//画面内の存在するブロックのみで計算する
-	const int DELETE_LEN = 4;//削除するために必要な隣接するブロックの個数
 
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
@@ -1613,7 +1620,7 @@ int Phase_GameMain::Block_Delete() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
-				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
+				if (Counter[DeleteFlag[x][y]] >= BLOCK_DELETE_LEN) {
 					//水平の矢印の場合
 					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_X ||
 						old[x][y] == BLOCK_TYPE_GREEN_ARROW_X ||
@@ -1713,7 +1720,7 @@ int Phase_GameMain::Block_Delete() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
-				if (Counter[DeleteFlag[x][y]] >= DELETE_LEN) {
+				if (Counter[DeleteFlag[x][y]] >= BLOCK_DELETE_LEN) {
 					//削除
 					if (Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15)) {
 						//フライテキストの生成

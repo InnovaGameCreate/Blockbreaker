@@ -23,6 +23,7 @@ public://定数とかの宣言
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
 	static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
+	static const int BLOCK_DELETE_LEN = 3;//削除するために必要な隣接するブロックの個数
 
 	//ブロックの種類
 	enum BLOCK_TYPE {
@@ -191,6 +192,8 @@ private:
 
 	//スコア
 	Score score;
+
+	int ChainCount = 0;	//連鎖カウント
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル

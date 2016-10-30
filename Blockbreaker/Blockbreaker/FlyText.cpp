@@ -73,7 +73,7 @@ void FlyText::Draw() {
 			float x = (float)(dat.x - GetDrawStringWidthToHandle(dat.string, (int)strlenDx(dat.string), dat.fonthandle) / 2.);	//中心座標から左端の座標に変換
 			float y = (float)(dat.y - GetFontAscentToHandle(dat.fonthandle) / 2.);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
-			DrawStringFToHandle((float)dat.x, (float)(dat.y - val * 20), dat.string, dat.Color, dat.fonthandle);
+			DrawStringFToHandle((float)x, (float)(y - val * 20), dat.string, dat.Color, dat.fonthandle);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
