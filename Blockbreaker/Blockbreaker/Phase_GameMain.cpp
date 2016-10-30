@@ -199,6 +199,13 @@ void Phase_GameMain::Draw() {
 
 	//デバッグ
 #ifdef _DEBUG_GAMEMAIN_
+	//ゲームオーバー領域を描画する
+	double tY;
+	Convert_Ingame_FromBlock(0, GAMEOVER_BORDER, 0, 0, NULL, &tY);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawBox(0, 0, WINDOW_WIDTH, (int)tY, GetColor(0, 255, 0), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	//縦横BLOCK_SIZE間隔で線を描画する
 	for (int i = BLOCK_PADDINGLEFT + 1; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++) {
 		DrawLine(i * BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE,
@@ -216,7 +223,7 @@ void Phase_GameMain::Draw() {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), &X, &Y);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, 0, &X, &Y);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 50);
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -410,10 +417,10 @@ void Phase_GameMain::Update() {
 			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
 			Block_AllMovedata.Enable = FALSE;//移動を無効化(Block_AllMoveしてからすること！)
 
-			//ゲームオーバーの判定を行う
-			if (JudgeGameOver() != 0) {
-				PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
-			}
+			////ゲームオーバーの判定を行う
+			//if (JudgeGameOver() != 0) {
+			//	PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
+			//}
 
 			UpdateBlockRequest(gameCycle);	//現在のゲームサイクルに割り込む形でブロックのアップデートを入れる
 		}
@@ -561,10 +568,10 @@ int Phase_GameMain::Update_FieldBlock() {
 	case 0://初期化
 		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
 
-		//ゲームオーバーの判定を行う
-		if (JudgeGameOver() != 0) {
-			PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
-		}
+		////ゲームオーバーの判定を行う
+		//if (JudgeGameOver() != 0) {
+		//	PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
+		//}
 		//画面外ブロックを削除する
 		Block_Delete_OutScreen();
 
@@ -684,6 +691,10 @@ int Phase_GameMain::Update_FieldBlock() {
 			printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 		}
 		else {
+			//死亡判定を行う
+			if (JudgeGameOver() != 0) {
+				PauseRequest(PauseMode_GameOver);
+			}
 			Loop_No = -1;
 			printLog_I(_T("ブロック計算ループの終了"));
 			setGameCycle(Loop_Next);
@@ -863,16 +874,18 @@ void Phase_GameMain::GameMain_Key() {
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//ブロックの設置
-		//一番上の行にブロックが存在しない場合(自殺してしまうため)
-		int Flag = TRUE;//上にブロックがあったらFALSEになる
-		for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
-			if (getBlockColor(x, BLOCK_PADDINGUP) != BLOCK_TYPE_NO) {
-				//なんかブロックがある場合
-				Flag = FALSE;
-				break;
+		//自殺防止
+		int Flag = TRUE;//死亡領域にブロックがあったらFALSEになる
+		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+			for (int y = 0; y < GAMEOVER_BORDER+1; y++) {
+				if (getBlockColor(x, y) != BLOCK_TYPE_NO) {
+					//なんかブロックがある場合
+					Flag = FALSE;
+					break;
+				}
 			}
 		}
-		if(Flag)	under_Block();//上にブロックがない場合に実行される
+		if (Flag)	under_Block();//上にブロックがない場合に実行される
 
 
 	}
@@ -983,9 +996,9 @@ int Phase_GameMain::Create_FallBlock(struct Fallblock_Pack *fallblock_Pack) {
 	//有効
 	fallBlockInfo.Enable = TRUE;
 
-	if (JudgeGameOver() != 0) {
-		PauseRequest(PauseMode_GameOver);
-	}
+	//if (JudgeGameOver() != 0) {
+	//	PauseRequest(PauseMode_GameOver);
+	//}
 
 	printLog_I(_T("落下ブロックの【新規生成】"));
 	return TRUE;
@@ -1060,12 +1073,12 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 	fallBlockInfo.PlaceX += MoveVal;
 
 
-	//回転が入った場合は死亡判定をする
-	if (MoveVal != 0) {
-		if (JudgeGameOver() != 0) {
-			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-		}
-	}
+	////回転が入った場合は死亡判定をする
+	//if (MoveVal != 0) {
+	//	if (JudgeGameOver() != 0) {
+	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+	//	}
+	//}
 
 	return MoveVal;
 }
@@ -1121,12 +1134,12 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 	//ずらしの反映
 	fallBlockInfo.PlaceY += MoveVal;
 
-	//移動が入った場合は死亡判定をする
-	if (MoveVal != 0) {
-		if (JudgeGameOver() != 0) {
-			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-		}
-	}
+	////移動が入った場合は死亡判定をする
+	//if (MoveVal != 0) {
+	//	if (JudgeGameOver() != 0) {
+	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+	//	}
+	//}
 
 
 	return MoveVal;
@@ -1198,12 +1211,12 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 		RotaVal = -RotaVal;
 	}
 
-	//回転が入った場合は死亡判定をする
-	if (RotaVal != 0) {
-		if (JudgeGameOver() != 0) {
-			PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-		}
-	}
+	////回転が入った場合は死亡判定をする
+	//if (RotaVal != 0) {
+	//	if (JudgeGameOver() != 0) {
+	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
+	//	}
+	//}
 
 	return RotaVal;
 }
@@ -1308,12 +1321,15 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 
 //下からブロックがわいてくる
 void Phase_GameMain::under_Block() {
+	const int BLOCKSPOWN_Y = BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//ブロックの出現する位置
+
+
 	for (int i = BLOCK_PADDINGLEFT; BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT > i; i++) {
 		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
 
 
-		BLOCK_TYPE bl = getBlockColor(i - 1, 15, FALSE, FALSE);//左側のブロック
-		BLOCK_TYPE bu = getBlockColor(i, 15 - 1, FALSE, FALSE);//上側のブロック
+		BLOCK_TYPE bl = getBlockColor(i - 1, BLOCKSPOWN_Y, FALSE, FALSE);//左側のブロック
+		BLOCK_TYPE bu = getBlockColor(i, BLOCKSPOWN_Y - 1, FALSE, FALSE);//上側のブロック
 
 		do {
 			int swi = (int)(randomTable.getRand(0, 259) / 10.);
@@ -1349,7 +1365,7 @@ void Phase_GameMain::under_Block() {
 
 
 
-		add_FraldBlock(i, 15, bt, FALSE, TRUE);
+		add_FraldBlock(i, BLOCKSPOWN_Y, bt, FALSE, TRUE);
 	}
 
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
@@ -2150,13 +2166,16 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 int Phase_GameMain::JudgeGameOver() {
 	printLog_I(_T("ゲームオーバーかどうかの判定を行います"));
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-		if (getBlockColor(x, 0, FALSE, FALSE) != BLOCK_TYPE_NO) {
-			//0列目(画面上の見えない部分)にブロックが侵入した
-			printLog_I(_T("ブロックが上まで積み上がっていまってゲームオーバー"));
-			return 1;
+		for (int y = 0; y < GAMEOVER_BORDER; y++) {
+			if (getBlockColor(x, y, FALSE, FALSE) != BLOCK_TYPE_NO) {
+				//0列目(画面上の見えない部分)にブロックが侵入した
+				printLog_I(_T("ブロックが上まで積み上がっていまってゲームオーバー"));
+				return 1;
+			}
 		}
 	}
 
+	//普通は起きない
 	if (isFallBlock_Enable()) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {

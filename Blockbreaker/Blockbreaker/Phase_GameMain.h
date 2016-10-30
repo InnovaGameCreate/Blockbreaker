@@ -5,9 +5,9 @@
 class Phase_GameMain : public PhaseController
 {
 public://定数とかの宣言
-	static const int BLOCK_SIZE = 64;			//ブロックの縦横のピクセルサイズ
+	static const int BLOCK_SIZE = 40;			//ブロックの縦横のピクセルサイズ
 	static const int BLOCK_WIDTHNUM = 11;		//実際のブロックの横の個数
-	static const int BLOCK_HEIGHTNUM = 16;		//実際のブロックの縦の個数
+	static const int BLOCK_HEIGHTNUM = 24;		//実際のブロックの縦の個数
 	static const int BLOCK_PADDINGUP = 1;		//描画するブロックの開始位置(上)
 	static const int BLOCK_PADDINGDOWN = 1;		//描画するブロックの開始位置(下)
 	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
@@ -21,6 +21,7 @@ public://定数とかの宣言
 	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
+	static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
 
 	//ブロックの種類

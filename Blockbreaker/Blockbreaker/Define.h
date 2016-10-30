@@ -6,7 +6,7 @@
 
 //デバッグ設定の定義(使用しない場合はコメントアウト)
 #ifdef DEBUG
-//#define _DEBUG_GAMEMAIN_			//ゲームメインのデバッグ
+#define _DEBUG_GAMEMAIN_			//ゲームメインのデバッグ
 #endif // DEBUG
 
 

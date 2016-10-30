@@ -44,8 +44,8 @@ int FlyText::addFlyText(double CenterX, double CenterY, int limit, FONTTYPE font
 	//その他の設定を反映する
 	FlyTextData[temp].fonthandle = Font_getHandle(font);
 	FlyTextData[temp].Color = Color;
-	FlyTextData[temp].x = CenterX - GetDrawStringWidthToHandle(FlyTextData[temp].string, (int)strlenDx(FlyTextData[temp].string), FlyTextData[temp].fonthandle) / 2.;	//中心座標から左端の座標に変換
-	FlyTextData[temp].y = CenterY - GetFontAscentToHandle(FlyTextData[temp].fonthandle)/2.;
+	FlyTextData[temp].x = CenterX;
+	FlyTextData[temp].y = CenterY;
 	FlyTextData[temp].Count = 0;
 	FlyTextData[temp].Limit = limit;
 
@@ -62,12 +62,16 @@ int FlyText::isEnable(int num) {
 
 //フライテキストを描画する
 void FlyText::Draw() {
-	for (auto dat: FlyTextData) {
+	for (auto dat : FlyTextData) {
 		if (dat.Enable) {
 			double val = 0;
 			val = dat.Count / (double)dat.Limit;
 			int Alpha = 255;
 			if (val > 0.7)	Alpha = (int)((1 - val) / 0.3 * 255);
+
+			//中央座標なのでが記録されているので、描画位置を修正する
+			float x = (float)(dat.x - GetDrawStringWidthToHandle(dat.string, (int)strlenDx(dat.string), dat.fonthandle) / 2.);	//中心座標から左端の座標に変換
+			float y = (float)(dat.y - GetFontAscentToHandle(dat.fonthandle) / 2.);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
 			DrawStringFToHandle((float)dat.x, (float)(dat.y - val * 20), dat.string, dat.Color, dat.fonthandle);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -76,7 +80,7 @@ void FlyText::Draw() {
 }
 
 //フライテキストの計算処理
-void FlyText::Update(){
+void FlyText::Update() {
 	for (auto &dat : FlyTextData) {
 		if (dat.Enable) {
 			dat.Count++;	//カウントを加算する
