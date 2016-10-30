@@ -16,7 +16,7 @@ public://定数とかの宣言
 	static const int BLOCK_HEIGHTNUM_INGAME = BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN);		//画面内の縦のブロックの個数
 
 	static const int GAMEWINDOW_PADDINGX = 70;	//ゲーム画面のX方向のズレ
-	static const int GAMEWINDOW_PADDINGY = 32;	//ゲーム画面のY方向のズレ
+	static const int GAMEWINDOW_PADDINGY = 40;	//ゲーム画面のY方向のズレ
 	static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の横幅
 	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
@@ -116,6 +116,35 @@ private:
 		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
 	};
 
+	//スコア関係
+	struct Score {
+		/*
+		0:ブロックの消去によるスコア
+		1:その他
+		*/
+		int score[2];
+		Score() { init(); }
+		//スコアの初期化
+		void init() {
+			for (auto &data: score) {
+				data = 0;
+			}
+		}
+		//合計スコアの取得
+		int getScore() {
+			int sum = 0;
+			for (auto data : score) {
+				sum += data;
+			}
+			return sum;
+		}
+		//スコアの加算
+		void addScore(int No, int Score) {
+			if (No < 0 || ARRAY_LENGTH(score) <= No)	return;
+			score[No] += Score;
+		}
+	};
+
 	//ゲームサイクルの識別
 	enum GameCycle {
 		GameCycle_FALL,			//ブロックの落下
@@ -158,6 +187,9 @@ private:
 
 	//フライテキスト表示クラス
 	FlyText flyText;
+
+	//スコア
+	Score score;
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル

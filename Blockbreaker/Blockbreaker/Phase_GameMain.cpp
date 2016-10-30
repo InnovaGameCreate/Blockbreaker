@@ -92,7 +92,7 @@ void Phase_GameMain::Restart() {
 	Count_Turn = 0;
 	//落下中ブロックの削除
 	Delete_FallBlock();
-
+	score.init();//スコアの初期化
 
 	//ブロックの削除を行う
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
@@ -1624,6 +1624,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 						}
@@ -1641,6 +1642,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 						}
@@ -1658,6 +1660,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 							if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
@@ -1665,6 +1668,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 						}
@@ -1682,6 +1686,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 							if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
@@ -1689,6 +1694,7 @@ int Phase_GameMain::Block_Delete() {
 								double X, Y;
 								Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
 								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+								score.addScore(0, 50);
 								DelCount++;
 							}
 						}
@@ -1711,6 +1717,7 @@ int Phase_GameMain::Block_Delete() {
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+100"));
+						score.addScore(0, 100);
 						DelCount++;
 					}
 
@@ -1720,6 +1727,7 @@ int Phase_GameMain::Block_Delete() {
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						score.addScore(0, 80);
 						DelCount++;//上
 					}
 					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
@@ -1727,6 +1735,7 @@ int Phase_GameMain::Block_Delete() {
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						score.addScore(0, 80);
 						DelCount++;//下
 					}
 					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
@@ -1734,6 +1743,7 @@ int Phase_GameMain::Block_Delete() {
 						double X, Y;
 						Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						score.addScore(0, 80);
 						DelCount++;//左
 					}
 					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
@@ -1741,6 +1751,7 @@ int Phase_GameMain::Block_Delete() {
 						double X, Y;
 						Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						score.addScore(0, 80);
 						DelCount++;//右
 					}
 
