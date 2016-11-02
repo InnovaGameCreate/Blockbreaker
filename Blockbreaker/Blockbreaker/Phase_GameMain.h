@@ -83,7 +83,7 @@ private:
 	class SelectItem_pause : public SelectItem
 	{
 	public:
-		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};
+		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
 	private:
 		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
 	};
