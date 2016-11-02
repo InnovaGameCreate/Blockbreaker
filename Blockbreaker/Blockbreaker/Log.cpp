@@ -2,7 +2,7 @@
 #include "MainFunc.h"
 #include "Log.h"
 
-static inline TCHAR *gettypestr(int Type);
+static inline TCHAR *gettypestr(Log_Type Type);
 static inline TCHAR *getNostr(unsigned int Type);
 static THREAD getThreadEnum(DWORD threadID);
 static TCHAR *getThreadName(DWORD threadID);
@@ -91,7 +91,7 @@ void Log_p(float X, float Y, float Z) {
 #endif // _DEBUG
 
 //エラーのタイプ取得
-static inline TCHAR *gettypestr(int Type) {
+static inline TCHAR *gettypestr(Log_Type Type) {
 	switch (Type) {
 	case Log_Type_INFORMATION:
 		return _T("情報");

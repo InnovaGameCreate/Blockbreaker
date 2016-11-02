@@ -79,6 +79,17 @@ public://定数とかの宣言
 	};
 
 private:
+	//ここにポーズメニュー表示時に出す選択肢のクラスを定義する
+	class SelectItem_pause : public SelectItem
+	{
+	public:
+		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};
+	private:
+		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
+	};
+
+
+
 	//移動モーションのデータ
 	struct BlockMoveMotion {
 		BlockMoveMotion() {
@@ -178,7 +189,7 @@ private:
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
-	SelectItem<Phase_GameMain> pauseMenu = SelectItem<Phase_GameMain>(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
+	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
@@ -289,9 +300,6 @@ private:
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
 	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
 	void Create_Wait_Block();//待機ブロックの生成
-	void pauseMenu_Cannel();						//ポーズ解除ボタンが押されたとき
-	void pauseMenu_ReStart();						//やり直すボタンが押されたとき
-	void pauseMenu_End();							//ゲーム終了ボタンが押されたとき
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 

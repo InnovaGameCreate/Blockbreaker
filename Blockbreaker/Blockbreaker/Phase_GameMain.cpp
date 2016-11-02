@@ -60,11 +60,10 @@ void Phase_GameMain::Init_Draw() {
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 	//ポーズメニューの項目を作成
-	pauseMenu.addItem(_T("再開"), 3, &Phase_GameMain::pauseMenu_Cannel, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("やり直す"), 3, &Phase_GameMain::pauseMenu_ReStart, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("ゲーム終了"), 3, &Phase_GameMain::pauseMenu_End, NULL, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("再開"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("やり直す"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ゲーム終了"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	pauseMenu.setScrolltype(1);
-	pauseMenu.setinstance(this);
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
 	pauseMenu.setEnable(TRUE);
@@ -644,7 +643,7 @@ int Phase_GameMain::Update_FieldBlock() {
 			//ブロックの消去判定が入れば
 			ChainCount++;	//連鎖カウントを加算する
 			//連鎖カウントを描画する(フライテキスト)
-			if(ChainCount >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH/2., GAMEWINDOW_HEIGHT/2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%d連鎖！！"), ChainCount);
+			if (ChainCount >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH / 2., GAMEWINDOW_HEIGHT / 2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%d連鎖！！"), ChainCount);
 
 
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
@@ -885,7 +884,7 @@ void Phase_GameMain::GameMain_Key() {
 		//自殺防止
 		int Flag = TRUE;//死亡領域にブロックがあったらFALSEになる
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-			for (int y = 0; y < GAMEOVER_BORDER+1; y++) {
+			for (int y = 0; y < GAMEOVER_BORDER + 1; y++) {
 				if (getBlockColor(x, y) != BLOCK_TYPE_NO) {
 					//なんかブロックがある場合
 					Flag = FALSE;
@@ -2298,20 +2297,20 @@ BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
 }
 */
 
-//ポーズ解除ボタンが押されたとき
-void Phase_GameMain::pauseMenu_Cannel() {
-	phase_GameMain.PauseRequest(PauseMode_NO);
-
-}
-
-//やり直すボタンが押されたとき
-void Phase_GameMain::pauseMenu_ReStart() {
-	phase_GameMain.Restart();
-
-}
-
-//ゲーム終了ボタンが押されたとき
-void Phase_GameMain::pauseMenu_End() {
-	ExitGameRequest();
-
+//ポーズメニューのボタンが押されたとき
+void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
+	switch (No) {
+	case 0://再開ボタン
+		phase_GameMain.PauseRequest(PauseMode_NO);
+		break;
+	case 1://やり直すボタン
+		phase_GameMain.Restart();
+		break;
+	case 2://終了ボタン
+		ExitGameRequest();
+		break;
+	default:
+		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
+		break;
+	}
 }
