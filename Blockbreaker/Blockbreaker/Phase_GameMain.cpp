@@ -806,6 +806,12 @@ void Phase_GameMain::Update_Final() {
 			X += Field_PaddingX;
 			Y += Field_PaddingY;
 
+			//ゲームオーバーが近い場合は左右に揺らす
+			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
+				X += getGraph_Sin(Count_PlayTime * 30, 3, 0);
+				X += randomTable.getRand(-2, 2);
+			}
+
 			//座標の記録
 			field[x][y].DrawPlaceX = X;
 			field[x][y].DrawPlaceY = Y;
