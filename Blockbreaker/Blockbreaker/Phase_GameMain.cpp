@@ -808,7 +808,7 @@ void Phase_GameMain::Update_Final() {
 
 			//ゲームオーバーが近い場合は左右に揺らす
 			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				X += getGraph_Sin(Count_PlayTime * 30, 3, 0);
+				X += getGraph_Sin(getCountPlayTime() * 30, 3, 0);
 				X += randomTable.getRand(-2, 2);
 			}
 
@@ -2180,6 +2180,11 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 	FallBlock_MoveX(X, FALSE);
 	FallBlock_MoveY(Y, FALSE);
 
+}
+
+//ゲームの経過フレーム数を取得する
+int Phase_GameMain::getCountPlayTime() {
+	return Count_PlayTime;
 }
 
 //ゲームオーバーになっているかどうかの確認
