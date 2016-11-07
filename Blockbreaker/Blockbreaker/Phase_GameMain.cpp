@@ -134,7 +134,9 @@ void Phase_GameMain::Draw() {
 			double X, Y;
 			X = field[x][y].DrawPlaceX;
 			Y = field[x][y].DrawPlaceY;
-			switch (field[x][y].blockChangeMotion.Type) {
+			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
+			if (t != BlockChangeMotionType_NO && field[x][y].blockChangeMotion.Count < 0)	t = BlockChangeMotionType_NO;
+			switch (t) {
 			case BlockChangeMotionType_NO:
 				//変化モーション無しの場合は無難に描画する
 				DrawBlock(X, Y, field[x][y].color);
@@ -1275,7 +1277,7 @@ void Phase_GameMain::FallBlock_addField() {
 戻り値
 	TRUEで設置(削除)成功
 */
-int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BlockChangeMotionType MotionType, int MotionLengh, BLOCK_TYPE *Before) {
+int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BLOCK_TYPE *Before) {
 	if (Before != NULL)	*Before = BLOCK_TYPE_NO;	//前のブロックを指定する
 	BLOCK_TYPE before = BLOCK_TYPE_NO;	//消去前のブロック
 	//画面外ブロックは設置不可
@@ -1297,22 +1299,8 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 	//現在のブロックを記録する
 	before = field[X][Y].color;
 
-	//モーションの設定
-	switch (MotionType) {
-	case Phase_GameMain::BlockChangeMotionType_NO:
-		//モーションの初期化
-		field[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
-		break;
-	case Phase_GameMain::BlockChangeMotionType_NOMAL:
-		Block_SetChangeMotion_NOMAL(X, Y, brock_type, MotionLengh);	//削除時のみは設定不可(内部処理)
-		break;
-	case Phase_GameMain::BlockChangeMotionType_EXPLOSION:
-		if (brock_type == BLOCK_TYPE_NO) Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh);	//削除時のみ設定可能
-		break;
-	case Phase_GameMain::BlockChangeMotionType_SMALL:
-		if (brock_type == BLOCK_TYPE_NO) Block_SetChangeMotion_SMALL(X, Y, MotionLengh);	//削除時のみ設定可能
-		break;
-	}
+	//設定されているモーションを削除する
+	field[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
 	field[X][Y].blockMoveMotion.Enable = FALSE;
 
 	//ブロックの設置(削除)
@@ -1401,7 +1389,7 @@ void Phase_GameMain::Block_Black_Func() {
 				else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//紫色ブロック
 
 				//変化モーションの設定
-				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_BLACK, 20);
+				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_BLACK, 20, 0);
 			}
 		}
 	}
@@ -1429,7 +1417,7 @@ void Phase_GameMain::Block_Rainbow_Func() {
 				}
 
 				//変化モーションの設定
-				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_RAINBOW, 20);
+				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_RAINBOW, 20, 0);
 
 
 			}
@@ -1548,20 +1536,19 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 }
 
 //フィールドブロックを直接削除する(削除されたらTRUE)
-int Phase_GameMain::Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion, int MotionLengh) {
-
+int Phase_GameMain::Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion, int MotionLengh, int Delay) {
 	if (getBlockColor(X, Y, FALSE, FALSE) == BLOCK_TYPE_NO)	return FALSE;//ブロックがそもそも存在しない場合は何もしない
-
+	BLOCK_TYPE bt = BLOCK_TYPE_NO;	//削除されたブロックの種類
 	//ブロックの削除を行う
-	int flag = add_FraldBlock(X, Y, BLOCK_TYPE_NO, TRUE, TRUE, PlayMotion, MotionLengh);
+	int flag = add_FraldBlock(X, Y, BLOCK_TYPE_NO, TRUE, TRUE, &bt);
 
 	if (flag) {
 		//ブロックが削除された
 		if (PlayMotion == BlockChangeMotionType_EXPLOSION) {
-			Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh);	//モーションの生成
+			Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh, bt, Delay);	//モーションの生成
 		}
 		else if (PlayMotion == BlockChangeMotionType_SMALL) {
-			Block_SetChangeMotion_SMALL(X, Y, MotionLengh);	//モーションの生成
+			Block_SetChangeMotion_SMALL(X, Y, MotionLengh, bt, Delay);	//モーションの生成
 		}
 	}
 
@@ -1948,7 +1935,7 @@ int Phase_GameMain::isBlock_PlayMoveMotion() {
 }
 
 //フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
-void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength) {
+void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay) {
 	if (getBlockColor(x, y, TRUE, FALSE) == BLOCK_TYPE_NUM)	return;	//ブロックが画面外の場合は処理をしない
 	if (MotionLength <= 0)									return;	//長さが負の数の場合も処理をしない
 
@@ -1960,7 +1947,7 @@ void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType m
 	field[x][y].blockChangeMotion.To = To;
 	field[x][y].blockChangeMotion.From = From;
 	field[x][y].blockChangeMotion.Length = MotionLength;
-	field[x][y].blockChangeMotion.Count = 0;
+	field[x][y].blockChangeMotion.Count = Delay;
 
 	field[x][y].blockChangeMotion.Type = mtype;
 
@@ -1968,43 +1955,37 @@ void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType m
 }
 
 //フィールドのブロックに変化モーション(通常)を設定する
-void Phase_GameMain::Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength) {
+void Phase_GameMain::Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength, int Delay) {
 
 	BLOCK_TYPE From = getBlockColor(x, y, FALSE, FALSE);
 
 	if (From == To)				return;		//変化先が同じ場合は処理をしない
 	if (To == BLOCK_TYPE_NO)	return;		//変化先がブロック無しの場合は処理をしない(正しく描画出来ないため)
-	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, From, To, MotionLength);
+	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, From, To, MotionLength, Delay);
 }
 
 //フィールドのブロックに変化モーション(通常)を設定する(変化元指定)
-void Phase_GameMain::Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength) {
+void Phase_GameMain::Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength, int Delay) {
 
 	BLOCK_TYPE To = getBlockColor(x, y, FALSE, FALSE);
 	if (from == To)				return;		//変化先が同じ場合は処理をしない
 	if (To == BLOCK_TYPE_NO)	return;		//変化先がブロック無しの場合は処理をしない(正しく描画出来ないため)
-	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, from, To, MotionLength);
+	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, from, To, MotionLength, Delay);
 }
 
 
 //フィールドのブロックに変化モーション(爆発)を設定する
-void Phase_GameMain::Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength) {
-
-	BLOCK_TYPE From = getBlockColor(x, y, FALSE, FALSE);
-
+void Phase_GameMain::Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay) {
 	if (From == BLOCK_TYPE_NO)	return;//ブロックが存在しない場合は無視
 
-	Block_SetChangeMotion(x, y, BlockChangeMotionType_EXPLOSION, From, From, MotionLength);
+	Block_SetChangeMotion(x, y, BlockChangeMotionType_EXPLOSION, From, From, MotionLength, Delay);
 }
 
 //フィールドのブロックに変化モーション(小さくなって消える)を設定する
-void Phase_GameMain::Block_SetChangeMotion_SMALL(int x, int y, int MotionLength) {
-
-	BLOCK_TYPE From = getBlockColor(x, y, FALSE, FALSE);
-
+void Phase_GameMain::Block_SetChangeMotion_SMALL(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay) {
 	if (From == BLOCK_TYPE_NO)	return;//ブロックが存在しない場合は無視
 
-	Block_SetChangeMotion(x, y, BlockChangeMotionType_SMALL, From, From, MotionLength);
+	Block_SetChangeMotion(x, y, BlockChangeMotionType_SMALL, From, From, MotionLength, Delay);
 }
 
 //変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
