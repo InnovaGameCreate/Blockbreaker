@@ -10,13 +10,6 @@
 #endif // DEBUG
 
 
-#ifdef _DEBUG_GAMEMAIN_
-const int DEBUG_GAMEMAIN = TRUE;	//ゲームメインのデバッグ(変数版)
-#else
-const int DEBUG_GAMEMAIN = FALSE;	//ゲームメインのデバッグ(変数版)
-#endif // _DEBUG_GAMEMAIN_
-
-
 
 #define GAMEVERSION _T("0.1")		//バージョン名
 

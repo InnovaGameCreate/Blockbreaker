@@ -79,6 +79,7 @@ void Phase_GameMain::Init_Update() {
 	Create_Wait_Block();
 	Restart();	//リスタート
 
+
 }
 
 //リスタート
@@ -268,6 +269,20 @@ void Phase_GameMain::Draw() {
 
 			DrawBlock(X, Y, waitBlockinfo[0].BlockID[x][y]);
 		}
+	}
+
+	//ステータス描画
+	{
+		//現在の経過ターン数の描画
+		TCHAR str[100];
+		Font_DrawStringWithShadow(550, 300, _T("経過ターン数"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+		_stprintf(str, _T("%dターン"), Count_Turn);
+		Font_DrawStringWithShadow(570, 360, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+
+		Font_DrawStringWithShadow(550, 410, _T("経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+		_stprintf(str, _T("%.2fs"), Count_PlayTime/60.);
+		Font_DrawStringWithShadow(570, 470, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+
 	}
 
 	//ゲーム画面を描画する
@@ -471,39 +486,12 @@ void Phase_GameMain::Update() {
 	case GameCycle_BeforeFALL:
 	{
 
-		if (Count_Turn % 3 == 0) {
+		if (Count_Turn % 4 == 0) {
 			under_Block();
 		}
-		else {
-			BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
-			int swi = (int)(randomTable.getRand(0, 219) / 10.);
-			switch (swi) {
-			case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
-			case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
-			case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
-			case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
-			case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
-			case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
-			case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
-			case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
-			case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
-			case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
-			case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
-			case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
-			case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
-			case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
-			case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
-			case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
-			case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
-			case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
-			case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
-			case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
-			case 20:	bt = BLOCK_TYPE_TREE;				break;
-			case 21:	bt = BLOCK_TYPE_BOM;				break;
-			}
-
-			//ランダムで一番上の段に木ブロックを設置する
-			for (int i = 0; add_FraldBlock((int)randomTable.getRand(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT), 1, bt) == FALSE && i < 10; i++);
+		else if(Count_Turn % 7 == 0) {
+			//木ブロックで再上面を埋める
+			for (int i = BLOCK_PADDINGLEFT; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++)	add_FraldBlock(i, BLOCK_PADDINGUP, BLOCK_TYPE_TREE);
 		}
 		UpdateBlockRequest(GameCycle_FALL);
 	}
@@ -793,7 +781,9 @@ int Phase_GameMain::Update_ChangeMotion() {
 void Phase_GameMain::Update_Counter() {
 
 	//ステージ経過時間のカウントアップ(通常プレイ時に加算する)
-	if (getPauseMode() == PauseMode_NO && Block_AllMovedata.Enable == FALSE)	Count_PlayTime++;
+	if (getPauseMode() == PauseMode_NO
+		&& Block_AllMovedata.Enable == FALSE
+		&& gameCycle == GameCycle_FALL)	Count_PlayTime++;
 
 	//ポーズ時のカウンタ
 	if (getPauseMode() != PauseMode_NO)	Count_Pause++;
@@ -2220,8 +2210,14 @@ void Phase_GameMain::Create_Wait_Block() {
 		waitBlockinfo[i] = waitBlockinfo[i + 1];
 	}
 
+
+
 	//新規に作成する落下ブロックの配置パターンを決定する(0～3)
 	int Pattern = (int)(randomTable.getRand(0, 399) / 100.);
+	//5％の確率で爆弾を単体で落下させる
+	if (randomTable.getRand(0, 1000) < 50) {
+		Pattern = 4;
+	}
 
 	//ランダムに設置するブロックを2個決定する
 	BLOCK_TYPE type1 = GetRandomBlockType_FALL();
@@ -2267,6 +2263,12 @@ void Phase_GameMain::Create_Wait_Block() {
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
 		//printLog_D(_T("横で右中心パターン"));
+		break;
+	case 4://爆弾の単体落下
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM;
+
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
 		break;
 	default:
 		printLog_E(_T("落下ブロック配置パターンが不明です"));
