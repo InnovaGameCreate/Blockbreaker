@@ -52,8 +52,8 @@ public://定数とかの宣言
 		BLOCK_TYPE_GREEN_ARROW_XY2,	//緑(斜め右下)
 		BLOCK_TYPE_PURPLE_ARROW_X,	//紫(平行矢印)
 		BLOCK_TYPE_PURPLE_ARROW_Y,	//紫(垂直矢印)
-		BLOCK_TYPE_PURPLE_ARROW_XY,	//紫(垂直矢印)
-		BLOCK_TYPE_PURPLE_ARROW_XY2,//紫(垂直矢印)
+		BLOCK_TYPE_PURPLE_ARROW_XY,	//紫(斜め右上)
+		BLOCK_TYPE_PURPLE_ARROW_XY2,//紫(斜め右下)
 		BLOCK_TYPE_TREE, //樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 		BLOCK_TYPE_BLACK,//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
 		BLOCK_TYPE_NOROUND,//枠で囲われたブロック（回せない）
@@ -124,10 +124,6 @@ private:
 		BlockChangeMotion blockChangeMotion;	//ブロック変化モーション
 	};
 
-	struct Fallblock_Pack {
-		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//縦横FALLBLOCK_SIZEずつのブロック領域としてブロックの位置情報を記録する
-	};
-
 	//スコア関係
 	struct Score {
 		/*
@@ -175,7 +171,7 @@ private:
 		int Counter;			//落下ブロックのカウンタ(常に有効な変数です！！)(負の数でブロックが消滅してからの経過フレーム、正の数でブロックが生成されてからの時間)
 
 		int Enable;				//落下中かどうか(TRUEで落下ブロック有効)
-		struct Fallblock_Pack fallblock;	//落下ブロック本体の情報
+		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];		//落下ブロック本体の情報
 		
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int FallCount;			//落下カウントダウン(0で落下する)
@@ -186,6 +182,13 @@ private:
 		int Key_LRMove;			//左右移動(-1左、0移動無し、1右移動)
 		int Key_LRRota;			//回転移動(-1反時計回り、0回転無し、1時計回り)
 	};
+	//落下ブロックの待機列の情報
+	struct FallBlockInfo_Wait {
+		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//ブロック配置
+		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
+		int Flag_Rotate;		//回転可能かどうか(TRUEで回転可能)
+	};
+
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 
@@ -248,8 +251,8 @@ private:
 	PauseMode Flag_pauseRequest;		//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)
 
 	
-	FallBlockInfo fallBlockInfo;	//落下ブロックの情報
-	FallBlockInfo waitBlockinfo[2];//待機ブロックの情報
+	FallBlockInfo fallBlockInfo;			//落下ブロックの情報
+	FallBlockInfo_Wait waitBlockinfo[2];	//待機ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
@@ -276,6 +279,7 @@ private:
 	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
 
 	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(移動出来る量<=MoveVal)
 	int FallBlock_MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
 	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
@@ -299,7 +303,8 @@ private:
 	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
 	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
-	void Create_Wait_Block();//待機ブロックの生成
+	void Create_Wait_Block();						//落下ブロックの待機列の作成
+	BLOCK_TYPE GetRandomBlockType();				//ランダムでブロックの種類を返す
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 
@@ -311,7 +316,7 @@ public:
 	void Finalize_Draw();
 	void Finalize_Update();
 
-	int Create_FallBlock(struct Fallblock_Pack *fallblock_Pack);		//落下ブロックを生成する(戻り値:成功でTRUE)
+	int Create_FallBlock();		//落下ブロックを生成する(戻り値:成功でTRUE)
 	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
 
 	/*設定系*/
