@@ -23,7 +23,7 @@ public://定数とかの宣言
 	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
 	static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
-	static const int BLOCK_DELETE_LEN = 3;//削除するために必要な隣接するブロックの個数
+	static const int BLOCK_DELETE_LEN = 4;//削除するために必要な隣接するブロックの個数
 
 	//ブロックの種類
 	enum BLOCK_TYPE {
@@ -304,7 +304,8 @@ private:
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
 	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
 	void Create_Wait_Block();						//落下ブロックの待機列の作成
-	BLOCK_TYPE GetRandomBlockType();				//ランダムでブロックの種類を返す
+	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
+	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
 	//BLOCK_TYPE Get_Block_Type(int h);
 public:
 

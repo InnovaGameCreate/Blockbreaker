@@ -1,7 +1,6 @@
 #include "MainFunc.h"
 
 
-
 Phase_GameMain::Phase_GameMain() {
 	//ポーズメニューの項目を作成
 	pauseMenu.addItem(_T("再開"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
@@ -243,7 +242,7 @@ void Phase_GameMain::Draw() {
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), FALSE);
 			}
-}
+		}
 	}
 #endif // _DEBUG_GAMEMAIN_
 
@@ -252,17 +251,33 @@ void Phase_GameMain::Draw() {
 	//描画先をバックスクリーンにする
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
+	//ゲーム画面の背景画像を描画
 	DrawGraph(0, 0, haikei, FALSE);
 
+	//次の落下ブロックの描画
+	DrawBox(550, 60, 550 + BLOCK_SIZE * (FALLBLOCK_SIZE+2), 60 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), GetColor(10, 10, 10), TRUE);
+	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+			double X, Y;
+			Convert_Ingame_FromBlock(x, y, 0, 0, &X, &Y);
 
-	//ゲーム画面を描画する(デバッグモードの場合は、全ブロック領域を描画する)
-	if (DEBUG_GAMEMAIN) {
-		DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
+			X += 550 + BLOCK_SIZE;
+			Y += 60 + BLOCK_SIZE;
+
+
+
+			DrawBlock(X, Y, waitBlockinfo[0].BlockID[x][y]);
+		}
 	}
-	else {
-		DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
-	}
+
+	//ゲーム画面を描画する
+	//デバッグ
+#ifdef _DEBUG_GAMEMAIN_
+	//デバッグモードの場合、全ブロック領域を描画する
+	DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
+#else
+	DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
+#endif
 
 
 	//デバッグ
@@ -278,7 +293,7 @@ void Phase_GameMain::Draw() {
 	for (int i = BLOCK_PADDINGUP; i < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; i++) {
 		DrawFormatStringToHandle(20, GAMEWINDOW_PADDINGY + (i - BLOCK_PADDINGUP) * BLOCK_SIZE + 15,
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
-	}
+}
 #endif // _DEBUG_GAMEMAIN_
 
 
@@ -1354,35 +1369,7 @@ void Phase_GameMain::under_Block() {
 		BLOCK_TYPE bu = getBlockColor(i, BLOCKSPOWN_Y - 1, FALSE, FALSE);//上側のブロック
 
 		do {
-			int swi = (int)(randomTable.getRand(0, 259) / 10.);
-			switch (swi) {
-			case 0:		bt = BLOCK_TYPE_RED_ARROW_X;		break;
-			case 1:		bt = BLOCK_TYPE_RED_ARROW_Y;		break;
-			case 2:		bt = BLOCK_TYPE_RED_ARROW_XY;		break;
-			case 3:		bt = BLOCK_TYPE_RED_ARROW_XY2;		break;
-			case 4:		bt = BLOCK_TYPE_BLUE_ARROW_X;		break;
-			case 5:		bt = BLOCK_TYPE_BLUE_ARROW_Y;		break;
-			case 6:		bt = BLOCK_TYPE_BLUE_ARROW_XY;		break;
-			case 7:		bt = BLOCK_TYPE_BLUE_ARROW_XY2;		break;
-			case 8:		bt = BLOCK_TYPE_YELLOW_ARROW_X;		break;
-			case 9:		bt = BLOCK_TYPE_YELLOW_ARROW_Y;		break;
-			case 10:	bt = BLOCK_TYPE_YELLOW_ARROW_XY;	break;
-			case 11:	bt = BLOCK_TYPE_YELLOW_ARROW_XY2;	break;
-			case 12:	bt = BLOCK_TYPE_GREEN_ARROW_X;		break;
-			case 13:	bt = BLOCK_TYPE_GREEN_ARROW_Y;		break;
-			case 14:	bt = BLOCK_TYPE_GREEN_ARROW_XY;		break;
-			case 15:	bt = BLOCK_TYPE_GREEN_ARROW_XY2;	break;
-			case 16:	bt = BLOCK_TYPE_PURPLE_ARROW_X;		break;
-			case 17:	bt = BLOCK_TYPE_PURPLE_ARROW_Y;		break;
-			case 18:	bt = BLOCK_TYPE_PURPLE_ARROW_XY;	break;
-			case 19:	bt = BLOCK_TYPE_PURPLE_ARROW_XY2;	break;
-			case 20:	bt = BLOCK_TYPE_TREE;				break;
-			case 21:	bt = BLOCK_TYPE_RED;				break;
-			case 22:	bt = BLOCK_TYPE_BLUE;				break;
-			case 23:	bt = BLOCK_TYPE_YELLOW;				break;
-			case 24:	bt = BLOCK_TYPE_GREEN;				break;
-			case 25:	bt = BLOCK_TYPE_PURPLE;				break;
-			}
+			bt = GetRandomBlockType_UNDER();//ランダムでブロックを決定する
 		} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, bu));
 
 
@@ -2237,8 +2224,8 @@ void Phase_GameMain::Create_Wait_Block() {
 	int Pattern = (int)(randomTable.getRand(0, 399) / 100.);
 
 	//ランダムに設置するブロックを2個決定する
-	BLOCK_TYPE type1 = GetRandomBlockType();
-	BLOCK_TYPE type2 = GetRandomBlockType();
+	BLOCK_TYPE type1 = GetRandomBlockType_FALL();
+	BLOCK_TYPE type2 = GetRandomBlockType_FALL();
 
 	//最後尾待機ブロックの配置を初期化する
 	for (int i = 0; i < FALLBLOCK_SIZE; i++) {
@@ -2292,8 +2279,8 @@ void Phase_GameMain::Create_Wait_Block() {
 	printLog_I(_T("ブロックの待機列を進めました"));
 }
 
-//ランダムでブロックの種類を返す
-Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType() {
+//ランダムでブロックの種類を返す(落下ブロック用)
+Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_FALL() {
 	int Rand = (int)randomTable.getRand(0, 100);
 
 	//確率で戻り値を変えるようにする
@@ -2315,6 +2302,31 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType() {
 	if (Rand < 97)	return BLOCK_TYPE_PURPLE_ARROW_X;	//紫(平行矢印)
 	if (Rand < 98)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
 	return BLOCK_TYPE_RAINBOW;							//虹色のブロック(下のブロックと同じ色になる)
+}
+
+//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
+Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
+	int Rand = (int)randomTable.getRand(0, 200);
+
+	//確率で戻り値を変えるようにする
+	if (Rand < 37)	return BLOCK_TYPE_RED;		//赤
+	if (Rand < 75)	return BLOCK_TYPE_BLUE;		//青
+	if (Rand < 112)	return BLOCK_TYPE_YELLOW;	//黄
+	if (Rand < 150)	return BLOCK_TYPE_GREEN;	//緑
+	if (Rand < 188)	return BLOCK_TYPE_PURPLE;	//紫
+
+	//ここから特殊ブロック↓
+	if (Rand < 189)	return BLOCK_TYPE_RED_ARROW_X;		//赤(平行矢印)
+	if (Rand < 190)	return BLOCK_TYPE_RED_ARROW_Y;		//赤(垂直矢印)
+	if (Rand < 191)	return BLOCK_TYPE_BLUE_ARROW_X;		//青(平行矢印)
+	if (Rand < 192)	return BLOCK_TYPE_BLUE_ARROW_Y;		//青(垂直矢印)
+	if (Rand < 193)	return BLOCK_TYPE_YELLOW_ARROW_X;	//黄(平行矢印)
+	if (Rand < 194)	return BLOCK_TYPE_YELLOW_ARROW_Y;	//黄(垂直矢印)
+	if (Rand < 195)	return BLOCK_TYPE_GREEN_ARROW_X;	//緑(平行矢印)
+	if (Rand < 196)	return BLOCK_TYPE_GREEN_ARROW_Y;	//緑(垂直矢印)
+	if (Rand < 197)	return BLOCK_TYPE_PURPLE_ARROW_X;	//紫(平行矢印)
+	if (Rand < 198)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
+	return BLOCK_TYPE_TREE;								//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 }
 
 /*
