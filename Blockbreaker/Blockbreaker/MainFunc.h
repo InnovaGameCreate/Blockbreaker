@@ -1,6 +1,7 @@
 #pragma once
 #include "PhaseController.h"
 #include "Phase_GameMain.h"
+#include "Phase_TopMenu.h"
 #include "SelectItem.h"
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -89,6 +90,7 @@ typedef struct {
 //クラスのインスタンス(グローバル変数)
 extern Phase_Default phase_Default;		//デフォルトのフェーズ
 extern Phase_GameMain phase_GameMain;	//ゲームメインのフェーズ
+extern Phase_TopMenu phase_TopMenu;		//トップメニューのフェーズ
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

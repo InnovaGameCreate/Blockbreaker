@@ -3,6 +3,13 @@
 
 
 Phase_GameMain::Phase_GameMain() {
+	//ポーズメニューの項目を作成
+	pauseMenu.addItem(_T("再開"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("やり直す"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ゲーム終了"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.setScrolltype(1);
+	pauseMenu.sethaba(50);
+	pauseMenu.setCenteringMode(0);
 }
 
 
@@ -59,13 +66,6 @@ void Phase_GameMain::Init_Draw() {
 	SetLoopTimePosSoundMem(9768, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
-	//ポーズメニューの項目を作成
-	pauseMenu.addItem(_T("再開"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("やり直す"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("ゲーム終了"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.setScrolltype(1);
-	pauseMenu.sethaba(50);
-	pauseMenu.setCenteringMode(0);
 	pauseMenu.setEnable(TRUE);
 }
 
@@ -860,6 +860,7 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteMask(Tex_BlockFireEffect2);
 
 	DeleteSoundMem(BGM);
+
 }
 
 //終了処理(計算処理)
@@ -2299,7 +2300,7 @@ void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
 		phase_GameMain.Restart();
 		break;
 	case 2://終了ボタン
-		ExitGameRequest();
+		Changefaze(FAZE_TopMenu, THREAD_Update);
 		break;
 	default:
 		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);

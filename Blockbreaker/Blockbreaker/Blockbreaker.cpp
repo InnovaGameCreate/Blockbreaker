@@ -4,6 +4,7 @@
 //グローバル変数の定義
 Phase_Default phase_Default;
 Phase_GameMain phase_GameMain;
+Phase_TopMenu phase_TopMenu;
 
 //変数
 static unsigned int stateKey[256];				//キーボードのキー
@@ -130,13 +131,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (DxLib_Init() == -1)	return -1;						//DXライブラリの初期化(ウィンドウ表示)
 
 	fpsController_Draw.SetVSyncMode(GetWaitVSyncFlag());	//垂直同期を使用してゲームを停止するかどうかの設定
-															
+
 	SetActiveStateChangeCallBackFunction(ActiveStateChange, NULL);	// ウインドウのアクティブ状態に変化があったときに呼ばれるコールバック関数を登録
 	SetRestoreGraphCallback(RestoreGraphCallback);			//フルスクリーンに復帰する際のテクスチャ等の再ロードを行う
-	
 
 
-																	
+
+
 	SetMouseDispFlag(Flag_MouseCursor);		//マウスカーソル設定(ウィンドウの生成後に行わないと無理っぽい)
 
 	SetDrawScreen(DX_SCREEN_BACK);							//裏画面に描画を行うように設定する
@@ -159,10 +160,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	//フェーズの定義
+	phaseController[FAZE_TopMenu] = &phase_TopMenu;
 	phaseController[FAZE_GameMain] = &phase_GameMain;
 
 
-											
 	if (isMultiThread())	_beginthreadex(NULL, 0, Thread_Update, "計算スレッド", 0, NULL);//マルチスレッドならば新規スレッド作成
 
 

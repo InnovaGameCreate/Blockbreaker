@@ -12,7 +12,7 @@ void Phase_Default::Init_Update() {};
 void Phase_Default::Draw() {};
 
 void Phase_Default::Update() { 
-	Changefaze(FAZE_GameMain, THREAD_Update);
+	Changefaze(FAZE_TopMenu, THREAD_Update);
 };
 
 void Phase_Default::Finalize_Draw() {};
