@@ -259,7 +259,8 @@ private:
 
 	RandomTable randomTable;	//乱数テーブル
 
-	int Count_PlayTime;		//経過フレーム数(ポーズ、一時停止などでカウントアップが一時停止する)
+	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
+	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)
 	int Count_Pause;		//ポーズ時のカウンタ
 	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
@@ -330,7 +331,8 @@ public:
 	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
-	int getCountPlayTime();			//ゲームの経過フレーム数を取得する
+	int getCountPlayTime();			//実際に操作をしている経過フレーム数を取得する
+	int getCountGameTime();			//ゲームの経過フレーム数を取得
 	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 	int isBlock_PlayMoveMotion();		//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	int isBlock_PlayChangeMotion();		//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)

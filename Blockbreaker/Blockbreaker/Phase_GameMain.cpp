@@ -87,6 +87,7 @@ void Phase_GameMain::Restart() {
 	Flag_Pause = PauseMode_NO;
 	Flag_pauseRequest = PauseMode_NO;
 	Count_PlayTime = 0;
+	Count_GameTime = 0;
 	Count_Pause = 0;
 	Count_Turn = 0;
 	//落下中ブロックの削除
@@ -279,9 +280,13 @@ void Phase_GameMain::Draw() {
 		_stprintf(str, _T("%dターン"), Count_Turn);
 		Font_DrawStringWithShadow(570, 360, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
-		Font_DrawStringWithShadow(550, 410, _T("経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf(str, _T("%.2fs"), Count_PlayTime/60.);
-		Font_DrawStringWithShadow(570, 470, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+		Font_DrawStringWithShadow(550, 410, _T("ゲーム経過時間"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+		_stprintf(str, _T("%.2fs"), getCountGameTime() / 60.);
+		Font_DrawStringWithShadow(570, 470, str, GetColor(0x90, 0xff, 0x85), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+
+		Font_DrawStringWithShadow(550, 520, _T("操作経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+		_stprintf(str, _T("%.2fs"), getCountPlayTime() / 60.);
+		Font_DrawStringWithShadow(570, 580, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 	}
 
@@ -783,7 +788,13 @@ void Phase_GameMain::Update_Counter() {
 	//ステージ経過時間のカウントアップ(通常プレイ時に加算する)
 	if (getPauseMode() == PauseMode_NO
 		&& Block_AllMovedata.Enable == FALSE
-		&& gameCycle == GameCycle_FALL)	Count_PlayTime++;
+		&& gameCycle == GameCycle_FALL) {
+		Count_PlayTime++;
+	}
+
+	if (getPauseMode() == PauseMode_NO) {
+		Count_GameTime++;
+	}
 
 	//ポーズ時のカウンタ
 	if (getPauseMode() != PauseMode_NO)	Count_Pause++;
@@ -828,7 +839,7 @@ void Phase_GameMain::Update_Final() {
 
 			//ゲームオーバーが近い場合は左右に揺らす
 			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				X += getGraph_Sin(getCountPlayTime() * 30, 3, 0);
+				if(getBlockColor(x, GAMEOVER_BORDER ) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountGameTime() * 30, 3, 0);
 				X += randomTable.getRand(-2, 2);
 			}
 
@@ -2158,9 +2169,14 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 
 }
 
-//ゲームの経過フレーム数を取得する
+//実際に操作をしている経過フレーム数を取得する
 int Phase_GameMain::getCountPlayTime() {
 	return Count_PlayTime;
+}
+
+//ゲームの経過フレーム数を取得
+int Phase_GameMain::getCountGameTime() {
+	return Count_GameTime;
 }
 
 //ゲームオーバーになっているかどうかの確認
