@@ -54,12 +54,13 @@ public://定数とかの宣言
 		BLOCK_TYPE_PURPLE_ARROW_Y,	//紫(垂直矢印)
 		BLOCK_TYPE_PURPLE_ARROW_XY,	//紫(斜め右上)
 		BLOCK_TYPE_PURPLE_ARROW_XY2,//紫(斜め右下)
-		BLOCK_TYPE_TREE, //樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
-		BLOCK_TYPE_BLACK,//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
-		BLOCK_TYPE_NOROUND,//枠で囲われたブロック（回せない）
-		BLOCK_TYPE_RAINBOW,//虹色のブロック(下のブロックと同じ色になる)
-		BLOCK_TYPE_BOM,//爆弾(問答無用で周囲のブロック破壊)
-		BLOCK_TYPE_NUM		//ブロックの種類の数(画面外ブロック)
+		BLOCK_TYPE_TREE,		//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
+		BLOCK_TYPE_BLACK,		//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
+		BLOCK_TYPE_NOROUND,		//枠で囲われたブロック（回せない）
+		BLOCK_TYPE_RAINBOW,		//虹色のブロック(下のブロックと同じ色になる)
+		BLOCK_TYPE_BOM,			//爆弾(問答無用で周囲のブロック破壊)
+		BLOCK_TYPE_2BOM,		//2爆弾(2ブロック隣接で消去する)
+		BLOCK_TYPE_NUM			//ブロックの種類の数(画面外ブロック)
 	};
 
 	//ポーズの種類
@@ -240,6 +241,7 @@ private:
 	int Tex_BlockBLACK;				//黒ブロック
 	int Tex_BlockRAINBOW;			//虹色ブロック
 	int Tex_BlockBOMB;				//爆弾ブロック
+	int Tex_Block2BOMB;				//2爆弾ブロック
 	int Tex_BlockFireEffect;		//炎エフェクトブロック
 	int Tex_BlockFireEffect2;		//炎エフェクトブロックのマスク画像
 	int haikei;				//背景
@@ -278,6 +280,7 @@ private:
 	void Block_Black_Func();		//フィールドに存在する黒色ブロックの色を決定する
 	void Block_Rainbow_Func();		//フィールドに存在する虹色ブロックの色を決定する
 	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
+	void Block_2BOMB_Func();	//フィールドに存在するスリー爆弾ブロックを爆破する
 
 	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
 	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(移動出来る量<=MoveVal)
@@ -287,7 +290,7 @@ private:
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
 	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40, int Delay = 0);		//フィールドブロックを削除する
 	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
-	int Block_Delete();							//連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
+	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//連続するフィールドブロックを削除する(Flag_EventをTRUEで消去によって発動する効果も発動する)(消去したブロックの数)
 	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
 	void under_Block();							//下からブロックがわいてくる
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント

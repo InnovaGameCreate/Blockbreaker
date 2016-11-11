@@ -55,6 +55,7 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB_3.png)"));
 	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
 	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
 
@@ -288,6 +289,10 @@ void Phase_GameMain::Draw() {
 		_stprintf(str, _T("%.2fs"), getCountPlayTime() / 60.);
 		Font_DrawStringWithShadow(570, 580, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
+		Font_DrawStringWithShadow(550, 630, _T("獲得スコア"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+		_stprintf(str, _T("%d"), score.getScore());
+		Font_DrawStringWithShadow(570, 700, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+
 	}
 
 	//ゲーム画面を描画する
@@ -352,8 +357,6 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, 
 	int Y = (int)(CenterY + BLOCK_SIZE / 2.);
 
 	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, getBlockTexture(type), TRUE, FALSE);
-
-	//DrawRotaGraph((int)CenterX, (int)CenterY, 1, 0, getBlockTexture(type), TRUE);
 }
 
 //ブロックタイプよりテクスチャハンドルの取得
@@ -417,6 +420,8 @@ int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 		return Tex_BlockRAINBOW;
 	case BLOCK_TYPE_BOM://爆弾ブロック
 		return Tex_BlockBOMB;
+	case BLOCK_TYPE_2BOM://2爆弾ブロック
+		return Tex_Block2BOMB;
 	}
 	printLog_E(_T("テクスチャ番号を取得できませんでした(BLOCK_TYPE=%d)"), type);
 	return -1;	//エラー
@@ -627,6 +632,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		Block_Black_Func();		//黒ブロックの色変更
 		Block_Rainbow_Func();	//虹色ブロックの色を変更
 		Block_BOMB_Func();		//爆弾ブロックの処理
+		Block_2BOMB_Func();		//2爆弾ブロックの処理
 		Loop_No = 4;
 		printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
 		break;
@@ -884,9 +890,11 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
 	DeleteGraph(Tex_BlockFireEffect);
+	DeleteGraph(Tex_BlockBOMB);
+	DeleteGraph(Tex_Block2BOMB);
 	DeleteGraph(haikei);
 
-	DeleteMask(Tex_BlockFireEffect2);
+	DeleteGraph(Tex_BlockFireEffect2);
 
 	DeleteSoundMem(BGM);
 
@@ -1484,8 +1492,26 @@ void Phase_GameMain::Block_BOMB_Func() {
 	}
 
 	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
-
 }
+
+//フィールドに存在するスリー爆弾ブロックを爆破する
+void Phase_GameMain::Block_2BOMB_Func() {
+	int DeleteNum = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BLOCK_TYPE_2BOM) {//爆弾ブロックの時
+				//自身の削除
+				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+
+				//2個隣接しているブロックを破壊する
+				DeleteNum += Block_Delete(2, FALSE);
+			}
+		}
+	}
+
+	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
+}
+
 
 //指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
@@ -1569,7 +1595,7 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChange
 }
 
 //連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
-int Phase_GameMain::Block_Delete() {
+int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 	//画面内の存在するブロックのみで計算する
 
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
@@ -1615,112 +1641,121 @@ int Phase_GameMain::Block_Delete() {
 
 	//矢印ブロックの効果を先に発動する
 	int DelCount = 0;
-	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
-				if (Counter[DeleteFlag[x][y]] >= BLOCK_DELETE_LEN) {
-					//水平の矢印の場合
-					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_X ||
-						old[x][y] == BLOCK_TYPE_GREEN_ARROW_X ||
-						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_X ||
-						old[x][y] == BLOCK_TYPE_RED_ARROW_X ||
-						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
-						//左端から右端までの一列を一括消去
-						for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
-							if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
+	if (Flag_Event) {
+		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+				if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
+					if (Counter[DeleteFlag[x][y]] >= Len) {
+						//水平の矢印の場合
+						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_X ||
+							old[x][y] == BLOCK_TYPE_GREEN_ARROW_X ||
+							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_X ||
+							old[x][y] == BLOCK_TYPE_RED_ARROW_X ||
+							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
+							//左端から右端までの一列を一括消去
+							for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
+								if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
 							}
 						}
-					}
-					//垂直の矢印の場合
-					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_Y ||
-						old[x][y] == BLOCK_TYPE_GREEN_ARROW_Y ||
-						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_Y ||
-						old[x][y] == BLOCK_TYPE_RED_ARROW_Y ||
-						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
-						//左端から右端までの一列を一括消去
-						for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
-							if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
+						//垂直の矢印の場合
+						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_Y ||
+							old[x][y] == BLOCK_TYPE_GREEN_ARROW_Y ||
+							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_Y ||
+							old[x][y] == BLOCK_TYPE_RED_ARROW_Y ||
+							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
+							//左端から右端までの一列を一括消去
+							for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
+								if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
 							}
 						}
-					}
-					//右上の矢印の場合
-					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY ||
-						old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY ||
-						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY ||
-						old[x][y] == BLOCK_TYPE_RED_ARROW_XY ||
-						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
-						//斜めに一括消去
-						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-							if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
-							}
-							if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
+						//右上の矢印の場合
+						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY ||
+							old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY ||
+							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY ||
+							old[x][y] == BLOCK_TYPE_RED_ARROW_XY ||
+							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
+							//斜めに一括消去
+							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
+								if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
+								if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
 							}
 						}
-					}
-					//右下の矢印の場合
-					if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY2 ||
-						old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY2 ||
-						old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY2 ||
-						old[x][y] == BLOCK_TYPE_RED_ARROW_XY2 ||
-						old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
-						//斜めに一括消去
-						for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-							if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
-							}
-							if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
-								//フライテキストの生成
-								double X, Y;
-								Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
-								flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
-								score.addScore(0, 50);
-								DelCount++;
+						//右下の矢印の場合
+						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY2 ||
+							old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY2 ||
+							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY2 ||
+							old[x][y] == BLOCK_TYPE_RED_ARROW_XY2 ||
+							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
+							//斜めに一括消去
+							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
+								if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
+								if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40)) {
+									//フライテキストの生成
+									double X, Y;
+									Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
+									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									score.addScore(0, 50);
+									DelCount++;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+		//この時点で削除があった(つまり矢印ブロックで消された)
+		if (DelCount > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 	}
-	//この時点で削除があった(つまり矢印ブロックで消された)
-	if (DelCount > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 
+
+	BlockChangeMotionType DelMotion = BlockChangeMotionType_SMALL;
+	int DelLen = 15;
+	if (!Flag_Event) {
+		DelMotion = BlockChangeMotionType_EXPLOSION;
+		DelLen = 40;
+	}
 	//隣接しているブロックを削除する
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//配列の範囲内
-				if (Counter[DeleteFlag[x][y]] >= BLOCK_DELETE_LEN) {
+				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
-					if (Block_Delete_Direct(x, y, BlockChangeMotionType_SMALL, 15)) {
+					if (Block_Delete_Direct(x, y, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
@@ -1730,7 +1765,7 @@ int Phase_GameMain::Block_Delete() {
 					}
 
 					//ついでに隣接する樹木ブロックも削除
-					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
@@ -1738,7 +1773,7 @@ int Phase_GameMain::Block_Delete() {
 						score.addScore(0, 80);
 						DelCount++;//上
 					}
-					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
@@ -1746,7 +1781,7 @@ int Phase_GameMain::Block_Delete() {
 						score.addScore(0, 80);
 						DelCount++;//下
 					}
-					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
@@ -1754,7 +1789,7 @@ int Phase_GameMain::Block_Delete() {
 						score.addScore(0, 80);
 						DelCount++;//左
 					}
-					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, BlockChangeMotionType_SMALL, 15)) {
+					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
@@ -2234,6 +2269,10 @@ void Phase_GameMain::Create_Wait_Block() {
 	if (randomTable.getRand(0, 1000) < 50) {
 		Pattern = 4;
 	}
+	if (randomTable.getRand(0, 1000) < 100) {
+		//10％の確率で2爆弾ブロックを落とす
+		Pattern = 5;
+	}
 
 	//ランダムに設置するブロックを2個決定する
 	BLOCK_TYPE type1 = GetRandomBlockType_FALL();
@@ -2282,6 +2321,12 @@ void Phase_GameMain::Create_Wait_Block() {
 		break;
 	case 4://爆弾の単体落下
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM;
+
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		break;
+	case 5://スリー爆弾の単体落下
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_2BOM;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
@@ -2346,31 +2391,6 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 	if (Rand < 198)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
 	return BLOCK_TYPE_TREE;								//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 }
-
-/*
-BLOCK_TYPE Phase_GameMain::Get_Block_Type(int h) {
-	switch (h)
-	{
-	case 0:
-
-		break;
-	case 1:
-		return BLOCK_TYPE_RED;//赤
-	case 2:
-		return BLOCK_TYPE_BLUE;//青
-	case 3:
-		return BLOCK_TYPE_YELLOW;//黄
-	case 4:
-		return BLOCK_TYPE_GREEN;//緑
-
-	case 5:
-		return BLOCK_TYPE_PURPLE;//紫
-
-
-	}
-	return BLOCK_TYPE_NO;
-}
-*/
 
 //ポーズメニューのボタンが押されたとき
 void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
