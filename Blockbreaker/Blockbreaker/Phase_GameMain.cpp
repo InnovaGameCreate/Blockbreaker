@@ -95,6 +95,8 @@ void Phase_GameMain::Restart() {
 	//落下中ブロックの削除
 	Delete_FallBlock();
 	score.init();//スコアの初期化
+	//ブロック待機列の初期化
+	for (int i = 0; i < ARRAY_LENGTH(waitBlockinfo); i++) Create_Wait_Block();
 
 	//ブロックの削除を行う
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
