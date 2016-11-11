@@ -83,6 +83,18 @@ double RandomTable::map(long long v, long long sx, long long sn, double dx, doub
 
 //乱数表より指定範囲の乱数の取得
 double RandomTable::getRand(double min, double max) {
+	double r = getRand(min, max, Randomcounter);
+
+	Randomcounter++;				//指定位置の乱数を取得
+	Randomcounter %= TableSize;		//乱数の位置カウンタが配列外に出ないように余剰計算を行う
+
+
+	//乱数表の最大値、最小値、入力値の最小値、最大値より指定範囲の乱数を算出する
+	return r;
+}
+
+//乱数表より指定範囲の乱数を取得する(乱数テーブルの位置を指定するので、引数がすべて同じ場合は常に同じ値が返ります)
+double RandomTable::getRand(double min, double max, int Place) {
 	if (randomTable == NULL)	return 0;
 	if (TableSize < 1)	return 0;
 	if (min == max)	return min;	//最小値と最大値が同じ場合は最小値を返す(乱数する意味無いよね？？)
@@ -91,9 +103,8 @@ double RandomTable::getRand(double min, double max) {
 		min = max;
 		max = t;
 	}
-	unsigned int r = randomTable[Randomcounter++];	//指定位置の乱数を取得
-	Randomcounter %= TableSize;		//乱数の位置カウンタが配列外に出ないように余剰計算を行う
-
+	Place %= TableSize;
+	unsigned int r = randomTable[Place];	//指定位置の乱数を取得
 
 	//乱数表の最大値、最小値、入力値の最小値、最大値より指定範囲の乱数を算出する
 	return map(r, randomTable_MinVal, randomTable_maxVal, min, max);

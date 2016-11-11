@@ -89,6 +89,7 @@ void Phase_GameMain::Restart() {
 	Flag_pauseRequest = PauseMode_NO;
 	Count_PlayTime = 0;
 	Count_GameTime = 0;
+	Count_Time = 0;
 	Count_Pause = 0;
 	Count_Turn = 0;
 	//落下中ブロックの削除
@@ -105,6 +106,9 @@ void Phase_GameMain::Restart() {
 			field[x][y].move_flag = 0;
 		}
 	}
+
+	//適当にブロックを設置する(下から3段)
+	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 3, BLOCK_WIDTHNUM_INGAME, 3);
 
 	//ゲームサイクルをブロック落下に設定
 	setGameCycle(GameCycle_FALL);
@@ -136,6 +140,13 @@ void Phase_GameMain::Draw() {
 			double X, Y;
 			X = field[x][y].DrawPlaceX;
 			Y = field[x][y].DrawPlaceY;
+
+			//ゲームオーバー時に下に落下させる
+			if (getPauseMode() == PauseMode_GameOver) {
+				if (Count_Pause < 300)	Y += 1 / 2.*0.2*Count_Pause*Count_Pause;
+				else					Y += 1 / 2.*0.2*300*300;
+			}
+
 			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
 			if (t != BlockChangeMotionType_NO && field[x][y].blockChangeMotion.Count < 0)	t = BlockChangeMotionType_NO;
 			switch (t) {
@@ -278,19 +289,19 @@ void Phase_GameMain::Draw() {
 		//現在の経過ターン数の描画
 		TCHAR str[100];
 		Font_DrawStringWithShadow(550, 300, _T("経過ターン数"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf(str, _T("%dターン"), Count_Turn);
+		_stprintf_s(str, _T("%dターン"), Count_Turn);
 		Font_DrawStringWithShadow(570, 360, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 		Font_DrawStringWithShadow(550, 410, _T("ゲーム経過時間"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf(str, _T("%.2fs"), getCountGameTime() / 60.);
+		_stprintf_s(str, _T("%.2fs"), getCountGameTime() / 60.);
 		Font_DrawStringWithShadow(570, 470, str, GetColor(0x90, 0xff, 0x85), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 		Font_DrawStringWithShadow(550, 520, _T("操作経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf(str, _T("%.2fs"), getCountPlayTime() / 60.);
+		_stprintf_s(str, _T("%.2fs"), getCountPlayTime() / 60.);
 		Font_DrawStringWithShadow(570, 580, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 		Font_DrawStringWithShadow(550, 630, _T("獲得スコア"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf(str, _T("%d"), score.getScore());
+		_stprintf_s(str, _T("%d"), score.getScore());
 		Font_DrawStringWithShadow(570, 700, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 	}
@@ -335,14 +346,65 @@ void Phase_GameMain::Draw() {
 		pauseMenu.Draw();
 		break;
 	case PauseMode_GameOver:
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(150, 0, 0), TRUE);
+	{
+		//だんだん濃くする
+		int Alpha = 200;
+		Alpha = (int)(Alpha * Count_Pause / 300.);
+		if (Alpha > 200)	Alpha = 200;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		if (Count_Pause % 120 <= 80)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("GAME OVER"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+		//上から文字が落ちてくる
+		const int strW = 60;
+		int strX = (int)(WINDOW_WIDTH/2. - strW * (9/2.));
+		double strY = 460;
+
+		strY = 460 * Count_Pause / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("G"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 30) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("A"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 60) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("M"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 90) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("E"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 120) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("O"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 150) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("V"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 180) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("E"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+		strX += strW;
+
+		strY = 460 * (Count_Pause - 210) / 40.;
+		if (strY > 460)	strY = 460;
+		Font_DrawStringWithShadow(strX, (int)strY, _T("R"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
+
 
 		//選択肢の項目の描画
 		pauseMenu.Draw();
+	}
 		break;
 	}
 }
@@ -791,15 +853,21 @@ int Phase_GameMain::Update_ChangeMotion() {
 //カウンタのカウントアップ
 void Phase_GameMain::Update_Counter() {
 
-	//ステージ経過時間のカウントアップ(通常プレイ時に加算する)
+	//実際に操作をしている経過フレーム数の加算
 	if (getPauseMode() == PauseMode_NO
 		&& Block_AllMovedata.Enable == FALSE
 		&& gameCycle == GameCycle_FALL) {
 		Count_PlayTime++;
 	}
 
+	//ステージ経過時間のカウントアップ(通常プレイ時に加算する)
 	if (getPauseMode() == PauseMode_NO) {
 		Count_GameTime++;
+	}
+
+	//ゲーム経過フレーム数のカウントアップ
+	if (getPauseMode() != PauseMode_NOMAL) {
+		Count_Time++;
 	}
 
 	//ポーズ時のカウンタ
@@ -845,8 +913,8 @@ void Phase_GameMain::Update_Final() {
 
 			//ゲームオーバーが近い場合は左右に揺らす
 			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				if(getBlockColor(x, GAMEOVER_BORDER ) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountGameTime() * 30, 3, 0);
-				X += randomTable.getRand(-2, 2);
+				if(getBlockColor(x, GAMEOVER_BORDER ) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountTime() * 30, 3, 0);
+				X += randomTable.getRand(-2, 2, getCountTime()+x*y+y);
 			}
 
 			//座標の記録
@@ -997,6 +1065,7 @@ void Phase_GameMain::PauseRequest(PauseMode pauseMode) {
 	}
 	Flag_pauseRequest = pauseMode;
 }
+
 
 //落下ブロックが落下中かどうかの取得(TRUEで落下中)
 int Phase_GameMain::isFallBlock_Falling() {
@@ -1367,24 +1436,7 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 
 //下からブロックがわいてくる
 void Phase_GameMain::under_Block() {
-	const int BLOCKSPOWN_Y = BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//ブロックの出現する位置
-
-
-	for (int i = BLOCK_PADDINGLEFT; BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT > i; i++) {
-		BLOCK_TYPE bt = BLOCK_TYPE_RAINBOW;
-
-
-		BLOCK_TYPE bl = getBlockColor(i - 1, BLOCKSPOWN_Y, FALSE, FALSE);//左側のブロック
-		BLOCK_TYPE bu = getBlockColor(i, BLOCKSPOWN_Y - 1, FALSE, FALSE);//上側のブロック
-
-		do {
-			bt = GetRandomBlockType_UNDER();//ランダムでブロックを決定する
-		} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, bu));
-
-
-
-		add_FraldBlock(i, BLOCKSPOWN_Y, bt, FALSE, TRUE);
-	}
+	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN, BLOCK_WIDTHNUM_INGAME, 1);
 
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
 }
@@ -2209,9 +2261,34 @@ int Phase_GameMain::getCountPlayTime() {
 	return Count_PlayTime;
 }
 
-//ゲームの経過フレーム数を取得
+//ゲームの経過フレーム数を取得(クリアで停止します)
 int Phase_GameMain::getCountGameTime() {
 	return Count_GameTime;
+}
+
+//ゲームの経過フレーム数を取得(ポーズでのみ停止する)
+int Phase_GameMain::getCountTime() {
+	return Count_Time;
+}
+
+//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
+void Phase_GameMain::setBlock_Rect(int x, int y, int w, int h) {
+	for (int bl_X = x; bl_X < x + w; bl_X++) {
+		for (int bl_Y = y; bl_Y < y + h; bl_Y++) {
+
+			BLOCK_TYPE bl = getBlockColor(bl_X - 1, bl_Y, FALSE, FALSE);//左側のブロック
+			BLOCK_TYPE br = getBlockColor(bl_X + 1, bl_Y, FALSE, FALSE);//右側のブロック
+			BLOCK_TYPE bu = getBlockColor(bl_X, bl_Y - 1, FALSE, FALSE);//上側のブロック
+			BLOCK_TYPE bd = getBlockColor(bl_X, bl_Y + 1, FALSE, FALSE);//下側のブロック
+
+			BLOCK_TYPE bt;
+			do {
+				bt = GetRandomBlockType_UNDER();//ランダムでブロックを決定する
+			} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, br) || isSameColorBlock(bt, bu) || isSameColorBlock(bt, bd));
+
+			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);
+		}
+	}
 }
 
 //ゲームオーバーになっているかどうかの確認

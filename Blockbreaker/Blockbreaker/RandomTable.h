@@ -5,7 +5,8 @@ public:
 	RandomTable();
 	RandomTable(int tableSize);
 	~RandomTable();
-	double getRand(double min, double max);	//乱数表より指定範囲の乱数の取得
+	double getRand(double min, double max);				//乱数表より指定範囲の乱数の取得
+	double getRand(double min, double max, int Place);	
 private:
 	int Randomcounter;					//乱数取得の際に使用するカウンター
 	unsigned int *randomTable;			//乱数表

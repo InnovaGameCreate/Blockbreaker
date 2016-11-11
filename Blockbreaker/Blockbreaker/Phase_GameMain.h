@@ -263,6 +263,7 @@ private:
 
 	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
 	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)
+	int Count_Time;			//ゲーム経過フレーム数
 	int Count_Pause;		//ポーズ時のカウンタ
 	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
@@ -310,7 +311,7 @@ private:
 	void Create_Wait_Block();						//落下ブロックの待機列の作成
 	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
 	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
-	//BLOCK_TYPE Get_Block_Type(int h);
+	void setBlock_Rect(int x, int y, int w, int h);	//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
 public:
 
 
@@ -335,7 +336,8 @@ public:
 	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
 	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
 	int getCountPlayTime();			//実際に操作をしている経過フレーム数を取得する
-	int getCountGameTime();			//ゲームの経過フレーム数を取得
+	int getCountGameTime();			//ゲームの経過フレーム数を取得(クリアで停止します)
+	int getCountTime();				//ゲームの経過フレーム数を取得(クリアしても停止しません)
 	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 	int isBlock_PlayMoveMotion();		//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	int isBlock_PlayChangeMotion();		//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
