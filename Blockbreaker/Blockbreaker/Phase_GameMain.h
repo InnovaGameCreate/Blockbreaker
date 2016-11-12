@@ -243,7 +243,8 @@ private:
 	int Tex_BlockBOMB;				//爆弾ブロック
 	int Tex_Block2BOMB;				//2爆弾ブロック
 	int Tex_BlockFireEffect;		//炎エフェクトブロック
-	int Tex_BlockFireEffect2;		//炎エフェクトブロックのマスク画像
+	int Tex_BlockFireEffect2;		//炎エフェクトブロック2(炭)
+	int Tex_BlockCenterEffect;		//回転の中心であることを分かるようにするエフェクト
 	int haikei;				//背景
 
 	int BGM;				//BGM

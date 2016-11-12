@@ -55,9 +55,10 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB_3.png)"));
+	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB_3.png)"));
 	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
 	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
+	if ((Tex_BlockCenterEffect = LoadGraph(_T("Data/Blocks/Block_CENTER.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_CENTER.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
 
@@ -218,6 +219,10 @@ void Phase_GameMain::Draw() {
 
 
 				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
+				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
+					//中心の場合かつ回転可能ブロックの場合
+					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)1, 0, Tex_BlockCenterEffect, TRUE, FALSE);
+				}
 			}
 		}
 	}
@@ -960,11 +965,13 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockBLACK);
 	DeleteGraph(Tex_BlockRAINBOW);
 	DeleteGraph(Tex_BlockFireEffect);
+	DeleteGraph(Tex_BlockFireEffect2);
+	DeleteGraph(Tex_BlockCenterEffect);
 	DeleteGraph(Tex_BlockBOMB);
 	DeleteGraph(Tex_Block2BOMB);
+	
 	DeleteGraph(haikei);
 
-	DeleteGraph(Tex_BlockFireEffect2);
 
 	DeleteSoundMem(BGM);
 
@@ -2364,6 +2371,11 @@ void Phase_GameMain::Create_Wait_Block() {
 		}
 	}
 
+
+	//ブロックの特殊効果を設定する
+	waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = TRUE;
+
+
 	//先に決めたパターンよりブロックの配置を決定する(ついでにスポーン位置も)
 	switch (Pattern) {
 	case 0://縦で下側中心パターン
@@ -2403,20 +2415,22 @@ void Phase_GameMain::Create_Wait_Block() {
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		//無条件で回転不可
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = FALSE;
 		break;
 	case 5://スリー爆弾の単体落下
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_2BOM;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		//無条件で回転不可
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = FALSE;
 		break;
 	default:
 		printLog_E(_T("落下ブロック配置パターンが不明です"));
 		break;
 	}
 
-	//ブロックの特殊効果を設定する
-	waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = TRUE;
 
 	printLog_I(_T("ブロックの待機列を進めました"));
 }
