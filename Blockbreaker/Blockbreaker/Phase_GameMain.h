@@ -192,6 +192,7 @@ private:
 
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
+	field_info Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//計算上のフィールド情報UseVirtualField=TRUEで使用
 
 	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
@@ -295,7 +296,8 @@ private:
 	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//連続するフィールドブロックを削除する(Flag_EventをTRUEで消去によって発動する効果も発動する)(消去したブロックの数)
 	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
 	void under_Block();							//下からブロックがわいてくる
-	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter);	//隣接する同色ブロックのカウント
+	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField = FALSE);	//隣接する同色ブロックのカウント
+	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(TRUEで仮想の面を使用する)
 	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUEで簡略計算します)
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
 	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay);	//フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
@@ -312,6 +314,7 @@ private:
 	void Create_Wait_Block();						//落下ブロックの待機列の作成
 	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
 	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
+	void Virtualfield_Update();						//仮想フィールドを現在のフィールドと一致させる
 	void setBlock_Rect(int x, int y, int w, int h);	//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
 public:
 
@@ -324,7 +327,7 @@ public:
 	void Finalize_Update();
 
 	int Create_FallBlock();		//落下ブロックを生成する(戻り値:成功でTRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL, int UseVirtualField = FALSE);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
 
 	/*設定系*/
 	void PauseRequest(PauseMode pauseMode);	//ポーズ状態のリクエスト
@@ -339,7 +342,7 @@ public:
 	int getCountPlayTime();			//実際に操作をしている経過フレーム数を取得する
 	int getCountGameTime();			//ゲームの経過フレーム数を取得(クリアで停止します)
 	int getCountTime();				//ゲームの経過フレーム数を取得(クリアしても停止しません)
-	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
+	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE, int UseVirtualField = FALSE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
 	int isBlock_PlayMoveMotion();		//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	int isBlock_PlayChangeMotion();		//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
 	void Restart();						//リスタート

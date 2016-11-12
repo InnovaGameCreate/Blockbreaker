@@ -113,6 +113,9 @@ void Phase_GameMain::Restart() {
 	//適当にブロックを設置する(下から3段)
 	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 3, BLOCK_WIDTHNUM_INGAME, 3);
 
+	//仮想ブロックの更新を行う
+	Virtualfield_Update();
+
 	//ゲームサイクルをブロック落下に設定
 	setGameCycle(GameCycle_FALL);
 
@@ -1397,7 +1400,7 @@ void Phase_GameMain::FallBlock_addField() {
 戻り値
 	TRUEで設置(削除)成功
 */
-int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BLOCK_TYPE *Before) {
+int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BLOCK_TYPE *Before, int UseVirtualField) {
 	if (Before != NULL)	*Before = BLOCK_TYPE_NO;	//前のブロックを指定する
 	BLOCK_TYPE before = BLOCK_TYPE_NO;	//消去前のブロック
 	//画面外ブロックは設置不可
@@ -1406,7 +1409,7 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 
 
 	//ブロックを設置しようとしている位置の現在のブロックを取得する(捜査対象外は画面外ブロックになります)
-	BLOCK_TYPE bt = getBlockColor(X, Y, TRUE, !OutScreen);
+	BLOCK_TYPE bt = getBlockColor(X, Y, TRUE, !OutScreen, UseVirtualField);
 	if (Override) {
 		//上書きが有効な場合
 		if (bt == BLOCK_TYPE_NUM)	return FALSE;//画面外ブロックの時のみ失敗
@@ -1417,24 +1420,38 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 	}
 
 	//現在のブロックを記録する
-	before = field[X][Y].color;
+	before = getBlockColor(X, Y, TRUE, FALSE, UseVirtualField);
 
-	//設定されているモーションを削除する
-	field[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
-	field[X][Y].blockMoveMotion.Enable = FALSE;
+	if (UseVirtualField) {
+		//設定されているモーションを削除する
+		Virtualfield[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
+		Virtualfield[X][Y].blockMoveMotion.Enable = FALSE;
 
-	//ブロックの設置(削除)
-	field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
-	field[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
-	field[X][Y].color = brock_type;	//ブロックの置き換え
+		//ブロックの設置(削除)
+		Virtualfield[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+		Virtualfield[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+		Virtualfield[X][Y].color = brock_type;	//ブロックの置き換え
+	}
+	else {
+		//設定されているモーションを削除する
+		field[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
+		field[X][Y].blockMoveMotion.Enable = FALSE;
+
+		//ブロックの設置(削除)
+		field[X][Y].fall_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+		field[X][Y].move_flag = FALSE;	//初期値これでいいのか分からんが一応初期化しとく
+		field[X][Y].color = brock_type;	//ブロックの置き換え
+	}
 
 
 	if (brock_type == BLOCK_TYPE_NO) {
 		//この場合はブロック削除なので
-		printLog_I(_T("フィールドブロックの【削除】[%d][%d]"), X, Y);
+		if (UseVirtualField)	printLog_I(_T("仮想フィールドブロックの【削除】[%d][%d]"), X, Y);
+		else					printLog_I(_T("フィールドブロックの【削除】[%d][%d]"), X, Y);
 	}
 	else {
-		printLog_I(_T("フィールドブロックの【新規生成】[%d][%d](type=%d)"), X, Y, brock_type);
+		if (UseVirtualField)	printLog_I(_T("仮想フィールドブロックの【新規生成】[%d][%d](type=%d)"), X, Y, brock_type);
+		else					printLog_I(_T("フィールドブロックの【新規生成】[%d][%d](type=%d)"), X, Y, brock_type);
 	}
 
 
@@ -1446,7 +1463,6 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 //下からブロックがわいてくる
 void Phase_GameMain::under_Block() {
 	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN, BLOCK_WIDTHNUM_INGAME, 1);
-
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
 }
 
@@ -1575,7 +1591,7 @@ void Phase_GameMain::Block_2BOMB_Func() {
 
 
 //指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
-Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame) {
+Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame, int UseVirtualField) {
 
 	//画面外処理
 	if (InGame) {
@@ -1589,7 +1605,7 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOu
 		if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 	}
 
-	return field[X][Y].color;
+	return ((UseVirtualField) ? Virtualfield[X][Y].color : field[X][Y].color);
 
 }
 
@@ -1659,25 +1675,10 @@ int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChange
 int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 	//画面内の存在するブロックのみで計算する
 
-	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
+
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
-	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (x < BLOCK_PADDINGLEFT || BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT - 1 < x ||	//画面外
-				y < BLOCK_PADDINGUP || BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 1 < y ||	//画面外
-				field[x][y].color == BLOCK_TYPE_NO ||
-				field[x][y].color == BLOCK_TYPE_NUM ||
-				field[x][y].color == BLOCK_TYPE_TREE ||
-				field[x][y].color == BLOCK_TYPE_BLACK ||
-				field[x][y].color == BLOCK_TYPE_RAINBOW ||
-				field[x][y].color == BLOCK_TYPE_BOM) {//除外ブロック
-				DeleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
-			}
-			else {
-				DeleteFlag[x][y] = -1;
-			}
-		}
-	}
+	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
+	CreateSequenceCountTable(DeleteFlag, BLOCK_PADDINGLEFT, BLOCK_PADDINGUP, BLOCK_WIDTHNUM_INGAME, BLOCK_HEIGHTNUM_INGAME);
 
 	//削除前のブロックの一覧を作成する
 	BLOCK_TYPE old[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
@@ -1872,6 +1873,33 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 	return DelCount;
 }
 
+//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(TRUEで仮想の面を使用する)
+void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField) {
+	if (deleteFlag == NULL)	return;
+
+
+
+	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			field_info *f = &(field[x][y]);
+			if(UseVirtualField)	f = &(Virtualfield[x][y]);
+			if (!(X <= x && x < X +W && Y <= y && y < Y + H) ||	//範囲外
+				f->color == BLOCK_TYPE_NO ||
+				f->color == BLOCK_TYPE_NUM ||
+				f->color == BLOCK_TYPE_TREE ||
+				f->color == BLOCK_TYPE_BLACK ||
+				f->color == BLOCK_TYPE_RAINBOW ||
+				f->color == BLOCK_TYPE_BOM) {		//除外ブロック
+				deleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
+			}
+			else {
+				deleteFlag[x][y] = -1;
+			}
+		}
+	}
+}
+
 //画面外のブロックをすべて削除する(消去したブロックの数)
 int Phase_GameMain::Block_Delete_OutScreen() {
 	int count = 0;
@@ -1893,16 +1921,26 @@ int Phase_GameMain::Block_Delete_OutScreen() {
 }
 
 //隣接する同色ブロックにマーカーを付ける
-void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter) {
+void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField) {
+	if (deleteFlag == NULL)		return;		//マーカーを付けるテーブルがない場合
 	if (deleteFlag[x][y] != -1)	return;		//未探索ブロックじゃない場合
-	BLOCK_TYPE bt = field[x][y].color;      //ブロックの種類を記録する
-	deleteFlag[x][y] = ID;					//探索済み(探索IDを設定する)
+	BLOCK_TYPE bt = ((UseVirtualField) ? Virtualfield[x][y].color : field[x][y].color);	//ブロックの種類を記録する
+	deleteFlag[x][y] = ID;	//探索済み(探索IDを設定する)
 	(*Counter)++;
 
-	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(field[x + 1][y].color, bt, TRUE))	SequenceCount(x + 1, y, ID, deleteFlag, Counter);
-	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(field[x][y + 1].color, bt, TRUE))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
-	if (x - 1 >= 0 && isSameColorBlock(field[x - 1][y].color, bt, TRUE))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
-	if (y - 1 >= 0 && isSameColorBlock(field[x][y - 1].color, bt, TRUE))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
+	int FirstFlag = TRUE;
+
+	BLOCK_TYPE NextBlock = ((UseVirtualField) ? Virtualfield[x + 1][y].color : field[x + 1][y].color);
+	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(NextBlock, bt, FirstFlag))		SequenceCount(x + 1, y, ID, deleteFlag, Counter);
+
+	NextBlock = ((UseVirtualField) ? Virtualfield[x][y + 1].color : field[x][y + 1].color);
+	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
+
+	NextBlock = ((UseVirtualField) ? Virtualfield[x - 1][y].color : field[x - 1][y].color);
+	if (x - 1 >= 0 && isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
+
+	NextBlock = ((UseVirtualField) ? Virtualfield[x][y - 1].color : field[x][y - 1].color);
+	if (y - 1 >= 0 && isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
 
 //指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)
@@ -2280,22 +2318,28 @@ int Phase_GameMain::getCountTime() {
 	return Count_Time;
 }
 
-//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
+//指定したエリアにブロックを設置する(消去判定が入らないように設置します)
 void Phase_GameMain::setBlock_Rect(int x, int y, int w, int h) {
+	//仮想フィールド情報を更新する
+	Virtualfield_Update();
+
 	for (int bl_X = x; bl_X < x + w; bl_X++) {
 		for (int bl_Y = y; bl_Y < y + h; bl_Y++) {
-
-			BLOCK_TYPE bl = getBlockColor(bl_X - 1, bl_Y, FALSE, FALSE);//左側のブロック
-			BLOCK_TYPE br = getBlockColor(bl_X + 1, bl_Y, FALSE, FALSE);//右側のブロック
-			BLOCK_TYPE bu = getBlockColor(bl_X, bl_Y - 1, FALSE, FALSE);//上側のブロック
-			BLOCK_TYPE bd = getBlockColor(bl_X, bl_Y + 1, FALSE, FALSE);//下側のブロック
-
 			BLOCK_TYPE bt;
-			do {
-				bt = GetRandomBlockType_UNDER();//ランダムでブロックを決定する
-			} while (isSameColorBlock(bt, bl) || isSameColorBlock(bt, br) || isSameColorBlock(bt, bu) || isSameColorBlock(bt, bd));
+			int Count = 0;
 
-			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);
+			do {
+				Count = 0;
+				bt = GetRandomBlockType_UNDER();//ランダムでブロックを決定し仮想設置する
+				add_FraldBlock(bl_X, bl_Y, bt, TRUE, TRUE, NULL, TRUE);
+				int BlockFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
+				//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
+				CreateSequenceCountTable(BlockFlag, 0, 0, BLOCK_WIDTHNUM, BLOCK_HEIGHTNUM, TRUE);
+				SequenceCount(bl_X, bl_Y, 0, BlockFlag, &Count, TRUE);
+			} while (Count >= BLOCK_DELETE_LEN);
+
+			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);//本番の設置
+			
 		}
 	}
 }
@@ -2483,6 +2527,18 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 	if (Rand < 197)	return BLOCK_TYPE_PURPLE_ARROW_X;	//紫(平行矢印)
 	if (Rand < 198)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
 	return BLOCK_TYPE_TREE;								//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
+}
+
+//仮想フィールドを現在のフィールドと一致させる
+void Phase_GameMain::Virtualfield_Update() {
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			Virtualfield[x][y] = field[x][y];
+		}
+	}
+	printLog_I(_T("仮想フィールドを更新しました"));
+
+
 }
 
 //ポーズメニューのボタンが押されたとき
