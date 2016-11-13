@@ -55,7 +55,8 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BLACK.png)"));
 	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_RAINBOW.png)"));
 	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB_3.png)"));
+	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_2BOMB.png)"));
+	if ((Tex_BlockBOMB_Color = LoadGraph(_T("Data/Blocks/Block_BOMB_Color.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_BOMB_Color.png)"));
 	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
 	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
 	if ((Tex_BlockCenterEffect = LoadGraph(_T("Data/Blocks/Block_CENTER.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_CENTER.png)"));
@@ -224,7 +225,9 @@ void Phase_GameMain::Draw() {
 				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
 				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
 					//中心の場合かつ回転可能ブロックの場合
-					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)1, 0, Tex_BlockCenterEffect, TRUE, FALSE);
+					float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
+					
+					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
 				}
 			}
 		}
@@ -494,6 +497,8 @@ int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 		return Tex_BlockBOMB;
 	case BLOCK_TYPE_2BOM://2爆弾ブロック
 		return Tex_Block2BOMB;
+	case BLOCK_TYPE_BOM_Color://同色爆弾ブロック
+		return Tex_BlockBOMB_Color;
 	}
 	printLog_E(_T("テクスチャ番号を取得できませんでした(BLOCK_TYPE=%d)"), type);
 	return -1;	//エラー
@@ -705,6 +710,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		Block_Rainbow_Func();	//虹色ブロックの色を変更
 		Block_BOMB_Func();		//爆弾ブロックの処理
 		Block_2BOMB_Func();		//2爆弾ブロックの処理
+		Block_BOMBColor_Func();	//同色爆弾ブロックの処理
 		Loop_No = 4;
 		printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
 		break;
@@ -972,6 +978,7 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockCenterEffect);
 	DeleteGraph(Tex_BlockBOMB);
 	DeleteGraph(Tex_Block2BOMB);
+	DeleteGraph(Tex_BlockBOMB_Color);
 	
 	DeleteGraph(haikei);
 
@@ -1571,7 +1578,7 @@ void Phase_GameMain::Block_BOMB_Func() {
 	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 }
 
-//フィールドに存在するスリー爆弾ブロックを爆破する
+//フィールドに存在する2爆弾ブロックを爆破する
 void Phase_GameMain::Block_2BOMB_Func() {
 	int DeleteNum = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
@@ -1582,6 +1589,30 @@ void Phase_GameMain::Block_2BOMB_Func() {
 
 				//2個隣接しているブロックを破壊する
 				DeleteNum += Block_Delete(2, FALSE);
+			}
+		}
+	}
+
+	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
+}
+
+//フィールドに存在する同色爆弾ブロックを爆破する
+void Phase_GameMain::Block_BOMBColor_Func() {
+	int DeleteNum = 0;
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			if (field[x][y].color == BLOCK_TYPE_BOM_Color) {//爆弾ブロックの時
+				//自身の削除
+				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+				//真下のブロックの色を取得する
+				BLOCK_TYPE under = getBlockColor(x, y+1);
+
+				//同色ブロックを削除する
+				for (int x2 = BLOCK_PADDINGLEFT; x2 < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x2++) {
+					for (int y2 = BLOCK_PADDINGUP; y2 < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; y2++) {
+						Block_Delete_Color(x2, y2, under, BlockChangeMotionType_EXPLOSION, 40);
+					}
+				}
 			}
 		}
 	}
@@ -1665,8 +1696,8 @@ int Phase_GameMain::Block_Delete_Direct(int X, int Y, BlockChangeMotionType Play
 }
 
 //指定した座標が指定したブロックだった場合に削除(削除されたらTRUE)
-int Phase_GameMain::Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion, int MotionLengh) {
-	if (getBlockColor(X, Y) != type)	return FALSE;//違うブロックの場合は削除しない
+int Phase_GameMain::Block_Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion, int MotionLengh) {
+	if (!isSameColorBlock(type, getBlockColor(X, Y)))	return FALSE;//違う色のブロックの場合は削除しない
 
 	return Block_Delete_Direct(X, Y, PlayMotion, MotionLengh);
 }
@@ -1827,7 +1858,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 					}
 
 					//ついでに隣接する樹木ブロックも削除
-					if (Block_Delete_Type(x, y - 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
+					if (Block_Delete_Color(x, y - 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
@@ -1835,7 +1866,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						score.addScore(0, 80);
 						DelCount++;//上
 					}
-					if (Block_Delete_Type(x, y + 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
+					if (Block_Delete_Color(x, y + 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
@@ -1843,7 +1874,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						score.addScore(0, 80);
 						DelCount++;//下
 					}
-					if (Block_Delete_Type(x - 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
+					if (Block_Delete_Color(x - 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
@@ -1851,7 +1882,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						score.addScore(0, 80);
 						DelCount++;//左
 					}
-					if (Block_Delete_Type(x + 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
+					if (Block_Delete_Color(x + 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
 						//フライテキストの生成
 						double X, Y;
 						Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
@@ -1890,7 +1921,9 @@ void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLO
 				f->color == BLOCK_TYPE_TREE ||
 				f->color == BLOCK_TYPE_BLACK ||
 				f->color == BLOCK_TYPE_RAINBOW ||
-				f->color == BLOCK_TYPE_BOM) {		//除外ブロック
+				f->color == BLOCK_TYPE_BOM ||
+				f->color == BLOCK_TYPE_2BOM ||
+				f->color == BLOCK_TYPE_BOM_Color) {		//除外ブロック
 				deleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
 			}
 			else {
@@ -1954,7 +1987,9 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Onl
 		if (type1 == BLOCK_TYPE_RAINBOW)	return FALSE;
 		if (type1 == BLOCK_TYPE_BOM)		return FALSE;
 		if (type1 == BLOCK_TYPE_2BOM)		return FALSE;
+		if (type1 == BLOCK_TYPE_BOM_Color)	return FALSE;
 		if (type1 == BLOCK_TYPE_NUM)		return FALSE;
+
 		if (type2 == BLOCK_TYPE_NO)			return FALSE;
 		if (type2 == BLOCK_TYPE_TREE)		return FALSE;
 		if (type2 == BLOCK_TYPE_BLACK)		return FALSE;
@@ -1962,6 +1997,7 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Onl
 		if (type2 == BLOCK_TYPE_RAINBOW)	return FALSE;
 		if (type2 == BLOCK_TYPE_BOM)		return FALSE;
 		if (type2 == BLOCK_TYPE_2BOM)		return FALSE;
+		if (type2 == BLOCK_TYPE_BOM_Color)	return FALSE;
 		if (type2 == BLOCK_TYPE_NUM)		return FALSE;
 	}
 
@@ -2402,7 +2438,7 @@ void Phase_GameMain::Create_Wait_Block() {
 		Pattern = 4;
 	}
 	if (randomTable.getRand(0, 1000) < 100) {
-		//10％の確率で2爆弾ブロックを落とす
+		//10％の確率で同色爆弾ブロックを落とす
 		Pattern = 5;
 	}
 
@@ -2464,8 +2500,8 @@ void Phase_GameMain::Create_Wait_Block() {
 		//無条件で回転不可
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = FALSE;
 		break;
-	case 5://スリー爆弾の単体落下
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_2BOM;
+	case 5://同色爆弾の単体落下
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM_Color;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;

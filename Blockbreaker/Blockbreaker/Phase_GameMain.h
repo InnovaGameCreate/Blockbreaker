@@ -60,6 +60,7 @@ public://定数とかの宣言
 		BLOCK_TYPE_RAINBOW,		//虹色のブロック(下のブロックと同じ色になる)
 		BLOCK_TYPE_BOM,			//爆弾(問答無用で周囲のブロック破壊)
 		BLOCK_TYPE_2BOM,		//2爆弾(2ブロック隣接で消去する)
+		BLOCK_TYPE_BOM_Color,	//同色爆弾(真下と同色のブロックを消去する)
 		BLOCK_TYPE_NUM			//ブロックの種類の数(画面外ブロック)
 	};
 
@@ -243,6 +244,7 @@ private:
 	int Tex_BlockRAINBOW;			//虹色ブロック
 	int Tex_BlockBOMB;				//爆弾ブロック
 	int Tex_Block2BOMB;				//2爆弾ブロック
+	int Tex_BlockBOMB_Color;		//同色爆弾ブロック
 	int Tex_BlockFireEffect;		//炎エフェクトブロック
 	int Tex_BlockFireEffect2;		//炎エフェクトブロック2(炭)
 	int Tex_BlockCenterEffect;		//回転の中心であることを分かるようにするエフェクト
@@ -283,7 +285,8 @@ private:
 	void Block_Black_Func();		//フィールドに存在する黒色ブロックの色を決定する
 	void Block_Rainbow_Func();		//フィールドに存在する虹色ブロックの色を決定する
 	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
-	void Block_2BOMB_Func();	//フィールドに存在するスリー爆弾ブロックを爆破する
+	void Block_2BOMB_Func();		//フィールドに存在するスリー爆弾ブロックを爆破する
+	void Block_BOMBColor_Func();	//フィールドに存在する同色爆弾ブロックを爆破する
 
 	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
 	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(移動出来る量<=MoveVal)
@@ -292,7 +295,7 @@ private:
 	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
 	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
 	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40, int Delay = 0);		//フィールドブロックを削除する
-	int Block_Delete_Type(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
+	int Block_Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
 	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//連続するフィールドブロックを削除する(Flag_EventをTRUEで消去によって発動する効果も発動する)(消去したブロックの数)
 	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
 	void under_Block();							//下からブロックがわいてくる
