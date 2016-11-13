@@ -298,7 +298,7 @@ private:
 	void under_Block();							//下からブロックがわいてくる
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField = FALSE);	//隣接する同色ブロックのカウント
 	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(TRUEで仮想の面を使用する)
-	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUEで簡略計算します)
+	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUE色のあるブロックのみ判定)
 	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
 	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay);	//フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
 	void Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength, int Delay);				//フィールドのブロックに変化モーション(通常)を設定する

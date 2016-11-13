@@ -567,7 +567,7 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 	{
-
+		//落下ブロックの待機列に下からブロックが沸いてくる命令があるときは下からブロックを沸かせる
 		if (Count_Turn % 4 == 0) {
 			under_Block();
 		}
@@ -1928,24 +1928,24 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 	deleteFlag[x][y] = ID;	//探索済み(探索IDを設定する)
 	(*Counter)++;
 
-	int FirstFlag = TRUE;
+	int OnlyColor = TRUE;
 
 	BLOCK_TYPE NextBlock = ((UseVirtualField) ? Virtualfield[x + 1][y].color : field[x + 1][y].color);
-	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(NextBlock, bt, FirstFlag))		SequenceCount(x + 1, y, ID, deleteFlag, Counter);
+	if (x + 1 < BLOCK_WIDTHNUM	&& isSameColorBlock(NextBlock, bt, OnlyColor))		SequenceCount(x + 1, y, ID, deleteFlag, Counter);
 
 	NextBlock = ((UseVirtualField) ? Virtualfield[x][y + 1].color : field[x][y + 1].color);
-	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
+	if (y + 1 < BLOCK_HEIGHTNUM	&& isSameColorBlock(NextBlock, bt, OnlyColor))	SequenceCount(x, y + 1, ID, deleteFlag, Counter);
 
 	NextBlock = ((UseVirtualField) ? Virtualfield[x - 1][y].color : field[x - 1][y].color);
-	if (x - 1 >= 0 && isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
+	if (x - 1 >= 0 && isSameColorBlock(NextBlock, bt, OnlyColor))	SequenceCount(x - 1, y, ID, deleteFlag, Counter);
 
 	NextBlock = ((UseVirtualField) ? Virtualfield[x][y - 1].color : field[x][y - 1].color);
-	if (y - 1 >= 0 && isSameColorBlock(NextBlock, bt, FirstFlag))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
+	if (y - 1 >= 0 && isSameColorBlock(NextBlock, bt, OnlyColor))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
 
 //指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)
-int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int FirstFlag) {
-	if (!FirstFlag) {//簡略計算でないとき
+int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock) {
+	if (OnlyColorBlock) {//簡略計算でないとき
 		//色の概念の無いブロックの場合
 		if (type1 == BLOCK_TYPE_NO)			return FALSE;
 		if (type1 == BLOCK_TYPE_TREE)		return FALSE;
@@ -1953,6 +1953,7 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Fir
 		if (type1 == BLOCK_TYPE_NOROUND)	return FALSE;
 		if (type1 == BLOCK_TYPE_RAINBOW)	return FALSE;
 		if (type1 == BLOCK_TYPE_BOM)		return FALSE;
+		if (type1 == BLOCK_TYPE_2BOM)		return FALSE;
 		if (type1 == BLOCK_TYPE_NUM)		return FALSE;
 		if (type2 == BLOCK_TYPE_NO)			return FALSE;
 		if (type2 == BLOCK_TYPE_TREE)		return FALSE;
@@ -1960,6 +1961,7 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Fir
 		if (type2 == BLOCK_TYPE_NOROUND)	return FALSE;
 		if (type2 == BLOCK_TYPE_RAINBOW)	return FALSE;
 		if (type2 == BLOCK_TYPE_BOM)		return FALSE;
+		if (type2 == BLOCK_TYPE_2BOM)		return FALSE;
 		if (type2 == BLOCK_TYPE_NUM)		return FALSE;
 	}
 
