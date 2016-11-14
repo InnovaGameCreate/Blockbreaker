@@ -2536,15 +2536,10 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_FALL() {
 
 	//ここから特殊ブロック↓
 	if (Rand < 89)	return BLOCK_TYPE_RED_ARROW_X;		//赤(平行矢印)
-	if (Rand < 90)	return BLOCK_TYPE_RED_ARROW_Y;		//赤(垂直矢印)
 	if (Rand < 91)	return BLOCK_TYPE_BLUE_ARROW_X;		//青(平行矢印)
-	if (Rand < 92)	return BLOCK_TYPE_BLUE_ARROW_Y;		//青(垂直矢印)
 	if (Rand < 93)	return BLOCK_TYPE_YELLOW_ARROW_X;	//黄(平行矢印)
-	if (Rand < 94)	return BLOCK_TYPE_YELLOW_ARROW_Y;	//黄(垂直矢印)
 	if (Rand < 95)	return BLOCK_TYPE_GREEN_ARROW_X;	//緑(平行矢印)
-	if (Rand < 96)	return BLOCK_TYPE_GREEN_ARROW_Y;	//緑(垂直矢印)
 	if (Rand < 97)	return BLOCK_TYPE_PURPLE_ARROW_X;	//紫(平行矢印)
-	if (Rand < 98)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
 	return BLOCK_TYPE_RAINBOW;							//虹色のブロック(下のブロックと同じ色になる)
 }
 
@@ -2561,15 +2556,10 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 
 	//ここから特殊ブロック↓
 	if (Rand < 189)	return BLOCK_TYPE_RED_ARROW_X;		//赤(平行矢印)
-	if (Rand < 190)	return BLOCK_TYPE_RED_ARROW_Y;		//赤(垂直矢印)
 	if (Rand < 191)	return BLOCK_TYPE_BLUE_ARROW_X;		//青(平行矢印)
-	if (Rand < 192)	return BLOCK_TYPE_BLUE_ARROW_Y;		//青(垂直矢印)
 	if (Rand < 193)	return BLOCK_TYPE_YELLOW_ARROW_X;	//黄(平行矢印)
-	if (Rand < 194)	return BLOCK_TYPE_YELLOW_ARROW_Y;	//黄(垂直矢印)
 	if (Rand < 195)	return BLOCK_TYPE_GREEN_ARROW_X;	//緑(平行矢印)
-	if (Rand < 196)	return BLOCK_TYPE_GREEN_ARROW_Y;	//緑(垂直矢印)
 	if (Rand < 197)	return BLOCK_TYPE_PURPLE_ARROW_X;	//紫(平行矢印)
-	if (Rand < 198)	return BLOCK_TYPE_PURPLE_ARROW_Y;	//紫(垂直矢印)
 	return BLOCK_TYPE_TREE;								//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
 }
 
