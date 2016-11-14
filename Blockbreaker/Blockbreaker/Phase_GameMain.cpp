@@ -579,7 +579,6 @@ void Phase_GameMain::Update() {
 			under_Block();
 		}
 		else if(Count_Turn % 7 == 0) {
-			//木ブロックで再上面を埋める
 			for (int i = BLOCK_PADDINGLEFT; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++)	add_FraldBlock(i, BLOCK_PADDINGUP, BLOCK_TYPE_TREE);
 		}
 		UpdateBlockRequest(GameCycle_FALL);
@@ -608,7 +607,7 @@ int Phase_GameMain::Update_FallBlock() {
 
 	if (isFallBlock_Falling()) {//落下中の場合
 		fallBlockInfo.FallCount--;
-		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 5;	//高速落下モードの場合カウントをさらに入れる
+		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 10;	//高速落下モードの場合カウントをさらに入れる
 		if (fallBlockInfo.FallCount < 0)		fallBlockInfo.FallCount = 0;	//落下カウントが0以下だと都合が悪いので
 		if (fallBlockInfo.Key_LRMove > 0) {
 			//右移動
