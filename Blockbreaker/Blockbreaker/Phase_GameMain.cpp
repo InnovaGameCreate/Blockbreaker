@@ -197,10 +197,11 @@ void Phase_GameMain::Draw() {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, 0, &X, &Y);
-
+				double Per = -(fallBlockInfo.FallCount / 60.);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
+				
 				//全体ずらしの分描画座標をずらす
-				if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+				//if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
 					X += Field_PaddingX;
 					Y += Field_PaddingY;
 					//画面外に出てしまう場合はでないように調整する
@@ -219,13 +220,14 @@ void Phase_GameMain::Draw() {
 						Y = (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE;
 					}
 
-				}
+				//}
 
 
 				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
 				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
 					//中心の場合かつ回転可能ブロックの場合
-					float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
+					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
+					float Scale = 1;
 					
 					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
 				}
