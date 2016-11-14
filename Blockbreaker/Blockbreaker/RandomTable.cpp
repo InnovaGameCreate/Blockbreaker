@@ -1,4 +1,4 @@
-//乱数テーブル
+//乱数テーブル(最小値以上最大値未満)
 //author:Kisogawa(2016/09/20)
 
 #include "RandomTable.h"
@@ -48,7 +48,7 @@ void RandomTable::CreateRandomTable(int tableSize) {
 	randomTable_MinVal = getMin();
 	//最大値を記録
 	randomTable_maxVal = getMax();
-	printLog_I(_T("乱数表の生成完了(size=%.2fKB)"), (sizeof(unsigned int) * TableSize) /1024.);
+	printLog_I(_T("乱数表の生成完了(size=%.2fKB)"), (sizeof(unsigned int) * TableSize) / 1024.);
 }
 
 //乱数テーブルでの最小値を取得する
@@ -107,5 +107,52 @@ double RandomTable::getRand(double min, double max, int Place) {
 	unsigned int r = randomTable[Place];	//指定位置の乱数を取得
 
 	//乱数表の最大値、最小値、入力値の最小値、最大値より指定範囲の乱数を算出する
-	return map(r, randomTable_MinVal, randomTable_maxVal, min, max);
+	return map(r, randomTable_MinVal, randomTable_maxVal + 1, min, max);
+}
+
+//指定した個数の被り無しの乱数を取得する(int型)(取得する値の範囲が大きい場合はメモリをめっちゃ食います)
+void RandomTable::getRand_num(int min, int max, int *rand, int ranmd_num) {
+	if (rand == NULL)		return;	//引数の値がおかしい
+	if (ranmd_num <= 0)		return;	//引数の値がおかしい
+
+	//引数の配列を初期化する
+	for (int i = 0; i < ranmd_num; i++) {
+		rand[i] = 0;
+	}
+
+	if (min > max) {//最小値と最大値が逆の場合、入れ替える
+		int t = min;
+		min = max;
+		max = t;
+	}
+	//最小値、最大値から生成可能な乱数の個数を算出
+	int len = abs(max - min);
+	
+
+	//テーブルを作成する
+	int *table = new int[len];
+	if (table == NULL)	return;		//メモリの確保に失敗
+	for (int i = 0; i < len; i++) {
+		table[i] = min + i;
+	}
+
+	//テーブルのシャッフルを行う
+	for (int i = 0; i < min(ranmd_num, len); i++) {
+		int place = (int)getRand(0, len);
+		if (place >= len) {
+			place = len - 1;
+			printLog_C(_T("配列オーバーを検知(修復済み)"));
+		}
+		//入れ替え
+		int t = table[place];
+		table[place] = table[i];
+		table[i] = t;
+	}
+
+	//配列に記録する
+	for (int i = 0; i < min(ranmd_num, len); i++) {
+		rand[i] = table[i];
+	}
+
+	delete table;	//メモリ領域の開放
 }
