@@ -579,7 +579,7 @@ void Phase_GameMain::Update() {
 			under_Block();
 		}
 		else if(Count_Turn % 7 == 0) {
-			int ran[4];
+			int ran[5];
 			randomTable.getRand_num(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT, ran, ARRAY_LENGTH(ran));
 			for (int i = 0; i < ARRAY_LENGTH(ran); i++) {
 				add_FraldBlock(ran[i], BLOCK_PADDINGUP, BLOCK_TYPE_TREE);
