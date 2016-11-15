@@ -93,17 +93,13 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 
 	//頂点データの準備(UV座標も再計算する)
 	ColorWaveVertex.Vert[0].pos = VGet((float)(X1), (float)(Y1), 0.0f);
-	//ColorWaveVertex.Vert[0].u = 0;	ColorWaveVertex.Vert[0].v = 0;
-	//ColorWaveVertex.Vert[0].su = 0;	ColorWaveVertex.Vert[0].sv = 0;
+	ColorWaveVertex.Vert[0].u = 0;	ColorWaveVertex.Vert[0].v = 0;
 	ColorWaveVertex.Vert[1].pos = VGet((float)(X1 + W), (float)(Y1), 0.0f);
-	//ColorWaveVertex.Vert[1].u = RealX / W;	ColorWaveVertex.Vert[1].v = 0;
-	//ColorWaveVertex.Vert[1].su = RealX / W;	ColorWaveVertex.Vert[1].sv = 0;
+	ColorWaveVertex.Vert[1].u = W / RealX;	ColorWaveVertex.Vert[1].v = 0;
 	ColorWaveVertex.Vert[2].pos = VGet((float)(X1), (float)(Y1 + H), 0.0f);
-	//ColorWaveVertex.Vert[2].u = 0;	ColorWaveVertex.Vert[2].v = RealY / H;
-	//ColorWaveVertex.Vert[2].su = 0;	ColorWaveVertex.Vert[2].sv = RealY / H;
+	ColorWaveVertex.Vert[2].u = 0;	ColorWaveVertex.Vert[2].v = H / RealY;
 	ColorWaveVertex.Vert[3].pos = VGet((float)(X1 + W), (float)(Y1 + H), 0.0f);
-	//ColorWaveVertex.Vert[3].u = RealX / W;	ColorWaveVertex.Vert[3].v = RealY / H;
-	//ColorWaveVertex.Vert[3].su = RealX / W;	ColorWaveVertex.Vert[3].sv = RealY / H;
+	ColorWaveVertex.Vert[3].u = W / RealX;	ColorWaveVertex.Vert[3].v = H / RealY;
 	ColorWaveVertex.Vert[4] = ColorWaveVertex.Vert[2];
 	ColorWaveVertex.Vert[5] = ColorWaveVertex.Vert[1];
 
