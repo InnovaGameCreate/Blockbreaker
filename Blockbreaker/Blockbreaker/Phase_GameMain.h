@@ -319,6 +319,7 @@ private:
 	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
 	void Virtualfield_Update();						//仮想フィールドを現在のフィールドと一致させる
 	void setBlock_Rect(int x, int y, int w, int h);	//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
+	int getBlock_Upper(int x);						//指定したX座標の一番上のブロックのY座標を取得する(見えている座標のみで判断)
 public:
 
 

@@ -83,23 +83,25 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 
 	ClearDrawScreen();
 
+
+	float RealX, RealY;	//実際のテクスチャの大きさ
+	GetGraphSizeF(srcImage, &RealX, &RealY);
+
 	float W, H;	//実際のテクスチャの大きさ
-
-	int RealX = Phase_GameMain::BLOCK_SIZE, RealY = Phase_GameMain::BLOCK_SIZE;	//実際に描画する大きさ
-
-	GetGraphSizeF(srcImage, &W, &H);
-	GetGraphSizeF(Effect1, &W, &H);
-	GetGraphSizeF(Effect2, &W, &H);
+	W = Phase_GameMain::BLOCK_SIZE;
+	H = Phase_GameMain::BLOCK_SIZE;
+	W = RealX;
+	H = RealY;
 
 	//頂点データの準備(UV座標も再計算する)
 	ColorWaveVertex.Vert[0].pos = VGet((float)(X1), (float)(Y1), 0.0f);
-	ColorWaveVertex.Vert[0].u = 0;	ColorWaveVertex.Vert[0].v = 0;
+	//ColorWaveVertex.Vert[0].u = 0;	ColorWaveVertex.Vert[0].v = 0;
 	ColorWaveVertex.Vert[1].pos = VGet((float)(X1 + W), (float)(Y1), 0.0f);
-	ColorWaveVertex.Vert[1].u = W / RealX;	ColorWaveVertex.Vert[1].v = 0;
+	//ColorWaveVertex.Vert[1].u = W / RealX;	ColorWaveVertex.Vert[1].v = 0;
 	ColorWaveVertex.Vert[2].pos = VGet((float)(X1), (float)(Y1 + H), 0.0f);
-	ColorWaveVertex.Vert[2].u = 0;	ColorWaveVertex.Vert[2].v = H / RealY;
+	//ColorWaveVertex.Vert[2].u = 0;	ColorWaveVertex.Vert[2].v = H / RealY;
 	ColorWaveVertex.Vert[3].pos = VGet((float)(X1 + W), (float)(Y1 + H), 0.0f);
-	ColorWaveVertex.Vert[3].u = W / RealX;	ColorWaveVertex.Vert[3].v = H / RealY;
+	//ColorWaveVertex.Vert[3].u = W / RealX;	ColorWaveVertex.Vert[3].v = H / RealY;
 	ColorWaveVertex.Vert[4] = ColorWaveVertex.Vert[2];
 	ColorWaveVertex.Vert[5] = ColorWaveVertex.Vert[1];
 

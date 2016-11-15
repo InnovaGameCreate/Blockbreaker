@@ -140,6 +140,79 @@ void Phase_GameMain::Draw() {
 		GAMEWINDOW_WIDTH + BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_HEIGHT + BLOCK_PADDINGUP*BLOCK_SIZE,
 		GetColor(0xb3, 0x65, 0xe5), TRUE);
 
+	//フィールド全体のズレを計算する
+	double Field_PaddingX = 0;
+	double Field_PaddingY = 0;
+	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
+		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+		//上の計算結果より、描画座標の計算
+		Field_PaddingX += D * cos(deg_to_rad(Rota));
+		Field_PaddingY += D * sin(deg_to_rad(Rota));
+	}
+	//落下中ブロックの描画
+	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			int ShadowDrawDFlag = FALSE;
+			int yCount = 0;	//y方向に存在するブロックの数
+			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
+				double X, Y;
+				double Per = -(fallBlockInfo.FallCount / 60.);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
+
+
+				X += Field_PaddingX;
+				Y += Field_PaddingY;
+				//画面外に出てしまう場合はでないように調整する
+				int Dan = 0;//ブロックが存在する段数
+				for (int y2 = 0; y2 < FALLBLOCK_SIZE; y2++) {
+					for (int x2 = 0; x2 < FALLBLOCK_SIZE; x2++) {
+						if (fallBlockInfo.BlockID[x2][y2] != BLOCK_TYPE_NO) {
+							Dan = y2;
+							//ループを抜ける
+							x2 = FALLBLOCK_SIZE;
+							y2 = FALLBLOCK_SIZE;
+						}
+					}
+				}
+				if (Y < (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE) {
+					Y = (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE;
+				}
+
+				//ブロックの下側に影を描画する(結構クソ)
+				//if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO && ShadowDrawDFlag == FALSE) {
+				//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+				//	DrawBox(X+3, Y+3, X + BLOCK_SIZE-3, GAMEWINDOW_HEIGHT + BLOCK_SIZE-3, GetColor(0, 0, 0), TRUE);
+				//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				//	ShadowDrawDFlag = TRUE;
+				//}
+
+				//ブロックの落下予想地点の描画
+				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
+					//ブロックの落下予想地点にブロックを描画する
+					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
+					double aX, aY;
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &aX, &aY);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+					DrawBlock(aX, aY, fallBlockInfo.BlockID[x][y]);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					yCount++;
+				}
+
+
+				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
+				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
+					//中心の場合かつ回転可能ブロックの場合
+					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
+					float Scale = 1;
+
+					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
+				}
+			}
+		}
+	}
+
 	//フィールドブロックの描画
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -151,7 +224,7 @@ void Phase_GameMain::Draw() {
 			//ゲームオーバー時に下に落下させる
 			if (getPauseMode() == PauseMode_GameOver) {
 				if (Count_Pause < 300)	Y += 1 / 2.*0.2*Count_Pause*Count_Pause;
-				else					Y += 1 / 2.*0.2*300*300;
+				else					Y += 1 / 2.*0.2 * 300 * 300;
 			}
 
 			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
@@ -182,58 +255,7 @@ void Phase_GameMain::Draw() {
 		}
 	}
 
-	//フィールド全体のズレを計算する
-	double Field_PaddingX = 0;
-	double Field_PaddingY = 0;
-	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
-		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
-		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-		//上の計算結果より、描画座標の計算
-		Field_PaddingX += D * cos(deg_to_rad(Rota));
-		Field_PaddingY += D * sin(deg_to_rad(Rota));
-	}
-	//落下中ブロックの描画
-	if (isFallBlock_Enable()) {//落下ブロックが有効な時
-		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
-			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				double X, Y;
-				double Per = -(fallBlockInfo.FallCount / 60.);
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
-				
-				//全体ずらしの分描画座標をずらす
-				//if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
-					X += Field_PaddingX;
-					Y += Field_PaddingY;
-					//画面外に出てしまう場合はでないように調整する
-					int Dan = 0;//ブロックが存在する段数
-					for (int y2 = 0; y2 < FALLBLOCK_SIZE; y2++) {
-						for (int x2 = 0; x2 < FALLBLOCK_SIZE; x2++) {
-							if (fallBlockInfo.BlockID[x2][y2] != BLOCK_TYPE_NO) {
-								Dan = y2;
-								//ループを抜ける
-								x2 = FALLBLOCK_SIZE;
-								y2 = FALLBLOCK_SIZE;
-							}
-						}
-					}
-					if (Y < (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE) {
-						Y = (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE;
-					}
 
-				//}
-
-
-				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
-				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
-					//中心の場合かつ回転可能ブロックの場合
-					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
-					float Scale = 1;
-					
-					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
-				}
-			}
-		}
-	}
 
 	//フライテキストを描画する
 	flyText.Draw();
@@ -270,7 +292,7 @@ void Phase_GameMain::Draw() {
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), FALSE);
-			}
+}
 		}
 	}
 #endif // _DEBUG_GAMEMAIN_
@@ -284,7 +306,7 @@ void Phase_GameMain::Draw() {
 	DrawGraph(0, 0, haikei, FALSE);
 
 	//次の落下ブロックの描画
-	DrawBox(550, 60, 550 + BLOCK_SIZE * (FALLBLOCK_SIZE+2), 60 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), GetColor(10, 10, 10), TRUE);
+	DrawBox(550, 60, 550 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), 60 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), GetColor(10, 10, 10), TRUE);
 	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 			double X, Y;
@@ -344,7 +366,7 @@ void Phase_GameMain::Draw() {
 	for (int i = BLOCK_PADDINGUP; i < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; i++) {
 		DrawFormatStringToHandle(20, GAMEWINDOW_PADDINGY + (i - BLOCK_PADDINGUP) * BLOCK_SIZE + 15,
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
-}
+	}
 #endif // _DEBUG_GAMEMAIN_
 
 
@@ -372,7 +394,7 @@ void Phase_GameMain::Draw() {
 
 		//上から文字が落ちてくる
 		const int strW = 60;
-		int strX = (int)(WINDOW_WIDTH/2. - strW * (9/2.));
+		int strX = (int)(WINDOW_WIDTH / 2. - strW * (9 / 2.));
 		double strY = 460;
 
 		strY = 460 * Count_Pause / 40.;
@@ -420,7 +442,7 @@ void Phase_GameMain::Draw() {
 		//選択肢の項目の描画
 		pauseMenu.Draw();
 	}
-		break;
+	break;
 	}
 }
 
@@ -578,7 +600,7 @@ void Phase_GameMain::Update() {
 		if (Count_Turn % 4 == 0) {
 			under_Block();
 		}
-		else if(Count_Turn % 7 == 0) {
+		else if (Count_Turn % 7 == 0) {
 			int ran[5];
 			randomTable.getRand_num(BLOCK_PADDINGLEFT, BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT, ran, ARRAY_LENGTH(ran));
 			for (int i = 0; i < ARRAY_LENGTH(ran); i++) {
@@ -935,8 +957,8 @@ void Phase_GameMain::Update_Final() {
 
 			//ゲームオーバーが近い場合は左右に揺らす
 			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				if(getBlockColor(x, GAMEOVER_BORDER ) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountTime() * 30, 3, 0);
-				X += randomTable.getRand(-2, 2, getCountTime()+x*y+y);
+				if (getBlockColor(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountTime() * 30, 3, 0);
+				X += randomTable.getRand(-2, 2, getCountTime() + x*y + y);
 			}
 
 			//座標の記録
@@ -985,7 +1007,7 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockBOMB);
 	DeleteGraph(Tex_Block2BOMB);
 	DeleteGraph(Tex_BlockBOMB_Color);
-	
+
 	DeleteGraph(haikei);
 
 
@@ -1611,7 +1633,7 @@ void Phase_GameMain::Block_BOMBColor_Func() {
 				//自身の削除
 				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
 				//真下のブロックの色を取得する
-				BLOCK_TYPE under = getBlockColor(x, y+1);
+				BLOCK_TYPE under = getBlockColor(x, y + 1);
 
 				//同色ブロックを削除する
 				for (int x2 = BLOCK_PADDINGLEFT; x2 < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x2++) {
@@ -1920,8 +1942,8 @@ void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLO
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			field_info *f = &(field[x][y]);
-			if(UseVirtualField)	f = &(Virtualfield[x][y]);
-			if (!(X <= x && x < X +W && Y <= y && y < Y + H) ||	//範囲外
+			if (UseVirtualField)	f = &(Virtualfield[x][y]);
+			if (!(X <= x && x < X + W && Y <= y && y < Y + H) ||	//範囲外
 				f->color == BLOCK_TYPE_NO ||
 				f->color == BLOCK_TYPE_NUM ||
 				f->color == BLOCK_TYPE_TREE ||
@@ -2383,7 +2405,7 @@ void Phase_GameMain::setBlock_Rect(int x, int y, int w, int h) {
 			} while (Count >= BLOCK_DELETE_LEN);
 
 			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);//本番の設置
-			
+
 		}
 	}
 }
@@ -2591,4 +2613,12 @@ void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
 		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
 		break;
 	}
+}
+
+//指定したX座標の一番上のブロックのY座標を取得する(見えている座標のみで判断)
+int Phase_GameMain::getBlock_Upper(int x) {
+	for (int y = BLOCK_PADDINGUP; y < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; y++) {
+		if (getBlockColor(x, y) != BLOCK_TYPE_NO)	return y;
+	}
+	return BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//最下段の一段下の座標を返す
 }
