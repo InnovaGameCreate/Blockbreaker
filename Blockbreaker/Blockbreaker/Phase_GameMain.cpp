@@ -60,9 +60,11 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect.png)"));
 	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_FireEffect2.png)"));
 	if ((Tex_BlockCenterEffect = LoadGraph(_T("Data/Blocks/Block_CENTER.png"))) == -1)					printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_CENTER.png)"));
+	if ((Tex_BlockBack = LoadGraph(_T("Data/Blocks/Block_Back.png"))) == -1)							printLog_E(_T("ファイルの読み込み失敗(Data/Blocks/Block_Back.png)"));
 
 	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
-
+	if ((Tex_FieldBack = LoadGraph(_T("Data/image/BlockField_Back.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/BlockField_Back.png)"));
+	
 
 	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
@@ -136,126 +138,12 @@ void Phase_GameMain::Draw() {
 	ClearDrawScreen();
 
 	//画面一杯に四角形を描画する(後々テクスチャに置き換わる)
-	DrawBox(BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE,
-		GAMEWINDOW_WIDTH + BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_HEIGHT + BLOCK_PADDINGUP*BLOCK_SIZE,
-		GetColor(0xb3, 0x65, 0xe5), TRUE);
+	DrawGraph(BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, Tex_FieldBack, FALSE);
 
-	//フィールド全体のズレを計算する
-	double Field_PaddingX = 0;
-	double Field_PaddingY = 0;
-	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
-		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
-		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-		//上の計算結果より、描画座標の計算
-		Field_PaddingX += D * cos(deg_to_rad(Rota));
-		Field_PaddingY += D * sin(deg_to_rad(Rota));
-	}
-	//落下中ブロックの描画
-	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+	Draw_FallBlock();	//落下ブロックの描画
 
-		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
-			int ShadowDrawDFlag = FALSE;
-			int yCount = 0;	//y方向に存在するブロックの数
-			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
-				double X, Y;
-				double Per = -(fallBlockInfo.FallCount / 60.);
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
-
-
-				X += Field_PaddingX;
-				Y += Field_PaddingY;
-				//画面外に出てしまう場合はでないように調整する
-				int Dan = 0;//ブロックが存在する段数
-				for (int y2 = 0; y2 < FALLBLOCK_SIZE; y2++) {
-					for (int x2 = 0; x2 < FALLBLOCK_SIZE; x2++) {
-						if (fallBlockInfo.BlockID[x2][y2] != BLOCK_TYPE_NO) {
-							Dan = y2;
-							//ループを抜ける
-							x2 = FALLBLOCK_SIZE;
-							y2 = FALLBLOCK_SIZE;
-						}
-					}
-				}
-				if (Y < (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE) {
-					Y = (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE;
-				}
-
-				//ブロックの下側に影を描画する(結構クソ)
-				//if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO && ShadowDrawDFlag == FALSE) {
-				//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-				//	DrawBox(X+3, Y+3, X + BLOCK_SIZE-3, GAMEWINDOW_HEIGHT + BLOCK_SIZE-3, GetColor(0, 0, 0), TRUE);
-				//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-				//	ShadowDrawDFlag = TRUE;
-				//}
-
-				//ブロックの落下予想地点の描画
-				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
-					//ブロックの落下予想地点にブロックを描画する
-					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
-					double aX, aY;
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &aX, &aY);
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-					DrawBlock(aX, aY, fallBlockInfo.BlockID[x][y]);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-					yCount++;
-				}
-
-
-				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
-				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
-					//中心の場合かつ回転可能ブロックの場合
-					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
-					float Scale = 1;
-
-					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
-				}
-			}
-		}
-	}
-
-	//フィールドブロックの描画
-	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
-		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//描画先の座標を取得
-			double X, Y;
-			X = field[x][y].DrawPlaceX;
-			Y = field[x][y].DrawPlaceY;
-
-			//ゲームオーバー時に下に落下させる
-			if (getPauseMode() == PauseMode_GameOver) {
-				if (Count_Pause < 300)	Y += 1 / 2.*0.2*Count_Pause*Count_Pause;
-				else					Y += 1 / 2.*0.2 * 300 * 300;
-			}
-
-			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
-			if (t != BlockChangeMotionType_NO && field[x][y].blockChangeMotion.Count < 0)	t = BlockChangeMotionType_NO;
-			switch (t) {
-			case BlockChangeMotionType_NO:
-				//変化モーション無しの場合は無難に描画する
-				DrawBlock(X, Y, field[x][y].color);
-				break;
-			case BlockChangeMotionType_NOMAL:
-				//普通の変化モーション
-				DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
-				//変化量に応じて半透明で描画する
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255));
-				DrawBlock(X, Y, field[x][y].blockChangeMotion.To);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-				break;
-			case BlockChangeMotionType_EXPLOSION:
-				//爆発(シェーダに頑張ってもらう)
-				ShaderBackGround_DeleteBlock(X, Y, field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length
-					, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Tex_BlockFireEffect2);
-				break;
-			case BlockChangeMotionType_SMALL:
-				//小さくなる
-				DrawBlock(X, Y, field[x][y].blockChangeMotion.From, 1 - (field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length));
-				break;
-			}
-		}
-	}
-
-
+	Draw_FieldBlock();	//フィールドブロックの描画
+	
 
 	//フライテキストを描画する
 	flyText.Draw();
@@ -292,7 +180,7 @@ void Phase_GameMain::Draw() {
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), FALSE);
-}
+			}
 		}
 	}
 #endif // _DEBUG_GAMEMAIN_
@@ -443,6 +331,129 @@ void Phase_GameMain::Draw() {
 		pauseMenu.Draw();
 	}
 	break;
+	}
+}
+
+//落下ブロックの描画
+void Phase_GameMain::Draw_FallBlock() {
+	//フィールド全体のズレを計算する
+	double Field_PaddingX = 0;
+	double Field_PaddingY = 0;
+	if (Block_AllMovedata.Enable) {//全体ずらすが有効な場合
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//現在の移動距離の計算
+		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
+		//上の計算結果より、描画座標の計算
+		Field_PaddingX += D * cos(deg_to_rad(Rota));
+		Field_PaddingY += D * sin(deg_to_rad(Rota));
+	}
+	//落下中ブロックの描画
+	if (isFallBlock_Enable()) {//落下ブロックが有効な時
+
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			int ShadowDrawDFlag = FALSE;
+			int yCount = 0;	//y方向に存在するブロックの数
+			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
+				//ブロックの落下予想地点の描画
+				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
+					//ブロックの落下予想地点にブロックを描画する
+					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
+					double aX, aY;
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &aX, &aY);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+					//中心座標に変換
+					int X = (int)(aX + BLOCK_SIZE / 2.);
+					int Y = (int)(aY + BLOCK_SIZE / 2.);
+					DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)1, 0, Tex_BlockBack, TRUE, FALSE);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+					DrawBlock(aX, aY, fallBlockInfo.BlockID[x][y]);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					yCount++;
+				}
+			}
+		}
+
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			int ShadowDrawDFlag = FALSE;
+			int yCount = 0;	//y方向に存在するブロックの数
+			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
+				double X, Y;
+				double Per = -(fallBlockInfo.FallCount / 60.);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
+
+
+				X += Field_PaddingX;
+				Y += Field_PaddingY;
+				//画面外に出てしまう場合はでないように調整する
+				int Dan = 0;//ブロックが存在する段数
+				for (int y2 = 0; y2 < FALLBLOCK_SIZE; y2++) {
+					for (int x2 = 0; x2 < FALLBLOCK_SIZE; x2++) {
+						if (fallBlockInfo.BlockID[x2][y2] != BLOCK_TYPE_NO) {
+							Dan = y2;
+							//ループを抜ける
+							x2 = FALLBLOCK_SIZE;
+							y2 = FALLBLOCK_SIZE;
+						}
+					}
+				}
+				if (Y < (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE) {
+					Y = (y - Dan + BLOCK_PADDINGUP)*BLOCK_SIZE;
+				}
+
+				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
+				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
+					//中心の場合かつ回転可能ブロックの場合
+					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
+					float Scale = 1;
+
+					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
+				}
+			}
+		}
+	}
+}
+
+//フィールドブロックの描画
+void Phase_GameMain::Draw_FieldBlock() {
+
+	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
+		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
+			//描画先の座標を取得
+			double X, Y;
+			X = field[x][y].DrawPlaceX;
+			Y = field[x][y].DrawPlaceY;
+
+			//ゲームオーバー時に下に落下させる
+			if (getPauseMode() == PauseMode_GameOver) {
+				if (Count_Pause < 300)	Y += 1 / 2.*0.2*Count_Pause*Count_Pause;
+				else					Y += 1 / 2.*0.2 * 300 * 300;
+			}
+
+			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
+			if (t != BlockChangeMotionType_NO && field[x][y].blockChangeMotion.Count < 0)	t = BlockChangeMotionType_NO;
+			switch (t) {
+			case BlockChangeMotionType_NO:
+				//変化モーション無しの場合は無難に描画する
+				DrawBlock(X, Y, field[x][y].color);
+				break;
+			case BlockChangeMotionType_NOMAL:
+				//普通の変化モーション
+				DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
+				//変化量に応じて半透明で描画する
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255));
+				DrawBlock(X, Y, field[x][y].blockChangeMotion.To);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				break;
+			case BlockChangeMotionType_EXPLOSION:
+				//爆発(シェーダに頑張ってもらう)
+				ShaderBackGround_DeleteBlock(X, Y, field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length
+					, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Tex_BlockFireEffect2);
+				break;
+			case BlockChangeMotionType_SMALL:
+				//小さくなる
+				DrawBlock(X, Y, field[x][y].blockChangeMotion.From, 1 - (field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length));
+				break;
+			}
+		}
 	}
 }
 
@@ -1007,8 +1018,10 @@ void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(Tex_BlockBOMB);
 	DeleteGraph(Tex_Block2BOMB);
 	DeleteGraph(Tex_BlockBOMB_Color);
+	DeleteGraph(Tex_BlockBack);
 
 	DeleteGraph(haikei);
+	DeleteGraph(Tex_FieldBack);
 
 
 	DeleteSoundMem(BGM);

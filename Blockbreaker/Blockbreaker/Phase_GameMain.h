@@ -214,6 +214,7 @@ private:
 
 
 	int gameWindow;	//ゲーム画面を描画するハンドル
+	int Tex_BlockBack;				//背景ブロック(ブロックの色をなるだけ正確に表示するための背景画像)
 	int Tex_BlockRED;				//赤ブロック
 	int Tex_BlockRED_ARROW_X;		//赤ブロック(平行矢印)
 	int Tex_BlockRED_ARROW_Y;		//赤ブロック(垂直矢印)
@@ -248,7 +249,8 @@ private:
 	int Tex_BlockFireEffect;		//炎エフェクトブロック
 	int Tex_BlockFireEffect2;		//炎エフェクトブロック2(炭)
 	int Tex_BlockCenterEffect;		//回転の中心であることを分かるようにするエフェクト
-	int haikei;				//背景
+	int haikei;						//背景
+	int Tex_FieldBack;			//フィールド背景
 
 	int BGM;				//BGM
 
@@ -272,6 +274,8 @@ private:
 	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
 	void Draw();
+	void Draw_FallBlock();			//落下ブロックの描画
+	void Draw_FieldBlock();			//フィールドブロックの描画
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
