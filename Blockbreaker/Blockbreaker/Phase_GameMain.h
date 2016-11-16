@@ -277,6 +277,7 @@ private:
 	void Draw_FallBlock();			//落下ブロックの描画
 	void Draw_FieldBlock();			//フィールドブロックの描画
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
+	void DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale = 1);			//テクスチャを直接指定してブロックを描画する(インゲーム座標)
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
 	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)

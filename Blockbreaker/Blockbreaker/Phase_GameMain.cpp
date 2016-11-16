@@ -346,7 +346,8 @@ void Phase_GameMain::Draw_FallBlock() {
 		Field_PaddingX += D * cos(deg_to_rad(Rota));
 		Field_PaddingY += D * sin(deg_to_rad(Rota));
 	}
-	//落下中ブロックの描画
+
+	//ブロックの落下予想地点にブロックを描画する
 	if (isFallBlock_Enable()) {//落下ブロックが有効な時
 
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
@@ -355,23 +356,25 @@ void Phase_GameMain::Draw_FallBlock() {
 			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
 				//ブロックの落下予想地点の描画
 				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
-					//ブロックの落下予想地点にブロックを描画する
+
 					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
-					double aX, aY;
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &aX, &aY);
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-					//中心座標に変換
-					int X = (int)(aX + BLOCK_SIZE / 2.);
-					int Y = (int)(aY + BLOCK_SIZE / 2.);
-					DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)1, 0, Tex_BlockBack, TRUE, FALSE);
+					double X, Y;
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &X, &Y);
+
+					//フィールドのズレの部分を反映する
+					X += Field_PaddingX;
+					Y += Field_PaddingY;
+
+					DrawBlock_Tex(X, Y, Tex_BlockBack);
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
-					DrawBlock(aX, aY, fallBlockInfo.BlockID[x][y]);
+					DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 					yCount++;
 				}
 			}
 		}
 
+		//落下中ブロックの描画
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			int ShadowDrawDFlag = FALSE;
 			int yCount = 0;	//y方向に存在するブロックの数
@@ -380,7 +383,7 @@ void Phase_GameMain::Draw_FallBlock() {
 				double Per = -(fallBlockInfo.FallCount / 60.);
 				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
 
-
+				//フィールドのズレの部分を反映する
 				X += Field_PaddingX;
 				Y += Field_PaddingY;
 				//画面外に出てしまう場合はでないように調整する
@@ -462,11 +465,19 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, 
 
 	if (type == BLOCK_TYPE_NO)	return;
 
+	DrawBlock_Tex(CenterX, CenterY, getBlockTexture(type), Scale);
+}
+
+//テクスチャを直接指定してブロックを描画する(インゲーム座標)
+void Phase_GameMain::DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale) {
+
+	if (tex <= 0)	return;
+
 	//中心座標に変換
 	int X = (int)(CenterX + BLOCK_SIZE / 2.);
 	int Y = (int)(CenterY + BLOCK_SIZE / 2.);
 
-	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, getBlockTexture(type), TRUE, FALSE);
+	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, tex, TRUE, FALSE);
 }
 
 //ブロックタイプよりテクスチャハンドルの取得
