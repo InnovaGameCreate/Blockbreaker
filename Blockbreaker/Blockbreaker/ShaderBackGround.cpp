@@ -117,9 +117,7 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 
 
 	SetDrawScreen(t);
-	//中心座標に変換
-	X = X + Phase_GameMain::BLOCK_SIZE / 2.;
-	Y = Y + Phase_GameMain::BLOCK_SIZE / 2.;
+
 	//ブロックの描画
 	DrawRectRotaGraphFast2((int)X, (int)Y, 0, 0, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE/2, Phase_GameMain::BLOCK_SIZE / 2, 1, 0, GrHandle, TRUE, FALSE);
 }

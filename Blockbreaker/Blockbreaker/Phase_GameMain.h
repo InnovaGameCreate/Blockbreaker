@@ -260,7 +260,7 @@ private:
 
 	
 	FallBlockInfo fallBlockInfo;			//落下ブロックの情報
-	FallBlockInfo_Wait waitBlockinfo[2];	//待機ブロックの情報
+	FallBlockInfo_Wait waitBlockinfo[3];	//待機ブロックの情報
 
 	GameCycle gameCycle;		//ゲームサイクル
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
@@ -277,6 +277,7 @@ private:
 	void Draw_FallBlock();			//落下ブロックの描画
 	void Draw_FieldBlock();			//フィールドブロックの描画
 	void Draw_Status();				//ステータスの描画
+	void Draw_NextFallBlock();		//次の落下ブロックの描画
 	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
 	void DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale = 1);			//テクスチャを直接指定してブロックを描画する(インゲーム座標)
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ

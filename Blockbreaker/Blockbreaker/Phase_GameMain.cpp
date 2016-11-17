@@ -193,19 +193,7 @@ void Phase_GameMain::Draw() {
 	//ゲーム画面の背景画像を描画
 	DrawGraph(0, 0, haikei, FALSE);
 
-	//次の落下ブロックの描画
-	DrawBox(550, 60, 550 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), 60 + BLOCK_SIZE * (FALLBLOCK_SIZE + 2), GetColor(10, 10, 10), TRUE);
-	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
-		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-			double X, Y;
-			Convert_Ingame_FromBlock(x, y, 0, 0, &X, &Y);
-
-			X += 550 + BLOCK_SIZE;
-			Y += 60 + BLOCK_SIZE;
-
-			DrawBlock(X, Y, waitBlockinfo[0].BlockID[x][y]);
-		}
-	}
+	Draw_NextFallBlock();	//次の落下ブロックの描画
 
 	Draw_Status();	//ステータス描画
 
@@ -337,7 +325,7 @@ void Phase_GameMain::Draw_FallBlock() {
 
 					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
 					double X, Y;
-					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0, 0, &X, &Y);
+					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0.5, 0.5, &X, &Y);
 
 					//フィールドのズレの部分を反映する
 					X += Field_PaddingX;
@@ -359,7 +347,7 @@ void Phase_GameMain::Draw_FallBlock() {
 			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
 				double X, Y;
 				double Per = -(fallBlockInfo.FallCount / 60.);
-				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0, Per, &X, &Y);
+				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0.5, Per+0.5, &X, &Y);
 
 				//フィールドのズレの部分を反映する
 				X += Field_PaddingX;
@@ -386,7 +374,7 @@ void Phase_GameMain::Draw_FallBlock() {
 					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
 					float Scale = 1;
 
-					DrawRectRotaGraphFast2((int)(X + BLOCK_SIZE / 2.), (int)(Y + BLOCK_SIZE / 2.), 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
+					DrawRectRotaGraphFast2((int)X, (int)Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Scale, 0, Tex_BlockCenterEffect, TRUE, FALSE);
 				}
 			}
 		}
@@ -465,6 +453,36 @@ void Phase_GameMain::Draw_Status() {
 	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 }
 
+//次の落下ブロックの描画
+void Phase_GameMain::Draw_NextFallBlock() {
+	int placeX = 550;
+	int placeY = 60;
+	double Before_X = 0;	//直前の描画エリアの高さ
+	double Scale = 1;
+
+	for (int i = 0; i < min(ARRAY_LENGTH(waitBlockinfo), 5); i++) {
+		placeY += (int)Before_X;
+		if (i != 0)	Scale = 0.7;
+		Before_X = BLOCK_SIZE * (FALLBLOCK_SIZE + 2) * Scale + 20;
+		DrawBox(placeX, placeY, (int)(placeX + BLOCK_SIZE * (FALLBLOCK_SIZE + 2) * Scale), (int)(placeY + BLOCK_SIZE * (FALLBLOCK_SIZE + 2) * Scale), GetColor(10, 10, 10), TRUE);
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+				double X, Y;
+				Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
+
+				//縦にずらす
+				X *= Scale;
+				Y *= Scale;
+
+				X += placeX + BLOCK_SIZE * Scale;
+				Y += placeY + BLOCK_SIZE * Scale;
+
+				DrawBlock(X, Y, waitBlockinfo[i].BlockID[x][y], Scale);
+			}
+		}
+	}
+}
+
 //ブロックを描画する(インゲーム座標)
 void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale) {
 
@@ -478,11 +496,7 @@ void Phase_GameMain::DrawBlock_Tex(double CenterX, double CenterY, int tex, doub
 
 	if (tex <= 0)	return;
 
-	//中心座標に変換
-	int X = (int)(CenterX + BLOCK_SIZE / 2.);
-	int Y = (int)(CenterY + BLOCK_SIZE / 2.);
-
-	DrawRectRotaGraphFast2(X, Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, tex, TRUE, FALSE);
+	DrawRectRotaGraphFast2((int)CenterX, (int)CenterY, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, tex, TRUE, FALSE);
 }
 
 //ブロックタイプよりテクスチャハンドルの取得
@@ -966,7 +980,7 @@ void Phase_GameMain::Update_Final() {
 			double X, Y;
 			if (field[x][y].blockMoveMotion.Enable) {
 				//移動モーション有り
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0, 0, &X, &Y);	//移動元座標の計算
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0.5, 0.5, &X, &Y);	//移動元座標の計算
 				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//現在の移動距離の計算
 				double Rota = getRotation(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY);
 				//上の計算結果より、描画座標の計算
@@ -975,7 +989,7 @@ void Phase_GameMain::Update_Final() {
 			}
 			else {
 				//移動モーション無し
-				Convert_Ingame_FromBlock(x, y, 0, 0, &X, &Y);
+				Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 			}
 
 			//全体ずらしの分描画座標をずらす

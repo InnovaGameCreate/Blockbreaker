@@ -1,5 +1,4 @@
 #pragma once
-
 #include "MainFunc.h"
 
 class Phase_TopMenu : public PhaseController
