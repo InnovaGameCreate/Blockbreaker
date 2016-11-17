@@ -1,6 +1,5 @@
 //複数の項目の中から一つを選ぶためのクラス(オーバーライドして使用する)
 #pragma once
-#include "MainFunc.h"
 #include "Enum.h"
 
 class SelectItem
