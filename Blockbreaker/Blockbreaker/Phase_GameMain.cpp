@@ -397,9 +397,7 @@ void Phase_GameMain::Draw_FieldBlock() {
 				else					Y += 1 / 2.*0.2 * 300 * 300;
 			}
 
-			BlockChangeMotionType t = field[x][y].blockChangeMotion.Type;
-			if (t != BlockChangeMotionType_NO && field[x][y].blockChangeMotion.Count < 0)	t = BlockChangeMotionType_NO;
-			switch (t) {
+			switch (field[x][y].blockChangeMotion.Type) {
 			case BlockChangeMotionType_NO:
 				//変化モーション無しの場合は無難に描画する
 				DrawBlock(X, Y, field[x][y].color);
@@ -414,8 +412,13 @@ void Phase_GameMain::Draw_FieldBlock() {
 				break;
 			case BlockChangeMotionType_EXPLOSION:
 				//爆発(シェーダに頑張ってもらう)
-				ShaderBackGround_DeleteBlock(X, Y, field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length
-					, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Tex_BlockFireEffect2);
+				if (field[x][y].blockChangeMotion.Count < 0) {//モーション前は普通に描画
+					DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
+				}
+				else {
+					ShaderBackGround_DeleteBlock(X, Y, field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length
+						, getBlockTexture(field[x][y].blockChangeMotion.From), Tex_BlockFireEffect, Tex_BlockFireEffect2);
+				}
 				break;
 			case BlockChangeMotionType_SMALL:
 				//小さくなる
@@ -637,8 +640,8 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 	{
-		//落下ブロックの待機列に下からブロックが沸いてくる命令があるときは下からブロックを沸かせる
-		if (Count_Turn % 4 == 0) {
+		//下からブロックを沸かす
+		if (Count_Turn % 4 == 0 || getBlock_maxUpper() > BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 3) {
 			under_Block();
 		}
 		else if (Count_Turn % 7 == 0) {
@@ -1605,42 +1608,42 @@ void Phase_GameMain::Block_BOMB_Func() {
 
 				//周囲のブロックを削除する(爆弾ブロックは削除しない)
 				if (getBlockColor(x + 1, y) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x + 1, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x + 1, y, BlockChangeMotionType_EXPLOSION, 40, 5))	DeleteNum++;
 				}
 				if (getBlockColor(x + 2, y) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x + 2, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x + 2, y, BlockChangeMotionType_EXPLOSION, 40, 15))	DeleteNum++;
 				}
 				if (getBlockColor(x - 1, y) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x - 1, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x - 1, y, BlockChangeMotionType_EXPLOSION, 40, 5))	DeleteNum++;
 				}
 				if (getBlockColor(x - 2, y) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x - 2, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x - 2, y, BlockChangeMotionType_EXPLOSION, 40, 15))	DeleteNum++;
 				}
 				if (getBlockColor(x, y + 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x, y + 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x, y + 1, BlockChangeMotionType_EXPLOSION, 40, 5))	DeleteNum++;
 				}
 				if (getBlockColor(x, y + 2) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x, y + 2, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x, y + 2, BlockChangeMotionType_EXPLOSION, 40, 15))	DeleteNum++;
 				}
 				if (getBlockColor(x, y - 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x, y - 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x, y - 1, BlockChangeMotionType_EXPLOSION, 40, 5))	DeleteNum++;
 				}
 				if (getBlockColor(x, y - 2) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x, y - 2, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x, y - 2, BlockChangeMotionType_EXPLOSION, 40, 15))	DeleteNum++;
 				}
 
 
 				if (getBlockColor(x - 1, y - 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x - 1, y - 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x - 1, y - 1, BlockChangeMotionType_EXPLOSION, 40, 10))	DeleteNum++;
 				}
 				if (getBlockColor(x + 1, y - 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x + 1, y - 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x + 1, y - 1, BlockChangeMotionType_EXPLOSION, 40, 10))	DeleteNum++;
 				}
 				if (getBlockColor(x + 1, y + 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x + 1, y + 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x + 1, y + 1, BlockChangeMotionType_EXPLOSION, 40, 10))	DeleteNum++;
 				}
 				if (getBlockColor(x - 1, y + 1) != BLOCK_TYPE_BOM) {
-					if (Block_Delete_Direct(x - 1, y + 1, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
+					if (Block_Delete_Direct(x - 1, y + 1, BlockChangeMotionType_EXPLOSION, 40, 10))	DeleteNum++;
 				}
 			}
 		}
@@ -2196,7 +2199,7 @@ void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType m
 	field[x][y].blockChangeMotion.To = To;
 	field[x][y].blockChangeMotion.From = From;
 	field[x][y].blockChangeMotion.Length = MotionLength;
-	field[x][y].blockChangeMotion.Count = Delay;
+	field[x][y].blockChangeMotion.Count = -Delay;
 
 	field[x][y].blockChangeMotion.Type = mtype;
 
@@ -2664,4 +2667,13 @@ int Phase_GameMain::getBlock_Upper(int x) {
 		if (getBlockColor(x, y) != BLOCK_TYPE_NO)	return y;
 	}
 	return BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//最下段の一段下の座標を返す
+}
+
+//最大の高さのブロックのY座標を取得する
+int Phase_GameMain::getBlock_maxUpper() {
+	int Max_Y = BLOCK_HEIGHTNUM;
+	for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
+		Max_Y = min(Max_Y, getBlock_Upper(x));
+	}
+	return Max_Y;
 }
