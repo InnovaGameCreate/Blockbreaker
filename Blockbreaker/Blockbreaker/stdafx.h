@@ -17,14 +17,11 @@
 #include <iostream>
 #include <random>
 #include <functional>
+#include "Base/Base_BB_Header.h"
 
 #include "resource.h"
 
-#include "Log.h"
-#include "FpsController.h"
 #include "FlyText.h"
-
-#include "RandomTable.h"
 
 
 
