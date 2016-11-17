@@ -13,6 +13,7 @@ static int GenJyuuGothicLHeavy_Edge80;//源桑ゴシックL Heavyエッジ付きサイズ80
 static int SFSquareHeadCondensed_Edge15;//SF Square Head Condensedエッジ付きサイズ15
 static int SFSquareHeadCondensed_Edge25;//SF Square Head Condensedエッジ付きサイズ25
 static int SFSquareHeadCondensed_Edge35;//SF Square Head Condensedエッジ付きサイズ35
+static int SFSquareHeadCondensed_Edge45;//SF Square Head Condensedエッジ付きサイズ45
 
 static int LiadFlag = 0;
 
@@ -96,6 +97,7 @@ void Font_init() {
 	SFSquareHeadCondensed_Edge15 = CreateFontToHandle(_T("SF Square Head Condensed"), 15, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge25 = CreateFontToHandle(_T("SF Square Head Condensed"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge35 = CreateFontToHandle(_T("SF Square Head Condensed"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+	SFSquareHeadCondensed_Edge45 = CreateFontToHandle(_T("SF Square Head Condensed"), 45, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("Fontsの初期化処理完了"));
 
 
@@ -139,6 +141,8 @@ int Font_getHandle(FONTTYPE font) {
 		return SFSquareHeadCondensed_Edge25;
 	case FONTTYPE_SFSquareHeadCondensed_Edge35:
 		return SFSquareHeadCondensed_Edge35;
+	case FONTTYPE_SFSquareHeadCondensed_Edge45:
+		return SFSquareHeadCondensed_Edge45;
 	}
 	return 0;
 }

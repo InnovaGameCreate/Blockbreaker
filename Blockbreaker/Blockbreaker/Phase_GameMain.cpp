@@ -203,33 +203,11 @@ void Phase_GameMain::Draw() {
 			X += 550 + BLOCK_SIZE;
 			Y += 60 + BLOCK_SIZE;
 
-
-
 			DrawBlock(X, Y, waitBlockinfo[0].BlockID[x][y]);
 		}
 	}
 
-	//ステータス描画
-	{
-		//現在の経過ターン数の描画
-		TCHAR str[100];
-		Font_DrawStringWithShadow(550, 300, _T("経過ターン数"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf_s(str, _T("%dターン"), Count_Turn);
-		Font_DrawStringWithShadow(570, 360, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-
-		Font_DrawStringWithShadow(550, 410, _T("ゲーム経過時間"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf_s(str, _T("%.2fs"), getCountGameTime() / 60.);
-		Font_DrawStringWithShadow(570, 470, str, GetColor(0x90, 0xff, 0x85), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-
-		Font_DrawStringWithShadow(550, 520, _T("操作経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf_s(str, _T("%.2fs"), getCountPlayTime() / 60.);
-		Font_DrawStringWithShadow(570, 580, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-
-		Font_DrawStringWithShadow(550, 630, _T("獲得スコア"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-		_stprintf_s(str, _T("%d"), score.getScore());
-		Font_DrawStringWithShadow(570, 700, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
-
-	}
+	Draw_Status();	//ステータス描画
 
 	//ゲーム画面を描画する
 	//デバッグ
@@ -458,6 +436,33 @@ void Phase_GameMain::Draw_FieldBlock() {
 			}
 		}
 	}
+}
+
+//ステータスの描画
+void Phase_GameMain::Draw_Status() {
+	//現在の経過ターン数の描画
+	int placeX = 880;	//項目の基準位置
+	int placeY = 60;	//項目の基準位置
+
+	TCHAR str[100];
+	Font_DrawStringWithShadow(placeX, placeY, _T("経過ターン数"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	_stprintf_s(str, _T("%dターン"), Count_Turn);
+	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
+
+	placeY += 110;
+	Font_DrawStringWithShadow(placeX, placeY, _T("ゲーム経過時間"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	_stprintf_s(str, _T("%.2fs"), getCountGameTime() / 60.);
+	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0x90, 0xff, 0x85), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
+
+	placeY += 110;
+	Font_DrawStringWithShadow(placeX, placeY, _T("操作経過時間"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	_stprintf_s(str, _T("%.2fs"), getCountPlayTime() / 60.);
+	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
+
+	placeY += 110;
+	Font_DrawStringWithShadow(placeX, placeY, _T("獲得スコア"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	_stprintf_s(str, _T("%d"), score.getScore());
+	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 }
 
 //ブロックを描画する(インゲーム座標)
