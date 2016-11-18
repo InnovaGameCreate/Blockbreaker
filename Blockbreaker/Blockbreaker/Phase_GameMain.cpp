@@ -1822,7 +1822,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
 							//左端から右端までの一列を一括消去
 							for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
-								if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 3)) {
+								if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
@@ -1840,7 +1840,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
 							//左端から右端までの一列を一括消去
 							for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
-								if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40, abs(y - i) * 3)) {
+								if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40, abs(y - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
@@ -1858,7 +1858,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
 							//斜めに一括消去
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-								if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 3)) {
+								if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
@@ -1866,7 +1866,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									score.addScore(0, 50);
 									DelCount++;
 								}
-								if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 3)) {
+								if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
@@ -1884,7 +1884,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
 							//斜めに一括消去
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
-								if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 3)) {
+								if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
@@ -1892,7 +1892,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									score.addScore(0, 50);
 									DelCount++;
 								}
-								if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 3)) {
+								if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
 									//フライテキストの生成
 									double X, Y;
 									Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
