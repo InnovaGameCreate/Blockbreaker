@@ -2507,14 +2507,28 @@ void Phase_GameMain::Create_Wait_Block() {
 
 
 	//新規に作成する落下ブロックの配置パターンを決定する(0～3)
-	int Pattern = (int)(randomTable.getRand(0, 399) / 100.);
+	const int Percent = (int)(randomTable.getRand(0, 100));
+	int Pattern = 0;	//ブロックのパターン
+	if (Percent < 24) {
+		Pattern = 0;
+	}
+	else if (Percent < 48) {
+		Pattern = 1;
+	}
+	else if (Percent < 72) {
+		Pattern = 2;
+	}
+	else if (Percent < 96) {
+		Pattern = 3;
+	}
+	else {
+		Pattern = 4;
+	}
+
+
 	//5％の確率で爆弾を単体で落下させる
 	if (randomTable.getRand(0, 1000) < 50) {
 		Pattern = 4;
-	}
-	if (randomTable.getRand(0, 1000) < 100) {
-		//10％の確率で同色爆弾ブロックを落とす
-		Pattern = 5;
 	}
 
 	//ランダムに設置するブロックを2個決定する
@@ -2567,15 +2581,7 @@ void Phase_GameMain::Create_Wait_Block() {
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
 		//printLog_D(_T("横で右中心パターン"));
 		break;
-	case 4://爆弾の単体落下
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM;
-
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
-		//無条件で回転不可
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = FALSE;
-		break;
-	case 5://同色爆弾の単体落下
+	case 4://同色爆弾の単体落下
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM_Color;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
