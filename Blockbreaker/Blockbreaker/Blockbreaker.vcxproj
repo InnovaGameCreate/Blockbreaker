@@ -286,7 +286,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Blockbreaker.cpp" />
-    <ClCompile Include="Calculations.cpp" />
     <ClCompile Include="FlyText.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="LoadMenu.cpp" />

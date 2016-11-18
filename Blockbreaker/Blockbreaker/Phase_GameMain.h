@@ -24,6 +24,7 @@ public://定数とかの宣言
 	static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
 	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
 	static const int BLOCK_DELETE_LEN = 4;//削除するために必要な隣接するブロックの個数
+	static const int BLOCK_DEFAULT_VAL = 6;//ブロックの初期積載量
 
 	//ブロックの種類
 	enum BLOCK_TYPE {
@@ -130,9 +131,10 @@ private:
 	struct Score {
 		/*
 		0:ブロックの消去によるスコア
-		1:その他
+		1:破壊光線による減点
+		2:その他
 		*/
-		int score[2];
+		int score[3];
 		Score() { init(); }
 		//スコアの初期化
 		void init() {
@@ -195,7 +197,7 @@ private:
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	field_info Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//計算上のフィールド情報UseVirtualField=TRUEで使用
 
-	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
+	SelectItem_pause pauseMenu = SelectItem_pause(Base_BB_getWINDOW_WIDTH()/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
@@ -262,6 +264,9 @@ private:
 	FallBlockInfo fallBlockInfo;			//落下ブロックの情報
 	FallBlockInfo_Wait waitBlockinfo[3];	//待機ブロックの情報
 
+	PolygonPoints2 lay;			//破壊光線のエフェクト情報
+	int Count_lay;				//破壊光線エフェクトの経過時間
+
 	GameCycle gameCycle;		//ゲームサイクル
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
@@ -283,6 +288,7 @@ private:
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
 	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
+	void Update_Lay_BlockDel();		//破壊光線エフェクトの更新
 	void Update_Counter();			//カウンタのカウントアップ
 	void Update();
 	void Update_Final();			//Update後に呼ばれる
@@ -306,6 +312,7 @@ private:
 	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//連続するフィールドブロックを削除する(Flag_EventをTRUEで消去によって発動する効果も発動する)(消去したブロックの数)
 	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
 	void under_Block();							//下からブロックがわいてくる
+	void Lay_BlockDel();						//破壊光線でブロックを破壊する
 	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField = FALSE);	//隣接する同色ブロックのカウント
 	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(TRUEで仮想の面を使用する)
 	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUE色のあるブロックのみ判定)

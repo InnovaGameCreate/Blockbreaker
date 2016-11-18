@@ -65,9 +65,6 @@
     <ClCompile Include="StartDialog.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Calculations.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Phase_GameMain.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

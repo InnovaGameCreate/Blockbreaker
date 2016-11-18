@@ -96,6 +96,8 @@ void Phase_GameMain::Restart() {
 	Count_Time = 0;
 	Count_Pause = 0;
 	Count_Turn = 0;
+	Count_lay = 0;
+	lay.SetpointNum(0);
 	//落下中ブロックの削除
 	Delete_FallBlock();
 	score.init();//スコアの初期化
@@ -114,7 +116,7 @@ void Phase_GameMain::Restart() {
 	}
 
 	//適当にブロックを設置する(下から3段)
-	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 3, BLOCK_WIDTHNUM_INGAME, 3);
+	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - BLOCK_DEFAULT_VAL, BLOCK_WIDTHNUM_INGAME, BLOCK_DEFAULT_VAL);
 
 	//仮想ブロックの更新を行う
 	Virtualfield_Update();
@@ -144,6 +146,10 @@ void Phase_GameMain::Draw() {
 
 	Draw_FieldBlock();	//フィールドブロックの描画
 
+	//破壊光線の描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	DrawPolygon2D_Notexture2(&lay, GetColor(200, 200, 0), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	//フライテキストを描画する
 	flyText.Draw();
@@ -600,6 +606,8 @@ void Phase_GameMain::Update() {
 		return;
 	}
 
+	//破壊光線エフェクトの更新
+	Update_Lay_BlockDel();
 	//フライテキストの更新
 	flyText.Update();
 
@@ -641,8 +649,8 @@ void Phase_GameMain::Update() {
 		break;
 	case GameCycle_BeforeFALL:
 	{
-		//下からブロックを沸かす
-		if (Count_Turn % 4 == 0 || getBlock_maxUpper() > BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - 3) {
+		if (Count_Turn % 4 == 0 || getBlock_maxUpper() > BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - BLOCK_DEFAULT_VAL) {
+			//下からブロックを沸かす
 			under_Block();
 		}
 		else if (Count_Turn % 7 == 0) {
@@ -659,10 +667,6 @@ void Phase_GameMain::Update() {
 		Update_FieldBlock();
 		break;
 	}
-
-
-
-
 }
 
 //落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
@@ -728,17 +732,18 @@ int Phase_GameMain::Update_FieldBlock() {
 	/*
 	ゲーム更新ループ
 	0.初期化処理(最初の1度のみ実行)
-	1.重力計算
-	2.移動モーション
-	3.ブロックの特殊効果
-	4.変化モーション
-	5.重力計算
-	6.移動モーション
-	7.ブロックの消去判定→消去ブロック無しの場合は11へ
-	8.変化モーション
-	9.重力計算
-	10.移動モーションから7へ
-	11.更新ループ終了
+	1.変化モーション
+	2.重力計算
+	3.移動モーション
+	4.ブロックの特殊効果
+	5.変化モーション
+	6.重力計算
+	7.移動モーション
+	8.ブロックの消去判定→消去ブロック無しの場合は11へ
+	9.変化モーション
+	10.重力計算
+	11.移動モーションから7へ
+	12.更新ループ終了
 	*/
 
 
@@ -748,46 +753,15 @@ int Phase_GameMain::Update_FieldBlock() {
 		ChainCount = 0;	//連鎖カウントをリセットする
 		gameCycleFirstCallFlag = FALSE;	//ゲームサイクルが変更された時のフラグをFALSEに設定する
 
-		////ゲームオーバーの判定を行う
-		//if (JudgeGameOver() != 0) {
-		//	PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
-		//}
 		//画面外ブロックを削除する
 		Block_Delete_OutScreen();
 
 		if (!gameCycleFirstCallFlag) {
 			Loop_No = 1;
-			printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
 		}
 		break;
-	case 1://重力計算
-		Block_Gravity();//重力計算を行う
-		Loop_No = 2;
-		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
-		break;
-	case 2://移動モーション
-		if (Update_MoveMotion() == FALSE) {
-			//移動がなかった場合
-			if (gameCycleFirstCallFlag) {
-				Loop_No = 0;
-				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
-			}
-			else {
-				Loop_No = 3;
-				printLog_I(_T("ブロックの特殊効果へ移行【Loop_No=%d】"), Loop_No);
-			}
-		}
-		break;
-	case 3://ブロックの特殊効果
-		Block_Black_Func();		//黒ブロックの色変更
-		Block_Rainbow_Func();	//虹色ブロックの色を変更
-		Block_BOMB_Func();		//爆弾ブロックの処理
-		Block_2BOMB_Func();		//2爆弾ブロックの処理
-		Block_BOMBColor_Func();	//同色爆弾ブロックの処理
-		Loop_No = 4;
-		printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
-		break;
-	case 4://変化モーション
+	case 1://変化モーション
 		if (Update_ChangeMotion() == FALSE) {
 			//変化がなかった場合
 			if (gameCycleFirstCallFlag) {
@@ -795,17 +769,17 @@ int Phase_GameMain::Update_FieldBlock() {
 				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 			}
 			else {
-				Loop_No = 5;
+				Loop_No = 2;
 				printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
 			}
 		}
 		break;
-	case 5://重力計算
+	case 2://重力計算
 		Block_Gravity();//重力計算を行う
-		Loop_No = 6;
+		Loop_No = 3;
 		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
 		break;
-	case 6://移動モーション
+	case 3://移動モーション
 		if (Update_MoveMotion() == FALSE) {
 			//移動がなかった場合
 			if (gameCycleFirstCallFlag) {
@@ -813,12 +787,52 @@ int Phase_GameMain::Update_FieldBlock() {
 				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 			}
 			else {
-				Loop_No = 7;
+				Loop_No = 4;
+				printLog_I(_T("ブロックの特殊効果へ移行【Loop_No=%d】"), Loop_No);
+			}
+		}
+		break;
+	case 4://ブロックの特殊効果
+		Block_Black_Func();		//黒ブロックの色変更
+		Block_Rainbow_Func();	//虹色ブロックの色を変更
+		Block_BOMB_Func();		//爆弾ブロックの処理
+		Block_2BOMB_Func();		//2爆弾ブロックの処理
+		Block_BOMBColor_Func();	//同色爆弾ブロックの処理
+		Loop_No = 5;
+		printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 5://変化モーション
+		if (Update_ChangeMotion() == FALSE) {
+			//変化がなかった場合
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 6;
+				printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
+			}
+		}
+		break;
+	case 6://重力計算
+		Block_Gravity();//重力計算を行う
+		Loop_No = 7;
+		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
+		break;
+	case 7://移動モーション
+		if (Update_MoveMotion() == FALSE) {
+			//移動がなかった場合
+			if (gameCycleFirstCallFlag) {
+				Loop_No = 0;
+				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
+			}
+			else {
+				Loop_No = 8;
 				printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
 			}
 		}
 		break;
-	case 7://ブロックの消去判定
+	case 8://ブロックの消去判定
 		if (Block_Delete() > 0) {
 			//ブロックの消去判定が入れば
 			ChainCount++;	//連鎖カウントを加算する
@@ -827,7 +841,7 @@ int Phase_GameMain::Update_FieldBlock() {
 
 
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
-			Loop_No = 8;
+			Loop_No = 9;
 			printLog_I(_T("変化モーションへ移行【Loop_No=%d】"), Loop_No);
 		}
 		else {
@@ -836,12 +850,12 @@ int Phase_GameMain::Update_FieldBlock() {
 				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 			}
 			else {
-				Loop_No = 11;
+				Loop_No = 12;
 				printLog_I(_T("終了処理へ移行【Loop_No=%d】"), Loop_No);
 			}
 		}
 		break;
-	case 8://変化モーション
+	case 9://変化モーション
 		if (Update_ChangeMotion() == FALSE) {
 			//変化がなかった場合
 			if (gameCycleFirstCallFlag) {
@@ -849,17 +863,17 @@ int Phase_GameMain::Update_FieldBlock() {
 				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 			}
 			else {
-				Loop_No = 9;
+				Loop_No = 10;
 				printLog_I(_T("重力計算へ移行【Loop_No=%d】"), Loop_No);
 			}
 		}
 		break;
-	case 9://重力計算
+	case 10://重力計算
 		Block_Gravity();//重力計算を行う
-		Loop_No = 10;
+		Loop_No = 11;
 		printLog_I(_T("移動モーションへ移行【Loop_No=%d】"), Loop_No);
 		break;
-	case 10://移動モーション
+	case 11://移動モーション
 		if (Update_MoveMotion() == FALSE) {
 			//移動がなかった場合
 			if (gameCycleFirstCallFlag) {
@@ -867,21 +881,25 @@ int Phase_GameMain::Update_FieldBlock() {
 				printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 			}
 			else {
-				Loop_No = 7;
+				Loop_No = 8;
 				printLog_I(_T("ブロックの消去判定へ移行【Loop_No=%d】"), Loop_No);
 			}
 		}
 		break;
-	case 11://終了
+	case 12://終了
+			//死亡判定を行う
+		if (JudgeGameOver() != 0) {
+			//ゲームオーバーラインを超えたら破壊光線でブロックを破壊する
+			Lay_BlockDel();
+			UpdateBlockRequest(GameCycle_Update);
+		}
+
 		if (gameCycleFirstCallFlag) {
 			Loop_No = 0;
 			printLog_I(_T("初期化へ移行【Loop_No=%d】"), Loop_No);
 		}
 		else {
-			//死亡判定を行う
-			if (JudgeGameOver() != 0) {
-				PauseRequest(PauseMode_GameOver);
-			}
+
 			Loop_No = -1;
 			printLog_I(_T("ブロック計算ループの終了"));
 			setGameCycle(Loop_Next);
@@ -1242,12 +1260,7 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 	fallBlockInfo.PlaceX += MoveVal;
 
 
-	////回転が入った場合は死亡判定をする
-	//if (MoveVal != 0) {
-	//	if (JudgeGameOver() != 0) {
-	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-	//	}
-	//}
+
 
 	return MoveVal;
 }
@@ -1355,12 +1368,6 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 	//ずらしの反映
 	fallBlockInfo.PlaceY += MoveVal;
 
-	////移動が入った場合は死亡判定をする
-	//if (MoveVal != 0) {
-	//	if (JudgeGameOver() != 0) {
-	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-	//	}
-	//}
 
 
 	return MoveVal;
@@ -1433,13 +1440,6 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	if (Minus) {
 		RotaVal = -RotaVal;
 	}
-
-	////回転が入った場合は死亡判定をする
-	//if (RotaVal != 0) {
-	//	if (JudgeGameOver() != 0) {
-	//		PauseRequest(PauseMode_GameOver);//ゲームオーバーにする
-	//	}
-	//}
 
 	return RotaVal;
 }
@@ -1546,6 +1546,51 @@ int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Over
 void Phase_GameMain::under_Block() {
 	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN, BLOCK_WIDTHNUM_INGAME, 1);
 	Block_AllMoveRequest(0, -1);	//ブロック全体を移動
+}
+
+//破壊光線でブロックを破壊する
+void Phase_GameMain::Lay_BlockDel() {
+	//レーザーのエフェクト
+	lay.SetpointNum(3);	//三角形を設定
+	lay.X[0] = GAMEWINDOW_WIDTH / 2.;
+	lay.Y[0] = 0 + BLOCK_SIZE * BLOCK_PADDINGUP;
+	lay.X[1] = 0;
+	lay.Y[1] = BLOCK_SIZE * 3 + BLOCK_SIZE * BLOCK_PADDINGUP;
+	lay.X[2] = 0;
+	lay.Y[2] = BLOCK_SIZE * 12 + BLOCK_SIZE * BLOCK_PADDINGUP;
+	Count_lay = 0;
+
+	//エフェクト範囲のブロックを抹消する
+	for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
+		for (int y = BLOCK_PADDINGUP + 3; y < BLOCK_PADDINGUP + 12; y++) {
+			Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40, x*2 + 15);
+		}
+	}
+
+	//スコアを減らす
+	score.addScore(1, -1'0000);
+}
+
+//破壊光線エフェクトの更新
+void Phase_GameMain::Update_Lay_BlockDel() {
+	if (lay.getpointNum() == 3) {
+		Count_lay++;
+		if (Count_lay < 15) {
+			//何もしない
+		}
+		else if(Count_lay < 45){
+			//フレーム数の割合から位置を計算する
+			lay.X[1] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
+			lay.X[2] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
+		}
+		else if (Count_lay < 55) {
+			lay.X[1] = GAMEWINDOW_WIDTH;
+			lay.X[2] = GAMEWINDOW_WIDTH;
+		}
+		else {
+			lay.SetpointNum(0);
+		}
+	}
 }
 
 //フィールドに存在する黒色ブロックの色を決定する
