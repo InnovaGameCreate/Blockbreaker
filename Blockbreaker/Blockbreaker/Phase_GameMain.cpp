@@ -893,8 +893,9 @@ int Phase_GameMain::Update_FieldBlock() {
 			//死亡判定を行う
 		if (JudgeGameOver() != 0) {
 			//ゲームオーバーラインを超えたら破壊光線でブロックを破壊する
-			Lay_BlockDel();
-			UpdateBlockRequest(GameCycle_Update);
+			//Lay_BlockDel();
+			PauseRequest(PauseMode_GameOver);
+			//UpdateBlockRequest(GameCycle_Update);
 		}
 
 		if (gameCycleFirstCallFlag) {
