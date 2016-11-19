@@ -1,11 +1,11 @@
-#include "MainFunc.h"
+ï»¿#include "MainFunc.h"
 
 
 Phase_GameMain::Phase_GameMain() {
-	//ƒ|[ƒYƒƒjƒ…[‚Ì€–Ú‚ğì¬
-	pauseMenu.addItem(_T("ÄŠJ"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("‚â‚è’¼‚·"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	pauseMenu.addItem(_T("ƒgƒbƒvƒƒjƒ…[‚Ö"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	//ãƒãƒ¼ã‚ºãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®é …ç›®ã‚’ä½œæˆ
+	pauseMenu.addItem(_T("å†é–‹"), 3, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ã‚„ã‚Šç›´ã™"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	pauseMenu.addItem(_T("ãƒˆãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¸"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	pauseMenu.setScrolltype(1);
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
@@ -15,79 +15,79 @@ Phase_GameMain::Phase_GameMain() {
 Phase_GameMain::~Phase_GameMain() {
 }
 
-//‰Šú‰»(•`‰æˆ—)
+//åˆæœŸåŒ–(æç”»å‡¦ç†)
 void Phase_GameMain::Init_Draw() {
-	//ƒQ[ƒ€‰æ–Ê‚Ì¶¬(Œã‚ÅƒVƒF[ƒ_‚ğg‚¢‚½‚¢‚Ì‚Å2‚Ìnæ‚ÌƒTƒCƒY‚Åì¬‚µ‚Ü‚·)
-	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ƒEƒBƒ“ƒhƒEì¬‚É¸”s‚µ‚Ü‚µ‚½"));
+	//ã‚²ãƒ¼ãƒ ç”»é¢ã®ç”Ÿæˆ(å¾Œã§ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã„ãŸã„ã®ã§2ã®nä¹—ã®ã‚µã‚¤ã‚ºã§ä½œæˆã—ã¾ã™)
+	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ"));
 
-	//ƒuƒƒbƒN‰æ‘œ
-	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)								printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RED.png)"));
-	if ((Tex_BlockRED_ARROW_X = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_X.png"))) == -1)				printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RED_ARROW_X.png)"));
-	if ((Tex_BlockRED_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_Y.png"))) == -1)				printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RED_ARROW_Y.png)"));
-	if ((Tex_BlockRED_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RED_ARROW_XY.png)"));
-	if ((Tex_BlockRED_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY2.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RED_ARROW_XY2.png)"));
+	//ãƒ–ãƒ­ãƒƒã‚¯ç”»åƒ
+	if ((Tex_BlockRED = LoadGraph(_T("Data/Blocks/Block_RED.png"))) == -1)								printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RED.png)"));
+	if ((Tex_BlockRED_ARROW_X = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_X.png"))) == -1)				printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RED_ARROW_X.png)"));
+	if ((Tex_BlockRED_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_Y.png"))) == -1)				printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RED_ARROW_Y.png)"));
+	if ((Tex_BlockRED_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RED_ARROW_XY.png)"));
+	if ((Tex_BlockRED_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_RED_ARROW_XY2.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RED_ARROW_XY2.png)"));
 
-	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLUE.png)"));
-	if ((Tex_BlockBLUE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_X.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLUE_ARROW_X.png)"));
-	if ((Tex_BlockBLUE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_Y.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLUE_ARROW_Y.png)"));
-	if ((Tex_BlockBLUE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLUE_ARROW_XY.png)"));
-	if ((Tex_BlockBLUE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY2.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLUE_ARROW_XY2.png)"));
+	if ((Tex_BlockBLUE = LoadGraph(_T("Data/Blocks/Block_BLUE.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLUE.png)"));
+	if ((Tex_BlockBLUE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_X.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLUE_ARROW_X.png)"));
+	if ((Tex_BlockBLUE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_Y.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLUE_ARROW_Y.png)"));
+	if ((Tex_BlockBLUE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLUE_ARROW_XY.png)"));
+	if ((Tex_BlockBLUE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_BLUE_ARROW_XY2.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLUE_ARROW_XY2.png)"));
 
-	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)						printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_YELLOW.png)"));
-	if ((Tex_BlockYELLOW_ARROW_X = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_X.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_YELLOW_ARROW_X.png)"));
-	if ((Tex_BlockYELLOW_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_Y.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_YELLOW_ARROW_Y.png)"));
-	if ((Tex_BlockYELLOW_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_YELLOW_ARROW_XY.png)"));
-	if ((Tex_BlockYELLOW_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY2.png"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_YELLOW_ARROW_XY2.png)"));
+	if ((Tex_BlockYELLOW = LoadGraph(_T("Data/Blocks/Block_YELLOW.png"))) == -1)						printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_YELLOW.png)"));
+	if ((Tex_BlockYELLOW_ARROW_X = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_X.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_YELLOW_ARROW_X.png)"));
+	if ((Tex_BlockYELLOW_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_Y.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_YELLOW_ARROW_Y.png)"));
+	if ((Tex_BlockYELLOW_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_YELLOW_ARROW_XY.png)"));
+	if ((Tex_BlockYELLOW_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_YELLOW_ARROW_XY2.png"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_YELLOW_ARROW_XY2.png)"));
 
-	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_GREEN.png)"));
-	if ((Tex_BlockGREEN_ARROW_X = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_X.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_GREEN_ARROW_X.png)"));
-	if ((Tex_BlockGREEN_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_Y.png"))) == -1)			printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_GREEN_ARROW_Y.png)"));
-	if ((Tex_BlockGREEN_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_GREEN_ARROW_XY.png)"));
-	if ((Tex_BlockGREEN_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY2.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_GREEN_ARROW_XY2.png)"));
+	if ((Tex_BlockGREEN = LoadGraph(_T("Data/Blocks/Block_GREEN.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_GREEN.png)"));
+	if ((Tex_BlockGREEN_ARROW_X = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_X.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_GREEN_ARROW_X.png)"));
+	if ((Tex_BlockGREEN_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_Y.png"))) == -1)			printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_GREEN_ARROW_Y.png)"));
+	if ((Tex_BlockGREEN_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_GREEN_ARROW_XY.png)"));
+	if ((Tex_BlockGREEN_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_GREEN_ARROW_XY2.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_GREEN_ARROW_XY2.png)"));
 
-	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)						printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_PURPLE.png)"));
-	if ((Tex_BlockPURPLE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_X.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_PURPLE_ARROW_X.png)"));
-	if ((Tex_BlockPURPLE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_Y.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_PURPLE_ARROW_Y.png)"));
-	if ((Tex_BlockPURPLE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY.png"))) == -1)		printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_PURPLE_ARROW_XY.png)"));
-	if ((Tex_BlockPURPLE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY2.png"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_PURPLE_ARROW_XY2.png)"));
+	if ((Tex_BlockPURPLE = LoadGraph(_T("Data/Blocks/Block_PURPLE.png"))) == -1)						printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_PURPLE.png)"));
+	if ((Tex_BlockPURPLE_ARROW_X = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_X.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_PURPLE_ARROW_X.png)"));
+	if ((Tex_BlockPURPLE_ARROW_Y = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_Y.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_PURPLE_ARROW_Y.png)"));
+	if ((Tex_BlockPURPLE_ARROW_XY = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY.png"))) == -1)		printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_PURPLE_ARROW_XY.png)"));
+	if ((Tex_BlockPURPLE_ARROW_XY2 = LoadGraph(_T("Data/Blocks/Block_PURPLE_ARROW_XY2.png"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_PURPLE_ARROW_XY2.png)"));
 
-	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_TREE.png)"));
-	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BLACK.png)"));
-	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_RAINBOW.png)"));
-	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BOMB.png)"));
-	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_2BOMB.png)"));
-	if ((Tex_BlockBOMB_Color = LoadGraph(_T("Data/Blocks/Block_BOMB_Color.png"))) == -1)				printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_BOMB_Color.png)"));
-	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_FireEffect.png)"));
-	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_FireEffect2.png)"));
-	if ((Tex_BlockCenterEffect = LoadGraph(_T("Data/Blocks/Block_CENTER.png"))) == -1)					printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_CENTER.png)"));
-	if ((Tex_BlockBack = LoadGraph(_T("Data/Blocks/Block_Back.png"))) == -1)							printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/Blocks/Block_Back.png)"));
+	if ((Tex_BlockTREE = LoadGraph(_T("Data/Blocks/Block_TREE.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_TREE.png)"));
+	if ((Tex_BlockBLACK = LoadGraph(_T("Data/Blocks/Block_BLACK.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BLACK.png)"));
+	if ((Tex_BlockRAINBOW = LoadGraph(_T("Data/Blocks/Block_RAINBOW.png"))) == -1)						printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_RAINBOW.png)"));
+	if ((Tex_BlockBOMB = LoadGraph(_T("Data/Blocks/Block_BOMB.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BOMB.png)"));
+	if ((Tex_Block2BOMB = LoadGraph(_T("Data/Blocks/Block_2BOMB.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_2BOMB.png)"));
+	if ((Tex_BlockBOMB_Color = LoadGraph(_T("Data/Blocks/Block_BOMB_Color.png"))) == -1)				printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_BOMB_Color.png)"));
+	if ((Tex_BlockFireEffect = LoadGraph(_T("Data/Blocks/Block_FireEffect.png"))) == -1)				printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_FireEffect.png)"));
+	if ((Tex_BlockFireEffect2 = LoadGraph(_T("Data/Blocks/Block_FireEffect2.png"))) == -1)				printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_FireEffect2.png)"));
+	if ((Tex_BlockCenterEffect = LoadGraph(_T("Data/Blocks/Block_CENTER.png"))) == -1)					printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_CENTER.png)"));
+	if ((Tex_BlockBack = LoadGraph(_T("Data/Blocks/Block_Back.png"))) == -1)							printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/Blocks/Block_Back.png)"));
 
-	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/image/colorbom.png)"));
-	if ((Tex_FieldBack = LoadGraph(_T("Data/image/BlockField_Back.png"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/image/BlockField_Back.png)"));
+	if ((haikei = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/image/colorbom.png)"));
+	if ((Tex_FieldBack = LoadGraph(_T("Data/image/BlockField_Back.png"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/image/BlockField_Back.png)"));
 
 
-	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/BGM/Happy_Halloween.wav)"));
+	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/BGM/Happy_Halloween.wav)"));
 	SetLoopTimePosSoundMem(9768, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 	pauseMenu.setEnable(TRUE);
 }
 
-//ƒtƒ‹ƒXƒNƒŠ[ƒ“‚É•œ‹A‚ÉŒÄ‚Î‚ê‚é
+//ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã«å¾©å¸°æ™‚ã«å‘¼ã°ã‚Œã‚‹
 void Phase_GameMain::RestoreGraphCallback() {
-	//ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ’¼‚µ
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿ç›´ã—
 }
 
-//‰Šú‰»(ŒvZˆ—)
+//åˆæœŸåŒ–(è¨ˆç®—å‡¦ç†)
 void Phase_GameMain::Init_Update() {
 	Create_Wait_Block();
 	Create_Wait_Block();
-	Restart();	//ƒŠƒXƒ^[ƒg
+	Restart();	//ãƒªã‚¹ã‚¿ãƒ¼ãƒˆ
 
 
 }
 
-//ƒŠƒXƒ^[ƒg
+//ãƒªã‚¹ã‚¿ãƒ¼ãƒˆ
 void Phase_GameMain::Restart() {
 	Flag_Pause = PauseMode_NO;
 	Flag_pauseRequest = PauseMode_NO;
@@ -98,13 +98,13 @@ void Phase_GameMain::Restart() {
 	Count_Turn = 0;
 	Count_lay = 0;
 	lay.SetpointNum(0);
-	//—‰º’†ƒuƒƒbƒN‚Ìíœ
+	//è½ä¸‹ä¸­ãƒ–ãƒ­ãƒƒã‚¯ã®å‰Šé™¤
 	Delete_FallBlock();
-	score.init();//ƒXƒRƒA‚Ì‰Šú‰»
-	//ƒuƒƒbƒN‘Ò‹@—ñ‚Ì‰Šú‰»
+	score.init();//ã‚¹ã‚³ã‚¢ã®åˆæœŸåŒ–
+	//ãƒ–ãƒ­ãƒƒã‚¯å¾…æ©Ÿåˆ—ã®åˆæœŸåŒ–
 	for (int i = 0; i < ARRAY_LENGTH(waitBlockinfo); i++) Create_Wait_Block();
 
-	//ƒuƒƒbƒN‚Ìíœ‚ğs‚¤
+	//ãƒ–ãƒ­ãƒƒã‚¯ã®å‰Šé™¤ã‚’è¡Œã†
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			field[x][y].color = BLOCK_TYPE_NO;
@@ -115,56 +115,56 @@ void Phase_GameMain::Restart() {
 		}
 	}
 
-	//“K“–‚ÉƒuƒƒbƒN‚ğİ’u‚·‚é(‰º‚©‚ç3’i)
+	//é©å½“ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨­ç½®ã™ã‚‹(ä¸‹ã‹ã‚‰3æ®µ)
 	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - BLOCK_DEFAULT_VAL, BLOCK_WIDTHNUM_INGAME, BLOCK_DEFAULT_VAL);
 
-	//‰¼‘zƒuƒƒbƒN‚ÌXV‚ğs‚¤
+	//ä»®æƒ³ãƒ–ãƒ­ãƒƒã‚¯ã®æ›´æ–°ã‚’è¡Œã†
 	Virtualfield_Update();
 
-	//ƒQ[ƒ€ƒTƒCƒNƒ‹‚ğƒuƒƒbƒN—‰º‚Éİ’è
+	//ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ã‚’ãƒ–ãƒ­ãƒƒã‚¯è½ä¸‹ã«è¨­å®š
 	setGameCycle(GameCycle_FALL);
 
-	//BGM‚ğÅ‰‚©‚çÄ¶‚µ’¼‚·
+	//BGMã‚’æœ€åˆã‹ã‚‰å†ç”Ÿã—ç›´ã™
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
 
-	printLog_I(_T("ƒXƒe[ƒW‚ğÅ‰‚©‚ç‚â‚è’¼‚µ‚Ü‚µ‚½(Restart)"));
+	printLog_I(_T("ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’æœ€åˆã‹ã‚‰ã‚„ã‚Šç›´ã—ã¾ã—ãŸ(Restart)"));
 }
 
-//•`‰æˆ—
+//æç”»å‡¦ç†
 void Phase_GameMain::Draw() {
 
 
-	//•`‰ææ‚ğƒQ[ƒ€‰æ–Ê‚É‚·‚é
+	//æç”»å…ˆã‚’ã‚²ãƒ¼ãƒ ç”»é¢ã«ã™ã‚‹
 	SetDrawScreen(gameWindow);
 	ClearDrawScreen();
 
-	//‰æ–Êˆê”t‚ÉlŠpŒ`‚ğ•`‰æ‚·‚é(ŒãXƒeƒNƒXƒ`ƒƒ‚É’u‚«Š·‚í‚é)
+	//ç”»é¢ä¸€æ¯ã«å››è§’å½¢ã‚’æç”»ã™ã‚‹(å¾Œã€…ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«ç½®ãæ›ã‚ã‚‹)
 	DrawGraph(BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, Tex_FieldBack, FALSE);
 
-	Draw_FallBlock();	//—‰ºƒuƒƒbƒN‚Ì•`‰æ
+	Draw_FallBlock();	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 
-	Draw_FieldBlock();	//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Ì•`‰æ
+	Draw_FieldBlock();	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 
-	//”j‰óŒõü‚Ì•`‰æ
+	//ç ´å£Šå…‰ç·šã®æç”»
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawPolygon2D_Notexture2(&lay, GetColor(200, 200, 0), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	//ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ•`‰æ‚·‚é
+	//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»ã™ã‚‹
 	flyText.Draw();
 
 
-	//ƒfƒoƒbƒO
+	//ãƒ‡ãƒãƒƒã‚°
 #ifdef _DEBUG_GAMEMAIN_
-	//ƒQ[ƒ€ƒI[ƒo[—Ìˆæ‚ğ•`‰æ‚·‚é
+	//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼é ˜åŸŸã‚’æç”»ã™ã‚‹
 	double tY;
 	Convert_Ingame_FromBlock(0, GAMEOVER_BORDER, 0, 0, NULL, &tY);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawBox(0, 0, WINDOW_WIDTH, (int)tY, GetColor(0, 255, 0), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	//c‰¡BLOCK_SIZEŠÔŠu‚Åü‚ğ•`‰æ‚·‚é
+	//ç¸¦æ¨ªBLOCK_SIZEé–“éš”ã§ç·šã‚’æç”»ã™ã‚‹
 	for (int i = BLOCK_PADDINGLEFT + 1; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++) {
 		DrawLine(i * BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE,
 			i * BLOCK_SIZE, GAMEWINDOW_HEIGHT + BLOCK_PADDINGUP*BLOCK_SIZE,
@@ -176,8 +176,8 @@ void Phase_GameMain::Draw() {
 			i * BLOCK_SIZE, GetColor(0xff, 0xbf, 0x74));
 	}
 
-	//—‰ºƒuƒƒbƒN‚Ì”ÍˆÍ‚ğ•`‰æ‚·‚é
-	if (isFallBlock_Enable()) {//—‰ºƒuƒƒbƒN‚ª—LŒø‚È
+	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ç¯„å›²ã‚’æç”»ã™ã‚‹
+	if (isFallBlock_Enable()) {//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒæœ‰åŠ¹ãªæ™‚
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
@@ -193,29 +193,29 @@ void Phase_GameMain::Draw() {
 
 
 
-	//•`‰ææ‚ğƒoƒbƒNƒXƒNƒŠ[ƒ“‚É‚·‚é
+	//æç”»å…ˆã‚’ãƒãƒƒã‚¯ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã«ã™ã‚‹
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//ƒQ[ƒ€‰æ–Ê‚Ì”wŒi‰æ‘œ‚ğ•`‰æ
+	//ã‚²ãƒ¼ãƒ ç”»é¢ã®èƒŒæ™¯ç”»åƒã‚’æç”»
 	DrawGraph(0, 0, haikei, FALSE);
 
-	Draw_NextFallBlock();	//Ÿ‚Ì—‰ºƒuƒƒbƒN‚Ì•`‰æ
+	Draw_NextFallBlock();	//æ¬¡ã®è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 
-	Draw_Status();	//ƒXƒe[ƒ^ƒX•`‰æ
+	Draw_Status();	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æç”»
 
-	//ƒQ[ƒ€‰æ–Ê‚ğ•`‰æ‚·‚é
-	//ƒfƒoƒbƒO
+	//ã‚²ãƒ¼ãƒ ç”»é¢ã‚’æç”»ã™ã‚‹
+	//ãƒ‡ãƒãƒƒã‚°
 #ifdef _DEBUG_GAMEMAIN_
-	//ƒfƒoƒbƒOƒ‚[ƒh‚Ìê‡A‘SƒuƒƒbƒN—Ìˆæ‚ğ•`‰æ‚·‚é
+	//ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã€å…¨ãƒ–ãƒ­ãƒƒã‚¯é ˜åŸŸã‚’æç”»ã™ã‚‹
 	DrawRectGraph(GAMEWINDOW_PADDINGX - BLOCK_PADDINGLEFT*BLOCK_SIZE, GAMEWINDOW_PADDINGY - BLOCK_PADDINGUP*BLOCK_SIZE, 0, 0, BLOCK_WIDTHNUM*BLOCK_SIZE, BLOCK_HEIGHTNUM*BLOCK_SIZE, gameWindow, FALSE, FALSE);
 #else
 	DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
 #endif
 
 
-	//ƒfƒoƒbƒO
+	//ãƒ‡ãƒãƒƒã‚°
 #ifdef _DEBUG_GAMEMAIN_
-	//ƒ}ƒX–Ú‚Ì”Ô†‚ğ•`‰æ
+	//ãƒã‚¹ç›®ã®ç•ªå·ã‚’æç”»
 	for (int i = BLOCK_PADDINGLEFT; i < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; i++) {
 		int Width = -GetDrawFormatStringWidthToHandle(Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%d"), i);
 		Width += BLOCK_SIZE;
@@ -232,19 +232,19 @@ void Phase_GameMain::Draw() {
 
 	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
-		//ƒ|[ƒYó‘Ô‚Æ•ª‚©‚é‚æ‚¤‚É•`‰æ‚·‚é
+		//ãƒãƒ¼ã‚ºçŠ¶æ…‹ã¨åˆ†ã‹ã‚‹ã‚ˆã†ã«æç”»ã™ã‚‹
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		if (Count_Pause % 120 <= 80)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
 
-		//‘I‘ğˆ‚Ì€–Ú‚Ì•`‰æ
+		//é¸æŠè‚¢ã®é …ç›®ã®æç”»
 		pauseMenu.Draw();
 		break;
 	case PauseMode_GameOver:
 	{
-		//‚¾‚ñ‚¾‚ñ”Z‚­‚·‚é
+		//ã ã‚“ã ã‚“æ¿ƒãã™ã‚‹
 		int Alpha = 200;
 		Alpha = (int)(Alpha * Count_Pause / 300.);
 		if (Alpha > 200)	Alpha = 200;
@@ -252,7 +252,7 @@ void Phase_GameMain::Draw() {
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0), TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		//ã‚©‚ç•¶š‚ª—‚¿‚Ä‚­‚é
+		//ä¸Šã‹ã‚‰æ–‡å­—ãŒè½ã¡ã¦ãã‚‹
 		const int strW = 60;
 		int strX = (int)(WINDOW_WIDTH / 2. - strW * (9 / 2.));
 		double strY = 460;
@@ -299,48 +299,48 @@ void Phase_GameMain::Draw() {
 		Font_DrawStringWithShadow(strX, (int)strY, _T("R"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
 
 
-		//‘I‘ğˆ‚Ì€–Ú‚Ì•`‰æ
+		//é¸æŠè‚¢ã®é …ç›®ã®æç”»
 		pauseMenu.Draw();
 	}
 	break;
-	case PauseMode_GameClear://ƒQ[ƒ€ƒNƒŠƒA
-		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 300, _T("‚»‚±‚Ü‚ÅI"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+	case PauseMode_GameClear://ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢æ™‚
+		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 300, _T("ãã“ã¾ã§ï¼"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
 		
-		//‘I‘ğˆ‚Ì€–Ú‚Ì•`‰æ
+		//é¸æŠè‚¢ã®é …ç›®ã®æç”»
 		pauseMenu.Draw();
 		break;
 	}
 }
 
-//—‰ºƒuƒƒbƒN‚Ì•`‰æ
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 void Phase_GameMain::Draw_FallBlock() {
-	//ƒtƒB[ƒ‹ƒh‘S‘Ì‚ÌƒYƒŒ‚ğŒvZ‚·‚é
+	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å…¨ä½“ã®ã‚ºãƒ¬ã‚’è¨ˆç®—ã™ã‚‹
 	double Field_PaddingX = 0;
 	double Field_PaddingY = 0;
-	if (Block_AllMovedata.Enable) {//‘S‘Ì‚¸‚ç‚·‚ª—LŒø‚Èê‡
-		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//Œ»İ‚ÌˆÚ“®‹——£‚ÌŒvZ
+	if (Block_AllMovedata.Enable) {//å…¨ä½“ãšã‚‰ã™ãŒæœ‰åŠ¹ãªå ´åˆ
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//ç¾åœ¨ã®ç§»å‹•è·é›¢ã®è¨ˆç®—
 		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-		//ã‚ÌŒvZŒ‹‰Ê‚æ‚èA•`‰æÀ•W‚ÌŒvZ
+		//ä¸Šã®è¨ˆç®—çµæœã‚ˆã‚Šã€æç”»åº§æ¨™ã®è¨ˆç®—
 		Field_PaddingX += D * cos(deg_to_rad(Rota));
 		Field_PaddingY += D * sin(deg_to_rad(Rota));
 	}
 
 
-	if (isFallBlock_Enable()) {//—‰ºƒuƒƒbƒN‚ª—LŒø‚È
+	if (isFallBlock_Enable()) {//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒæœ‰åŠ¹ãªæ™‚
 
-		//ƒuƒƒbƒN‚Ì—‰º—\‘z’n“_‚ÉƒuƒƒbƒN‚ğ•`‰æ‚·‚é
+		//ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹äºˆæƒ³åœ°ç‚¹ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»ã™ã‚‹
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			int ShadowDrawDFlag = FALSE;
-			int yCount = 0;	//y•ûŒü‚É‘¶İ‚·‚éƒuƒƒbƒN‚Ì”
+			int yCount = 0;	//yæ–¹å‘ã«å­˜åœ¨ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
 			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
-				//ƒuƒƒbƒN‚Ì—‰º—\‘z’n“_‚Ì•`‰æ
+				//ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹äºˆæƒ³åœ°ç‚¹ã®æç”»
 				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
 
 					int ansY = getBlock_Upper(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
 					double X, Y;
 					Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), ansY, 0.5, 0.5, &X, &Y);
 
-					//ƒtƒB[ƒ‹ƒh‚ÌƒYƒŒ‚Ì•”•ª‚ğ”½‰f‚·‚é
+					//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚ºãƒ¬ã®éƒ¨åˆ†ã‚’åæ˜ ã™ã‚‹
 					X += Field_PaddingX;
 					Y += Field_PaddingY;
 
@@ -353,25 +353,25 @@ void Phase_GameMain::Draw_FallBlock() {
 			}
 		}
 
-		//—‰º’†ƒuƒƒbƒN‚Ì•`‰æ
+		//è½ä¸‹ä¸­ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			int ShadowDrawDFlag = FALSE;
-			int yCount = 0;	//y•ûŒü‚É‘¶İ‚·‚éƒuƒƒbƒN‚Ì”
+			int yCount = 0;	//yæ–¹å‘ã«å­˜åœ¨ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
 			for (int y = FALLBLOCK_SIZE - 1; y >= 0; y--) {
 				double X, Y;
 				double Per = -(fallBlockInfo.FallCount / 60.);
 				Convert_Ingame_FromBlock(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), 0.5, Per + 0.5, &X, &Y);
 
-				//ƒtƒB[ƒ‹ƒh‚ÌƒYƒŒ‚Ì•”•ª‚ğ”½‰f‚·‚é
+				//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚ºãƒ¬ã®éƒ¨åˆ†ã‚’åæ˜ ã™ã‚‹
 				X += Field_PaddingX;
 				Y += Field_PaddingY;
-				//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚¤ê‡‚Í‚Å‚È‚¢‚æ‚¤‚É’²®‚·‚é
-				int Dan = 0;//ƒuƒƒbƒN‚ª‘¶İ‚·‚é’i”
+				//ç”»é¢å¤–ã«å‡ºã¦ã—ã¾ã†å ´åˆã¯ã§ãªã„ã‚ˆã†ã«èª¿æ•´ã™ã‚‹
+				int Dan = 0;//ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹æ®µæ•°
 				for (int y2 = 0; y2 < FALLBLOCK_SIZE; y2++) {
 					for (int x2 = 0; x2 < FALLBLOCK_SIZE; x2++) {
 						if (fallBlockInfo.BlockID[x2][y2] != BLOCK_TYPE_NO) {
 							Dan = y2;
-							//ƒ‹[ƒv‚ğ”²‚¯‚é
+							//ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 							x2 = FALLBLOCK_SIZE;
 							y2 = FALLBLOCK_SIZE;
 						}
@@ -383,7 +383,7 @@ void Phase_GameMain::Draw_FallBlock() {
 
 				DrawBlock(X, Y, fallBlockInfo.BlockID[x][y]);
 				if (x == 1 && y == 1 && fallBlockInfo.Flag_Rotate) {
-					//’†S‚Ìê‡‚©‚Â‰ñ“]‰Â”\ƒuƒƒbƒN‚Ìê‡
+					//ä¸­å¿ƒã®å ´åˆã‹ã¤å›è»¢å¯èƒ½ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ
 					//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
 					float Scale = 1;
 
@@ -394,17 +394,17 @@ void Phase_GameMain::Draw_FallBlock() {
 	}
 }
 
-//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Ì•`‰æ
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 void Phase_GameMain::Draw_FieldBlock() {
 
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//•`‰ææ‚ÌÀ•W‚ğæ“¾
+			//æç”»å…ˆã®åº§æ¨™ã‚’å–å¾—
 			double X, Y;
 			X = field[x][y].DrawPlaceX;
 			Y = field[x][y].DrawPlaceY;
 
-			//ƒQ[ƒ€ƒI[ƒo[‚É‰º‚É—‰º‚³‚¹‚é
+			//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼æ™‚ã«ä¸‹ã«è½ä¸‹ã•ã›ã‚‹
 			if (getPauseMode() == PauseMode_GameOver) {
 				if (Count_Pause < 300)	Y += 1 / 2.*0.2*Count_Pause*Count_Pause;
 				else					Y += 1 / 2.*0.2 * 300 * 300;
@@ -412,20 +412,20 @@ void Phase_GameMain::Draw_FieldBlock() {
 
 			switch (field[x][y].blockChangeMotion.Type) {
 			case BlockChangeMotionType_NO:
-				//•Ï‰»ƒ‚[ƒVƒ‡ƒ“–³‚µ‚Ìê‡‚Í–³“ï‚É•`‰æ‚·‚é
+				//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç„¡ã—ã®å ´åˆã¯ç„¡é›£ã«æç”»ã™ã‚‹
 				DrawBlock(X, Y, field[x][y].color);
 				break;
 			case BlockChangeMotionType_NOMAL:
-				//•’Ê‚Ì•Ï‰»ƒ‚[ƒVƒ‡ƒ“
+				//æ™®é€šã®å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 				DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
-				//•Ï‰»—Ê‚É‰‚¶‚Ä”¼“§–¾‚Å•`‰æ‚·‚é
+				//å¤‰åŒ–é‡ã«å¿œã˜ã¦åŠé€æ˜ã§æç”»ã™ã‚‹
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)((field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length) * 255));
 				DrawBlock(X, Y, field[x][y].blockChangeMotion.To);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 				break;
 			case BlockChangeMotionType_EXPLOSION:
-				//”š”­(ƒVƒF[ƒ_‚ÉŠæ’£‚Á‚Ä‚à‚ç‚¤)
-				if (field[x][y].blockChangeMotion.Count < 0) {//ƒ‚[ƒVƒ‡ƒ“‘O‚Í•’Ê‚É•`‰æ
+				//çˆ†ç™º(ã‚·ã‚§ãƒ¼ãƒ€ã«é ‘å¼µã£ã¦ã‚‚ã‚‰ã†)
+				if (field[x][y].blockChangeMotion.Count < 0) {//ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å‰ã¯æ™®é€šã«æç”»
 					DrawBlock(X, Y, field[x][y].blockChangeMotion.From);
 				}
 				else {
@@ -434,7 +434,7 @@ void Phase_GameMain::Draw_FieldBlock() {
 				}
 				break;
 			case BlockChangeMotionType_SMALL:
-				//¬‚³‚­‚È‚é
+				//å°ã•ããªã‚‹
 				DrawBlock(X, Y, field[x][y].blockChangeMotion.From, 1 - (field[x][y].blockChangeMotion.Count / (double)field[x][y].blockChangeMotion.Length));
 				break;
 			}
@@ -442,38 +442,38 @@ void Phase_GameMain::Draw_FieldBlock() {
 	}
 }
 
-//ƒXƒe[ƒ^ƒX‚Ì•`‰æ
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®æç”»
 void Phase_GameMain::Draw_Status() {
-	//Œ»İ‚ÌŒo‰ßƒ^[ƒ“”‚Ì•`‰æ
-	int placeX = 880;	//€–Ú‚ÌŠî€ˆÊ’u
-	int placeY = 60;	//€–Ú‚ÌŠî€ˆÊ’u
+	//ç¾åœ¨ã®çµŒéã‚¿ãƒ¼ãƒ³æ•°ã®æç”»
+	int placeX = 880;	//é …ç›®ã®åŸºæº–ä½ç½®
+	int placeY = 60;	//é …ç›®ã®åŸºæº–ä½ç½®
 
 	TCHAR str[100];
-	Font_DrawStringWithShadow(placeX, placeY, _T("Œo‰ßƒ^[ƒ“”"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	_stprintf_s(str, _T("%dƒ^[ƒ“"), Count_Turn);
+	Font_DrawStringWithShadow(placeX, placeY, _T("çµŒéã‚¿ãƒ¼ãƒ³æ•°"), GetColor(0x00, 0xac, 0xd7), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	_stprintf_s(str, _T("%dã‚¿ãƒ¼ãƒ³"), Count_Turn);
 	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0x70, 0xe2, 0xff), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 
 	placeY += 110;
-	Font_DrawStringWithShadow(placeX, placeY, _T("ƒQ[ƒ€Œo‰ßŠÔ"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	Font_DrawStringWithShadow(placeX, placeY, _T("ã‚²ãƒ¼ãƒ çµŒéæ™‚é–“"), GetColor(0x13, 0xc6, 0x00), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	_stprintf_s(str, _T("%.2fs"), getCountGameTime() / 60.);
 	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0x90, 0xff, 0x85), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 
 	placeY += 110;
-	Font_DrawStringWithShadow(placeX, placeY, _T("‘€ìŒo‰ßŠÔ"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	Font_DrawStringWithShadow(placeX, placeY, _T("æ“ä½œçµŒéæ™‚é–“"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	_stprintf_s(str, _T("%.2fs"), getCountPlayTime() / 60.);
 	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 
 	placeY += 110;
-	Font_DrawStringWithShadow(placeX, placeY, _T("Šl“¾ƒXƒRƒA"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	Font_DrawStringWithShadow(placeX, placeY, _T("ç²å¾—ã‚¹ã‚³ã‚¢"), GetColor(0xff, 0xa4, 0x38), GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	_stprintf_s(str, _T("%d"), score.getScore());
 	Font_DrawStringWithShadow(placeX + 20, placeY + 60, str, GetColor(0xd9, 0x8b, 0x30), GetColor(10, 10, 10), FONTTYPE_SFSquareHeadCondensed_Edge45);
 }
 
-//Ÿ‚Ì—‰ºƒuƒƒbƒN‚Ì•`‰æ
+//æ¬¡ã®è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 void Phase_GameMain::Draw_NextFallBlock() {
 	int placeX = 550;
 	int placeY = 60;
-	double Before_X = 0;	//’¼‘O‚Ì•`‰æƒGƒŠƒA‚Ì‚‚³
+	double Before_X = 0;	//ç›´å‰ã®æç”»ã‚¨ãƒªã‚¢ã®é«˜ã•
 	double Scale = 1;
 
 	for (int i = 0; i < min(ARRAY_LENGTH(waitBlockinfo), 5); i++) {
@@ -486,7 +486,7 @@ void Phase_GameMain::Draw_NextFallBlock() {
 				double X, Y;
 				Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 
-				//c‚É‚¸‚ç‚·
+				//ç¸¦ã«ãšã‚‰ã™
 				X *= Scale;
 				Y *= Scale;
 
@@ -499,7 +499,7 @@ void Phase_GameMain::Draw_NextFallBlock() {
 	}
 }
 
-//ƒuƒƒbƒN‚ğ•`‰æ‚·‚é(ƒCƒ“ƒQ[ƒ€À•W)
+//ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»ã™ã‚‹(ã‚¤ãƒ³ã‚²ãƒ¼ãƒ åº§æ¨™)
 void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale) {
 
 	if (type == BLOCK_TYPE_NO)	return;
@@ -507,7 +507,7 @@ void Phase_GameMain::DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, 
 	DrawBlock_Tex(CenterX, CenterY, getBlockTexture(type), Scale);
 }
 
-//ƒeƒNƒXƒ`ƒƒ‚ğ’¼Úw’è‚µ‚ÄƒuƒƒbƒN‚ğ•`‰æ‚·‚é(ƒCƒ“ƒQ[ƒ€À•W)
+//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç›´æ¥æŒ‡å®šã—ã¦ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»ã™ã‚‹(ã‚¤ãƒ³ã‚²ãƒ¼ãƒ åº§æ¨™)
 void Phase_GameMain::DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale) {
 
 	if (tex <= 0)	return;
@@ -515,96 +515,96 @@ void Phase_GameMain::DrawBlock_Tex(double CenterX, double CenterY, int tex, doub
 	DrawRectRotaGraphFast2((int)CenterX, (int)CenterY, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2, BLOCK_SIZE / 2, (float)Scale, 0, tex, TRUE, FALSE);
 }
 
-//ƒuƒƒbƒNƒ^ƒCƒv‚æ‚èƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹‚Ìæ“¾
+//ãƒ–ãƒ­ãƒƒã‚¯ã‚¿ã‚¤ãƒ—ã‚ˆã‚Šãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«ã®å–å¾—
 int Phase_GameMain::getBlockTexture(BLOCK_TYPE type) {
 	switch (type) {
-	case BLOCK_TYPE_RED:	//ÔƒuƒƒbƒN
+	case BLOCK_TYPE_RED:	//èµ¤ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockRED;
-	case BLOCK_TYPE_BLUE:	//ÂƒuƒƒbƒN
+	case BLOCK_TYPE_BLUE:	//é’ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockBLUE;
-	case BLOCK_TYPE_GREEN:	//—ÎƒuƒƒbƒN
+	case BLOCK_TYPE_GREEN:	//ç·‘ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockGREEN;
-	case BLOCK_TYPE_PURPLE:	//‡ƒuƒƒbƒN
+	case BLOCK_TYPE_PURPLE:	//ç´«ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockPURPLE;
-	case BLOCK_TYPE_RED_ARROW_X://Ô(•½s–îˆó)
+	case BLOCK_TYPE_RED_ARROW_X://èµ¤(å¹³è¡ŒçŸ¢å°)
 		return Tex_BlockRED_ARROW_X;
-	case BLOCK_TYPE_RED_ARROW_Y://Ô(‚’¼–îˆó)
+	case BLOCK_TYPE_RED_ARROW_Y://èµ¤(å‚ç›´çŸ¢å°)
 		return Tex_BlockRED_ARROW_Y;
-	case BLOCK_TYPE_RED_ARROW_XY://Ô(Î‚ß‰Eã)
+	case BLOCK_TYPE_RED_ARROW_XY://èµ¤(æ–œã‚å³ä¸Š)
 		return Tex_BlockRED_ARROW_XY;
-	case BLOCK_TYPE_RED_ARROW_XY2://Ô(Î‚ß‰E‰º)
+	case BLOCK_TYPE_RED_ARROW_XY2://èµ¤(æ–œã‚å³ä¸‹)
 		return Tex_BlockRED_ARROW_XY2;
-	case BLOCK_TYPE_BLUE_ARROW_X://Â(•½s–îˆó)
+	case BLOCK_TYPE_BLUE_ARROW_X://é’(å¹³è¡ŒçŸ¢å°)
 		return Tex_BlockBLUE_ARROW_X;
-	case BLOCK_TYPE_BLUE_ARROW_Y://Â(‚’¼–îˆó)
+	case BLOCK_TYPE_BLUE_ARROW_Y://é’(å‚ç›´çŸ¢å°)
 		return Tex_BlockBLUE_ARROW_Y;
-	case BLOCK_TYPE_BLUE_ARROW_XY://Â(Î‚ß‰Eã)
+	case BLOCK_TYPE_BLUE_ARROW_XY://é’(æ–œã‚å³ä¸Š)
 		return Tex_BlockBLUE_ARROW_XY;
-	case BLOCK_TYPE_BLUE_ARROW_XY2://Â(Î‚ß‰E‰º)
+	case BLOCK_TYPE_BLUE_ARROW_XY2://é’(æ–œã‚å³ä¸‹)
 		return Tex_BlockBLUE_ARROW_XY2;
-	case BLOCK_TYPE_YELLOW_ARROW_X://‰©(•½s–îˆó)
+	case BLOCK_TYPE_YELLOW_ARROW_X://é»„(å¹³è¡ŒçŸ¢å°)
 		return Tex_BlockYELLOW_ARROW_X;
-	case BLOCK_TYPE_YELLOW_ARROW_Y://‰©(‚’¼–îˆó)
+	case BLOCK_TYPE_YELLOW_ARROW_Y://é»„(å‚ç›´çŸ¢å°)
 		return Tex_BlockYELLOW_ARROW_Y;
-	case BLOCK_TYPE_YELLOW_ARROW_XY://‰©(Î‚ß‰Eã)
+	case BLOCK_TYPE_YELLOW_ARROW_XY://é»„(æ–œã‚å³ä¸Š)
 		return Tex_BlockYELLOW_ARROW_XY;
-	case BLOCK_TYPE_YELLOW_ARROW_XY2://‰©(Î‚ß‰E‰º)
+	case BLOCK_TYPE_YELLOW_ARROW_XY2://é»„(æ–œã‚å³ä¸‹)
 		return Tex_BlockYELLOW_ARROW_XY2;
-	case BLOCK_TYPE_GREEN_ARROW_X://—Î(•½s–îˆó)
+	case BLOCK_TYPE_GREEN_ARROW_X://ç·‘(å¹³è¡ŒçŸ¢å°)
 		return Tex_BlockGREEN_ARROW_X;
-	case BLOCK_TYPE_GREEN_ARROW_Y://—Î(‚’¼–îˆó)
+	case BLOCK_TYPE_GREEN_ARROW_Y://ç·‘(å‚ç›´çŸ¢å°)
 		return Tex_BlockGREEN_ARROW_Y;
-	case BLOCK_TYPE_GREEN_ARROW_XY://—Î(Î‚ß‰Eã)
+	case BLOCK_TYPE_GREEN_ARROW_XY://ç·‘(æ–œã‚å³ä¸Š)
 		return Tex_BlockGREEN_ARROW_XY;
-	case BLOCK_TYPE_GREEN_ARROW_XY2://—Î(Î‚ß‰E‰º)
+	case BLOCK_TYPE_GREEN_ARROW_XY2://ç·‘(æ–œã‚å³ä¸‹)
 		return Tex_BlockGREEN_ARROW_XY2;
-	case BLOCK_TYPE_PURPLE_ARROW_X://‡(•½s–îˆó)
+	case BLOCK_TYPE_PURPLE_ARROW_X://ç´«(å¹³è¡ŒçŸ¢å°)
 		return Tex_BlockPURPLE_ARROW_X;
-	case BLOCK_TYPE_PURPLE_ARROW_Y://‡(‚’¼–îˆó)
+	case BLOCK_TYPE_PURPLE_ARROW_Y://ç´«(å‚ç›´çŸ¢å°)
 		return Tex_BlockPURPLE_ARROW_Y;
-	case BLOCK_TYPE_PURPLE_ARROW_XY://‡(Î‚ß‰Eã)
+	case BLOCK_TYPE_PURPLE_ARROW_XY://ç´«(æ–œã‚å³ä¸Š)
 		return Tex_BlockPURPLE_ARROW_XY;
-	case BLOCK_TYPE_PURPLE_ARROW_XY2://‡(Î‚ß‰E‰º)
+	case BLOCK_TYPE_PURPLE_ARROW_XY2://ç´«(æ–œã‚å³ä¸‹)
 		return Tex_BlockPURPLE_ARROW_XY2;
-	case BLOCK_TYPE_YELLOW:	//‰©FƒuƒƒbƒN•`‰æ
+	case BLOCK_TYPE_YELLOW:	//é»„è‰²ãƒ–ãƒ­ãƒƒã‚¯æç”»
 		return Tex_BlockYELLOW;
-	case BLOCK_TYPE_TREE:	//÷–ØƒuƒƒbƒN
+	case BLOCK_TYPE_TREE:	//æ¨¹æœ¨ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockTREE;
-	case BLOCK_TYPE_BLACK:	//•ƒuƒƒbƒN
+	case BLOCK_TYPE_BLACK:	//é»’ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockBLACK;
-	case BLOCK_TYPE_RAINBOW://“øFƒuƒƒbƒN
+	case BLOCK_TYPE_RAINBOW://è™¹è‰²ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockRAINBOW;
-	case BLOCK_TYPE_BOM://”š’eƒuƒƒbƒN
+	case BLOCK_TYPE_BOM://çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockBOMB;
-	case BLOCK_TYPE_2BOM://2”š’eƒuƒƒbƒN
+	case BLOCK_TYPE_2BOM://2çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_Block2BOMB;
-	case BLOCK_TYPE_BOM_Color://“¯F”š’eƒuƒƒbƒN
+	case BLOCK_TYPE_BOM_Color://åŒè‰²çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯
 		return Tex_BlockBOMB_Color;
 	}
-	printLog_E(_T("ƒeƒNƒXƒ`ƒƒ”Ô†‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½(BLOCK_TYPE=%d)"), type);
-	return -1;	//ƒGƒ‰[
+	printLog_E(_T("ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸ(BLOCK_TYPE=%d)"), type);
+	return -1;	//ã‚¨ãƒ©ãƒ¼
 }
 
-//ŒvZˆ—
+//è¨ˆç®—å‡¦ç†
 void Phase_GameMain::Update() {
-	//ŒvZˆ—‚ÌÅ‰‚És‚¢‚½‚¢ˆ—(‘½‚­‚È‚Á‚½‚çŠÖ”‰»H)
+	//è¨ˆç®—å‡¦ç†ã®æœ€åˆã«è¡Œã„ãŸã„å‡¦ç†(å¤šããªã£ãŸã‚‰é–¢æ•°åŒ–ï¼Ÿ)
 
-	//ƒŠƒNƒGƒXƒg‚Ì”½‰f
+	//ãƒªã‚¯ã‚¨ã‚¹ãƒˆã®åæ˜ 
 	if (Flag_pauseRequest != PauseMode_NUM) {
-		Flag_Pause = Flag_pauseRequest;//ƒŠƒNƒGƒXƒg‚Ì”½‰f
+		Flag_Pause = Flag_pauseRequest;//ãƒªã‚¯ã‚¨ã‚¹ãƒˆã®åæ˜ 
 		Flag_pauseRequest = PauseMode_NUM;
 		Count_Pause = 0;
 	}
 
-	//ƒJƒEƒ“ƒ^‚Ì‰ÁZ
+	//ã‚«ã‚¦ãƒ³ã‚¿ã®åŠ ç®—
 	Update_Counter();
 
-	GameMain_Key();	//ƒL[ˆ—
+	GameMain_Key();	//ã‚­ãƒ¼å‡¦ç†
 
-	//ƒ|[ƒY‚Ìˆ—‚ğ‚µ‚Ä‚±‚Ìæ‚É‚Íi‚Ü‚È‚¢
+	//ãƒãƒ¼ã‚ºæ™‚ã®å‡¦ç†ã‚’ã—ã¦ã“ã®å…ˆã«ã¯é€²ã¾ãªã„
 	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
-		//‘I‘ğˆ‚Ì€–Ú‚ÌXV
+		//é¸æŠè‚¢ã®é …ç›®ã®æ›´æ–°
 		pauseMenu.Update();
 		return;
 	case PauseMode_GameOver:
@@ -615,27 +615,27 @@ void Phase_GameMain::Update() {
 		return;
 	}
 
-	//”j‰óŒõüƒGƒtƒFƒNƒg‚ÌXV
+	//ç ´å£Šå…‰ç·šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æ›´æ–°
 	Update_Lay_BlockDel();
-	//ƒtƒ‰ƒCƒeƒLƒXƒg‚ÌXV
+	//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®æ›´æ–°
 	flyText.Update();
 
-	//ƒuƒƒbƒN‘S‘ÌˆÚ“®‚ª—LŒø‚Èê‡‚ÍA’Êí‚Ìˆ—‚ğÀs‚¹‚¸A‘S‘ÌˆÚ“®‚ÌƒJƒEƒ“ƒgƒAƒbƒv‚Ì‚İs‚¤‚æ‚¤‚É‚·‚é
+	//ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ç§»å‹•ãŒæœ‰åŠ¹ãªå ´åˆã¯ã€é€šå¸¸ã®å‡¦ç†ã‚’å®Ÿè¡Œã›ãšã€å…¨ä½“ç§»å‹•ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—ã®ã¿è¡Œã†ã‚ˆã†ã«ã™ã‚‹
 	if (Block_AllMovedata.Enable == TRUE) {
-		Block_AllMovedata.Count++;//ƒJƒEƒ“ƒgƒAƒbƒv
-		//ˆÚ“®‚·‚é‹——£‚ÌŒvZ
+		Block_AllMovedata.Count++;//ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+		//ç§»å‹•ã™ã‚‹è·é›¢ã®è¨ˆç®—
 		double fX, fY, tX, tY;
 		Convert_Ingame_FromBlock(Block_AllMovedata.FromX, Block_AllMovedata.FromY, 0, 0, &fX, &fY);
 		Convert_Ingame_FromBlock(Block_AllMovedata.ToX, Block_AllMovedata.ToY, 0, 0, &tX, &tY);
-		double FMD = getDistance(fX, fY, tX, tY);	//ÅI“I‚ÈˆÚ“®‹——£
-		double MD = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//Œ»İ‚ÌˆÚ“®‹——£
-		if (FMD <= MD) {//ˆÚ“®Š®—¹
+		double FMD = getDistance(fX, fY, tX, tY);	//æœ€çµ‚çš„ãªç§»å‹•è·é›¢
+		double MD = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//ç¾åœ¨ã®ç§»å‹•è·é›¢
+		if (FMD <= MD) {//ç§»å‹•å®Œäº†
 
 			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-			Block_AllMovedata.Enable = FALSE;//ˆÚ“®‚ğ–³Œø‰»(Block_AllMove‚µ‚Ä‚©‚ç‚·‚é‚±‚ÆI)
+			Block_AllMovedata.Enable = FALSE;//ç§»å‹•ã‚’ç„¡åŠ¹åŒ–(Block_AllMoveã—ã¦ã‹ã‚‰ã™ã‚‹ã“ã¨ï¼)
 
 
-			UpdateBlockRequest(gameCycle);	//Œ»İ‚ÌƒQ[ƒ€ƒTƒCƒNƒ‹‚ÉŠ„‚è‚ŞŒ`‚ÅƒuƒƒbƒN‚ÌƒAƒbƒvƒf[ƒg‚ğ“ü‚ê‚é
+			UpdateBlockRequest(gameCycle);	//ç¾åœ¨ã®ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ã«å‰²ã‚Šè¾¼ã‚€å½¢ã§ãƒ–ãƒ­ãƒƒã‚¯ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚’å…¥ã‚Œã‚‹
 		}
 		return;
 	}
@@ -644,18 +644,18 @@ void Phase_GameMain::Update() {
 	case GameCycle_FALL:
 		if (getFallBlock_Interval() > 0) {
 			Count_Turn++;
-			Create_FallBlock();//‘O‰ñ‚Ì—‰ºƒuƒƒbƒNI—¹‚©‚çˆê’èŠÔŒã‚É—‰ºƒuƒƒbƒN‚ÌÄoŒ»
+			Create_FallBlock();//å‰å›ã®è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†ã‹ã‚‰ä¸€å®šæ™‚é–“å¾Œã«è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®å†å‡ºç¾
 		}
-		//—‰ºƒuƒƒbƒN‚Ì—‰ºˆ—
+		//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹å‡¦ç†
 		if (Update_FallBlock()) {
-			//—‰ºŠ®—¹Œã‚ÍŒvZ‚ğs‚¤
+			//è½ä¸‹å®Œäº†å¾Œã¯è¨ˆç®—ã‚’è¡Œã†
 			UpdateBlockRequest(GameCycle_BeforeFALL);
 		}
 		break;
 	case GameCycle_BeforeFALL:
 	{
 		if (Count_Turn % 4 == 0 || getBlock_maxUpper() > BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN - BLOCK_DEFAULT_VAL) {
-			//‰º‚©‚çƒuƒƒbƒN‚ğ•¦‚©‚·
+			//ä¸‹ã‹ã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ²¸ã‹ã™
 			under_Block();
 		}
 		else if (Count_Turn % 7 == 0) {
@@ -668,298 +668,298 @@ void Phase_GameMain::Update() {
 		UpdateBlockRequest(GameCycle_FALL);
 	}
 	break;
-	case GameCycle_Update://ƒuƒƒbƒN‚ÌŒvZ
+	case GameCycle_Update://ãƒ–ãƒ­ãƒƒã‚¯ã®è¨ˆç®—
 		Update_FieldBlock();
 		break;
 	}
 }
 
-//—‰ºƒuƒƒbƒN‚Ì—‰ºˆ—(TRUE‚Å—‰ºƒuƒƒbƒN‚Ì—‰ºI—¹)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹å‡¦ç†(TRUEã§è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹çµ‚äº†)
 int Phase_GameMain::Update_FallBlock() {
 	if (!isFallBlock_Enable()) {
-		//–³Œø‚Ì‚ÍƒCƒ“ƒ^[ƒoƒ‹ƒJƒEƒ“ƒg‚ğ‰ÁZ‚µI—¹
+		//ç„¡åŠ¹ã®æ™‚ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚«ã‚¦ãƒ³ãƒˆã‚’åŠ ç®—ã—çµ‚äº†
 		fallBlockInfo.Counter--;
 		return FALSE;
 	}
 
-	//ˆÈ‰º—LŒø‚È‚Æ‚«
-	fallBlockInfo.Counter++;	//ƒJƒEƒ“ƒ^‚ğ‰ÁZ
+	//ä»¥ä¸‹æœ‰åŠ¹ãªã¨ã
+	fallBlockInfo.Counter++;	//ã‚«ã‚¦ãƒ³ã‚¿ã‚’åŠ ç®—
 
-	if (isFallBlock_Falling()) {//—‰º’†‚Ìê‡
+	if (isFallBlock_Falling()) {//è½ä¸‹ä¸­ã®å ´åˆ
 		fallBlockInfo.FallCount--;
-		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 20;	//‚‘¬—‰ºƒ‚[ƒh‚Ìê‡ƒJƒEƒ“ƒg‚ğ‚³‚ç‚É“ü‚ê‚é
+		if (fallBlockInfo.Key_FlagFirstFall)	fallBlockInfo.FallCount -= 20;	//é«˜é€Ÿè½ä¸‹ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã‚«ã‚¦ãƒ³ãƒˆã‚’ã•ã‚‰ã«å…¥ã‚Œã‚‹
 
-		if (fallBlockInfo.FallCount < 0)		fallBlockInfo.FallCount = 0;	//—‰ºƒJƒEƒ“ƒg‚ª0ˆÈ‰º‚¾‚Æ“s‡‚ªˆ«‚¢‚Ì‚Å
+		if (fallBlockInfo.FallCount < 0)		fallBlockInfo.FallCount = 0;	//è½ä¸‹ã‚«ã‚¦ãƒ³ãƒˆãŒ0ä»¥ä¸‹ã ã¨éƒ½åˆãŒæ‚ªã„ã®ã§
 		if (fallBlockInfo.Key_LRMove > 0) {
-			//‰EˆÚ“®
+			//å³ç§»å‹•
 			if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 			else							SoundEffect_Play(SE_TYPE_Graze);
 
 		}
 		if (fallBlockInfo.Key_LRMove < 0) {
-			//¶ˆÚ“®
+			//å·¦ç§»å‹•
 			if (FallBlock_MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 		if (fallBlockInfo.Key_LRRota > 0) {
-			//Œv‰ñ‚è‚É‰ñ“]
+			//æ™‚è¨ˆå›ã‚Šã«å›è»¢
 			if (FallBlock_Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 		if (fallBlockInfo.Key_LRRota < 0) {
-			//”½Œv‰ñ‚è‚É‰ñ“]
+			//åæ™‚è¨ˆå›ã‚Šã«å›è»¢
 			if (FallBlock_Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 			else							SoundEffect_Play(SE_TYPE_Graze);
 		}
 
-		if (fallBlockInfo.FallCount <= 0) {//ƒJƒEƒ“ƒg0ˆÈ‰º‚Å—‰º
-			fallBlockInfo.FallCount = 60;	//ƒJƒEƒ“ƒg‚ğ–ß‚·(‚±‚±‚Å–ß‚³‚È‚¢‚ÆFallBlock_MoveYŠÖ”‚ÅˆÚ“®–³Œø‚Æ”»’è‚³‚êA‚¤‚Ü‚­“®‚©‚È‚¢)
-											/*—‰º‚µ‚æ‚¤‚Æ‚µ‚Ä–³—‚¾‚Á‚½‚çƒJƒEƒ“ƒg‚ğ0‚É‚µ–³Œø‰»‚·‚é•ûj*/
-			if (FallBlock_MoveY(1) == 0) {	//—‰ºo—ˆ‚È‚©‚Á‚½
-				fallBlockInfo.FallCount = -1;	//—‰ºƒJƒEƒ“ƒg‚Ì–³Œø‰»
-				printLog_I(_T("ƒuƒƒbƒN‚Ì—‰ºI—¹"));
-				FallBlock_addField();	//ƒtƒB[ƒ‹ƒh‚É—‰ºƒuƒƒbƒN‚ğİ’u
+		if (fallBlockInfo.FallCount <= 0) {//ã‚«ã‚¦ãƒ³ãƒˆ0ä»¥ä¸‹ã§è½ä¸‹
+			fallBlockInfo.FallCount = 60;	//ã‚«ã‚¦ãƒ³ãƒˆã‚’æˆ»ã™(ã“ã“ã§æˆ»ã•ãªã„ã¨FallBlock_MoveYé–¢æ•°ã§ç§»å‹•ç„¡åŠ¹ã¨åˆ¤å®šã•ã‚Œã€ã†ã¾ãå‹•ã‹ãªã„)
+											/*è½ä¸‹ã—ã‚ˆã†ã¨ã—ã¦ç„¡ç†ã ã£ãŸã‚‰ã‚«ã‚¦ãƒ³ãƒˆã‚’0ã«ã—ç„¡åŠ¹åŒ–ã™ã‚‹æ–¹é‡*/
+			if (FallBlock_MoveY(1) == 0) {	//è½ä¸‹å‡ºæ¥ãªã‹ã£ãŸ
+				fallBlockInfo.FallCount = -1;	//è½ä¸‹ã‚«ã‚¦ãƒ³ãƒˆã®ç„¡åŠ¹åŒ–
+				printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®è½ä¸‹çµ‚äº†"));
+				FallBlock_addField();	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨­ç½®
 				SoundEffect_Play(SE_TYPE_DecisionSelect);
 				return TRUE;
 			}
 		}
 	}
 
-	//ƒL[“ü—Í‚É‚æ‚éó‘Ô‚ÌƒŠƒZƒbƒg
+	//ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹çŠ¶æ…‹ã®ãƒªã‚»ãƒƒãƒˆ
 	fallBlockInfo.Key_FlagFirstFall = FALSE;
 	fallBlockInfo.Key_LRMove = 0;
 	fallBlockInfo.Key_LRRota = 0;
 	return FALSE;
 }
 
-//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Ì×X‚Æ‚µ‚½ŒvZƒ‹[ƒv
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®ç´°ã€…ã¨ã—ãŸè¨ˆç®—ãƒ«ãƒ¼ãƒ—
 int Phase_GameMain::Update_FieldBlock() {
 	/*
-	ƒQ[ƒ€XVƒ‹[ƒv
-	0.‰Šú‰»ˆ—(Å‰‚Ì1“x‚Ì‚İÀs)
-	1.•Ï‰»ƒ‚[ƒVƒ‡ƒ“
-	2.d—ÍŒvZ
-	3.ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
-	4.ƒuƒƒbƒN‚Ì“ÁêŒø‰Ê
-	5.•Ï‰»ƒ‚[ƒVƒ‡ƒ“
-	6.d—ÍŒvZ
-	7.ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
-	8.ƒuƒƒbƒN‚ÌÁ‹”»’è¨Á‹ƒuƒƒbƒN–³‚µ‚Ìê‡‚Í11‚Ö
-	9.•Ï‰»ƒ‚[ƒVƒ‡ƒ“
-	10.d—ÍŒvZ
-	11.ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚©‚ç7‚Ö
-	12.XVƒ‹[ƒvI—¹
+	ã‚²ãƒ¼ãƒ æ›´æ–°ãƒ«ãƒ¼ãƒ—
+	0.åˆæœŸåŒ–å‡¦ç†(æœ€åˆã®1åº¦ã®ã¿å®Ÿè¡Œ)
+	1.å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	2.é‡åŠ›è¨ˆç®—
+	3.ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	4.ãƒ–ãƒ­ãƒƒã‚¯ã®ç‰¹æ®ŠåŠ¹æœ
+	5.å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	6.é‡åŠ›è¨ˆç®—
+	7.ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	8.ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»åˆ¤å®šâ†’æ¶ˆå»ãƒ–ãƒ­ãƒƒã‚¯ç„¡ã—ã®å ´åˆã¯11ã¸
+	9.å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	10.é‡åŠ›è¨ˆç®—
+	11.ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰7ã¸
+	12.æ›´æ–°ãƒ«ãƒ¼ãƒ—çµ‚äº†
 	*/
 
 
 	switch (Loop_No) {
-	case 0://‰Šú‰»
+	case 0://åˆæœŸåŒ–
 
-		ChainCount = 0;	//˜A½ƒJƒEƒ“ƒg‚ğƒŠƒZƒbƒg‚·‚é
-		gameCycleFirstCallFlag = FALSE;	//ƒQ[ƒ€ƒTƒCƒNƒ‹‚ª•ÏX‚³‚ê‚½‚Ìƒtƒ‰ƒO‚ğFALSE‚Éİ’è‚·‚é
+		ChainCount = 0;	//é€£é–ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+		gameCycleFirstCallFlag = FALSE;	//ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚ã®ãƒ•ãƒ©ã‚°ã‚’FALSEã«è¨­å®šã™ã‚‹
 
-		//‰æ–ÊŠOƒuƒƒbƒN‚ğíœ‚·‚é
+		//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã™ã‚‹
 		Block_Delete_OutScreen();
 
 		if (!gameCycleFirstCallFlag) {
 			Loop_No = 1;
-			printLog_I(_T("•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+			printLog_I(_T("å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		}
 		break;
-	case 1://•Ï‰»ƒ‚[ƒVƒ‡ƒ“
+	case 1://å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_ChangeMotion() == FALSE) {
-			//•Ï‰»‚ª‚È‚©‚Á‚½ê‡
+			//å¤‰åŒ–ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 2;
-				printLog_I(_T("d—ÍŒvZ‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("é‡åŠ›è¨ˆç®—ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 2://d—ÍŒvZ
-		Block_Gravity();//d—ÍŒvZ‚ğs‚¤
+	case 2://é‡åŠ›è¨ˆç®—
+		Block_Gravity();//é‡åŠ›è¨ˆç®—ã‚’è¡Œã†
 		Loop_No = 3;
-		printLog_I(_T("ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+		printLog_I(_T("ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		break;
-	case 3://ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
+	case 3://ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_MoveMotion() == FALSE) {
-			//ˆÚ“®‚ª‚È‚©‚Á‚½ê‡
+			//ç§»å‹•ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 4;
-				printLog_I(_T("ƒuƒƒbƒN‚Ì“ÁêŒø‰Ê‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®ç‰¹æ®ŠåŠ¹æœã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 4://ƒuƒƒbƒN‚Ì“ÁêŒø‰Ê
-		Block_Black_Func();		//•ƒuƒƒbƒN‚ÌF•ÏX
-		Block_Rainbow_Func();	//“øFƒuƒƒbƒN‚ÌF‚ğ•ÏX
-		Block_BOMB_Func();		//”š’eƒuƒƒbƒN‚Ìˆ—
-		Block_2BOMB_Func();		//2”š’eƒuƒƒbƒN‚Ìˆ—
-		Block_BOMBColor_Func();	//“¯F”š’eƒuƒƒbƒN‚Ìˆ—
+	case 4://ãƒ–ãƒ­ãƒƒã‚¯ã®ç‰¹æ®ŠåŠ¹æœ
+		Block_Black_Func();		//é»’ãƒ–ãƒ­ãƒƒã‚¯ã®è‰²å¤‰æ›´
+		Block_Rainbow_Func();	//è™¹è‰²ãƒ–ãƒ­ãƒƒã‚¯ã®è‰²ã‚’å¤‰æ›´
+		Block_BOMB_Func();		//çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®å‡¦ç†
+		Block_2BOMB_Func();		//2çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®å‡¦ç†
+		Block_BOMBColor_Func();	//åŒè‰²çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®å‡¦ç†
 		Loop_No = 5;
-		printLog_I(_T("•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+		printLog_I(_T("å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		break;
-	case 5://•Ï‰»ƒ‚[ƒVƒ‡ƒ“
+	case 5://å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_ChangeMotion() == FALSE) {
-			//•Ï‰»‚ª‚È‚©‚Á‚½ê‡
+			//å¤‰åŒ–ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 6;
-				printLog_I(_T("d—ÍŒvZ‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("é‡åŠ›è¨ˆç®—ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 6://d—ÍŒvZ
-		Block_Gravity();//d—ÍŒvZ‚ğs‚¤
+	case 6://é‡åŠ›è¨ˆç®—
+		Block_Gravity();//é‡åŠ›è¨ˆç®—ã‚’è¡Œã†
 		Loop_No = 7;
-		printLog_I(_T("ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+		printLog_I(_T("ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		break;
-	case 7://ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
+	case 7://ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_MoveMotion() == FALSE) {
-			//ˆÚ“®‚ª‚È‚©‚Á‚½ê‡
+			//ç§»å‹•ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 8;
-				printLog_I(_T("ƒuƒƒbƒN‚ÌÁ‹”»’è‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»åˆ¤å®šã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 8://ƒuƒƒbƒN‚ÌÁ‹”»’è
+	case 8://ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»åˆ¤å®š
 		if (Block_Delete() > 0) {
-			//ƒuƒƒbƒN‚ÌÁ‹”»’è‚ª“ü‚ê‚Î
-			ChainCount++;	//˜A½ƒJƒEƒ“ƒg‚ğ‰ÁZ‚·‚é
-			//˜A½ƒJƒEƒ“ƒg‚ğ•`‰æ‚·‚é(ƒtƒ‰ƒCƒeƒLƒXƒg)
-			if (ChainCount >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH / 2., GAMEWINDOW_HEIGHT / 2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%d˜A½II"), ChainCount);
+			//ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»åˆ¤å®šãŒå…¥ã‚Œã°
+			ChainCount++;	//é€£é–ã‚«ã‚¦ãƒ³ãƒˆã‚’åŠ ç®—ã™ã‚‹
+			//é€£é–ã‚«ã‚¦ãƒ³ãƒˆã‚’æç”»ã™ã‚‹(ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆ)
+			if (ChainCount >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH / 2., GAMEWINDOW_HEIGHT / 2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%dé€£é–ï¼ï¼"), ChainCount);
 
 
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
 			Loop_No = 9;
-			printLog_I(_T("•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+			printLog_I(_T("å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		}
 		else {
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 12;
-				printLog_I(_T("I—¹ˆ—‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("çµ‚äº†å‡¦ç†ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 9://•Ï‰»ƒ‚[ƒVƒ‡ƒ“
+	case 9://å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_ChangeMotion() == FALSE) {
-			//•Ï‰»‚ª‚È‚©‚Á‚½ê‡
+			//å¤‰åŒ–ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 10;
-				printLog_I(_T("d—ÍŒvZ‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("é‡åŠ›è¨ˆç®—ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 10://d—ÍŒvZ
-		Block_Gravity();//d—ÍŒvZ‚ğs‚¤
+	case 10://é‡åŠ›è¨ˆç®—
+		Block_Gravity();//é‡åŠ›è¨ˆç®—ã‚’è¡Œã†
 		Loop_No = 11;
-		printLog_I(_T("ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+		printLog_I(_T("ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		break;
-	case 11://ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
+	case 11://ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 		if (Update_MoveMotion() == FALSE) {
-			//ˆÚ“®‚ª‚È‚©‚Á‚½ê‡
+			//ç§»å‹•ãŒãªã‹ã£ãŸå ´åˆ
 			if (gameCycleFirstCallFlag) {
 				Loop_No = 0;
-				printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 			else {
 				Loop_No = 8;
-				printLog_I(_T("ƒuƒƒbƒN‚ÌÁ‹”»’è‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+				printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»åˆ¤å®šã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 			}
 		}
 		break;
-	case 12://I—¹
-			//€–S”»’è‚ğs‚¤
+	case 12://çµ‚äº†
+			//æ­»äº¡åˆ¤å®šã‚’è¡Œã†
 		if (JudgeGameOver() != 0) {
-			//ƒQ[ƒ€ƒI[ƒo[ƒ‰ƒCƒ“‚ğ’´‚¦‚½‚ç”j‰óŒõü‚ÅƒuƒƒbƒN‚ğ”j‰ó‚·‚é
+			//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ³ã‚’è¶…ãˆãŸã‚‰ç ´å£Šå…‰ç·šã§ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç ´å£Šã™ã‚‹
 			//Lay_BlockDel();
 			Request_Pause(PauseMode_GameOver);
 			//UpdateBlockRequest(GameCycle_Update);
 		}
 		else if (JudgeGameClear() == TRUE) {
-			//ƒNƒŠƒA”»’è‚ğs‚¤
+			//ã‚¯ãƒªã‚¢åˆ¤å®šã‚’è¡Œã†
 			Request_Pause(PauseMode_GameClear);
 
 		}
 
 		if (gameCycleFirstCallFlag) {
 			Loop_No = 0;
-			printLog_I(_T("‰Šú‰»‚ÖˆÚsyLoop_No=%dz"), Loop_No);
+			printLog_I(_T("åˆæœŸåŒ–ã¸ç§»è¡Œã€Loop_No=%dã€‘"), Loop_No);
 		}
 		else {
 
 			Loop_No = -1;
-			printLog_I(_T("ƒuƒƒbƒNŒvZƒ‹[ƒv‚ÌI—¹"));
+			printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯è¨ˆç®—ãƒ«ãƒ¼ãƒ—ã®çµ‚äº†"));
 			setGameCycle(Loop_Next);
 		}
 		break;
 	default:
-		printLog_E(_T("•s–¾‚ÈLoop_No‚ªw’è‚³‚ê‚Ü‚µ‚½(–³ŒÀƒ‹[ƒv)(Loop_No=%d)"), Loop_No);
+		printLog_E(_T("ä¸æ˜ãªLoop_NoãŒæŒ‡å®šã•ã‚Œã¾ã—ãŸ(ç„¡é™ãƒ«ãƒ¼ãƒ—)(Loop_No=%d)"), Loop_No);
 		break;
 	}
 	return 0;
 }
 
-//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ÌXV(ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ªs‚í‚ê‚½‚Æ‚«‚ÍTRUE)
+//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°(ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒè¡Œã‚ã‚ŒãŸã¨ãã¯TRUE)
 int Phase_GameMain::Update_MoveMotion() {
-	int count = 0;//•Ï‰»ˆ—‚ğs‚Á‚½ƒuƒƒbƒN‚Ì”
+	int count = 0;//å¤‰åŒ–å‡¦ç†ã‚’è¡Œã£ãŸãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
 
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“
+			//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 			if (field[x][y].blockMoveMotion.Enable) {
-				field[x][y].blockMoveMotion.Count++;//ƒJƒEƒ“ƒgƒAƒbƒv
-													//ˆÚ“®‚·‚é‹——£‚ÌŒvZ
+				field[x][y].blockMoveMotion.Count++;//ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+													//ç§»å‹•ã™ã‚‹è·é›¢ã®è¨ˆç®—
 				double fX, fY, tX, tY;
 				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0, 0, &fX, &fY);
 				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY, 0, 0, &tX, &tY);
-				double FMD = getDistance(fX, fY, tX, tY);	//ÅI“I‚ÈˆÚ“®‹——£
-				double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//Œ»İ‚ÌˆÚ“®‹——£
-				if (FMD <= MD) {//ˆÚ“®Š®—¹
-					field[x][y].blockMoveMotion.Enable = FALSE;//ˆÚ“®‚ğ–³Œø‰»
+				double FMD = getDistance(fX, fY, tX, tY);	//æœ€çµ‚çš„ãªç§»å‹•è·é›¢
+				double MD = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//ç¾åœ¨ã®ç§»å‹•è·é›¢
+				if (FMD <= MD) {//ç§»å‹•å®Œäº†
+					field[x][y].blockMoveMotion.Enable = FALSE;//ç§»å‹•ã‚’ç„¡åŠ¹åŒ–
 				}
-				count++;	//ˆÚ“®‚µ‚½
+				count++;	//ç§»å‹•ã—ãŸ
 			}
 		}
 	}
 	return ((count > 0) ? TRUE : FALSE);
 }
 
-//•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ÌXV(•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ªs‚í‚ê‚½‚Æ‚«‚ÍTRUE)
+//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°(å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒè¡Œã‚ã‚ŒãŸã¨ãã¯TRUE)
 int Phase_GameMain::Update_ChangeMotion() {
-	int count = 0;//ˆÚ“®ˆ—‚ğs‚Á‚½ƒuƒƒbƒN‚Ì”
+	int count = 0;//ç§»å‹•å‡¦ç†ã‚’è¡Œã£ãŸãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
 
-	//•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ÌƒJƒEƒ“ƒgƒAƒbƒv
+	//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//•Ï‰»ƒ‚[ƒVƒ‡ƒ“
+			//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 			if (field[x][y].blockChangeMotion.Type != BlockChangeMotionType_NO) {
-				field[x][y].blockChangeMotion.Count++;//ƒJƒEƒ“ƒgƒAƒbƒv
-				if (field[x][y].blockChangeMotion.Count > field[x][y].blockChangeMotion.Length) {//ƒ‚[ƒVƒ‡ƒ“Š®—¹
-					field[x][y].blockChangeMotion.Type = BlockChangeMotionType_NO;//•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ğ–³Œø‰»
+				field[x][y].blockChangeMotion.Count++;//ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+				if (field[x][y].blockChangeMotion.Count > field[x][y].blockChangeMotion.Length) {//ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å®Œäº†
+					field[x][y].blockChangeMotion.Type = BlockChangeMotionType_NO;//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç„¡åŠ¹åŒ–
 				}
 				count++;
 			}
@@ -968,74 +968,74 @@ int Phase_GameMain::Update_ChangeMotion() {
 	return ((count > 0) ? TRUE : FALSE);
 }
 
-//ƒJƒEƒ“ƒ^‚ÌƒJƒEƒ“ƒgƒAƒbƒv
+//ã‚«ã‚¦ãƒ³ã‚¿ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
 void Phase_GameMain::Update_Counter() {
 
-	//ÀÛ‚É‘€ì‚ğ‚µ‚Ä‚¢‚éŒo‰ßƒtƒŒ[ƒ€”‚Ì‰ÁZ
+	//å®Ÿéš›ã«æ“ä½œã‚’ã—ã¦ã„ã‚‹çµŒéãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã®åŠ ç®—
 	if (getPauseMode() == PauseMode_NO
 		&& Block_AllMovedata.Enable == FALSE
 		&& gameCycle == GameCycle_FALL) {
 		Count_PlayTime++;
 	}
 
-	//ƒXƒe[ƒWŒo‰ßŠÔ‚ÌƒJƒEƒ“ƒgƒAƒbƒv(’ÊíƒvƒŒƒC‚É‰ÁZ‚·‚é)
+	//ã‚¹ãƒ†ãƒ¼ã‚¸çµŒéæ™‚é–“ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—(é€šå¸¸ãƒ—ãƒ¬ã‚¤æ™‚ã«åŠ ç®—ã™ã‚‹)
 	if (getPauseMode() == PauseMode_NO) {
 		Count_GameTime++;
 	}
 
-	//ƒQ[ƒ€Œo‰ßƒtƒŒ[ƒ€”‚ÌƒJƒEƒ“ƒgƒAƒbƒv
+	//ã‚²ãƒ¼ãƒ çµŒéãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
 	if (getPauseMode() != PauseMode_NOMAL) {
 		Count_Time++;
 	}
 
-	//ƒ|[ƒY‚ÌƒJƒEƒ“ƒ^
+	//ãƒãƒ¼ã‚ºæ™‚ã®ã‚«ã‚¦ãƒ³ã‚¿
 	if (getPauseMode() != PauseMode_NO)	Count_Pause++;
 }
 
-//UpdateŒã‚ÉŒÄ‚Î‚ê‚é
+//Updateå¾Œã«å‘¼ã°ã‚Œã‚‹
 void Phase_GameMain::Update_Final() {
-	/*•`‰æƒXƒŒƒbƒh—p‚ÌÀ•W‚ğŒvZ‚·‚é*/
+	/*æç”»ã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ã®åº§æ¨™ã‚’è¨ˆç®—ã™ã‚‹*/
 
-	//ƒtƒB[ƒ‹ƒh‘S‘Ì‚ÌƒYƒŒ‚ğŒvZ
+	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å…¨ä½“ã®ã‚ºãƒ¬ã‚’è¨ˆç®—
 	double Field_PaddingX = 0;
 	double Field_PaddingY = 0;
-	if (Block_AllMovedata.Enable) {//‘S‘Ì‚¸‚ç‚·‚ª—LŒø‚Èê‡
-		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//Œ»İ‚ÌˆÚ“®‹——£‚ÌŒvZ
+	if (Block_AllMovedata.Enable) {//å…¨ä½“ãšã‚‰ã™ãŒæœ‰åŠ¹ãªå ´åˆ
+		double D = getMoveDistance(Block_AllMovedata.a, Block_AllMovedata.MaxSpeed, Block_AllMovedata.Count);	//ç¾åœ¨ã®ç§»å‹•è·é›¢ã®è¨ˆç®—
 		double Rota = getRotation(Block_AllMovedata.FromX, Block_AllMovedata.FromY, Block_AllMovedata.ToX, Block_AllMovedata.ToY);
-		//ã‚ÌŒvZŒ‹‰Ê‚æ‚èA•`‰æÀ•W‚ÌŒvZ
+		//ä¸Šã®è¨ˆç®—çµæœã‚ˆã‚Šã€æç”»åº§æ¨™ã®è¨ˆç®—
 		Field_PaddingX += D * cos(deg_to_rad(Rota));
 		Field_PaddingY += D * sin(deg_to_rad(Rota));
 	}
-	//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ÌÀ•WŒvZ
+	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®åº§æ¨™è¨ˆç®—
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//•`‰ææ‚ÌÀ•W‚ğŒvZ‚·‚é
+			//æç”»å…ˆã®åº§æ¨™ã‚’è¨ˆç®—ã™ã‚‹
 			double X, Y;
 			if (field[x][y].blockMoveMotion.Enable) {
-				//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“—L‚è
-				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0.5, 0.5, &X, &Y);	//ˆÚ“®Œ³À•W‚ÌŒvZ
-				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//Œ»İ‚ÌˆÚ“®‹——£‚ÌŒvZ
+				//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æœ‰ã‚Š
+				Convert_Ingame_FromBlock(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, 0.5, 0.5, &X, &Y);	//ç§»å‹•å…ƒåº§æ¨™ã®è¨ˆç®—
+				double D = getMoveDistance(field[x][y].blockMoveMotion.a, field[x][y].blockMoveMotion.MaxSpeed, field[x][y].blockMoveMotion.Count);	//ç¾åœ¨ã®ç§»å‹•è·é›¢ã®è¨ˆç®—
 				double Rota = getRotation(field[x][y].blockMoveMotion.FromX, field[x][y].blockMoveMotion.FromY, field[x][y].blockMoveMotion.ToX, field[x][y].blockMoveMotion.ToY);
-				//ã‚ÌŒvZŒ‹‰Ê‚æ‚èA•`‰æÀ•W‚ÌŒvZ
+				//ä¸Šã®è¨ˆç®—çµæœã‚ˆã‚Šã€æç”»åº§æ¨™ã®è¨ˆç®—
 				X += D * cos(deg_to_rad(Rota));
 				Y += D * sin(deg_to_rad(Rota));
 			}
 			else {
-				//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“–³‚µ
+				//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç„¡ã—
 				Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 			}
 
-			//‘S‘Ì‚¸‚ç‚µ‚Ì•ª•`‰æÀ•W‚ğ‚¸‚ç‚·
+			//å…¨ä½“ãšã‚‰ã—ã®åˆ†æç”»åº§æ¨™ã‚’ãšã‚‰ã™
 			X += Field_PaddingX;
 			Y += Field_PaddingY;
 
-			//ƒQ[ƒ€ƒI[ƒo[‚ª‹ß‚¢ê‡‚Í¶‰E‚É—h‚ç‚·
+			//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãŒè¿‘ã„å ´åˆã¯å·¦å³ã«æºã‚‰ã™
 			if (getBlockColor(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
 				if (getBlockColor(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO)	X += getGraph_Sin(getCountTime() * 30, 3, 0);
 				X += randomTable.getRand(-2, 2, getCountTime() + x*y + y);
 			}
 
-			//À•W‚Ì‹L˜^
+			//åº§æ¨™ã®è¨˜éŒ²
 			field[x][y].DrawPlaceX = X;
 			field[x][y].DrawPlaceY = Y;
 		}
@@ -1043,7 +1043,7 @@ void Phase_GameMain::Update_Final() {
 
 }
 
-//I—¹ˆ—(•`‰æˆ—)
+//çµ‚äº†å‡¦ç†(æç”»å‡¦ç†)
 void Phase_GameMain::Finalize_Draw() {
 	DeleteGraph(gameWindow);
 
@@ -1091,69 +1091,69 @@ void Phase_GameMain::Finalize_Draw() {
 
 }
 
-//I—¹ˆ—(ŒvZˆ—)
+//çµ‚äº†å‡¦ç†(è¨ˆç®—å‡¦ç†)
 void Phase_GameMain::Finalize_Update() {
 
 }
 
-//ƒL[ˆ—
+//ã‚­ãƒ¼å‡¦ç†
 void Phase_GameMain::GameMain_Key() {
 
-	//ƒ|[ƒYˆ—
+	//ãƒãƒ¼ã‚ºå‡¦ç†
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
 		if (getPauseMode() == PauseMode_NOMAL) {
-			//ƒ|[ƒYó‘Ô‰ğœ
+			//ãƒãƒ¼ã‚ºçŠ¶æ…‹è§£é™¤
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
-			Request_Pause(PauseMode_NO);	//ƒ|[ƒYó‘Ô
+			Request_Pause(PauseMode_NO);	//ãƒãƒ¼ã‚ºçŠ¶æ…‹
 		}
 		else if (getPauseMode() == PauseMode_NO) {
-			//ƒ|[ƒY‚É
+			//ãƒãƒ¼ã‚ºã«
 			pauseMenu.setSelecedtItem(0);
 			SoundEffect_Play(SE_TYPE_Pause);
-			Request_Pause(PauseMode_NOMAL);	//ƒ|[ƒYó‘Ô
+			Request_Pause(PauseMode_NOMAL);	//ãƒãƒ¼ã‚ºçŠ¶æ…‹
 		}
 	}
 
-	if (getPauseMode() != PauseMode_NO)	return;//ƒ|[ƒYˆ—‚ª“ü‚Á‚½ê‡‚Í‚±‚Ìæ‚Íˆ—‚ğ‚µ‚È‚¢
+	if (getPauseMode() != PauseMode_NO)	return;//ãƒãƒ¼ã‚ºå‡¦ç†ãŒå…¥ã£ãŸå ´åˆã¯ã“ã®å…ˆã¯å‡¦ç†ã‚’ã—ãªã„
 
 	if (getKeyBind(KEYBIND_UP) == 1) {
-		//ƒuƒƒbƒN‚Ìİ’u
-		//©E–h~
-		int Flag = TRUE;//€–S—Ìˆæ‚ÉƒuƒƒbƒN‚ª‚ ‚Á‚½‚çFALSE‚É‚È‚é
+		//ãƒ–ãƒ­ãƒƒã‚¯ã®è¨­ç½®
+		//è‡ªæ®ºé˜²æ­¢
+		int Flag = TRUE;//æ­»äº¡é ˜åŸŸã«ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã£ãŸã‚‰FALSEã«ãªã‚‹
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 			for (int y = 0; y < GAMEOVER_BORDER + 1; y++) {
 				if (getBlockColor(x, y) != BLOCK_TYPE_NO) {
-					//‚È‚ñ‚©ƒuƒƒbƒN‚ª‚ ‚éê‡
+					//ãªã‚“ã‹ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹å ´åˆ
 					Flag = FALSE;
 					break;
 				}
 			}
 		}
-		if (Flag)	under_Block();//ã‚ÉƒuƒƒbƒN‚ª‚È‚¢ê‡‚ÉÀs‚³‚ê‚é
+		if (Flag)	under_Block();//ä¸Šã«ãƒ–ãƒ­ãƒƒã‚¯ãŒãªã„å ´åˆã«å®Ÿè¡Œã•ã‚Œã‚‹
 
 
 	}
 
 	if (isFallBlock_Falling() && !Block_AllMovedata.Enable) {
-		if (getKeyBind(KEYBIND_DOWN) > 0) {//‚‘¬—‰ºƒ‚[ƒh
+		if (getKeyBind(KEYBIND_DOWN) > 0) {//é«˜é€Ÿè½ä¸‹ãƒ¢ãƒ¼ãƒ‰
 			fallBlockInfo.Key_FlagFirstFall = TRUE;
 		}
-		if (getKeyBind(KEYBIND_RIGHT) == 1) {//‰EˆÚ“®
+		if (getKeyBind(KEYBIND_RIGHT) == 1) {//å³ç§»å‹•
 			fallBlockInfo.Key_LRMove++;
 		}
-		if (getKeyBind(KEYBIND_LEFT) == 1) {//¶ˆÚ“®
+		if (getKeyBind(KEYBIND_LEFT) == 1) {//å·¦ç§»å‹•
 			fallBlockInfo.Key_LRMove--;
 		}
-		if (getKeyBind(KEYBIND_ROTAL) == 1) {//”½Œv‰ñ‚è
+		if (getKeyBind(KEYBIND_ROTAL) == 1) {//åæ™‚è¨ˆå›ã‚Š
 			fallBlockInfo.Key_LRRota--;
 		}
-		if (getKeyBind(KEYBIND_ROTAR) == 1) {//Œv‰ñ‚è
+		if (getKeyBind(KEYBIND_ROTAR) == 1) {//æ™‚è¨ˆå›ã‚Š
 			fallBlockInfo.Key_LRRota++;
 		}
 	}
 }
 
-//ƒuƒƒbƒN‚ÌÀ•WH‚©‚çƒCƒ“ƒQ[ƒ€‚ÌÀ•W‚ğæ“¾‚·‚é(ŠÖ”“I‚Éo‚·‚½‚ßA‘¶İ‚µ‚È‚¢‚Í‚¸‚ÌƒuƒƒbƒNˆÊ’u‚àŒvZo—ˆ‚Ü‚·)
+//ãƒ–ãƒ­ãƒƒã‚¯ã®åº§æ¨™ï¼Ÿã‹ã‚‰ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®åº§æ¨™ã‚’å–å¾—ã™ã‚‹(é–¢æ•°çš„ã«å‡ºã™ãŸã‚ã€å­˜åœ¨ã—ãªã„ã¯ãšã®ãƒ–ãƒ­ãƒƒã‚¯ä½ç½®ã‚‚è¨ˆç®—å‡ºæ¥ã¾ã™)
 void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double *IngameX, double *IngameY) {
 	if (IngameX != NULL) {
 		*IngameX = blockX * BLOCK_SIZE + XVal*BLOCK_SIZE;
@@ -1163,115 +1163,115 @@ void Phase_GameMain::Convert_Ingame_FromBlock(int blockX, int blockY, double XVa
 	}
 }
 
-//ƒ|[ƒYó‘Ô‚Ìæ“¾
+//ãƒãƒ¼ã‚ºçŠ¶æ…‹ã®å–å¾—
 Phase_GameMain::PauseMode Phase_GameMain::getPauseMode() {
 	return Flag_Pause;
 }
 
-//ƒ|[ƒYó‘Ô‚ÌƒŠƒNƒGƒXƒg
+//ãƒãƒ¼ã‚ºçŠ¶æ…‹ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
 void Phase_GameMain::Request_Pause(PauseMode pauseMode) {
 
 	switch (pauseMode) {
 	case PauseMode_NO:
-		printLog_I(_T("yƒ|[ƒY‰ğœzƒŠƒNƒGƒXƒg"));
+		printLog_I(_T("ã€ãƒãƒ¼ã‚ºè§£é™¤ã€‘ãƒªã‚¯ã‚¨ã‚¹ãƒˆ"));
 		break;
 	case PauseMode_NOMAL:
-		//ƒQ[ƒ€ƒI[ƒo[‚ÌƒŠƒNƒGƒXƒg‚ª‚ ‚éê‡‚Íã‘‚«‚µ‚È‚¢
+		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒã‚ã‚‹å ´åˆã¯ä¸Šæ›¸ãã—ãªã„
 		if (Flag_pauseRequest == PauseMode_GameOver)	return;
-		printLog_I(_T("y’Êíƒ|[ƒYzƒŠƒNƒGƒXƒg"));
-		pauseMenu.setItemEnable(TRUE, 0);	//€–Ú0‚ğ—LŒø
+		printLog_I(_T("ã€é€šå¸¸ãƒãƒ¼ã‚ºã€‘ãƒªã‚¯ã‚¨ã‚¹ãƒˆ"));
+		pauseMenu.setItemEnable(TRUE, 0);	//é …ç›®0ã‚’æœ‰åŠ¹
 		break;
 	case PauseMode_GameOver:
-		printLog_I(_T("yƒQ[ƒ€ƒI[ƒo[ƒ|[ƒYzƒŠƒNƒGƒXƒg"));
-		pauseMenu.setItemEnable(FALSE, 0);	//€–Ú0‚ğ–³Œø‰»
+		printLog_I(_T("ã€ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãƒãƒ¼ã‚ºã€‘ãƒªã‚¯ã‚¨ã‚¹ãƒˆ"));
+		pauseMenu.setItemEnable(FALSE, 0);	//é …ç›®0ã‚’ç„¡åŠ¹åŒ–
 		break;
 	case PauseMode_GameClear:
-		printLog_I(_T("yƒQ[ƒ€ƒNƒŠƒAƒ|[ƒYzƒŠƒNƒGƒXƒg"));
-		pauseMenu.setItemEnable(FALSE, 0);	//€–Ú0‚ğ–³Œø‰»
+		printLog_I(_T("ã€ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ãƒãƒ¼ã‚ºã€‘ãƒªã‚¯ã‚¨ã‚¹ãƒˆ"));
+		pauseMenu.setItemEnable(FALSE, 0);	//é …ç›®0ã‚’ç„¡åŠ¹åŒ–
 		break;
 	}
 	Flag_pauseRequest = pauseMode;
 }
 
 
-//—‰ºƒuƒƒbƒN‚ª—‰º’†‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‚Å—‰º’†)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒè½ä¸‹ä¸­ã‹ã©ã†ã‹ã®å–å¾—(TRUEã§è½ä¸‹ä¸­)
 int Phase_GameMain::isFallBlock_Falling() {
 	if (!isFallBlock_Enable())	return FALSE;
 	return (fallBlockInfo.FallCount >= 0) ? TRUE : FALSE;
 }
 
-//—‰ºƒuƒƒbƒN‚ª—LŒø‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‚Å—LŒø)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒæœ‰åŠ¹ã‹ã©ã†ã‹ã®å–å¾—(TRUEã§æœ‰åŠ¹)
 int Phase_GameMain::isFallBlock_Enable() {
 	return (fallBlockInfo.Enable) ? TRUE : FALSE;
 }
 
-//—‰ºƒuƒƒbƒN‚ğ¶¬‚·‚é(–ß‚è’l:¬Œ÷‚ÅTRUE)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç”Ÿæˆã™ã‚‹(æˆ»ã‚Šå€¤:æˆåŠŸã§TRUE)
 int Phase_GameMain::Create_FallBlock() {
 	//if (fallblock_Pack == NULL)	return FALSE;
 
 	if (isFallBlock_Enable()) {
-		printLog_C(_T("—‰º’†‚ÌƒuƒƒbƒN‚ª‚·‚Å‚É‘¶İ‚·‚é‚½‚ßA—‰ºƒuƒƒbƒN‚ğV‚½‚É’Ç‰Áo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½"));
+		printLog_C(_T("è½ä¸‹ä¸­ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒã™ã§ã«å­˜åœ¨ã™ã‚‹ãŸã‚ã€è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ–°ãŸã«è¿½åŠ å‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸ"));
 		return FALSE;
 	}
 
-	//ƒuƒƒbƒN‘Ò‹@—ñ‚Ìæ“ª‚Ì—v‘f‚©‚ç¶¬‚·‚é
+	//ãƒ–ãƒ­ãƒƒã‚¯å¾…æ©Ÿåˆ—ã®å…ˆé ­ã®è¦ç´ ã‹ã‚‰ç”Ÿæˆã™ã‚‹
 
-	//ƒuƒƒbƒNî•ñ‚ÌƒRƒs[
+	//ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã®ã‚³ãƒ”ãƒ¼
 	for (int i = 0; i < FALLBLOCK_SIZE; i++) {
 		for (int j = 0; j < FALLBLOCK_SIZE; j++) {
 			fallBlockInfo.BlockID[i][j] = waitBlockinfo[0].BlockID[i][j];
 		}
 	}
 
-	//Šg’£İ’è‚ÌƒRƒs[
+	//æ‹¡å¼µè¨­å®šã®ã‚³ãƒ”ãƒ¼
 	fallBlockInfo.PlaceX = waitBlockinfo[0].PlaceX;
 	fallBlockInfo.PlaceY = waitBlockinfo[0].PlaceY;
 	fallBlockInfo.Flag_Rotate = waitBlockinfo[0].Flag_Rotate;
 
 
-	//—‰ºƒJƒEƒ“ƒg‚ğ60‚Éİ’è
+	//è½ä¸‹ã‚«ã‚¦ãƒ³ãƒˆã‚’60ã«è¨­å®š
 	fallBlockInfo.FallCount = 60;
 
-	//—‰ºƒuƒƒbƒN‚Ì‚»‚Ì‘¼‚Ìî•ñ‚Ì‰Šú‰»
+	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ãã®ä»–ã®æƒ…å ±ã®åˆæœŸåŒ–
 	fallBlockInfo.Counter = 0;
 	fallBlockInfo.Key_LRMove = 0;
 	fallBlockInfo.Key_LRRota = 0;
 	fallBlockInfo.Key_FlagFirstFall = FALSE;
 
-	//—LŒø
+	//æœ‰åŠ¹
 	fallBlockInfo.Enable = TRUE;
 
-	printLog_I(_T("—‰ºƒuƒƒbƒN‚ÌyV‹K¶¬z"));
+	printLog_I(_T("è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ã€æ–°è¦ç”Ÿæˆã€‘"));
 
-	//ƒuƒƒbƒN‘Ò‹@—ñ‚ği‚ß‚é
+	//ãƒ–ãƒ­ãƒƒã‚¯å¾…æ©Ÿåˆ—ã‚’é€²ã‚ã‚‹
 	Create_Wait_Block();
 
 	return TRUE;
 }
 
-//—‰ºƒuƒƒbƒN‚Ì‘O‰ñ‚Ì—‰º‚©‚ç‚ÌƒCƒ“ƒ^[ƒoƒ‹‚Ìæ“¾(—‰ºƒuƒƒbƒN‚ª‘¶İ‚·‚é‚Æ‚«‚Í0‚ª•Ô‚è‚Ü‚·)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®å‰å›ã®è½ä¸‹ã‹ã‚‰ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®å–å¾—(è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã¨ãã¯0ãŒè¿”ã‚Šã¾ã™)
 int Phase_GameMain::getFallBlock_Interval() {
 	if (isFallBlock_Enable())	return 0;
 	return (-fallBlockInfo.Counter);
 }
 
-//—‰ºƒuƒƒbƒN‚Ì–³Œø‰»
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ç„¡åŠ¹åŒ–
 void Phase_GameMain::Delete_FallBlock() {
-	if (!isFallBlock_Enable())	return;	//‚»‚à‚»‚à—LŒø‚Å–³‚¢‚Í–³‹
+	if (!isFallBlock_Enable())	return;	//ãã‚‚ãã‚‚æœ‰åŠ¹ã§ç„¡ã„æ™‚ã¯ç„¡è¦–
 
-	fallBlockInfo.Counter = 0;		//ƒJƒEƒ“ƒ^‚ğ0‚É‚à‚Ç‚·
-	fallBlockInfo.Enable = FALSE;	//—‰ºƒuƒƒbƒN‚Ì–³Œø‰»
+	fallBlockInfo.Counter = 0;		//ã‚«ã‚¦ãƒ³ã‚¿ã‚’0ã«ã‚‚ã©ã™
+	fallBlockInfo.Enable = FALSE;	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ç„¡åŠ¹åŒ–
 
-	printLog_I(_T("—‰ºƒuƒƒbƒN‚ÌyÁ‹z"));
+	printLog_I(_T("è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ã€æ¶ˆå»ã€‘"));
 }
 
-//—‰ºƒuƒƒbƒN‚ğX²•ûŒü‚ÉˆÚ“®(–ß‚è’l‚ÍÀÛ‚ÌˆÚ“®—Ê)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’Xè»¸æ–¹å‘ã«ç§»å‹•(æˆ»ã‚Šå€¤ã¯å®Ÿéš›ã®ç§»å‹•é‡)
 int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
-	if (!isFallBlock_Falling())		return 0;	//‚»‚à‚»‚à—‰º’†‚Å–³‚¢‚Í–³‹
+	if (!isFallBlock_Falling())		return 0;	//ãã‚‚ãã‚‚è½ä¸‹ä¸­ã§ç„¡ã„æ™‚ã¯ç„¡è¦–
 
 	MoveVal = getFallBlockVal_MoveX(MoveVal, CollisionFieldBlock);
 
-	//‚¸‚ç‚µ‚Ì”½‰f
+	//ãšã‚‰ã—ã®åæ˜ 
 	fallBlockInfo.PlaceX += MoveVal;
 
 
@@ -1280,51 +1280,51 @@ int Phase_GameMain::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 	return MoveVal;
 }
 
-//—‰ºƒuƒƒbƒN‚ªX²•ûŒü‚ÉˆÚ“®‰Â”\‚©‚Ç‚¤‚©‚Ìæ“¾(|ˆÚ“®o—ˆ‚é—Ê|<=MoveVal)(‚Â‚Ü‚è0‚ÅˆÚ“®•s‰Â)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒXè»¸æ–¹å‘ã«ç§»å‹•å¯èƒ½ã‹ã©ã†ã‹ã®å–å¾—(|ç§»å‹•å‡ºæ¥ã‚‹é‡|<=MoveVal)(ã¤ã¾ã‚Š0ã§ç§»å‹•ä¸å¯)
 int Phase_GameMain::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) {
-	if (!isFallBlock_Falling())		return FALSE;	//‚»‚à‚»‚à—‰º’†‚Å–³‚¢‚ÍˆÚ“®•s‰Â
+	if (!isFallBlock_Falling())		return FALSE;	//ãã‚‚ãã‚‚è½ä¸‹ä¸­ã§ç„¡ã„æ™‚ã¯ç§»å‹•ä¸å¯
 
 
-	//•ûj:‚¾‚ñ‚¾‚ñMoveVal‚ğ‘å‚«‚­‚µ‚Ä‚¢‚­
-	int Minus = FALSE;//ƒ}ƒCƒiƒXƒtƒ‰ƒO
+	//æ–¹é‡:ã ã‚“ã ã‚“MoveValã‚’å¤§ããã—ã¦ã„ã
+	int Minus = FALSE;//ãƒã‚¤ãƒŠã‚¹ãƒ•ãƒ©ã‚°
 	if (MoveVal < 0) {
-		//•„†”½“]
+		//ç¬¦å·åè»¢
 		MoveVal = -MoveVal;
 		Minus = TRUE;
 	}
 
 	for (int i = 0; i < MoveVal; i++) {
-		//‹[—“I‚ÉˆÚ“®‚µ‚½‚±‚Æ‚É‚·‚é
+		//æ“¬ä¼¼çš„ã«ç§»å‹•ã—ãŸã“ã¨ã«ã™ã‚‹
 		int pX = 0;
-		if (Minus)	pX = fallBlockInfo.PlaceX - (i + 1);	//•‰‚Ì•ûŒü
-		else		pX = fallBlockInfo.PlaceX + (i + 1);	//³‚Ì•ûŒü
+		if (Minus)	pX = fallBlockInfo.PlaceX - (i + 1);	//è² ã®æ–¹å‘
+		else		pX = fallBlockInfo.PlaceX + (i + 1);	//æ­£ã®æ–¹å‘
 
-															//‘¼‚ÌƒuƒƒbƒN‚Æ‚Ìd‚È‚è‚ğŒvZ‚·‚é(˜gŠO‚àƒuƒƒbƒN‚ª‚ ‚é‚Æl‚¦‚é)
+															//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®é‡ãªã‚Šã‚’è¨ˆç®—ã™ã‚‹(æ å¤–ã‚‚ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹ã¨è€ƒãˆã‚‹)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
-					//ƒuƒƒbƒN—L‚è‚Ìê‡AƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Æ‚Ìd‚È‚è‚ğŠm”F‚·‚é
-					if (CollisionFieldBlock) {//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Æ‚Ì‚ ‚½‚è”»’è‚ğ—LŒø‚É‚·‚éê‡
+					//ãƒ–ãƒ­ãƒƒã‚¯æœ‰ã‚Šã®å ´åˆã€ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®é‡ãªã‚Šã‚’ç¢ºèªã™ã‚‹
+					if (CollisionFieldBlock) {//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®ã‚ãŸã‚Šåˆ¤å®šã‚’æœ‰åŠ¹ã«ã™ã‚‹å ´åˆ
 						if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
-							//‘¼‚ÌƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚¢‚½ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+							//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã„ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
-							MoveVal = i;//ÅŠO‚Ìƒ‹[ƒv‚à”²‚¯‚é
+							MoveVal = i;//æœ€å¤–ã®ãƒ«ãƒ¼ãƒ—ã‚‚æŠœã‘ã‚‹
 						}
 					}
 					else {
 						if (getBlockColor(pX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
-							//‰æ–ÊŠOƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚¢‚½ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+							//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã„ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
-							MoveVal = i;//ÅŠO‚Ìƒ‹[ƒv‚à”²‚¯‚é
+							MoveVal = i;//æœ€å¤–ã®ãƒ«ãƒ¼ãƒ—ã‚‚æŠœã‘ã‚‹
 						}
 					}
 				}
 			}
 		}
 	}
-	//•„†‚ğŒ³‚É–ß‚·
+	//ç¬¦å·ã‚’å…ƒã«æˆ»ã™
 	if (Minus) {
 		MoveVal = -MoveVal;
 	}
@@ -1332,42 +1332,42 @@ int Phase_GameMain::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) 
 	return MoveVal;
 }
 
-//—‰ºƒuƒƒbƒN‚ğY²•ûŒü‚ÉˆÚ“®(–ß‚è’l‚ÍÀÛ‚ÌˆÚ“®—Ê)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’Yè»¸æ–¹å‘ã«ç§»å‹•(æˆ»ã‚Šå€¤ã¯å®Ÿéš›ã®ç§»å‹•é‡)
 int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
-	if (!isFallBlock_Falling())		return 0;	//‚»‚à‚»‚à—‰º’†‚Å–³‚¢‚Í–³‹
+	if (!isFallBlock_Falling())		return 0;	//ãã‚‚ãã‚‚è½ä¸‹ä¸­ã§ç„¡ã„æ™‚ã¯ç„¡è¦–
 
-												//•ûj:‚¾‚ñ‚¾‚ñMoveVal‚ğ‘å‚«‚­‚µ‚Ä‚¢‚­
-	int Minus = FALSE;//ƒ}ƒCƒiƒXƒtƒ‰ƒO
+												//æ–¹é‡:ã ã‚“ã ã‚“MoveValã‚’å¤§ããã—ã¦ã„ã
+	int Minus = FALSE;//ãƒã‚¤ãƒŠã‚¹ãƒ•ãƒ©ã‚°
 	if (MoveVal < 0) {
-		//•„†”½“]
+		//ç¬¦å·åè»¢
 		MoveVal = -MoveVal;
 		Minus = TRUE;
 	}
 
 	for (int i = 0; i < MoveVal; i++) {
-		//‹[—“I‚ÉˆÚ“®‚µ‚½‚±‚Æ‚É‚·‚é
+		//æ“¬ä¼¼çš„ã«ç§»å‹•ã—ãŸã“ã¨ã«ã™ã‚‹
 		int pY = 0;
-		if (Minus)	pY = fallBlockInfo.PlaceY - (i + 1);	//•‰‚Ì•ûŒü
-		else		pY = fallBlockInfo.PlaceY + (i + 1);	//³‚Ì•ûŒü
+		if (Minus)	pY = fallBlockInfo.PlaceY - (i + 1);	//è² ã®æ–¹å‘
+		else		pY = fallBlockInfo.PlaceY + (i + 1);	//æ­£ã®æ–¹å‘
 
-															//‘¼‚ÌƒuƒƒbƒN‚Æ‚Ìd‚È‚è‚ğŒvZ‚·‚é(˜gŠO‚àƒuƒƒbƒN‚ª‚ ‚é‚Æl‚¦‚é)
+															//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®é‡ãªã‚Šã‚’è¨ˆç®—ã™ã‚‹(æ å¤–ã‚‚ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹ã¨è€ƒãˆã‚‹)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {//ƒuƒƒbƒN—L‚è‚Ìê‡AƒuƒƒbƒN‚Ìd‚È‚è‚ğŠm”F‚·‚é
-					if (CollisionFieldBlock) {//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Æ‚Ì‚ ‚½‚è”»’è‚ğ—LŒø‚É‚·‚éê‡
+				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {//ãƒ–ãƒ­ãƒƒã‚¯æœ‰ã‚Šã®å ´åˆã€ãƒ–ãƒ­ãƒƒã‚¯ã®é‡ãªã‚Šã‚’ç¢ºèªã™ã‚‹
+					if (CollisionFieldBlock) {//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®ã‚ãŸã‚Šåˆ¤å®šã‚’æœ‰åŠ¹ã«ã™ã‚‹å ´åˆ
 						if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
-							//‘¼‚ÌƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚¢‚½ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+							//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã„ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
-							MoveVal = i;//ÅŠO‚Ìƒ‹[ƒv‚à”²‚¯‚é
+							MoveVal = i;//æœ€å¤–ã®ãƒ«ãƒ¼ãƒ—ã‚‚æŠœã‘ã‚‹
 						}
 					}
 					else {
 						if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
-							//‰æ–ÊŠOƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚¢‚½ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+							//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã„ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
-							MoveVal = i;//ÅŠO‚Ìƒ‹[ƒv‚à”²‚¯‚é
+							MoveVal = i;//æœ€å¤–ã®ãƒ«ãƒ¼ãƒ—ã‚‚æŠœã‘ã‚‹
 						}
 					}
 				}
@@ -1375,12 +1375,12 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 		}
 	}
 
-	//•„†‚ğŒ³‚É–ß‚·
+	//ç¬¦å·ã‚’å…ƒã«æˆ»ã™
 	if (Minus) {
 		MoveVal = -MoveVal;
 	}
 
-	//‚¸‚ç‚µ‚Ì”½‰f
+	//ãšã‚‰ã—ã®åæ˜ 
 	fallBlockInfo.PlaceY += MoveVal;
 
 
@@ -1388,16 +1388,16 @@ int Phase_GameMain::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 	return MoveVal;
 }
 
-//—‰ºƒuƒƒbƒN‚ğ‰ñ“]‚³‚¹‚é(‰ñ“]—Ê1‚ÅŒv‰ñ‚è‚É90“x)(–ß‚è’l‚ÍÀÛ‚Ì‰ñ“]—Ê)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’å›è»¢ã•ã›ã‚‹(å›è»¢é‡1ã§æ™‚è¨ˆå›ã‚Šã«90åº¦)(æˆ»ã‚Šå€¤ã¯å®Ÿéš›ã®å›è»¢é‡)
 int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
-	if (!isFallBlock_Falling())		return 0;	//‚»‚à‚»‚à—‰º’†‚Å–³‚¢‚Í–³‹
+	if (!isFallBlock_Falling())		return 0;	//ãã‚‚ãã‚‚è½ä¸‹ä¸­ã§ç„¡ã„æ™‚ã¯ç„¡è¦–
 
-	if (fallBlockInfo.Flag_Rotate == FALSE)	return 0;//‰ñ“]‚ª–³Œø‚Ìê‡‚Í‰ñ“]‚µ‚È‚¢
+	if (fallBlockInfo.Flag_Rotate == FALSE)	return 0;//å›è»¢ãŒç„¡åŠ¹ã®å ´åˆã¯å›è»¢ã—ãªã„
 
-												//•ûj:‚¾‚ñ‚¾‚ñMoveVal‚ğ‘å‚«‚­‚µ‚Ä‚¢‚­
-	int Minus = FALSE;//ƒ}ƒCƒiƒXƒtƒ‰ƒO
+												//æ–¹é‡:ã ã‚“ã ã‚“MoveValã‚’å¤§ããã—ã¦ã„ã
+	int Minus = FALSE;//ãƒã‚¤ãƒŠã‚¹ãƒ•ãƒ©ã‚°
 	if (RotaVal < 0) {
-		//•„†”½“]
+		//ç¬¦å·åè»¢
 		RotaVal = -RotaVal;
 		Minus = TRUE;
 	}
@@ -1405,16 +1405,16 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 
 	int FLAG = FALSE;
 	for (int i = 0; i < RotaVal; i++) {
-		//‹[—“I‚É‰ñ“]‚µ‚½‚±‚Æ‚É‚·‚é
+		//æ“¬ä¼¼çš„ã«å›è»¢ã—ãŸã“ã¨ã«ã™ã‚‹
 		BLOCK_TYPE RotaBlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];
-		if (Minus) {//”½Œv‰ñ‚è‚É90“x
+		if (Minus) {//åæ™‚è¨ˆå›ã‚Šã«90åº¦
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 					RotaBlockID[y][(FALLBLOCK_SIZE - 1) - x] = fallBlockInfo.BlockID[x][y];
 				}
 			}
 		}
-		else {//Œv‰ñ‚è‚É90“x
+		else {//æ™‚è¨ˆå›ã‚Šã«90åº¦
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 					RotaBlockID[(FALLBLOCK_SIZE - 1) - y][x] = fallBlockInfo.BlockID[x][y];
@@ -1422,16 +1422,16 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 			}
 		}
 
-		//‘¼‚ÌƒuƒƒbƒN‚Æ‚Ìd‚È‚è‚ğŒvZ‚·‚é(˜gŠO‚àƒuƒƒbƒN‚ª‚ ‚é‚Æl‚¦‚é)
+		//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨ã®é‡ãªã‚Šã‚’è¨ˆç®—ã™ã‚‹(æ å¤–ã‚‚ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹ã¨è€ƒãˆã‚‹)
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
-				if (RotaBlockID[x][y] != BLOCK_TYPE_NO) {//ƒuƒƒbƒN—L‚è‚Ìê‡AƒuƒƒbƒN‚Ìd‚È‚è‚ğŠm”F‚·‚é
+				if (RotaBlockID[x][y] != BLOCK_TYPE_NO) {//ãƒ–ãƒ­ãƒƒã‚¯æœ‰ã‚Šã®å ´åˆã€ãƒ–ãƒ­ãƒƒã‚¯ã®é‡ãªã‚Šã‚’ç¢ºèªã™ã‚‹
 					if (getBlockColor(fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER), fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
-						//‘¼‚ÌƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚¢‚½ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+						//ä»–ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã„ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
 						RotaVal = i;
-						FLAG = TRUE;//ÅŠO‚Ìƒ‹[ƒv‚à”²‚¯‚é
+						FLAG = TRUE;//æœ€å¤–ã®ãƒ«ãƒ¼ãƒ—ã‚‚æŠœã‘ã‚‹
 					}
 				}
 			}
@@ -1441,7 +1441,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 			break;
 		}
 		else {
-			//‰ñ“]‚ğŠm’è‚·‚é
+			//å›è»¢ã‚’ç¢ºå®šã™ã‚‹
 			for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 				for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 					fallBlockInfo.BlockID[x][y] = RotaBlockID[x][y];
@@ -1451,7 +1451,7 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 
 	}
 
-	//•„†‚ğŒ³‚É–ß‚·
+	//ç¬¦å·ã‚’å…ƒã«æˆ»ã™
 	if (Minus) {
 		RotaVal = -RotaVal;
 	}
@@ -1459,16 +1459,16 @@ int Phase_GameMain::FallBlock_Rotate(int RotaVal) {
 	return RotaVal;
 }
 
-//—‰ºƒuƒƒbƒN‚ğƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚É•ÏŠ·‚·‚é(‚Â‚Ü‚èİ’u)
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰æ›ã™ã‚‹(ã¤ã¾ã‚Šè¨­ç½®)
 void Phase_GameMain::FallBlock_addField() {
-	if (!isFallBlock_Enable())	return;	//‚»‚à‚»‚à—LŒø‚Å–³‚¢‚Í–³‹
+	if (!isFallBlock_Enable())	return;	//ãã‚‚ãã‚‚æœ‰åŠ¹ã§ç„¡ã„æ™‚ã¯ç„¡è¦–
 
-	//‰½‚à–³‚µƒuƒƒbƒNˆÈŠO‚ÍƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚É‡Ÿ•ÏŠ·‚ğs‚¤
+	//ä½•ã‚‚ç„¡ã—ãƒ–ãƒ­ãƒƒã‚¯ä»¥å¤–ã¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã«é †æ¬¡å¤‰æ›ã‚’è¡Œã†
 	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 		for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 			if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
-				int fX, fY;		//ƒuƒƒbƒN‚ÌƒtƒB[ƒ‹ƒhã‚ÌˆÊ’u
-				BLOCK_TYPE fB;	//İ’u‚·‚éƒuƒƒbƒN‚Ìí—Ş
+				int fX, fY;		//ãƒ–ãƒ­ãƒƒã‚¯ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸Šã®ä½ç½®
+				BLOCK_TYPE fB;	//è¨­ç½®ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡
 				fX = fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER);
 				fY = fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER);
 				fB = fallBlockInfo.BlockID[x][y];
@@ -1478,95 +1478,95 @@ void Phase_GameMain::FallBlock_addField() {
 			}
 		}
 	}
-	printLog_I(_T("—‰ºƒuƒƒbƒN‚Ìyİ’uz"));
+	printLog_I(_T("è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ã€è¨­ç½®ã€‘"));
 
-	//—‰ºƒuƒƒbƒN‚Ì–³Œø‰»ˆ—
+	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ç„¡åŠ¹åŒ–å‡¦ç†
 	Delete_FallBlock();
 
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÉƒuƒƒbƒN‚ğ’Ç‰Á(íœ)‚·‚é(ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚Ííœ‚³‚ê‚Ü‚·)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿½åŠ (å‰Šé™¤)ã™ã‚‹(ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã¯å‰Šé™¤ã•ã‚Œã¾ã™)
 /*
-ˆø”
-	Override:TRUE‚ÅƒuƒƒbƒNã‘‚«‚ğ‹–‰Â‚·‚é(Á‚·‚Æ‚«‚ÍTRUE‚É‚µ‚È‚¢‚ÆƒuƒƒbƒN‚ÍÁ‚¦‚È‚¢‚æ)
-	MotionInit:TRUE‚Åƒ‚[ƒVƒ‡ƒ“ƒf[ƒ^‚à‰Šú‰»‚·‚é
-	OutScreen:TRUE‚Å‰æ–ÊŠO‚ÉƒuƒƒbƒN‚ğİ’u‚·‚é‚±‚Æ‚ğ‹–‰Â
-	MotionType:•Ï‰»ƒ‚[ƒVƒ‡ƒ“İ’è(BlockChangeMotionType_NO‚Å•Ï‰»ƒ‚[ƒVƒ‡ƒ“íœ)
-	MotionLengh:ƒ‚[ƒVƒ‡ƒ“‚Ì’·‚³
-	Before:‘O‚Éİ’u‚³‚ê‚Ä‚¢‚½ƒuƒƒbƒN
-–ß‚è’l
-	TRUE‚Åİ’u(íœ)¬Œ÷
+å¼•æ•°
+	Override:TRUEã§ãƒ–ãƒ­ãƒƒã‚¯ä¸Šæ›¸ãã‚’è¨±å¯ã™ã‚‹(æ¶ˆã™ã¨ãã¯TRUEã«ã—ãªã„ã¨ãƒ–ãƒ­ãƒƒã‚¯ã¯æ¶ˆãˆãªã„ã‚ˆ)
+	MotionInit:TRUEã§ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã‚‚åˆæœŸåŒ–ã™ã‚‹
+	OutScreen:TRUEã§ç”»é¢å¤–ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨­ç½®ã™ã‚‹ã“ã¨ã‚’è¨±å¯
+	MotionType:å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š(BlockChangeMotionType_NOã§å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å‰Šé™¤)
+	MotionLengh:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®é•·ã•
+	Before:å‰ã«è¨­ç½®ã•ã‚Œã¦ã„ãŸãƒ–ãƒ­ãƒƒã‚¯
+æˆ»ã‚Šå€¤
+	TRUEã§è¨­ç½®(å‰Šé™¤)æˆåŠŸ
 */
 int Phase_GameMain::add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override, int OutScreen, BLOCK_TYPE *Before, int UseVirtualField) {
-	if (Before != NULL)	*Before = BLOCK_TYPE_NO;	//‘O‚ÌƒuƒƒbƒN‚ğw’è‚·‚é
-	BLOCK_TYPE before = BLOCK_TYPE_NO;	//Á‹‘O‚ÌƒuƒƒbƒN
-	//‰æ–ÊŠOƒuƒƒbƒN‚Íİ’u•s‰Â
+	if (Before != NULL)	*Before = BLOCK_TYPE_NO;	//å‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æŒ‡å®šã™ã‚‹
+	BLOCK_TYPE before = BLOCK_TYPE_NO;	//æ¶ˆå»å‰ã®ãƒ–ãƒ­ãƒƒã‚¯
+	//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã¯è¨­ç½®ä¸å¯
 	if (brock_type == BLOCK_TYPE_NUM)	return FALSE;
-	//ƒuƒƒbƒN–³‚µƒuƒƒbƒN‚ªw’è‚³‚ê‚½ê‡‚Ííœˆ—‚ğs‚¤
+	//ãƒ–ãƒ­ãƒƒã‚¯ç„¡ã—ãƒ–ãƒ­ãƒƒã‚¯ãŒæŒ‡å®šã•ã‚ŒãŸå ´åˆã¯å‰Šé™¤å‡¦ç†ã‚’è¡Œã†
 
 
-	//ƒuƒƒbƒN‚ğİ’u‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚éˆÊ’u‚ÌŒ»İ‚ÌƒuƒƒbƒN‚ğæ“¾‚·‚é(‘{¸‘ÎÛŠO‚Í‰æ–ÊŠOƒuƒƒbƒN‚É‚È‚è‚Ü‚·)
+	//ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨­ç½®ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ä½ç½®ã®ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å–å¾—ã™ã‚‹(æœæŸ»å¯¾è±¡å¤–ã¯ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã«ãªã‚Šã¾ã™)
 	BLOCK_TYPE bt = getBlockColor(X, Y, TRUE, !OutScreen, UseVirtualField);
 	if (Override) {
-		//ã‘‚«‚ª—LŒø‚Èê‡
-		if (bt == BLOCK_TYPE_NUM)	return FALSE;//‰æ–ÊŠOƒuƒƒbƒN‚Ì‚Ì‚İ¸”s
+		//ä¸Šæ›¸ããŒæœ‰åŠ¹ãªå ´åˆ
+		if (bt == BLOCK_TYPE_NUM)	return FALSE;//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚ã®ã¿å¤±æ•—
 	}
 	else {
-		//ã‘‚«–³Œø‚Ìê‡
-		if (bt != BLOCK_TYPE_NO)	return FALSE;//ƒuƒƒbƒN–³‚µ‚Æo‚È‚¢ê‡‚Í¸”s
+		//ä¸Šæ›¸ãç„¡åŠ¹ã®å ´åˆ
+		if (bt != BLOCK_TYPE_NO)	return FALSE;//ãƒ–ãƒ­ãƒƒã‚¯ç„¡ã—ã¨å‡ºãªã„å ´åˆã¯å¤±æ•—
 	}
 
-	//Œ»İ‚ÌƒuƒƒbƒN‚ğ‹L˜^‚·‚é
+	//ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨˜éŒ²ã™ã‚‹
 	before = getBlockColor(X, Y, TRUE, FALSE, UseVirtualField);
 
 	if (UseVirtualField) {
-		//İ’è‚³‚ê‚Ä‚¢‚éƒ‚[ƒVƒ‡ƒ“‚ğíœ‚·‚é
+		//è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤ã™ã‚‹
 		Virtualfield[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
 		Virtualfield[X][Y].blockMoveMotion.Enable = FALSE;
 
-		//ƒuƒƒbƒN‚Ìİ’u(íœ)
-		Virtualfield[X][Y].fall_flag = FALSE;	//‰Šú’l‚±‚ê‚Å‚¢‚¢‚Ì‚©•ª‚©‚ç‚ñ‚ªˆê‰‰Šú‰»‚µ‚Æ‚­
-		Virtualfield[X][Y].move_flag = FALSE;	//‰Šú’l‚±‚ê‚Å‚¢‚¢‚Ì‚©•ª‚©‚ç‚ñ‚ªˆê‰‰Šú‰»‚µ‚Æ‚­
-		Virtualfield[X][Y].color = brock_type;	//ƒuƒƒbƒN‚Ì’u‚«Š·‚¦
+		//ãƒ–ãƒ­ãƒƒã‚¯ã®è¨­ç½®(å‰Šé™¤)
+		Virtualfield[X][Y].fall_flag = FALSE;	//åˆæœŸå€¤ã“ã‚Œã§ã„ã„ã®ã‹åˆ†ã‹ã‚‰ã‚“ãŒä¸€å¿œåˆæœŸåŒ–ã—ã¨ã
+		Virtualfield[X][Y].move_flag = FALSE;	//åˆæœŸå€¤ã“ã‚Œã§ã„ã„ã®ã‹åˆ†ã‹ã‚‰ã‚“ãŒä¸€å¿œåˆæœŸåŒ–ã—ã¨ã
+		Virtualfield[X][Y].color = brock_type;	//ãƒ–ãƒ­ãƒƒã‚¯ã®ç½®ãæ›ãˆ
 	}
 	else {
-		//İ’è‚³‚ê‚Ä‚¢‚éƒ‚[ƒVƒ‡ƒ“‚ğíœ‚·‚é
+		//è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤ã™ã‚‹
 		field[X][Y].blockChangeMotion.Type = BlockChangeMotionType_NO;
 		field[X][Y].blockMoveMotion.Enable = FALSE;
 
-		//ƒuƒƒbƒN‚Ìİ’u(íœ)
-		field[X][Y].fall_flag = FALSE;	//‰Šú’l‚±‚ê‚Å‚¢‚¢‚Ì‚©•ª‚©‚ç‚ñ‚ªˆê‰‰Šú‰»‚µ‚Æ‚­
-		field[X][Y].move_flag = FALSE;	//‰Šú’l‚±‚ê‚Å‚¢‚¢‚Ì‚©•ª‚©‚ç‚ñ‚ªˆê‰‰Šú‰»‚µ‚Æ‚­
-		field[X][Y].color = brock_type;	//ƒuƒƒbƒN‚Ì’u‚«Š·‚¦
+		//ãƒ–ãƒ­ãƒƒã‚¯ã®è¨­ç½®(å‰Šé™¤)
+		field[X][Y].fall_flag = FALSE;	//åˆæœŸå€¤ã“ã‚Œã§ã„ã„ã®ã‹åˆ†ã‹ã‚‰ã‚“ãŒä¸€å¿œåˆæœŸåŒ–ã—ã¨ã
+		field[X][Y].move_flag = FALSE;	//åˆæœŸå€¤ã“ã‚Œã§ã„ã„ã®ã‹åˆ†ã‹ã‚‰ã‚“ãŒä¸€å¿œåˆæœŸåŒ–ã—ã¨ã
+		field[X][Y].color = brock_type;	//ãƒ–ãƒ­ãƒƒã‚¯ã®ç½®ãæ›ãˆ
 	}
 
 
 	if (brock_type == BLOCK_TYPE_NO) {
-		//‚±‚Ìê‡‚ÍƒuƒƒbƒNíœ‚È‚Ì‚Å
-		if (UseVirtualField)	printLog_I(_T("‰¼‘zƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Ìyíœz[%d][%d]"), X, Y);
-		else					printLog_I(_T("ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚Ìyíœz[%d][%d]"), X, Y);
+		//ã“ã®å ´åˆã¯ãƒ–ãƒ­ãƒƒã‚¯å‰Šé™¤ãªã®ã§
+		if (UseVirtualField)	printLog_I(_T("ä»®æƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®ã€å‰Šé™¤ã€‘[%d][%d]"), X, Y);
+		else					printLog_I(_T("ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®ã€å‰Šé™¤ã€‘[%d][%d]"), X, Y);
 	}
 	else {
-		if (UseVirtualField)	printLog_I(_T("‰¼‘zƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ÌyV‹K¶¬z[%d][%d](type=%d)"), X, Y, brock_type);
-		else					printLog_I(_T("ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ÌyV‹K¶¬z[%d][%d](type=%d)"), X, Y, brock_type);
+		if (UseVirtualField)	printLog_I(_T("ä»®æƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®ã€æ–°è¦ç”Ÿæˆã€‘[%d][%d](type=%d)"), X, Y, brock_type);
+		else					printLog_I(_T("ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã®ã€æ–°è¦ç”Ÿæˆã€‘[%d][%d](type=%d)"), X, Y, brock_type);
 	}
 
 
-	if (Before != NULL)	*Before = before;	//‘O‚ÌƒuƒƒbƒN‚ğw’è‚·‚é
+	if (Before != NULL)	*Before = before;	//å‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æŒ‡å®šã™ã‚‹
 	return TRUE;
 }
 
 
-//‰º‚©‚çƒuƒƒbƒN‚ª‚í‚¢‚Ä‚­‚é
+//ä¸‹ã‹ã‚‰ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã„ã¦ãã‚‹
 void Phase_GameMain::under_Block() {
 	setBlock_Rect(BLOCK_PADDINGLEFT, BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN, BLOCK_WIDTHNUM_INGAME, 1);
-	Block_AllMoveRequest(0, -1);	//ƒuƒƒbƒN‘S‘Ì‚ğˆÚ“®
+	Block_AllMoveRequest(0, -1);	//ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ã‚’ç§»å‹•
 }
 
-//”j‰óŒõü‚ÅƒuƒƒbƒN‚ğ”j‰ó‚·‚é
+//ç ´å£Šå…‰ç·šã§ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç ´å£Šã™ã‚‹
 void Phase_GameMain::Lay_BlockDel() {
-	//ƒŒ[ƒU[‚ÌƒGƒtƒFƒNƒg
-	lay.SetpointNum(3);	//OŠpŒ`‚ğİ’è
+	//ãƒ¬ãƒ¼ã‚¶ãƒ¼ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+	lay.SetpointNum(3);	//ä¸‰è§’å½¢ã‚’è¨­å®š
 	lay.X[0] = GAMEWINDOW_WIDTH / 2.;
 	lay.Y[0] = 0 + BLOCK_SIZE * BLOCK_PADDINGUP;
 	lay.X[1] = 0;
@@ -1575,26 +1575,26 @@ void Phase_GameMain::Lay_BlockDel() {
 	lay.Y[2] = BLOCK_SIZE * 12 + BLOCK_SIZE * BLOCK_PADDINGUP;
 	Count_lay = 0;
 
-	//ƒGƒtƒFƒNƒg”ÍˆÍ‚ÌƒuƒƒbƒN‚ğ–•Á‚·‚é
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç¯„å›²ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æŠ¹æ¶ˆã™ã‚‹
 	for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
 		for (int y = BLOCK_PADDINGUP + 3; y < BLOCK_PADDINGUP + 12; y++) {
 			Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40, x*2 + 15);
 		}
 	}
 
-	//ƒXƒRƒA‚ğŒ¸‚ç‚·
+	//ã‚¹ã‚³ã‚¢ã‚’æ¸›ã‚‰ã™
 	score.addScore(1, -1'0000);
 }
 
-//”j‰óŒõüƒGƒtƒFƒNƒg‚ÌXV
+//ç ´å£Šå…‰ç·šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æ›´æ–°
 void Phase_GameMain::Update_Lay_BlockDel() {
 	if (lay.getpointNum() == 3) {
 		Count_lay++;
 		if (Count_lay < 15) {
-			//‰½‚à‚µ‚È‚¢
+			//ä½•ã‚‚ã—ãªã„
 		}
 		else if(Count_lay < 45){
-			//ƒtƒŒ[ƒ€”‚ÌŠ„‡‚©‚çˆÊ’u‚ğŒvZ‚·‚é
+			//ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã®å‰²åˆã‹ã‚‰ä½ç½®ã‚’è¨ˆç®—ã™ã‚‹
 			lay.X[1] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
 			lay.X[2] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
 		}
@@ -1608,48 +1608,48 @@ void Phase_GameMain::Update_Lay_BlockDel() {
 	}
 }
 
-//ƒtƒB[ƒ‹ƒh‚É‘¶İ‚·‚é•FƒuƒƒbƒN‚ÌF‚ğŒˆ’è‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å­˜åœ¨ã™ã‚‹é»’è‰²ãƒ–ãƒ­ãƒƒã‚¯ã®è‰²ã‚’æ±ºå®šã™ã‚‹
 void Phase_GameMain::Block_Black_Func() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_BLACK) {//•ƒuƒƒbƒN‚Ì
-				//Šm—¦‚ÅƒuƒƒbƒN‚ÌID‚ğ‘‚«Š·‚¦‚é
+			if (field[x][y].color == BLOCK_TYPE_BLACK) {//é»’ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚
+				//ç¢ºç‡ã§ãƒ–ãƒ­ãƒƒã‚¯ã®IDã‚’æ›¸ãæ›ãˆã‚‹
 				int Val = (int)randomTable.getRand(0, 100);
-				if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//ÔFƒuƒƒbƒN
-				else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//ÂFƒuƒƒbƒN
-				else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//‰©FƒuƒƒbƒN
-				else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//—ÎFƒuƒƒbƒN
-				else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//‡FƒuƒƒbƒN
+				if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//èµ¤è‰²ãƒ–ãƒ­ãƒƒã‚¯
+				else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//é’è‰²ãƒ–ãƒ­ãƒƒã‚¯
+				else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//é»„è‰²ãƒ–ãƒ­ãƒƒã‚¯
+				else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//ç·‘è‰²ãƒ–ãƒ­ãƒƒã‚¯
+				else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//ç´«è‰²ãƒ–ãƒ­ãƒƒã‚¯
 
-				//•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚Ìİ’è
+				//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
 				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_BLACK, 20, 0);
 			}
 		}
 	}
 }
 
-//ƒtƒB[ƒ‹ƒh‚É‘¶İ‚·‚é“øFƒuƒƒbƒN‚ÌF‚ğŒˆ’è‚·‚é(‰º‚©‚ç‡‚É)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å­˜åœ¨ã™ã‚‹è™¹è‰²ãƒ–ãƒ­ãƒƒã‚¯ã®è‰²ã‚’æ±ºå®šã™ã‚‹(ä¸‹ã‹ã‚‰é †ã«)
 void Phase_GameMain::Block_Rainbow_Func() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
-			if (field[x][y].color == BLOCK_TYPE_RAINBOW) {//“øFƒuƒƒbƒN‚Ì
+			if (field[x][y].color == BLOCK_TYPE_RAINBOW) {//è™¹è‰²ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚
 				if (getBlockColor(x, y + 1) == BLOCK_TYPE_NO) {
-					//‰º‚ÉƒuƒƒbƒN‚ª–³‚¢
-					//Šm—¦‚ÅƒuƒƒbƒN‚ÌID‚ğ‘‚«Š·‚¦‚é
+					//ä¸‹ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒç„¡ã„
+					//ç¢ºç‡ã§ãƒ–ãƒ­ãƒƒã‚¯ã®IDã‚’æ›¸ãæ›ãˆã‚‹
 					int Val = (int)randomTable.getRand(0, 100);
-					if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//ÔFƒuƒƒbƒN
-					else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//ÂFƒuƒƒbƒN
-					else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//‰©FƒuƒƒbƒN
-					else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//—ÎFƒuƒƒbƒN
-					else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//‡FƒuƒƒbƒN
+					if (Val < 20)		field[x][y].color = BLOCK_TYPE_RED;		//èµ¤è‰²ãƒ–ãƒ­ãƒƒã‚¯
+					else if (Val < 40)	field[x][y].color = BLOCK_TYPE_BLUE;	//é’è‰²ãƒ–ãƒ­ãƒƒã‚¯
+					else if (Val < 60)	field[x][y].color = BLOCK_TYPE_YELLOW;	//é»„è‰²ãƒ–ãƒ­ãƒƒã‚¯
+					else if (Val < 80)	field[x][y].color = BLOCK_TYPE_GREEN;	//ç·‘è‰²ãƒ–ãƒ­ãƒƒã‚¯
+					else 				field[x][y].color = BLOCK_TYPE_PURPLE;	//ç´«è‰²ãƒ–ãƒ­ãƒƒã‚¯
 
 				}
 				else {
-					//‰º‚ÉƒuƒƒbƒN‚ª‚ ‚éê‡
+					//ä¸‹ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹å ´åˆ
 					field[x][y].color = getBlockColor(x, y + 1);
 				}
 
-				//•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚Ìİ’è
+				//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
 				Block_SetChangeMotion_NOMAL_From(x, y, BLOCK_TYPE_RAINBOW, 20, 0);
 
 
@@ -1658,16 +1658,16 @@ void Phase_GameMain::Block_Rainbow_Func() {
 	}
 }
 
-//ƒtƒB[ƒ‹ƒh‚É‘¶İ‚·‚é”š’eƒuƒƒbƒN‚ğ”š”j‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å­˜åœ¨ã™ã‚‹çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã‚’çˆ†ç ´ã™ã‚‹
 void Phase_GameMain::Block_BOMB_Func() {
 	int DeleteNum = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_BOM) {//”š’eƒuƒƒbƒN‚Ì
-				//©g‚Ìíœ
+			if (field[x][y].color == BLOCK_TYPE_BOM) {//çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚
+				//è‡ªèº«ã®å‰Šé™¤
 				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
 
-				//üˆÍ‚ÌƒuƒƒbƒN‚ğíœ‚·‚é(”š’eƒuƒƒbƒN‚Ííœ‚µ‚È‚¢)
+				//å‘¨å›²ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã™ã‚‹(çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã¯å‰Šé™¤ã—ãªã„)
 				if (getBlockColor(x + 1, y) != BLOCK_TYPE_BOM) {
 					if (Block_Delete_Direct(x + 1, y, BlockChangeMotionType_EXPLOSION, 40, 5))	DeleteNum++;
 				}
@@ -1713,16 +1713,16 @@ void Phase_GameMain::Block_BOMB_Func() {
 	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 }
 
-//ƒtƒB[ƒ‹ƒh‚É‘¶İ‚·‚é2”š’eƒuƒƒbƒN‚ğ”š”j‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å­˜åœ¨ã™ã‚‹2çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã‚’çˆ†ç ´ã™ã‚‹
 void Phase_GameMain::Block_2BOMB_Func() {
 	int DeleteNum = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_2BOM) {//”š’eƒuƒƒbƒN‚Ì
-				//©g‚Ìíœ
+			if (field[x][y].color == BLOCK_TYPE_2BOM) {//çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚
+				//è‡ªèº«ã®å‰Šé™¤
 				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
 
-				//2ŒÂ—×Ú‚µ‚Ä‚¢‚éƒuƒƒbƒN‚ğ”j‰ó‚·‚é
+				//2å€‹éš£æ¥ã—ã¦ã„ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç ´å£Šã™ã‚‹
 				DeleteNum += Block_Delete(2, FALSE);
 			}
 		}
@@ -1731,18 +1731,18 @@ void Phase_GameMain::Block_2BOMB_Func() {
 	if (DeleteNum > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 }
 
-//ƒtƒB[ƒ‹ƒh‚É‘¶İ‚·‚é“¯F”š’eƒuƒƒbƒN‚ğ”š”j‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å­˜åœ¨ã™ã‚‹åŒè‰²çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã‚’çˆ†ç ´ã™ã‚‹
 void Phase_GameMain::Block_BOMBColor_Func() {
 	int DeleteNum = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (field[x][y].color == BLOCK_TYPE_BOM_Color) {//”š’eƒuƒƒbƒN‚Ì
-				//©g‚Ìíœ
+			if (field[x][y].color == BLOCK_TYPE_BOM_Color) {//çˆ†å¼¾ãƒ–ãƒ­ãƒƒã‚¯ã®æ™‚
+				//è‡ªèº«ã®å‰Šé™¤
 				if (Block_Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, 40))	DeleteNum++;
-				//^‰º‚ÌƒuƒƒbƒN‚ÌF‚ğæ“¾‚·‚é
+				//çœŸä¸‹ã®ãƒ–ãƒ­ãƒƒã‚¯ã®è‰²ã‚’å–å¾—ã™ã‚‹
 				BLOCK_TYPE under = getBlockColor(x, y + 1);
 
-				//“¯FƒuƒƒbƒN‚ğíœ‚·‚é
+				//åŒè‰²ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã™ã‚‹
 				for (int x2 = BLOCK_PADDINGLEFT; x2 < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x2++) {
 					for (int y2 = BLOCK_PADDINGUP; y2 < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; y2++) {
 						Block_Delete_Color(x2, y2, under, BlockChangeMotionType_EXPLOSION, 40);
@@ -1756,17 +1756,17 @@ void Phase_GameMain::Block_BOMBColor_Func() {
 }
 
 
-//w’è‚µ‚½À•W‚ÌƒuƒƒbƒN‚Ìæ“¾(‘æ3ˆø”‚Í‰æ–ÊŠO‚ğƒuƒƒbƒN‚Æ‚µ‚Ä”»’è‚·‚é‚©‚Ç‚¤‚©TRUE”»’è)(‘æ4ˆø”‚ÍÀÛ‚É•`‰æ‚³‚ê‚éƒGƒŠƒAˆÈŠO‚ğ‰æ–ÊŠO‚É‚·‚éê‡TRUE,ƒuƒƒbƒNî•ñ‚ª–³‚¢ˆÊ’u‚ğ‰æ–ÊŠO‚É‚·‚éê‡‚ÍFALSE‚ğİ’è‚·‚é)
+//æŒ‡å®šã—ãŸåº§æ¨™ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å–å¾—(ç¬¬3å¼•æ•°ã¯ç”»é¢å¤–ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã¨ã—ã¦åˆ¤å®šã™ã‚‹ã‹ã©ã†ã‹TRUEåˆ¤å®š)(ç¬¬4å¼•æ•°ã¯å®Ÿéš›ã«æç”»ã•ã‚Œã‚‹ã‚¨ãƒªã‚¢ä»¥å¤–ã‚’ç”»é¢å¤–ã«ã™ã‚‹å ´åˆTRUE,ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ãŒç„¡ã„ä½ç½®ã‚’ç”»é¢å¤–ã«ã™ã‚‹å ´åˆã¯FALSEã‚’è¨­å®šã™ã‚‹)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOutScreenBlock, int InGame, int UseVirtualField) {
 
-	//‰æ–ÊŠOˆ—
+	//ç”»é¢å¤–å‡¦ç†
 	if (InGame) {
-		//ÀÛ‚Ì•`‰æƒGƒŠƒA‚Å”»’è
+		//å®Ÿéš›ã®æç”»ã‚¨ãƒªã‚¢ã§åˆ¤å®š
 		if (X < BLOCK_PADDINGLEFT || (BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT) <= X)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 		if (Y < BLOCK_PADDINGUP || (BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN) <= Y)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 	}
 	else {
-		//ƒtƒB[ƒ‹ƒhî•ñ‚©‚ç”»’è‚·‚é
+		//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‹ã‚‰åˆ¤å®šã™ã‚‹
 		if (X < 0 || BLOCK_WIDTHNUM <= X)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 		if (Y < 0 || BLOCK_HEIGHTNUM <= Y)	return (useOutScreenBlock) ? BLOCK_TYPE_NUM : BLOCK_TYPE_NO;
 	}
@@ -1775,7 +1775,7 @@ Phase_GameMain::BLOCK_TYPE Phase_GameMain::getBlockColor(int X, int Y, int useOu
 
 }
 
-//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ğd—Í‚Å—‰º‚³‚¹‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã‚’é‡åŠ›ã§è½ä¸‹ã•ã›ã‚‹
 void Phase_GameMain::Block_Gravity(int InGameOnly) {
 	int sX = 0, sY = 0;
 	int eX = BLOCK_WIDTHNUM, eY = BLOCK_HEIGHTNUM;
@@ -1789,64 +1789,64 @@ void Phase_GameMain::Block_Gravity(int InGameOnly) {
 	}
 
 	for (int x = sX; x < eX; x++) {
-		//—ñ‚²‚Æ‚ÉƒuƒƒbƒNî•ñ‚ğƒRƒs[‚·‚é
+		//åˆ—ã”ã¨ã«ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹
 		field_info t[BLOCK_HEIGHTNUM];
 		for (int y = sY; y < eY; y++) {
 			t[y] = field[x][y];
 			field[x][y].color = BLOCK_TYPE_NO;
 		}
 		int Count = eY - 1;
-		//‰º‚Ì’i‚©‚ç‘¶İ‚·‚éƒuƒƒbƒN‚ğ•À‚×’¼‚·(‹t‡‰ñ‚µ)
+		//ä¸‹ã®æ®µã‹ã‚‰å­˜åœ¨ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¸¦ã¹ç›´ã™(é€†é †å›ã—)
 		for (int y = eY - 1; y >= sY; y--) {
 			if (t[y].color != BLOCK_TYPE_NO) {
 				field[x][Count] = t[y];
-				//—‰ºƒ‚[ƒVƒ‡ƒ“(ƒJƒEƒ“ƒg‚ªˆÚ“®æAy‚ªˆÚ“®Œ³‚É‚È‚é)
+				//è½ä¸‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³(ã‚«ã‚¦ãƒ³ãƒˆãŒç§»å‹•å…ˆã€yãŒç§»å‹•å…ƒã«ãªã‚‹)
 				Block_SetMoveMotion(x, Count, x, y, x, Count, 0.3, 15);
 				Count--;
 			}
 		}
 	}
 
-	printLog_I(_T("ƒuƒƒbƒN‚Éd—ÍŒvZ‚ğs‚¢‚Ü‚µ‚½"));
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã«é‡åŠ›è¨ˆç®—ã‚’è¡Œã„ã¾ã—ãŸ"));
 }
 
-//ƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ğ’¼Úíœ‚·‚é(íœ‚³‚ê‚½‚çTRUE)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç›´æ¥å‰Šé™¤ã™ã‚‹(å‰Šé™¤ã•ã‚ŒãŸã‚‰TRUE)
 int Phase_GameMain::Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion, int MotionLengh, int Delay) {
-	if (getBlockColor(X, Y, FALSE, FALSE) == BLOCK_TYPE_NO)	return FALSE;//ƒuƒƒbƒN‚ª‚»‚à‚»‚à‘¶İ‚µ‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
-	BLOCK_TYPE bt = BLOCK_TYPE_NO;	//íœ‚³‚ê‚½ƒuƒƒbƒN‚Ìí—Ş
-	//ƒuƒƒbƒN‚Ìíœ‚ğs‚¤
+	if (getBlockColor(X, Y, FALSE, FALSE) == BLOCK_TYPE_NO)	return FALSE;//ãƒ–ãƒ­ãƒƒã‚¯ãŒãã‚‚ãã‚‚å­˜åœ¨ã—ãªã„å ´åˆã¯ä½•ã‚‚ã—ãªã„
+	BLOCK_TYPE bt = BLOCK_TYPE_NO;	//å‰Šé™¤ã•ã‚ŒãŸãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡
+	//ãƒ–ãƒ­ãƒƒã‚¯ã®å‰Šé™¤ã‚’è¡Œã†
 	int flag = add_FraldBlock(X, Y, BLOCK_TYPE_NO, TRUE, TRUE, &bt);
 
 	if (flag) {
-		//ƒuƒƒbƒN‚ªíœ‚³‚ê‚½
+		//ãƒ–ãƒ­ãƒƒã‚¯ãŒå‰Šé™¤ã•ã‚ŒãŸ
 		if (PlayMotion == BlockChangeMotionType_EXPLOSION) {
-			Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh, bt, Delay);	//ƒ‚[ƒVƒ‡ƒ“‚Ì¶¬
+			Block_SetChangeMotion_EXPLOSION(X, Y, MotionLengh, bt, Delay);	//ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®ç”Ÿæˆ
 		}
 		else if (PlayMotion == BlockChangeMotionType_SMALL) {
-			Block_SetChangeMotion_SMALL(X, Y, MotionLengh, bt, Delay);	//ƒ‚[ƒVƒ‡ƒ“‚Ì¶¬
+			Block_SetChangeMotion_SMALL(X, Y, MotionLengh, bt, Delay);	//ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®ç”Ÿæˆ
 		}
 	}
 
 	return ((flag) ? TRUE : FALSE);
 }
 
-//w’è‚µ‚½À•W‚ªw’è‚µ‚½ƒuƒƒbƒN‚¾‚Á‚½ê‡‚Éíœ(íœ‚³‚ê‚½‚çTRUE)
+//æŒ‡å®šã—ãŸåº§æ¨™ãŒæŒ‡å®šã—ãŸãƒ–ãƒ­ãƒƒã‚¯ã ã£ãŸå ´åˆã«å‰Šé™¤(å‰Šé™¤ã•ã‚ŒãŸã‚‰TRUE)
 int Phase_GameMain::Block_Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion, int MotionLengh) {
-	if (!isSameColorBlock(type, getBlockColor(X, Y)))	return FALSE;//ˆá‚¤F‚ÌƒuƒƒbƒN‚Ìê‡‚Ííœ‚µ‚È‚¢
+	if (!isSameColorBlock(type, getBlockColor(X, Y)))	return FALSE;//é•ã†è‰²ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆã¯å‰Šé™¤ã—ãªã„
 
 	return Block_Delete_Direct(X, Y, PlayMotion, MotionLengh);
 }
 
-//˜A‘±‚·‚éƒtƒB[ƒ‹ƒhƒuƒƒbƒN‚ğíœ‚·‚é(‚Â‚¢‚Å‚ÉÁ‹‚É‚æ‚Á‚Ä”­“®‚·‚éŒø‰Ê‚à”­“®‚·‚é)(Á‹‚µ‚½ƒuƒƒbƒN‚Ì”)
+//é€£ç¶šã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã™ã‚‹(ã¤ã„ã§ã«æ¶ˆå»ã«ã‚ˆã£ã¦ç™ºå‹•ã™ã‚‹åŠ¹æœã‚‚ç™ºå‹•ã™ã‚‹)(æ¶ˆå»ã—ãŸãƒ–ãƒ­ãƒƒã‚¯ã®æ•°)
 int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
-	//‰æ–Ê“à‚Ì‘¶İ‚·‚éƒuƒƒbƒN‚Ì‚İ‚ÅŒvZ‚·‚é
+	//ç”»é¢å†…ã®å­˜åœ¨ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®ã¿ã§è¨ˆç®—ã™ã‚‹
 
 
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
-	//—×ÚƒuƒƒbƒN¯•ÊID‚ğ‹L˜^‚·‚é•\‚Ìì¬(-1–¢’TõABLOCK_WIDTHNUM*BLOCK_HEIGHTNUM’Tõ‚©‚çœŠO)
+	//éš£æ¥ãƒ–ãƒ­ãƒƒã‚¯è­˜åˆ¥IDã‚’è¨˜éŒ²ã™ã‚‹è¡¨ã®ä½œæˆ(-1æœªæ¢ç´¢ã€BLOCK_WIDTHNUM*BLOCK_HEIGHTNUMæ¢ç´¢ã‹ã‚‰é™¤å¤–)
 	CreateSequenceCountTable(DeleteFlag, BLOCK_PADDINGLEFT, BLOCK_PADDINGUP, BLOCK_WIDTHNUM_INGAME, BLOCK_HEIGHTNUM_INGAME);
 
-	//íœ‘O‚ÌƒuƒƒbƒN‚Ìˆê——‚ğì¬‚·‚é
+	//å‰Šé™¤å‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸€è¦§ã‚’ä½œæˆã™ã‚‹
 	BLOCK_TYPE old[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -1854,12 +1854,12 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 		}
 	}
 
-	//—×ÚƒuƒƒbƒN‚ÌŒvZ‚ğs‚¤
-	int Counter[BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM];	//ID‚²‚Æ‚Ì—×ÚƒJƒEƒ“ƒg”
+	//éš£æ¥ãƒ–ãƒ­ãƒƒã‚¯ã®è¨ˆç®—ã‚’è¡Œã†
+	int Counter[BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM];	//IDã”ã¨ã®éš£æ¥ã‚«ã‚¦ãƒ³ãƒˆæ•°
 	int ID = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (DeleteFlag[x][y] == -1) {//–¢’TõƒuƒƒbƒN
+			if (DeleteFlag[x][y] == -1) {//æœªæ¢ç´¢ãƒ–ãƒ­ãƒƒã‚¯
 				Counter[ID] = 0;
 				SequenceCount(x, y, ID, DeleteFlag, &(Counter[ID]));
 				ID++;
@@ -1867,23 +1867,23 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 		}
 	}
 
-	//–îˆóƒuƒƒbƒN‚ÌŒø‰Ê‚ğæ‚É”­“®‚·‚é
+	//çŸ¢å°ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ¹æœã‚’å…ˆã«ç™ºå‹•ã™ã‚‹
 	int DelCount = 0;
 	if (Flag_Event) {
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-				if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//”z—ñ‚Ì”ÍˆÍ“à
+				if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//é…åˆ—ã®ç¯„å›²å†…
 					if (Counter[DeleteFlag[x][y]] >= Len) {
-						//…•½‚Ì–îˆó‚Ìê‡
+						//æ°´å¹³ã®çŸ¢å°ã®å ´åˆ
 						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_X ||
 							old[x][y] == BLOCK_TYPE_GREEN_ARROW_X ||
 							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_X ||
 							old[x][y] == BLOCK_TYPE_RED_ARROW_X ||
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_X) {
-							//¶’[‚©‚ç‰E’[‚Ü‚Å‚Ìˆê—ñ‚ğˆêŠ‡Á‹
+							//å·¦ç«¯ã‹ã‚‰å³ç«¯ã¾ã§ã®ä¸€åˆ—ã‚’ä¸€æ‹¬æ¶ˆå»
 							for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
 								if (Block_Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1892,16 +1892,16 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 								}
 							}
 						}
-						//‚’¼‚Ì–îˆó‚Ìê‡
+						//å‚ç›´ã®çŸ¢å°ã®å ´åˆ
 						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_Y ||
 							old[x][y] == BLOCK_TYPE_GREEN_ARROW_Y ||
 							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_Y ||
 							old[x][y] == BLOCK_TYPE_RED_ARROW_Y ||
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_Y) {
-							//¶’[‚©‚ç‰E’[‚Ü‚Å‚Ìˆê—ñ‚ğˆêŠ‡Á‹
+							//å·¦ç«¯ã‹ã‚‰å³ç«¯ã¾ã§ã®ä¸€åˆ—ã‚’ä¸€æ‹¬æ¶ˆå»
 							for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
 								if (Block_Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, 40, abs(y - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1910,16 +1910,16 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 								}
 							}
 						}
-						//‰Eã‚Ì–îˆó‚Ìê‡
+						//å³ä¸Šã®çŸ¢å°ã®å ´åˆ
 						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY ||
 							old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY ||
 							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY ||
 							old[x][y] == BLOCK_TYPE_RED_ARROW_XY ||
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY) {
-							//Î‚ß‚ÉˆêŠ‡Á‹
+							//æ–œã‚ã«ä¸€æ‹¬æ¶ˆå»
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
 								if (Block_Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1927,7 +1927,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									DelCount++;
 								}
 								if (Block_Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1936,16 +1936,16 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 								}
 							}
 						}
-						//‰E‰º‚Ì–îˆó‚Ìê‡
+						//å³ä¸‹ã®çŸ¢å°ã®å ´åˆ
 						if (old[x][y] == BLOCK_TYPE_BLUE_ARROW_XY2 ||
 							old[x][y] == BLOCK_TYPE_GREEN_ARROW_XY2 ||
 							old[x][y] == BLOCK_TYPE_PURPLE_ARROW_XY2 ||
 							old[x][y] == BLOCK_TYPE_RED_ARROW_XY2 ||
 							old[x][y] == BLOCK_TYPE_YELLOW_ARROW_XY2) {
-							//Î‚ß‚ÉˆêŠ‡Á‹
+							//æ–œã‚ã«ä¸€æ‹¬æ¶ˆå»
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
 								if (Block_Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1953,7 +1953,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									DelCount++;
 								}
 								if (Block_Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, 40, abs(x - i) * 2)) {
-									//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+									//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 									double X, Y;
 									Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
 									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
@@ -1966,7 +1966,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 				}
 			}
 		}
-		//‚±‚Ì“_‚Åíœ‚ª‚ ‚Á‚½(‚Â‚Ü‚è–îˆóƒuƒƒbƒN‚ÅÁ‚³‚ê‚½)
+		//ã“ã®æ™‚ç‚¹ã§å‰Šé™¤ãŒã‚ã£ãŸ(ã¤ã¾ã‚ŠçŸ¢å°ãƒ–ãƒ­ãƒƒã‚¯ã§æ¶ˆã•ã‚ŒãŸ)
 		if (DelCount > 0)	SoundEffect_Play(SE_TYPE_Smallexplosion);
 	}
 
@@ -1977,14 +1977,14 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 		DelMotion = BlockChangeMotionType_EXPLOSION;
 		DelLen = 40;
 	}
-	//—×Ú‚µ‚Ä‚¢‚éƒuƒƒbƒN‚ğíœ‚·‚é
+	//éš£æ¥ã—ã¦ã„ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã™ã‚‹
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//”z—ñ‚Ì”ÍˆÍ“à
+			if (0 <= DeleteFlag[x][y] && DeleteFlag[x][y] < ARRAY_LENGTH(Counter)) {//é…åˆ—ã®ç¯„å›²å†…
 				if (Counter[DeleteFlag[x][y]] >= Len) {
-					//íœ
+					//å‰Šé™¤
 					if (Block_Delete_Direct(x, y, DelMotion, DelLen)) {
-						//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+						//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+100"));
@@ -1992,38 +1992,38 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						DelCount++;
 					}
 
-					//‚Â‚¢‚Å‚É—×Ú‚·‚é÷–ØƒuƒƒbƒN‚àíœ
+					//ã¤ã„ã§ã«éš£æ¥ã™ã‚‹æ¨¹æœ¨ãƒ–ãƒ­ãƒƒã‚¯ã‚‚å‰Šé™¤
 					if (Block_Delete_Color(x, y - 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
-						//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+						//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
 						score.addScore(0, 80);
-						DelCount++;//ã
+						DelCount++;//ä¸Š
 					}
 					if (Block_Delete_Color(x, y + 1, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
-						//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+						//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 						double X, Y;
 						Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
 						score.addScore(0, 80);
-						DelCount++;//‰º
+						DelCount++;//ä¸‹
 					}
 					if (Block_Delete_Color(x - 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
-						//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+						//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 						double X, Y;
 						Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
 						score.addScore(0, 80);
-						DelCount++;//¶
+						DelCount++;//å·¦
 					}
 					if (Block_Delete_Color(x + 1, y, BLOCK_TYPE_TREE, DelMotion, DelLen)) {
-						//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì¶¬
+						//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ç”Ÿæˆ
 						double X, Y;
 						Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
 						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
 						score.addScore(0, 80);
-						DelCount++;//‰E
+						DelCount++;//å³
 					}
 
 
@@ -2033,24 +2033,24 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 		}
 	}
 
-	printLog_I(_T("—×ÚƒuƒƒbƒN‚ÌíœŒvZ‚ğs‚¢‚Ü‚µ‚½(%dƒuƒƒbƒN)"), DelCount);
+	printLog_I(_T("éš£æ¥ãƒ–ãƒ­ãƒƒã‚¯ã®å‰Šé™¤è¨ˆç®—ã‚’è¡Œã„ã¾ã—ãŸ(%dãƒ–ãƒ­ãƒƒã‚¯)"), DelCount);
 
 
 	return DelCount;
 }
 
-//SequenceCount‚Åg—p‚·‚éƒ}[ƒJ[ƒe[ƒuƒ‹‚ğì¬‚·‚é(—LŒø‚ÈƒGƒŠƒA)(TRUE‚Å‰¼‘z‚Ì–Ê‚ğg—p‚·‚é)
+//SequenceCountã§ä½¿ç”¨ã™ã‚‹ãƒãƒ¼ã‚«ãƒ¼ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ä½œæˆã™ã‚‹(æœ‰åŠ¹ãªã‚¨ãƒªã‚¢)(TRUEã§ä»®æƒ³ã®é¢ã‚’ä½¿ç”¨ã™ã‚‹)
 void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField) {
 	if (deleteFlag == NULL)	return;
 
 
 
-	//—×ÚƒuƒƒbƒN¯•ÊID‚ğ‹L˜^‚·‚é•\‚Ìì¬(-1–¢’TõABLOCK_WIDTHNUM*BLOCK_HEIGHTNUM’Tõ‚©‚çœŠO)
+	//éš£æ¥ãƒ–ãƒ­ãƒƒã‚¯è­˜åˆ¥IDã‚’è¨˜éŒ²ã™ã‚‹è¡¨ã®ä½œæˆ(-1æœªæ¢ç´¢ã€BLOCK_WIDTHNUM*BLOCK_HEIGHTNUMæ¢ç´¢ã‹ã‚‰é™¤å¤–)
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			field_info *f = &(field[x][y]);
 			if (UseVirtualField)	f = &(Virtualfield[x][y]);
-			if (!(X <= x && x < X + W && Y <= y && y < Y + H) ||	//”ÍˆÍŠO
+			if (!(X <= x && x < X + W && Y <= y && y < Y + H) ||	//ç¯„å›²å¤–
 				f->color == BLOCK_TYPE_NO ||
 				f->color == BLOCK_TYPE_NUM ||
 				f->color == BLOCK_TYPE_TREE ||
@@ -2058,7 +2058,7 @@ void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLO
 				f->color == BLOCK_TYPE_RAINBOW ||
 				f->color == BLOCK_TYPE_BOM ||
 				f->color == BLOCK_TYPE_2BOM ||
-				f->color == BLOCK_TYPE_BOM_Color) {		//œŠOƒuƒƒbƒN
+				f->color == BLOCK_TYPE_BOM_Color) {		//é™¤å¤–ãƒ–ãƒ­ãƒƒã‚¯
 				deleteFlag[x][y] = BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM;
 			}
 			else {
@@ -2068,13 +2068,13 @@ void Phase_GameMain::CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLO
 	}
 }
 
-//‰æ–ÊŠO‚ÌƒuƒƒbƒN‚ğ‚·‚×‚Äíœ‚·‚é(Á‹‚µ‚½ƒuƒƒbƒN‚Ì”)
+//ç”»é¢å¤–ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’ã™ã¹ã¦å‰Šé™¤ã™ã‚‹(æ¶ˆå»ã—ãŸãƒ–ãƒ­ãƒƒã‚¯ã®æ•°)
 int Phase_GameMain::Block_Delete_OutScreen() {
 	int count = 0;
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (getBlockColor(x, y, TRUE, TRUE) == BLOCK_TYPE_NUM) {
-				//‰æ–ÊŠOƒuƒƒbƒN‚Ìê‡‚Ííœ
+				//ç”»é¢å¤–ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆã¯å‰Šé™¤
 				if (Block_Delete_Direct(x, y)) {
 					count++;
 				}
@@ -2082,18 +2082,18 @@ int Phase_GameMain::Block_Delete_OutScreen() {
 		}
 	}
 
-	printLog_I(_T("‰æ–ÊŠO‚ÌƒuƒƒbƒN‚ğ‚·‚×‚Äíœ(%dŒÂ)"), count);
+	printLog_I(_T("ç”»é¢å¤–ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’ã™ã¹ã¦å‰Šé™¤(%då€‹)"), count);
 
 
 	return count;
 }
 
-//—×Ú‚·‚é“¯FƒuƒƒbƒN‚Éƒ}[ƒJ[‚ğ•t‚¯‚é
+//éš£æ¥ã™ã‚‹åŒè‰²ãƒ–ãƒ­ãƒƒã‚¯ã«ãƒãƒ¼ã‚«ãƒ¼ã‚’ä»˜ã‘ã‚‹
 void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField) {
-	if (deleteFlag == NULL)		return;		//ƒ}[ƒJ[‚ğ•t‚¯‚éƒe[ƒuƒ‹‚ª‚È‚¢ê‡
-	if (deleteFlag[x][y] != -1)	return;		//–¢’TõƒuƒƒbƒN‚¶‚á‚È‚¢ê‡
-	BLOCK_TYPE bt = ((UseVirtualField) ? Virtualfield[x][y].color : field[x][y].color);	//ƒuƒƒbƒN‚Ìí—Ş‚ğ‹L˜^‚·‚é
-	deleteFlag[x][y] = ID;	//’TõÏ‚İ(’TõID‚ğİ’è‚·‚é)
+	if (deleteFlag == NULL)		return;		//ãƒãƒ¼ã‚«ãƒ¼ã‚’ä»˜ã‘ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ãŒãªã„å ´åˆ
+	if (deleteFlag[x][y] != -1)	return;		//æœªæ¢ç´¢ãƒ–ãƒ­ãƒƒã‚¯ã˜ã‚ƒãªã„å ´åˆ
+	BLOCK_TYPE bt = ((UseVirtualField) ? Virtualfield[x][y].color : field[x][y].color);	//ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡ã‚’è¨˜éŒ²ã™ã‚‹
+	deleteFlag[x][y] = ID;	//æ¢ç´¢æ¸ˆã¿(æ¢ç´¢IDã‚’è¨­å®šã™ã‚‹)
 	(*Counter)++;
 
 	int OnlyColor = TRUE;
@@ -2111,10 +2111,10 @@ void Phase_GameMain::SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WI
 	if (y - 1 >= 0 && isSameColorBlock(NextBlock, bt, OnlyColor))	SequenceCount(x, y - 1, ID, deleteFlag, Counter);
 }
 
-//w’è‚µ‚½2ŒÂ‚ÌƒuƒƒbƒN‚ª“¯FƒuƒƒbƒN‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‚Å“¯F)
+//æŒ‡å®šã—ãŸ2å€‹ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒåŒè‰²ãƒ–ãƒ­ãƒƒã‚¯ã‹ã©ã†ã‹ã®å–å¾—(TRUEã§åŒè‰²)
 int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock) {
-	if (OnlyColorBlock) {//ŠÈ—ªŒvZ‚Å‚È‚¢‚Æ‚«
-		//F‚ÌŠT”O‚Ì–³‚¢ƒuƒƒbƒN‚Ìê‡
+	if (OnlyColorBlock) {//ç°¡ç•¥è¨ˆç®—ã§ãªã„ã¨ã
+		//è‰²ã®æ¦‚å¿µã®ç„¡ã„ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ
 		if (type1 == BLOCK_TYPE_NO)			return FALSE;
 		if (type1 == BLOCK_TYPE_TREE)		return FALSE;
 		if (type1 == BLOCK_TYPE_BLACK)		return FALSE;
@@ -2136,10 +2136,10 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Onl
 		if (type2 == BLOCK_TYPE_NUM)		return FALSE;
 	}
 
-	//“¯F”»’è(“¯ˆêƒuƒƒbƒN‚Ìê‡)
+	//åŒè‰²åˆ¤å®š(åŒä¸€ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ)
 	if (type1 == type2)	return TRUE;
 
-	//“¯F”»’è(Šî–{ƒuƒƒbƒN‚É’¼‚µ‚Äl‚¦‚Ü‚·)
+	//åŒè‰²åˆ¤å®š(åŸºæœ¬ãƒ–ãƒ­ãƒƒã‚¯ã«ç›´ã—ã¦è€ƒãˆã¾ã™)
 	switch (type1) {
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_X:
 	case Phase_GameMain::BLOCK_TYPE_RED_ARROW_Y:
@@ -2204,21 +2204,21 @@ int Phase_GameMain::isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int Onl
 		type2 = BLOCK_TYPE_PURPLE;
 		break;
 	}
-	//“¯F”»’è
+	//åŒè‰²åˆ¤å®š
 	if (type1 == type2)	return TRUE;
 
 	return FALSE;
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒNˆÚ“®‚Éƒ‚[ƒVƒ‡ƒ“‚ğİ’è‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ç§»å‹•ã«ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹
 void Phase_GameMain::Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed) {
-	if (getBlockColor(x, y, FALSE, FALSE) == BLOCK_TYPE_NO)	return;	//ƒuƒƒbƒN‚ª–³Œø‚Ìê‡‚Íˆ—‚ğ‚µ‚È‚¢
-	if (FromX == ToX && FromY == ToY)			return;	//ˆÚ“®–³‚µ‚Ìê‡‚àˆ—‚ğ‚µ‚È‚¢
-	if (a <= 0)									return;	//‰Á‘¬“x‚ª•‰‚Ì”‚Ìê‡‚àˆ—‚ğ‚µ‚È‚¢
-	if (MaxSpeed <= 0)							return;	//Å‘å‘¬“x‚ª•‰‚Ì”‚Ìê‡‚àˆ—‚ğ‚µ‚È‚¢
+	if (getBlockColor(x, y, FALSE, FALSE) == BLOCK_TYPE_NO)	return;	//ãƒ–ãƒ­ãƒƒã‚¯ãŒç„¡åŠ¹ã®å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„
+	if (FromX == ToX && FromY == ToY)			return;	//ç§»å‹•ç„¡ã—ã®å ´åˆã‚‚å‡¦ç†ã‚’ã—ãªã„
+	if (a <= 0)									return;	//åŠ é€Ÿåº¦ãŒè² ã®æ•°ã®å ´åˆã‚‚å‡¦ç†ã‚’ã—ãªã„
+	if (MaxSpeed <= 0)							return;	//æœ€å¤§é€Ÿåº¦ãŒè² ã®æ•°ã®å ´åˆã‚‚å‡¦ç†ã‚’ã—ãªã„
 
 	if (field[x][y].blockMoveMotion.Enable) {
-		printLog_C(_T("ƒuƒƒbƒN‚ÌˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ğã‘‚«‚µ‚Ü‚·"));
+		printLog_C(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ä¸Šæ›¸ãã—ã¾ã™"));
 		field[x][y].blockMoveMotion.Enable = FALSE;
 	}
 
@@ -2232,10 +2232,10 @@ void Phase_GameMain::Block_SetMoveMotion(int x, int y, int FromX, int FromY, int
 
 	field[x][y].blockMoveMotion.Enable = TRUE;
 
-	printLog_I(_T("ƒuƒƒbƒN‚ÉyˆÚ“®ƒ‚[ƒVƒ‡ƒ“z‚ğİ’è"));
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã«ã€ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã€‘ã‚’è¨­å®š"));
 }
 
-//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“’†‚ÌƒuƒƒbƒN‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‘¶İ)
+//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã®å–å¾—(TRUEå­˜åœ¨)
 int Phase_GameMain::isBlock_PlayMoveMotion() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -2247,13 +2247,13 @@ int Phase_GameMain::isBlock_PlayMoveMotion() {
 	return FALSE;
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒN‚É•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ğİ’è‚·‚é(‚±‚ê’P‘Ì‚Åg—p‚µ‚Ä–ŒÌ‚Á‚Ä‚à’m‚è‚Ü‚¹‚ñ)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹(ã“ã‚Œå˜ä½“ã§ä½¿ç”¨ã—ã¦äº‹æ•…ã£ã¦ã‚‚çŸ¥ã‚Šã¾ã›ã‚“)
 void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay) {
-	if (getBlockColor(x, y, TRUE, FALSE) == BLOCK_TYPE_NUM)	return;	//ƒuƒƒbƒN‚ª‰æ–ÊŠO‚Ìê‡‚Íˆ—‚ğ‚µ‚È‚¢
-	if (MotionLength <= 0)									return;	//’·‚³‚ª•‰‚Ì”‚Ìê‡‚àˆ—‚ğ‚µ‚È‚¢
+	if (getBlockColor(x, y, TRUE, FALSE) == BLOCK_TYPE_NUM)	return;	//ãƒ–ãƒ­ãƒƒã‚¯ãŒç”»é¢å¤–ã®å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„
+	if (MotionLength <= 0)									return;	//é•·ã•ãŒè² ã®æ•°ã®å ´åˆã‚‚å‡¦ç†ã‚’ã—ãªã„
 
 	if (field[x][y].blockChangeMotion.Type != BlockChangeMotionType_NO) {
-		printLog_C(_T("ƒuƒƒbƒN•Ï‰»ƒ‚[ƒVƒ‡ƒ“‚ğã‘‚«‚µ‚Ü‚·"));
+		printLog_C(_T("ãƒ–ãƒ­ãƒƒã‚¯å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ä¸Šæ›¸ãã—ã¾ã™"));
 		field[x][y].blockChangeMotion.Type = BlockChangeMotionType_NO;
 	}
 
@@ -2264,44 +2264,44 @@ void Phase_GameMain::Block_SetChangeMotion(int x, int y, BlockChangeMotionType m
 
 	field[x][y].blockChangeMotion.Type = mtype;
 
-	printLog_I(_T("ƒuƒƒbƒN‚Éy•Ï‰»ƒ‚[ƒVƒ‡ƒ“z‚ğİ’è[%d][%d]"), x, y);
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã«ã€å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã€‘ã‚’è¨­å®š[%d][%d]"), x, y);
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒN‚É•Ï‰»ƒ‚[ƒVƒ‡ƒ“(’Êí)‚ğİ’è‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³(é€šå¸¸)ã‚’è¨­å®šã™ã‚‹
 void Phase_GameMain::Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength, int Delay) {
 
 	BLOCK_TYPE From = getBlockColor(x, y, FALSE, FALSE);
 
-	if (From == To)				return;		//•Ï‰»æ‚ª“¯‚¶ê‡‚Íˆ—‚ğ‚µ‚È‚¢
-	if (To == BLOCK_TYPE_NO)	return;		//•Ï‰»æ‚ªƒuƒƒbƒN–³‚µ‚Ìê‡‚Íˆ—‚ğ‚µ‚È‚¢(³‚µ‚­•`‰æo—ˆ‚È‚¢‚½‚ß)
+	if (From == To)				return;		//å¤‰åŒ–å…ˆãŒåŒã˜å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„
+	if (To == BLOCK_TYPE_NO)	return;		//å¤‰åŒ–å…ˆãŒãƒ–ãƒ­ãƒƒã‚¯ç„¡ã—ã®å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„(æ­£ã—ãæç”»å‡ºæ¥ãªã„ãŸã‚)
 	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, From, To, MotionLength, Delay);
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒN‚É•Ï‰»ƒ‚[ƒVƒ‡ƒ“(’Êí)‚ğİ’è‚·‚é(•Ï‰»Œ³w’è)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³(é€šå¸¸)ã‚’è¨­å®šã™ã‚‹(å¤‰åŒ–å…ƒæŒ‡å®š)
 void Phase_GameMain::Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength, int Delay) {
 
 	BLOCK_TYPE To = getBlockColor(x, y, FALSE, FALSE);
-	if (from == To)				return;		//•Ï‰»æ‚ª“¯‚¶ê‡‚Íˆ—‚ğ‚µ‚È‚¢
-	if (To == BLOCK_TYPE_NO)	return;		//•Ï‰»æ‚ªƒuƒƒbƒN–³‚µ‚Ìê‡‚Íˆ—‚ğ‚µ‚È‚¢(³‚µ‚­•`‰æo—ˆ‚È‚¢‚½‚ß)
+	if (from == To)				return;		//å¤‰åŒ–å…ˆãŒåŒã˜å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„
+	if (To == BLOCK_TYPE_NO)	return;		//å¤‰åŒ–å…ˆãŒãƒ–ãƒ­ãƒƒã‚¯ç„¡ã—ã®å ´åˆã¯å‡¦ç†ã‚’ã—ãªã„(æ­£ã—ãæç”»å‡ºæ¥ãªã„ãŸã‚)
 	Block_SetChangeMotion(x, y, BlockChangeMotionType_NOMAL, from, To, MotionLength, Delay);
 }
 
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒN‚É•Ï‰»ƒ‚[ƒVƒ‡ƒ“(”š”­)‚ğİ’è‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³(çˆ†ç™º)ã‚’è¨­å®šã™ã‚‹
 void Phase_GameMain::Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay) {
-	if (From == BLOCK_TYPE_NO)	return;//ƒuƒƒbƒN‚ª‘¶İ‚µ‚È‚¢ê‡‚Í–³‹
+	if (From == BLOCK_TYPE_NO)	return;//ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ç„¡è¦–
 
 	Block_SetChangeMotion(x, y, BlockChangeMotionType_EXPLOSION, From, From, MotionLength, Delay);
 }
 
-//ƒtƒB[ƒ‹ƒh‚ÌƒuƒƒbƒN‚É•Ï‰»ƒ‚[ƒVƒ‡ƒ“(¬‚³‚­‚È‚Á‚ÄÁ‚¦‚é)‚ğİ’è‚·‚é
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ–ãƒ­ãƒƒã‚¯ã«å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³(å°ã•ããªã£ã¦æ¶ˆãˆã‚‹)ã‚’è¨­å®šã™ã‚‹
 void Phase_GameMain::Block_SetChangeMotion_SMALL(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay) {
-	if (From == BLOCK_TYPE_NO)	return;//ƒuƒƒbƒN‚ª‘¶İ‚µ‚È‚¢ê‡‚Í–³‹
+	if (From == BLOCK_TYPE_NO)	return;//ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ç„¡è¦–
 
 	Block_SetChangeMotion(x, y, BlockChangeMotionType_SMALL, From, From, MotionLength, Delay);
 }
 
-//•Ï‰»ƒ‚[ƒVƒ‡ƒ“’†‚ÌƒuƒƒbƒN‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‘¶İ)
+//å¤‰åŒ–ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã®å–å¾—(TRUEå­˜åœ¨)
 int Phase_GameMain::isBlock_PlayChangeMotion() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -2313,51 +2313,51 @@ int Phase_GameMain::isBlock_PlayChangeMotion() {
 	return FALSE;
 }
 
-//ƒQ[ƒ€ƒTƒCƒNƒ‹‚ğİ’è‚·‚é
+//ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ã‚’è¨­å®šã™ã‚‹
 void Phase_GameMain::setGameCycle(GameCycle gamecycle) {
 	if (gamecycle == GameCycle_NUM) {
-		printLog_E(_T("–³Œø‚ÈƒQ[ƒ€ƒTƒCƒNƒ‹‚ªw’è‚³‚ê‚Ü‚µ‚½"));
+		printLog_E(_T("ç„¡åŠ¹ãªã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ãŒæŒ‡å®šã•ã‚Œã¾ã—ãŸ"));
 		return;
 	}
 
 	GameCycle old = gameCycle;
 	gameCycle = gamecycle;
 
-	printLog_I(_T("ƒQ[ƒ€ƒTƒCƒNƒ‹‚Ì•ÏX(%d¨%d)"), old, gameCycle);
+	printLog_I(_T("ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ã®å¤‰æ›´(%dâ†’%d)"), old, gameCycle);
 	gameCycleFirstCallFlag = TRUE;
 }
 
-//ƒuƒƒbƒNî•ñ‚ğXV‚·‚é‚æ‚¤‚ÉƒŠƒNƒGƒXƒg
+//ãƒ–ãƒ­ãƒƒã‚¯æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹ã‚ˆã†ã«ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
 void Phase_GameMain::UpdateBlockRequest(GameCycle Next) {
 	if (Next == GameCycle_NUM) {
-		printLog_E(_T("ˆø”‚ª•s³‚Å‚·"));
+		printLog_E(_T("å¼•æ•°ãŒä¸æ­£ã§ã™"));
 		return;
 	}
 
 
-	if (gameCycle != GameCycle_Update) {	//ƒuƒƒbƒNXVƒTƒCƒNƒ‹‚ğÀs’†‚Å‚È‚¢ê‡‚ÍA
-		//ŒvZƒ‹[ƒv‚Ìˆ—ˆÊ’u‚ğİ’è
+	if (gameCycle != GameCycle_Update) {	//ãƒ–ãƒ­ãƒƒã‚¯æ›´æ–°ã‚µã‚¤ã‚¯ãƒ«ã‚’å®Ÿè¡Œä¸­ã§ãªã„å ´åˆã¯ã€
+		//è¨ˆç®—ãƒ«ãƒ¼ãƒ—ã®å‡¦ç†ä½ç½®ã‚’è¨­å®š
 		Loop_No = 0;
 	}
 
-	//ƒuƒƒbƒNŒvZƒTƒCƒNƒ‹‚ÖˆÚs(ƒ‹[ƒv‚ÌÄİ’è)
+	//ãƒ–ãƒ­ãƒƒã‚¯è¨ˆç®—ã‚µã‚¤ã‚¯ãƒ«ã¸ç§»è¡Œ(ãƒ«ãƒ¼ãƒ—ã®å†è¨­å®š)
 	setGameCycle(GameCycle_Update);
 
-	//ˆÚsæ‚ÌƒQ[ƒ€ƒTƒCƒNƒ‹‚ğ‹L˜^‚·‚é(ƒuƒƒbƒNXV‚ªw’è‚³‚ê‚½ê‡‚ÍˆÚsæ‚ğİ’è‚µ‚È‚¢)
+	//ç§»è¡Œå…ˆã®ã‚²ãƒ¼ãƒ ã‚µã‚¤ã‚¯ãƒ«ã‚’è¨˜éŒ²ã™ã‚‹(ãƒ–ãƒ­ãƒƒã‚¯æ›´æ–°ãŒæŒ‡å®šã•ã‚ŒãŸå ´åˆã¯ç§»è¡Œå…ˆã‚’è¨­å®šã—ãªã„)
 	if (Next != GameCycle_Update) {
 		Loop_Next = Next;
 	}
 
 
 
-	printLog_I(_T("ƒuƒƒbƒNŒvZƒ‹[ƒv‚É“ü‚è‚Ü‚·(I—¹Œã=%d)"), Loop_Next);
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯è¨ˆç®—ãƒ«ãƒ¼ãƒ—ã«å…¥ã‚Šã¾ã™(çµ‚äº†å¾Œ=%d)"), Loop_Next);
 
 }
 
-//ƒtƒB[ƒ‹ƒh‘S‘Ì‚ÌƒuƒƒbƒN‚ğw’è‚µ‚½•ª‚¾‚¯ˆÚ“®‚·‚éƒŠƒNƒGƒXƒg‚ğ‚·‚é(ƒQ[ƒ€‚ğˆê’â~‚µ‚Ä“®‚©‚µ‚Ü‚·)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å…¨ä½“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æŒ‡å®šã—ãŸåˆ†ã ã‘ç§»å‹•ã™ã‚‹ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ã™ã‚‹(ã‚²ãƒ¼ãƒ ã‚’ä¸€æ™‚åœæ­¢ã—ã¦å‹•ã‹ã—ã¾ã™)
 void Phase_GameMain::Block_AllMoveRequest(int X, int Y) {
 
-	if (Block_AllMovedata.Enable)	return;//‚·‚Å‚ÉƒuƒƒbƒN‚ªˆÚ“®’†‚Ìê‡A–³‹‚·‚é
+	if (Block_AllMovedata.Enable)	return;//ã™ã§ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒç§»å‹•ä¸­ã®å ´åˆã€ç„¡è¦–ã™ã‚‹
 
 
 	Block_AllMovedata.ToX = X;
@@ -2370,25 +2370,25 @@ void Phase_GameMain::Block_AllMoveRequest(int X, int Y) {
 
 	Block_AllMovedata.Enable = TRUE;
 
-	printLog_I(_T("ƒuƒƒbƒN‘S‘ÌˆÚ“®‚ªİ’è‚³‚ê‚Ü‚µ‚½(%d,%d)"), X, Y);
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ç§»å‹•ãŒè¨­å®šã•ã‚Œã¾ã—ãŸ(%d,%d)"), X, Y);
 }
 
-//ƒtƒB[ƒ‹ƒh‘S‘Ì‚ÌƒuƒƒbƒN‚ğw’è‚µ‚½•ª‚¾‚¯ˆÚ“®‚·‚é(‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚¤ƒuƒƒbƒN‚ÍÁ–Å‚µ‚Ü‚·)
+//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å…¨ä½“ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’æŒ‡å®šã—ãŸåˆ†ã ã‘ç§»å‹•ã™ã‚‹(ç”»é¢å¤–ã«å‡ºã¦ã—ã¾ã†ãƒ–ãƒ­ãƒƒã‚¯ã¯æ¶ˆæ»…ã—ã¾ã™)
 void Phase_GameMain::Block_AllMove(int X, int Y) {
-	//ˆ—‚É–³‘Ê‚ª‘½‚¢c
+	//å‡¦ç†ã«ç„¡é§„ãŒå¤šã„â€¦
 
-	//ˆê•Ï”
+	//ä¸€æ™‚å¤‰æ•°
 	field_info t[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
-	//ÀÛ‚ÉƒuƒƒbƒN‚ğ‚·‚×‚ÄˆÚ“®‚³‚¹‚é
+	//å®Ÿéš›ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’ã™ã¹ã¦ç§»å‹•ã•ã›ã‚‹
 
-	//¶ãˆÚ“®
+	//å·¦ä¸Šç§»å‹•
 	if (X <= 0 && Y <= 0) {
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
-					//”ÍˆÍ“à‚È‚ç•’Ê‚ÉƒRƒs[‚·‚é
+					//ç¯„å›²å†…ãªã‚‰æ™®é€šã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 					field[x][y] = field[x - X][y - Y];
-					if (field[x][y].blockMoveMotion.Enable) {//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ª—LŒø‚Èê‡‚ÍˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚É•â³‚ğ‚©‚¯‚é
+					if (field[x][y].blockMoveMotion.Enable) {//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ‰åŠ¹ãªå ´åˆã¯ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«è£œæ­£ã‚’ã‹ã‘ã‚‹
 						field[x][y].blockMoveMotion.FromX += X;
 						field[x][y].blockMoveMotion.FromY += Y;
 						field[x][y].blockMoveMotion.ToX += X;
@@ -2396,21 +2396,21 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 					}
 				}
 				else {
-					//”ÍˆÍŠO‚È‚çƒuƒƒbƒN‚ÌÁ‹
+					//ç¯„å›²å¤–ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»
 					Block_Delete_Direct(x, y);
 				}
 			}
 		}
-		printLog_I(_T("ƒuƒƒbƒN‘S‘Ì‚ğ¶ã‚É‚¸‚ç‚µ‚Ü‚µ‚½(%d,%d)"), X, Y);
+		printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ã‚’å·¦ä¸Šã«ãšã‚‰ã—ã¾ã—ãŸ(%d,%d)"), X, Y);
 	}
-	//¶‰ºˆÚ“®
+	//å·¦ä¸‹ç§»å‹•
 	else if (X <= 0 && Y >= 0) {
 		for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 			for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
-					//”ÍˆÍ“à‚È‚ç•’Ê‚ÉƒRƒs[‚·‚é
+					//ç¯„å›²å†…ãªã‚‰æ™®é€šã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 					field[x][y] = field[x - X][y - Y];
-					if (field[x][y].blockMoveMotion.Enable) {//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ª—LŒø‚Èê‡‚ÍˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚É•â³‚ğ‚©‚¯‚é
+					if (field[x][y].blockMoveMotion.Enable) {//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ‰åŠ¹ãªå ´åˆã¯ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«è£œæ­£ã‚’ã‹ã‘ã‚‹
 						field[x][y].blockMoveMotion.FromX += X;
 						field[x][y].blockMoveMotion.FromY += Y;
 						field[x][y].blockMoveMotion.ToX += X;
@@ -2418,21 +2418,21 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 					}
 				}
 				else {
-					//”ÍˆÍŠO‚È‚çƒuƒƒbƒN‚ÌÁ‹
+					//ç¯„å›²å¤–ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»
 					Block_Delete_Direct(x, y);
 				}
 			}
 		}
-		printLog_I(_T("ƒuƒƒbƒN‘S‘Ì‚ğ¶‰º‚É‚¸‚ç‚µ‚Ü‚µ‚½(%d,%d)"), X, Y);
+		printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ã‚’å·¦ä¸‹ã«ãšã‚‰ã—ã¾ã—ãŸ(%d,%d)"), X, Y);
 	}
-	//‰EãˆÚ“®
+	//å³ä¸Šç§»å‹•
 	else if (X >= 0 && Y <= 0) {
 		for (int x = BLOCK_WIDTHNUM - 1; x >= 0; x--) {
 			for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
-					//”ÍˆÍ“à‚È‚ç•’Ê‚ÉƒRƒs[‚·‚é
+					//ç¯„å›²å†…ãªã‚‰æ™®é€šã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 					field[x][y] = field[x - X][y - Y];
-					if (field[x][y].blockMoveMotion.Enable) {//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ª—LŒø‚Èê‡‚ÍˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚É•â³‚ğ‚©‚¯‚é
+					if (field[x][y].blockMoveMotion.Enable) {//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ‰åŠ¹ãªå ´åˆã¯ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«è£œæ­£ã‚’ã‹ã‘ã‚‹
 						field[x][y].blockMoveMotion.FromX += X;
 						field[x][y].blockMoveMotion.FromY += Y;
 						field[x][y].blockMoveMotion.ToX += X;
@@ -2440,21 +2440,21 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 					}
 				}
 				else {
-					//”ÍˆÍŠO‚È‚çƒuƒƒbƒN‚ÌÁ‹
+					//ç¯„å›²å¤–ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»
 					Block_Delete_Direct(x, y);
 				}
 			}
 		}
-		printLog_I(_T("ƒuƒƒbƒN‘S‘Ì‚ğ‰Eã‚É‚¸‚ç‚µ‚Ü‚µ‚½(%d,%d)"), X, Y);
+		printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ã‚’å³ä¸Šã«ãšã‚‰ã—ã¾ã—ãŸ(%d,%d)"), X, Y);
 	}
-	//‰E‰ºˆÚ“®
+	//å³ä¸‹ç§»å‹•
 	else if (X >= 0 && Y >= 0) {
 		for (int x = BLOCK_WIDTHNUM - 1; x >= 0; x--) {
 			for (int y = BLOCK_HEIGHTNUM - 1; y >= 0; y--) {
 				if (0 <= x - X && x - X < BLOCK_WIDTHNUM && 0 <= y - Y && y - Y < BLOCK_HEIGHTNUM) {
-					//”ÍˆÍ“à‚È‚ç•’Ê‚ÉƒRƒs[‚·‚é
+					//ç¯„å›²å†…ãªã‚‰æ™®é€šã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 					field[x][y] = field[x - X][y - Y];
-					if (field[x][y].blockMoveMotion.Enable) {//ˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚ª—LŒø‚Èê‡‚ÍˆÚ“®ƒ‚[ƒVƒ‡ƒ“‚É•â³‚ğ‚©‚¯‚é
+					if (field[x][y].blockMoveMotion.Enable) {//ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ‰åŠ¹ãªå ´åˆã¯ç§»å‹•ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«è£œæ­£ã‚’ã‹ã‘ã‚‹
 						field[x][y].blockMoveMotion.FromX += X;
 						field[x][y].blockMoveMotion.FromY += Y;
 						field[x][y].blockMoveMotion.ToX += X;
@@ -2462,38 +2462,38 @@ void Phase_GameMain::Block_AllMove(int X, int Y) {
 					}
 				}
 				else {
-					//”ÍˆÍŠO‚È‚çƒuƒƒbƒN‚ÌÁ‹
+					//ç¯„å›²å¤–ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®æ¶ˆå»
 					Block_Delete_Direct(x, y);
 				}
 			}
 		}
-		printLog_I(_T("ƒuƒƒbƒN‘S‘Ì‚ğ‰E‰º‚É‚¸‚ç‚µ‚Ü‚µ‚½(%d,%d)"), X, Y);
+		printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯å…¨ä½“ã‚’å³ä¸‹ã«ãšã‚‰ã—ã¾ã—ãŸ(%d,%d)"), X, Y);
 	}
 
-	//—‰º’†ƒuƒƒbƒN‚àˆÚ“®‚·‚é(‰æ–ÊŠO‚É‚Ís‚«‚Ü‚¹‚ñ)
+	//è½ä¸‹ä¸­ãƒ–ãƒ­ãƒƒã‚¯ã‚‚ç§»å‹•ã™ã‚‹(ç”»é¢å¤–ã«ã¯è¡Œãã¾ã›ã‚“)
 	FallBlock_MoveX(X, FALSE);
 	FallBlock_MoveY(Y, FALSE);
 
 }
 
-//ÀÛ‚É‘€ì‚ğ‚µ‚Ä‚¢‚éŒo‰ßƒtƒŒ[ƒ€”‚ğæ“¾‚·‚é
+//å®Ÿéš›ã«æ“ä½œã‚’ã—ã¦ã„ã‚‹çµŒéãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’å–å¾—ã™ã‚‹
 int Phase_GameMain::getCountPlayTime() {
 	return Count_PlayTime;
 }
 
-//ƒQ[ƒ€‚ÌŒo‰ßƒtƒŒ[ƒ€”‚ğæ“¾(ƒNƒŠƒA‚Å’â~‚µ‚Ü‚·)
+//ã‚²ãƒ¼ãƒ ã®çµŒéãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’å–å¾—(ã‚¯ãƒªã‚¢ã§åœæ­¢ã—ã¾ã™)
 int Phase_GameMain::getCountGameTime() {
 	return Count_GameTime;
 }
 
-//ƒQ[ƒ€‚ÌŒo‰ßƒtƒŒ[ƒ€”‚ğæ“¾(ƒ|[ƒY‚Å‚Ì‚İ’â~‚·‚é)
+//ã‚²ãƒ¼ãƒ ã®çµŒéãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’å–å¾—(ãƒãƒ¼ã‚ºã§ã®ã¿åœæ­¢ã™ã‚‹)
 int Phase_GameMain::getCountTime() {
 	return Count_Time;
 }
 
-//w’è‚µ‚½ƒGƒŠƒA‚ÉƒuƒƒbƒN‚ğİ’u‚·‚é(Á‹”»’è‚ª“ü‚ç‚È‚¢‚æ‚¤‚Éİ’u‚µ‚Ü‚·)
+//æŒ‡å®šã—ãŸã‚¨ãƒªã‚¢ã«ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¨­ç½®ã™ã‚‹(æ¶ˆå»åˆ¤å®šãŒå…¥ã‚‰ãªã„ã‚ˆã†ã«è¨­ç½®ã—ã¾ã™)
 void Phase_GameMain::setBlock_Rect(int x, int y, int w, int h) {
-	//‰¼‘zƒtƒB[ƒ‹ƒhî•ñ‚ğXV‚·‚é
+	//ä»®æƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹
 	Virtualfield_Update();
 
 	for (int bl_X = x; bl_X < x + w; bl_X++) {
@@ -2503,50 +2503,50 @@ void Phase_GameMain::setBlock_Rect(int x, int y, int w, int h) {
 
 			do {
 				Count = 0;
-				bt = GetRandomBlockType_UNDER();//ƒ‰ƒ“ƒ_ƒ€‚ÅƒuƒƒbƒN‚ğŒˆ’è‚µ‰¼‘zİ’u‚·‚é
+				bt = GetRandomBlockType_UNDER();//ãƒ©ãƒ³ãƒ€ãƒ ã§ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ±ºå®šã—ä»®æƒ³è¨­ç½®ã™ã‚‹
 				add_FraldBlock(bl_X, bl_Y, bt, TRUE, TRUE, NULL, TRUE);
 				int BlockFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
-				//—×ÚƒuƒƒbƒN¯•ÊID‚ğ‹L˜^‚·‚é•\‚Ìì¬(-1–¢’TõABLOCK_WIDTHNUM*BLOCK_HEIGHTNUM’Tõ‚©‚çœŠO)
+				//éš£æ¥ãƒ–ãƒ­ãƒƒã‚¯è­˜åˆ¥IDã‚’è¨˜éŒ²ã™ã‚‹è¡¨ã®ä½œæˆ(-1æœªæ¢ç´¢ã€BLOCK_WIDTHNUM*BLOCK_HEIGHTNUMæ¢ç´¢ã‹ã‚‰é™¤å¤–)
 				CreateSequenceCountTable(BlockFlag, 0, 0, BLOCK_WIDTHNUM, BLOCK_HEIGHTNUM, TRUE);
 				SequenceCount(bl_X, bl_Y, 0, BlockFlag, &Count, TRUE);
 			} while (Count >= BLOCK_DELETE_LEN);
 
-			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);//–{”Ô‚Ìİ’u
+			add_FraldBlock(bl_X, bl_Y, bt, FALSE, TRUE);//æœ¬ç•ªã®è¨­ç½®
 
 		}
 	}
 }
 
-//ƒQ[ƒ€ƒI[ƒo[‚É‚È‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÌŠm”F
+//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã«ãªã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã®ç¢ºèª
 /*
-–ß‚è’l
-0:ƒQ[ƒ€ƒI[ƒo[‚Å‚Í–³‚¢
-1:ƒuƒƒbƒN‚ªã‚Ü‚ÅÏ‚İã‚ª‚Á‚Ä‚¢‚Ü‚Á‚ÄƒQ[ƒ€ƒI[ƒo[
-2:—‰ºƒuƒƒbƒN‚ªŠù‘¶ƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚µ‚Ü‚Á‚ÄƒQ[ƒ€ƒI[ƒo[
+æˆ»ã‚Šå€¤
+0:ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã§ã¯ç„¡ã„
+1:ãƒ–ãƒ­ãƒƒã‚¯ãŒä¸Šã¾ã§ç©ã¿ä¸ŠãŒã£ã¦ã„ã¾ã£ã¦ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
+2:è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒæ—¢å­˜ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã—ã¾ã£ã¦ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 */
 int Phase_GameMain::JudgeGameOver() {
-	printLog_I(_T("ƒQ[ƒ€ƒI[ƒo[‚©‚Ç‚¤‚©‚Ì”»’è‚ğs‚¢‚Ü‚·"));
+	printLog_I(_T("ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã‹ã©ã†ã‹ã®åˆ¤å®šã‚’è¡Œã„ã¾ã™"));
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < GAMEOVER_BORDER; y++) {
 			if (getBlockColor(x, y, FALSE, FALSE) != BLOCK_TYPE_NO) {
-				//0—ñ–Ú(‰æ–Êã‚ÌŒ©‚¦‚È‚¢•”•ª)‚ÉƒuƒƒbƒN‚ªN“ü‚µ‚½
-				printLog_I(_T("ƒuƒƒbƒN‚ªã‚Ü‚ÅÏ‚İã‚ª‚Á‚Ä‚¢‚Ü‚Á‚ÄƒQ[ƒ€ƒI[ƒo["));
+				//0åˆ—ç›®(ç”»é¢ä¸Šã®è¦‹ãˆãªã„éƒ¨åˆ†)ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒä¾µå…¥ã—ãŸ
+				printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ãŒä¸Šã¾ã§ç©ã¿ä¸ŠãŒã£ã¦ã„ã¾ã£ã¦ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼"));
 				return 1;
 			}
 		}
 	}
 
-	//•’Ê‚Í‹N‚«‚È‚¢
+	//æ™®é€šã¯èµ·ããªã„
 	if (isFallBlock_Enable()) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (fallBlockInfo.BlockID[x][y] != BLOCK_TYPE_NO) {
 					int fX = fallBlockInfo.PlaceX + (x - FALLBLOCK_CENTER);
 					int fY = fallBlockInfo.PlaceY + (y - FALLBLOCK_CENTER);
-					BLOCK_TYPE fB = getBlockColor(fX, fY, TRUE);	//ƒuƒƒbƒN‚Ìí—Şæ“¾
+					BLOCK_TYPE fB = getBlockColor(fX, fY, TRUE);	//ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡å–å¾—
 					if (fB != BLOCK_TYPE_NO) {
-						printLog_I(_T("—‰ºƒuƒƒbƒN‚ªŠù‘¶ƒuƒƒbƒN‚Æd‚È‚Á‚Ä‚µ‚Ü‚Á‚ÄƒQ[ƒ€ƒI[ƒo["));
-						return 2;	//—‰ºƒuƒƒbƒN‚Ì‰º‚ÌˆÊ’u‚É’ÊíƒuƒƒbƒN‚ª‚ ‚é
+						printLog_I(_T("è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ãŒæ—¢å­˜ãƒ–ãƒ­ãƒƒã‚¯ã¨é‡ãªã£ã¦ã—ã¾ã£ã¦ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼"));
+						return 2;	//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸‹ã®ä½ç½®ã«é€šå¸¸ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹
 					}
 				}
 			}
@@ -2556,28 +2556,28 @@ int Phase_GameMain::JudgeGameOver() {
 	return 0;
 }
 
-//ƒQ[ƒ€ƒNƒŠƒA‚©‚Ç‚¤‚©‚ÌŠm”F(TRUEƒQ[ƒ€ƒNƒŠƒA)
+//ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã‹ã©ã†ã‹ã®ç¢ºèª(TRUEã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢)
 int Phase_GameMain::JudgeGameClear() {
 	if (score.getScore() > 10'0000) {
-		//ƒXƒRƒA‚ªˆê’èˆÈã‚ÅƒNƒŠƒA”»’è‚ğ“ü‚ê‚é
+		//ã‚¹ã‚³ã‚¢ãŒä¸€å®šä»¥ä¸Šã§ã‚¯ãƒªã‚¢åˆ¤å®šã‚’å…¥ã‚Œã‚‹
 		return TRUE;
 	}
 	return FALSE;
 }
 
-//—‰ºƒuƒƒbƒN‚Ì‘Ò‹@—ñ‚Ìì¬
+//è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®å¾…æ©Ÿåˆ—ã®ä½œæˆ
 void Phase_GameMain::Create_Wait_Block() {
 
-	//—ñ‚ğ‹l‚ß‚é(æ“ª‚Í0)
+	//åˆ—ã‚’è©°ã‚ã‚‹(å…ˆé ­ã¯0)
 	for (int i = 0; i < ARRAY_LENGTH(waitBlockinfo) - 1; i++) {
 		waitBlockinfo[i] = waitBlockinfo[i + 1];
 	}
 
 
 
-	//V‹K‚Éì¬‚·‚é—‰ºƒuƒƒbƒN‚Ì”z’uƒpƒ^[ƒ“‚ğŒˆ’è‚·‚é(0`3)
+	//æ–°è¦ã«ä½œæˆã™ã‚‹è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ã®é…ç½®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’æ±ºå®šã™ã‚‹(0ï½3)
 	const int Percent = (int)(randomTable.getRand(0, 100));
-	int Pattern = 0;	//ƒuƒƒbƒN‚Ìƒpƒ^[ƒ“
+	int Pattern = 0;	//ãƒ–ãƒ­ãƒƒã‚¯ã®ãƒ‘ã‚¿ãƒ¼ãƒ³
 	if (Percent < 24) {
 		Pattern = 0;
 	}
@@ -2595,16 +2595,16 @@ void Phase_GameMain::Create_Wait_Block() {
 	}
 
 
-	//5“‚ÌŠm—¦‚Å”š’e‚ğ’P‘Ì‚Å—‰º‚³‚¹‚é
+	//5ï¼…ã®ç¢ºç‡ã§çˆ†å¼¾ã‚’å˜ä½“ã§è½ä¸‹ã•ã›ã‚‹
 	if (randomTable.getRand(0, 1000) < 50) {
 		Pattern = 4;
 	}
 
-	//ƒ‰ƒ“ƒ_ƒ€‚Éİ’u‚·‚éƒuƒƒbƒN‚ğ2ŒÂŒˆ’è‚·‚é
+	//ãƒ©ãƒ³ãƒ€ãƒ ã«è¨­ç½®ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’2å€‹æ±ºå®šã™ã‚‹
 	BLOCK_TYPE type1 = GetRandomBlockType_FALL();
 	BLOCK_TYPE type2 = GetRandomBlockType_FALL();
 
-	//ÅŒã”ö‘Ò‹@ƒuƒƒbƒN‚Ì”z’u‚ğ‰Šú‰»‚·‚é
+	//æœ€å¾Œå°¾å¾…æ©Ÿãƒ–ãƒ­ãƒƒã‚¯ã®é…ç½®ã‚’åˆæœŸåŒ–ã™ã‚‹
 	for (int i = 0; i < FALLBLOCK_SIZE; i++) {
 		for (int j = 0; j < FALLBLOCK_SIZE; j++) {
 			waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[i][j] = BLOCK_TYPE_NO;
@@ -2612,140 +2612,140 @@ void Phase_GameMain::Create_Wait_Block() {
 	}
 
 
-	//ƒuƒƒbƒN‚Ì“ÁêŒø‰Ê‚ğİ’è‚·‚é
+	//ãƒ–ãƒ­ãƒƒã‚¯ã®ç‰¹æ®ŠåŠ¹æœã‚’è¨­å®šã™ã‚‹
 	waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = TRUE;
 
 
-	//æ‚ÉŒˆ‚ß‚½ƒpƒ^[ƒ“‚æ‚èƒuƒƒbƒN‚Ì”z’u‚ğŒˆ’è‚·‚é(‚Â‚¢‚Å‚ÉƒXƒ|[ƒ“ˆÊ’u‚à)
+	//å…ˆã«æ±ºã‚ãŸãƒ‘ã‚¿ãƒ¼ãƒ³ã‚ˆã‚Šãƒ–ãƒ­ãƒƒã‚¯ã®é…ç½®ã‚’æ±ºå®šã™ã‚‹(ã¤ã„ã§ã«ã‚¹ãƒãƒ¼ãƒ³ä½ç½®ã‚‚)
 	switch (Pattern) {
-	case 0://c‚Å‰º‘¤’†Sƒpƒ^[ƒ“
+	case 0://ç¸¦ã§ä¸‹å´ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][0] = type1;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = type2;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP + 1;
-		//printLog_D(_T("c‚Å‰º‘¤’†Sƒpƒ^[ƒ“"));
+		//printLog_D(_T("ç¸¦ã§ä¸‹å´ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³"));
 		break;
-	case 1://c‚Åã‘¤’†Sƒpƒ^[ƒ“
+	case 1://ç¸¦ã§ä¸Šå´ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = type1;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][2] = type2;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
-		//printLog_D(_T("c‚Åã‘¤’†Sƒpƒ^[ƒ“"));
+		//printLog_D(_T("ç¸¦ã§ä¸Šå´ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³"));
 		break;
-	case 2://‰¡‚Å¶’†Sƒpƒ^[ƒ“
+	case 2://æ¨ªã§å·¦ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = type1;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[2][1] = type2;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
-		//printLog_D(_T("‰¡‚Å¶’†Sƒpƒ^[ƒ“"));
+		//printLog_D(_T("æ¨ªã§å·¦ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³"));
 		break;
-	case 3://‰¡‚Å‰E’†Sƒpƒ^[ƒ“
+	case 3://æ¨ªã§å³ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[0][1] = type1;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = type2;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
-		//printLog_D(_T("‰¡‚Å‰E’†Sƒpƒ^[ƒ“"));
+		//printLog_D(_T("æ¨ªã§å³ä¸­å¿ƒãƒ‘ã‚¿ãƒ¼ãƒ³"));
 		break;
-	case 4://“¯F”š’e‚Ì’P‘Ì—‰º
+	case 4://åŒè‰²çˆ†å¼¾ã®å˜ä½“è½ä¸‹
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1] = BLOCK_TYPE_BOM_Color;
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
-		//–³ğŒ‚Å‰ñ“]•s‰Â
+		//ç„¡æ¡ä»¶ã§å›è»¢ä¸å¯
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].Flag_Rotate = FALSE;
 		break;
 	default:
-		printLog_E(_T("—‰ºƒuƒƒbƒN”z’uƒpƒ^[ƒ“‚ª•s–¾‚Å‚·"));
+		printLog_E(_T("è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯é…ç½®ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒä¸æ˜ã§ã™"));
 		break;
 	}
 
 
-	printLog_I(_T("ƒuƒƒbƒN‚Ì‘Ò‹@—ñ‚ği‚ß‚Ü‚µ‚½"));
+	printLog_I(_T("ãƒ–ãƒ­ãƒƒã‚¯ã®å¾…æ©Ÿåˆ—ã‚’é€²ã‚ã¾ã—ãŸ"));
 }
 
-//ƒ‰ƒ“ƒ_ƒ€‚ÅƒuƒƒbƒN‚Ìí—Ş‚ğ•Ô‚·(—‰ºƒuƒƒbƒN—p)
+//ãƒ©ãƒ³ãƒ€ãƒ ã§ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡ã‚’è¿”ã™(è½ä¸‹ãƒ–ãƒ­ãƒƒã‚¯ç”¨)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_FALL() {
 	int Rand = (int)randomTable.getRand(0, 100);
 
-	//Šm—¦‚Å–ß‚è’l‚ğ•Ï‚¦‚é‚æ‚¤‚É‚·‚é
-	if (Rand < 17)	return BLOCK_TYPE_RED;		//Ô
-	if (Rand < 35)	return BLOCK_TYPE_BLUE;		//Â
-	if (Rand < 52)	return BLOCK_TYPE_YELLOW;	//‰©
-	if (Rand < 70)	return BLOCK_TYPE_GREEN;	//—Î
-	if (Rand < 88)	return BLOCK_TYPE_PURPLE;	//‡
+	//ç¢ºç‡ã§æˆ»ã‚Šå€¤ã‚’å¤‰ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹
+	if (Rand < 17)	return BLOCK_TYPE_RED;		//èµ¤
+	if (Rand < 35)	return BLOCK_TYPE_BLUE;		//é’
+	if (Rand < 52)	return BLOCK_TYPE_YELLOW;	//é»„
+	if (Rand < 70)	return BLOCK_TYPE_GREEN;	//ç·‘
+	if (Rand < 88)	return BLOCK_TYPE_PURPLE;	//ç´«
 
-	//‚±‚±‚©‚ç“ÁêƒuƒƒbƒN«
-	if (Rand < 89)	return BLOCK_TYPE_RED_ARROW_X;		//Ô(•½s–îˆó)
-	if (Rand < 91)	return BLOCK_TYPE_BLUE_ARROW_X;		//Â(•½s–îˆó)
-	if (Rand < 93)	return BLOCK_TYPE_YELLOW_ARROW_X;	//‰©(•½s–îˆó)
-	if (Rand < 95)	return BLOCK_TYPE_GREEN_ARROW_X;	//—Î(•½s–îˆó)
-	if (Rand < 97)	return BLOCK_TYPE_PURPLE_ARROW_X;	//‡(•½s–îˆó)
-	return BLOCK_TYPE_RAINBOW;							//“øF‚ÌƒuƒƒbƒN(‰º‚ÌƒuƒƒbƒN‚Æ“¯‚¶F‚É‚È‚é)
+	//ã“ã“ã‹ã‚‰ç‰¹æ®Šãƒ–ãƒ­ãƒƒã‚¯â†“
+	if (Rand < 89)	return BLOCK_TYPE_RED_ARROW_X;		//èµ¤(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 91)	return BLOCK_TYPE_BLUE_ARROW_X;		//é’(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 93)	return BLOCK_TYPE_YELLOW_ARROW_X;	//é»„(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 95)	return BLOCK_TYPE_GREEN_ARROW_X;	//ç·‘(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 97)	return BLOCK_TYPE_PURPLE_ARROW_X;	//ç´«(å¹³è¡ŒçŸ¢å°)
+	return BLOCK_TYPE_RAINBOW;							//è™¹è‰²ã®ãƒ–ãƒ­ãƒƒã‚¯(ä¸‹ã®ãƒ–ãƒ­ãƒƒã‚¯ã¨åŒã˜è‰²ã«ãªã‚‹)
 }
 
-//ƒ‰ƒ“ƒ_ƒ€‚ÅƒuƒƒbƒN‚Ìí—Ş‚ğ•Ô‚·(‰º‚©‚ç•¦‚¢‚Ä‚­‚éƒuƒƒbƒN—p)
+//ãƒ©ãƒ³ãƒ€ãƒ ã§ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡ã‚’è¿”ã™(ä¸‹ã‹ã‚‰æ²¸ã„ã¦ãã‚‹ãƒ–ãƒ­ãƒƒã‚¯ç”¨)
 Phase_GameMain::BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 	int Rand = (int)randomTable.getRand(0, 200);
 
-	//Šm—¦‚Å–ß‚è’l‚ğ•Ï‚¦‚é‚æ‚¤‚É‚·‚é
-	if (Rand < 37)	return BLOCK_TYPE_RED;		//Ô
-	if (Rand < 75)	return BLOCK_TYPE_BLUE;		//Â
-	if (Rand < 112)	return BLOCK_TYPE_YELLOW;	//‰©
-	if (Rand < 150)	return BLOCK_TYPE_GREEN;	//—Î
-	if (Rand < 188)	return BLOCK_TYPE_PURPLE;	//‡
+	//ç¢ºç‡ã§æˆ»ã‚Šå€¤ã‚’å¤‰ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹
+	if (Rand < 37)	return BLOCK_TYPE_RED;		//èµ¤
+	if (Rand < 75)	return BLOCK_TYPE_BLUE;		//é’
+	if (Rand < 112)	return BLOCK_TYPE_YELLOW;	//é»„
+	if (Rand < 150)	return BLOCK_TYPE_GREEN;	//ç·‘
+	if (Rand < 188)	return BLOCK_TYPE_PURPLE;	//ç´«
 
-	//‚±‚±‚©‚ç“ÁêƒuƒƒbƒN«
-	if (Rand < 189)	return BLOCK_TYPE_RED_ARROW_X;		//Ô(•½s–îˆó)
-	if (Rand < 191)	return BLOCK_TYPE_BLUE_ARROW_X;		//Â(•½s–îˆó)
-	if (Rand < 193)	return BLOCK_TYPE_YELLOW_ARROW_X;	//‰©(•½s–îˆó)
-	if (Rand < 195)	return BLOCK_TYPE_GREEN_ARROW_X;	//—Î(•½s–îˆó)
-	if (Rand < 197)	return BLOCK_TYPE_PURPLE_ARROW_X;	//‡(•½s–îˆó)
-	return BLOCK_TYPE_TREE;								//÷–Ø‚ÌŒ`‚ÌƒuƒƒbƒNi—×Ú‚·‚é‚S•ûŒü‚Ì‚Ç‚±‚©‚ªÁ‚¦‚½‚Æ‚«‚Éˆê‚ÉÁ‚¦‚éj
+	//ã“ã“ã‹ã‚‰ç‰¹æ®Šãƒ–ãƒ­ãƒƒã‚¯â†“
+	if (Rand < 189)	return BLOCK_TYPE_RED_ARROW_X;		//èµ¤(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 191)	return BLOCK_TYPE_BLUE_ARROW_X;		//é’(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 193)	return BLOCK_TYPE_YELLOW_ARROW_X;	//é»„(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 195)	return BLOCK_TYPE_GREEN_ARROW_X;	//ç·‘(å¹³è¡ŒçŸ¢å°)
+	if (Rand < 197)	return BLOCK_TYPE_PURPLE_ARROW_X;	//ç´«(å¹³è¡ŒçŸ¢å°)
+	return BLOCK_TYPE_TREE;								//æ¨¹æœ¨ã®å½¢ã®ãƒ–ãƒ­ãƒƒã‚¯ï¼ˆéš£æ¥ã™ã‚‹ï¼”æ–¹å‘ã®ã©ã“ã‹ãŒæ¶ˆãˆãŸã¨ãã«ä¸€ç·’ã«æ¶ˆãˆã‚‹ï¼‰
 }
 
-//‰¼‘zƒtƒB[ƒ‹ƒh‚ğŒ»İ‚ÌƒtƒB[ƒ‹ƒh‚Æˆê’v‚³‚¹‚é
+//ä»®æƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ç¾åœ¨ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¨ä¸€è‡´ã•ã›ã‚‹
 void Phase_GameMain::Virtualfield_Update() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			Virtualfield[x][y] = field[x][y];
 		}
 	}
-	printLog_I(_T("‰¼‘zƒtƒB[ƒ‹ƒh‚ğXV‚µ‚Ü‚µ‚½"));
+	printLog_I(_T("ä»®æƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æ›´æ–°ã—ã¾ã—ãŸ"));
 
 
 }
 
-//ƒ|[ƒYƒƒjƒ…[‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
+//ãƒãƒ¼ã‚ºãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ã
 void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
 	switch (No) {
-	case 0://ÄŠJƒ{ƒ^ƒ“
+	case 0://å†é–‹ãƒœã‚¿ãƒ³
 		phase_GameMain.Request_Pause(PauseMode_NO);
 		break;
-	case 1://‚â‚è’¼‚·ƒ{ƒ^ƒ“
+	case 1://ã‚„ã‚Šç›´ã™ãƒœã‚¿ãƒ³
 		phase_GameMain.Restart();
 		break;
-	case 2://I—¹ƒ{ƒ^ƒ“
+	case 2://çµ‚äº†ãƒœã‚¿ãƒ³
 		Changefaze(FAZE_TopMenu, THREAD_Update);
 		break;
 	default:
-		printLog_C(_T("’è‹`‚³‚ê‚Ä‚¢‚È‚¢‘I‘ğ€–Ú‚ª‘I‘ğ‚³‚ê‚½‚æ‚¤‚Å‚·(%d)"), No);
+		printLog_C(_T("å®šç¾©ã•ã‚Œã¦ã„ãªã„é¸æŠé …ç›®ãŒé¸æŠã•ã‚ŒãŸã‚ˆã†ã§ã™(%d)"), No);
 		break;
 	}
 }
 
-//w’è‚µ‚½XÀ•W‚Ìˆê”Ôã‚ÌƒuƒƒbƒN‚ÌYÀ•W‚ğæ“¾‚·‚é(Œ©‚¦‚Ä‚¢‚éÀ•W‚Ì‚İ‚Å”»’f)
+//æŒ‡å®šã—ãŸXåº§æ¨™ã®ä¸€ç•ªä¸Šã®ãƒ–ãƒ­ãƒƒã‚¯ã®Yåº§æ¨™ã‚’å–å¾—ã™ã‚‹(è¦‹ãˆã¦ã„ã‚‹åº§æ¨™ã®ã¿ã§åˆ¤æ–­)
 int Phase_GameMain::getBlock_Upper(int x) {
 	for (int y = BLOCK_PADDINGUP; y < BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN; y++) {
 		if (getBlockColor(x, y) != BLOCK_TYPE_NO)	return y;
 	}
-	return BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//Å‰º’i‚Ìˆê’i‰º‚ÌÀ•W‚ğ•Ô‚·
+	return BLOCK_HEIGHTNUM - BLOCK_PADDINGDOWN;//æœ€ä¸‹æ®µã®ä¸€æ®µä¸‹ã®åº§æ¨™ã‚’è¿”ã™
 }
 
-//Å‘å‚Ì‚‚³‚ÌƒuƒƒbƒN‚ÌYÀ•W‚ğæ“¾‚·‚é
+//æœ€å¤§ã®é«˜ã•ã®ãƒ–ãƒ­ãƒƒã‚¯ã®Yåº§æ¨™ã‚’å–å¾—ã™ã‚‹
 int Phase_GameMain::getBlock_maxUpper() {
 	int Max_Y = BLOCK_HEIGHTNUM;
 	for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {

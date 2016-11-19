@@ -1,4 +1,4 @@
-//ƒVƒF[ƒ_ŠÖ˜AH(‰½‚µ‚Ä‚é‚©‚æ‚¤•ª‚©‚ç‚ñ)
+ï»¿//ã‚·ã‚§ãƒ¼ãƒ€é–¢é€£ï¼Ÿ(ä½•ã—ã¦ã‚‹ã‹ã‚ˆã†åˆ†ã‹ã‚‰ã‚“)
 //http://www.nicovideo.jp/watch/sm12147682
 #include "MainFunc.h"
 
@@ -7,36 +7,36 @@ struct vertex_t {
 };
 
 
-//ƒVƒF[ƒ_‚ğ—˜—p‚µ‚ÄÁ–Å‚·‚éƒuƒƒbƒN‚ğ•`‰æ
+//ã‚·ã‚§ãƒ¼ãƒ€ã‚’åˆ©ç”¨ã—ã¦æ¶ˆæ»…ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»
 vertex_t ColorWaveVertex;
-static int ColorWavePShandle;//Windows•—i’»ƒo[‚ÌƒoƒCƒiƒŠƒtƒ@ƒCƒ‹‚Ö‚Ìƒnƒ“ƒhƒ‹
-static int GrHandle;		//ˆê•`‰æ—p
+static int ColorWavePShandle;//Windowsé¢¨é€²æ—ãƒãƒ¼ã®ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒãƒ³ãƒ‰ãƒ«
+static int GrHandle;		//ä¸€æ™‚æç”»ç”¨
 
 static void Initialize_DeleteBlock();
 
 
-//ƒVƒF[ƒ_ŠÖ˜A‰Šú‰»
+//ã‚·ã‚§ãƒ¼ãƒ€é–¢é€£åˆæœŸåŒ–
 void ShaderBackGround_Initialize() {
-	InitShader();//ƒVƒF[ƒ_[ƒnƒ“ƒhƒ‹‚Ì‰Šú‰»
+	InitShader();//ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒãƒ³ãƒ‰ãƒ«ã®åˆæœŸåŒ–
 
 	Initialize_DeleteBlock();
-	printLog_I(_T("ƒVƒF[ƒ_[‚Ì‰Šú‰»Š®—¹"));
+	printLog_I(_T("ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®åˆæœŸåŒ–å®Œäº†"));
 }
 
-//ƒVƒF[ƒ_‚ğ—˜—p‚µ‚ÄÁ–Å‚·‚éƒuƒƒbƒN‚ğ•`‰æ‚·‚é‚Ì‰Šú‰»
+//ã‚·ã‚§ãƒ¼ãƒ€ã‚’åˆ©ç”¨ã—ã¦æ¶ˆæ»…ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»ã™ã‚‹ã®åˆæœŸåŒ–
 static void Initialize_DeleteBlock() {
 
 	//int t = GetValidShaderVersion();
 	//printf("%d\n", t);
-	//ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ƒo¥¥¥
+	//ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒï½¥ï½¥ï½¥
 	ColorWavePShandle = LoadPixelShader(_T("Data/Shader/ps_DeleteEffect.pso"));
 	if (ColorWavePShandle == -1) {
-		printLog_E(_T("ƒVƒF[ƒ_[‚Ìƒ[ƒh‚É¸”s(Data/Shader/ps_DeleteEffect.pso)"));
+		printLog_E(_T("ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/Shader/ps_DeleteEffect.pso)"));
 	}
 
 	GrHandle = MakeScreen(64, 64, TRUE);
 
-	//’¸“_ƒf[ƒ^‚Ì€”õ(‰Šú‰»)
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®æº–å‚™(åˆæœŸåŒ–)
 	for (int i = 0; i < 4; i++) {
 		ColorWaveVertex.Vert[i].pos = VGet(0.0f, 0.0f, 0.0f);
 		ColorWaveVertex.Vert[i].rhw = 1.0f;
@@ -54,23 +54,23 @@ static void Initialize_DeleteBlock() {
 	ColorWaveVertex.Vert[4] = ColorWaveVertex.Vert[2];
 	ColorWaveVertex.Vert[5] = ColorWaveVertex.Vert[1];
 
-	//”õl
+	//å‚™è€ƒ
 	/*
-	dif‚ÍƒfƒCƒtƒ…[ƒYƒJƒ‰[
-	spc‚ÍƒXƒyƒLƒ…ƒ‰ƒJƒ‰[
-	rhw‚Í‘½•ªƒAƒXƒyƒNƒg”äŠÖ˜A‚Ì’l
-	su,sv‚Í‚æ‚­•ª‚©‚ç‚È‚¢‚¯‚ÇƒeƒNƒXƒ`ƒƒÀ•WŠÖ˜A
+	difã¯ãƒ‡ã‚¤ãƒ•ãƒ¥ãƒ¼ã‚ºã‚«ãƒ©ãƒ¼
+	spcã¯ã‚¹ãƒšã‚­ãƒ¥ãƒ©ã‚«ãƒ©ãƒ¼
+	rhwã¯å¤šåˆ†ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”é–¢é€£ã®å€¤
+	su,svã¯ã‚ˆãåˆ†ã‹ã‚‰ãªã„ã‘ã©ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™é–¢é€£
 	*/
 }
 
-//ƒVƒF[ƒ_‚ğ—˜—p‚µ‚ÄÁ–Å‚·‚éƒuƒƒbƒN‚ğ•`‰æ‚·‚é
+//ã‚·ã‚§ãƒ¼ãƒ€ã‚’åˆ©ç”¨ã—ã¦æ¶ˆæ»…ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æç”»ã™ã‚‹
 void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage, int Effect1, int Effect2) {
 
-	//ˆø”‚Ìplace‚ğƒVƒF[ƒ_‚Ìˆ—‚É‡‚í‚¹‚Ä’²®‚·‚é
+	//å¼•æ•°ã®placeã‚’ã‚·ã‚§ãƒ¼ãƒ€ã®å‡¦ç†ã«åˆã‚ã›ã¦èª¿æ•´ã™ã‚‹
 	place = map(place, 0, 1, 1, -0.4);
 	/*
-	place‚ª0‚Ì1‚É‚·‚é
-	1‚ÌA-0.4‚É‚·‚é
+	placeãŒ0ã®æ™‚1ã«ã™ã‚‹
+	1ã®æ™‚ã€-0.4ã«ã™ã‚‹
 	*/
 	//float X1 = (float)X;
 	//float Y1 = (float)Y;
@@ -84,16 +84,16 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 	ClearDrawScreen();
 
 
-	float RealX, RealY;	//ÀÛ‚ÌƒeƒNƒXƒ`ƒƒ‚Ì‘å‚«‚³
+	float RealX, RealY;	//å®Ÿéš›ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å¤§ãã•
 	GetGraphSizeF(srcImage, &RealX, &RealY);
 
-	float W, H;	//ÀÛ‚ÌƒeƒNƒXƒ`ƒƒ‚Ì‘å‚«‚³
+	float W, H;	//å®Ÿéš›ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å¤§ãã•
 	W = Phase_GameMain::BLOCK_SIZE;
 	H = Phase_GameMain::BLOCK_SIZE;
 	W = RealX;
 	H = RealY;
 
-	//’¸“_ƒf[ƒ^‚Ì€”õ(UVÀ•W‚àÄŒvZ‚·‚é)
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®æº–å‚™(UVåº§æ¨™ã‚‚å†è¨ˆç®—ã™ã‚‹)
 	ColorWaveVertex.Vert[0].pos = VGet((float)(X1), (float)(Y1), 0.0f);
 	//ColorWaveVertex.Vert[0].u = 0;	ColorWaveVertex.Vert[0].v = 0;
 	ColorWaveVertex.Vert[1].pos = VGet((float)(X1 + W), (float)(Y1), 0.0f);
@@ -106,18 +106,18 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 	ColorWaveVertex.Vert[5] = ColorWaveVertex.Vert[1];
 
 	InitShaderConstantBuffer();
-	SetUsePixelShader(ColorWavePShandle);//g—p‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğƒZƒbƒg
+	SetUsePixelShader(ColorWavePShandle);//ä½¿ç”¨ã™ã‚‹ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
 	SetPSConstSF(0, (float)place);
 
-	SetUseTextureToShader(0, srcImage);//g—p‚·‚éƒeƒNƒXƒ`ƒƒ‚ğƒZƒbƒg
-	SetUseTextureToShader(1, Effect1);//g—p‚·‚éƒeƒNƒXƒ`ƒƒ‚ğƒZƒbƒg
-	SetUseTextureToShader(2, Effect2);//g—p‚·‚éƒeƒNƒXƒ`ƒƒ‚ğƒZƒbƒg
-	DrawPrimitive2DToShader(ColorWaveVertex.Vert, 6, DX_PRIMTYPE_TRIANGLELIST);//•`‰æ
-	SetUsePixelShader(-1);//g—p‚·‚éƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ğƒZƒbƒg
+	SetUseTextureToShader(0, srcImage);//ä½¿ç”¨ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚»ãƒƒãƒˆ
+	SetUseTextureToShader(1, Effect1);//ä½¿ç”¨ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚»ãƒƒãƒˆ
+	SetUseTextureToShader(2, Effect2);//ä½¿ç”¨ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚»ãƒƒãƒˆ
+	DrawPrimitive2DToShader(ColorWaveVertex.Vert, 6, DX_PRIMTYPE_TRIANGLELIST);//æç”»
+	SetUsePixelShader(-1);//ä½¿ç”¨ã™ã‚‹ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
 
 
 	SetDrawScreen(t);
 
-	//ƒuƒƒbƒN‚Ì•`‰æ
+	//ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»
 	DrawRectRotaGraphFast2((int)X, (int)Y, 0, 0, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE/2, Phase_GameMain::BLOCK_SIZE / 2, 1, 0, GrHandle, TRUE, FALSE);
 }

@@ -1,13 +1,13 @@
-//Œø‰Ê‰¹ŠÖŒW
+ï»¿//åŠ¹æœéŸ³é–¢ä¿‚
 #include "MainFunc.h"
 
-//Œø‰Ê‰¹‚Ìó‘Ô
+//åŠ¹æœéŸ³ã®çŠ¶æ…‹
 struct SE_STATE {
-	int Playing;	//Ä¶’†‚©‚Ç‚¤‚©
-	int Place;		//Œø‰Ê‰¹‚ÌÄ¶ˆÊ’u
+	int Playing;	//å†ç”Ÿä¸­ã‹ã©ã†ã‹
+	int Place;		//åŠ¹æœéŸ³ã®å†ç”Ÿä½ç½®
 };
 
-//Œø‰Ê‰¹‚Ìó‘Ô
+//åŠ¹æœéŸ³ã®çŠ¶æ…‹
 struct SE_DATA {
 	struct SE_STATE Bomb_Muteki;
 	struct SE_STATE Bomb_DamageFloor;
@@ -18,61 +18,61 @@ struct SE_DATA {
 
 
 
-static int ButtonSelect;	//€–Ú‚Ì‘I‘ğˆ‚ğˆÚ“®‚·‚é‚Ì‰¹
-static int ButtonDecision;	//€–Ú‚ğŒˆ’è‚µ‚½‚Ì‰¹
-static int ButtonCancel;	//€–Ú‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚½‚Ì‰¹
-static int OwnBarrier;		//©•ª‚ªƒoƒŠƒA‚ğ”­“®‚µ‚½‚Æ‚«‚Ì‰¹
-static int OwnDeath;		//©•ª‚ª€–S‚µ‚½‚Ì‰¹
-static int Bulletfire1;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹1(˜AË)
-static int Bulletfire2;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹2
-static int Bulletfire3;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹3
-static int Bulletfire4;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹4
-static int Bulletfire5;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹5
-static int Bulletfire6;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹6
-static int Bulletfire7;		//“G‚ª’e–‹‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹7
-static int Shotfire;		//©‹@‚ªƒVƒ‡ƒbƒg‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹
-static int Shotfire2;		//©‹@‚ªƒVƒ‡ƒbƒg‚ğ”­Ë‚µ‚½‚Æ‚«‚Ì‰¹2
-static int Graze;			//©‹@‚ª‚©‚·‚è‚ğ“ü‚ê‚½‚Æ‚«‚Ì‰¹
-static int ShotHit;			//©‹@‚ÌƒVƒ‡ƒbƒg‚ª“G‚É“–‚½‚Á‚½‚Æ‚«‚Ì‰¹
-static int ShotHit2;		//©‹@‚ÌƒVƒ‡ƒbƒg‚ª“G‚É“–‚½‚Á‚½‚Æ‚«‚Ì‰¹2
-static int EnemyDeath;		//“G‚ª€–S‚µ‚½‚Æ‚«‚Ì‰¹
-static int EnemyDeath2;		//“G‚ª€–S‚µ‚½‚Æ‚«‚Ì‰¹2
-static int Pause;			//ƒ{[ƒYƒ{ƒ^ƒ“
-static int Itemget;			//ƒAƒCƒeƒ€‚ğæ“¾‚µ‚½‚Æ‚«‚Ì‰¹
-static int PowerUp;			//ƒpƒ[ƒAƒbƒv‚µ‚½‚Æ‚«‚Ì
-static int Timeout;			//§ŒÀŠÔ‚Ì‰¹
-static int Timeout2;		//§ŒÀŠÔ‚Ì‰¹2
-static int Extend;			//1ƒAƒbƒv
-static int Bomb_Muteki;		//–³“Gƒ{ƒ€‚Ì‰¹
-static int Bonus;			//ƒ{[ƒiƒX
-static int GetBomb;			//ƒ{ƒ€æ“¾
-static int Bomb_DamageFloor;//ƒ_ƒ[ƒW°ƒ{ƒ€‚Ì‰¹
-static int Bomb_BarrierFloor;//ƒoƒŠƒA°ƒ{ƒ€‚Ì‰¹
-static int Charge_Up;		//ƒ`ƒƒ[ƒWUŒ‚‚Ì’iŠKUP‚Ì‰¹
-static int Charge_OK;		//ƒ`ƒƒ[ƒWUŒ‚‚ÌƒŠƒLƒƒƒXƒgŠ®—¹‚Ì‰¹
-static int Charge1;			//ƒ`ƒƒ[ƒWUŒ‚1‚ÌŒø‰Ê‰¹
-static int Charge2;			//ƒ`ƒƒ[ƒWUŒ‚2‚ÌŒø‰Ê‰¹
-static int Smallexplosion;	//¬”š”­
+static int ButtonSelect;	//é …ç›®ã®é¸æŠè‚¢ã‚’ç§»å‹•ã™ã‚‹æ™‚ã®éŸ³
+static int ButtonDecision;	//é …ç›®ã‚’æ±ºå®šã—ãŸæ™‚ã®éŸ³
+static int ButtonCancel;	//é …ç›®ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸæ™‚ã®éŸ³
+static int OwnBarrier;		//è‡ªåˆ†ãŒãƒãƒªã‚¢ã‚’ç™ºå‹•ã—ãŸã¨ãã®éŸ³
+static int OwnDeath;		//è‡ªåˆ†ãŒæ­»äº¡ã—ãŸæ™‚ã®éŸ³
+static int Bulletfire1;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³1(é€£å°„)
+static int Bulletfire2;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³2
+static int Bulletfire3;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³3
+static int Bulletfire4;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³4
+static int Bulletfire5;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³5
+static int Bulletfire6;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³6
+static int Bulletfire7;		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³7
+static int Shotfire;		//è‡ªæ©ŸãŒã‚·ãƒ§ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³
+static int Shotfire2;		//è‡ªæ©ŸãŒã‚·ãƒ§ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³2
+static int Graze;			//è‡ªæ©ŸãŒã‹ã™ã‚Šã‚’å…¥ã‚ŒãŸã¨ãã®éŸ³
+static int ShotHit;			//è‡ªæ©Ÿã®ã‚·ãƒ§ãƒƒãƒˆãŒæ•µã«å½“ãŸã£ãŸã¨ãã®éŸ³
+static int ShotHit2;		//è‡ªæ©Ÿã®ã‚·ãƒ§ãƒƒãƒˆãŒæ•µã«å½“ãŸã£ãŸã¨ãã®éŸ³2
+static int EnemyDeath;		//æ•µãŒæ­»äº¡ã—ãŸã¨ãã®éŸ³
+static int EnemyDeath2;		//æ•µãŒæ­»äº¡ã—ãŸã¨ãã®éŸ³2
+static int Pause;			//ãƒœãƒ¼ã‚ºãƒœã‚¿ãƒ³
+static int Itemget;			//ã‚¢ã‚¤ãƒ†ãƒ ã‚’å–å¾—ã—ãŸã¨ãã®éŸ³
+static int PowerUp;			//ãƒ‘ãƒ¯ãƒ¼ã‚¢ãƒƒãƒ—ã—ãŸã¨ãã®
+static int Timeout;			//åˆ¶é™æ™‚é–“ã®éŸ³
+static int Timeout2;		//åˆ¶é™æ™‚é–“ã®éŸ³2
+static int Extend;			//1ã‚¢ãƒƒãƒ—æ™‚
+static int Bomb_Muteki;		//ç„¡æ•µãƒœãƒ ã®éŸ³
+static int Bonus;			//ãƒœãƒ¼ãƒŠã‚¹
+static int GetBomb;			//ãƒœãƒ å–å¾—
+static int Bomb_DamageFloor;//ãƒ€ãƒ¡ãƒ¼ã‚¸åºŠãƒœãƒ ã®éŸ³
+static int Bomb_BarrierFloor;//ãƒãƒªã‚¢åºŠãƒœãƒ ã®éŸ³
+static int Charge_Up;		//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒã®æ®µéšUPã®éŸ³
+static int Charge_OK;		//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒã®ãƒªã‚­ãƒ£ã‚¹ãƒˆå®Œäº†ã®éŸ³
+static int Charge1;			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒ1ã®åŠ¹æœéŸ³
+static int Charge2;			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒ2ã®åŠ¹æœéŸ³
+static int Smallexplosion;	//å°çˆ†ç™º
 
-static struct SE_DATA data;				//Œø‰Ê‰¹‚Ìó‘Ô
-static struct SE_DATA Save_data;		//Œø‰Ê‰¹‚Ìó‘Ô
-static struct SE_DATA pause_data;		//Œø‰Ê‰¹‚Ìó‘Ô(ƒ|[ƒY’†)
+static struct SE_DATA data;				//åŠ¹æœéŸ³ã®çŠ¶æ…‹
+static struct SE_DATA Save_data;		//åŠ¹æœéŸ³ã®çŠ¶æ…‹
+static struct SE_DATA pause_data;		//åŠ¹æœéŸ³ã®çŠ¶æ…‹(ãƒãƒ¼ã‚ºä¸­)
 
-										//ƒZ[ƒu‚ğˆê“x‚Å‚à‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+										//ã‚»ãƒ¼ãƒ–ã‚’ä¸€åº¦ã§ã‚‚ã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
 static int Saved;
 
-//‰¹—Ê0`255
-static int BGM_Volume;//ŠÇ—‚Ì‚İ‚±‚±I
+//éŸ³é‡0ï½255
+static int BGM_Volume;//ç®¡ç†ã®ã¿ã“ã“ï¼
 static int SE_Volume;
 
-//Œø‰Ê‰¹‚ªÄ¶‚³‚ê‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO(ˆê‰ƒJƒEƒ“ƒgƒAƒbƒv‚·‚é)
+//åŠ¹æœéŸ³ãŒå†ç”Ÿã•ã‚ŒãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°(ä¸€å¿œã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—ã™ã‚‹)
 static unsigned int sE_playData[SE_TYPE_NUM];
 
 
 
 
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void SoundEffect_init() {
 
 	data.Bomb_Muteki.Playing = 0;
@@ -92,148 +92,148 @@ void SoundEffect_init() {
 
 	ButtonSelect = LoadSoundMemBase(_T("Data/SE/ChangeSelect.wav"), 1);
 	if (ButtonSelect == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ChangeSelect.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ChangeSelect.wav)"));
 	}
 	ButtonDecision = LoadSoundMemBase(_T("Data/SE/DecisionSelect.wav"), 1);
 	if (ButtonDecision == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/DecisionSelect.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/DecisionSelect.wav)"));
 	}
 	ButtonCancel = LoadSoundMemBase(_T("Data/SE/ButtonCancel.wav"), 1);
 	if (ButtonCancel == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ButtonCancel.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ButtonCancel.wav)"));
 	}
 	OwnBarrier = LoadSoundMemBase(_T("Data/SE/OwnBarrier.wav"), 1);
 	if (OwnBarrier == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/OwnBarrier.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/OwnBarrier.wav)"));
 	}
 	OwnDeath = LoadSoundMemBase(_T("Data/SE/OwnDeath.wav"), 1);
 	if (OwnDeath == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/OwnDeath.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/OwnDeath.wav)"));
 	}
 	Bulletfire1 = LoadSoundMemBase(_T("Data/SE/Bulletfire1.wav"), 1);
 	if (Bulletfire1 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire1.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire1.wav)"));
 	}
 	Bulletfire2 = LoadSoundMemBase(_T("Data/SE/Bulletfire2.wav"), 1);
 	if (Bulletfire2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire2.wav)"));
 	}
 	Bulletfire3 = LoadSoundMemBase(_T("Data/SE/Bulletfire3.wav"), 1);
 	if (Bulletfire3 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire3.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire3.wav)"));
 	}
 	Bulletfire4 = LoadSoundMemBase(_T("Data/SE/Bulletfire4.wav"), 1);
 	if (Bulletfire4 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire4.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire4.wav)"));
 	}
 	Bulletfire5 = LoadSoundMemBase(_T("Data/SE/Bulletfire5.wav"), 1);
 	if (Bulletfire5 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire5.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire5.wav)"));
 	}
 	Bulletfire6 = LoadSoundMemBase(_T("Data/SE/Bulletfire6.wav"), 1);
 	if (Bulletfire6 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire6.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire6.wav)"));
 	}
 	Bulletfire7 = LoadSoundMemBase(_T("Data/SE/Bulletfire7.wav"), 1);
 	if (Bulletfire7 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bulletfire7.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bulletfire7.wav)"));
 	}
 	Shotfire = LoadSoundMemBase(_T("Data/SE/Shotfire.wav"), 1);
 	if (Shotfire == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Shotfire.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Shotfire.wav)"));
 	}
 	Shotfire2 = LoadSoundMemBase(_T("Data/SE/Shotfire2.wav"), 1);
 	if (Shotfire2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Shotfire2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Shotfire2.wav)"));
 	}
 	Graze = LoadSoundMemBase(_T("Data/SE/Graze.wav"), 1);
 	if (Graze == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Graze.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Graze.wav)"));
 	}
 	ShotHit = LoadSoundMemBase(_T("Data/SE/ShotHit.wav"), 1);
 	if (ShotHit == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ShotHit.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ShotHit.wav)"));
 	}
 	ShotHit2 = LoadSoundMemBase(_T("Data/SE/ShotHit2.wav"), 1);
 	if (ShotHit2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ShotHit2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ShotHit2.wav)"));
 	}
 	EnemyDeath = LoadSoundMemBase(_T("Data/SE/EnemyDeath.wav"), 1);
 	if (EnemyDeath == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/EnemyDeath.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/EnemyDeath.wav)"));
 	}
 	EnemyDeath2 = LoadSoundMemBase(_T("Data/SE/EnemyDeath2.wav"), 1);
 	if (EnemyDeath2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/EnemyDeath2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/EnemyDeath2.wav)"));
 	}
 	Pause = LoadSoundMemBase(_T("Data/SE/Pause.wav"), 1);
 	if (Pause == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Pause.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Pause.wav)"));
 	}
 	Itemget = LoadSoundMemBase(_T("Data/SE/Itemget.wav"), 1);
 	if (Itemget == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Itemget.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Itemget.wav)"));
 	}
 	PowerUp = LoadSoundMemBase(_T("Data/SE/PowerUp.wav"), 1);
 	if (PowerUp == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/PowerUp.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/PowerUp.wav)"));
 	}
 	Timeout = LoadSoundMemBase(_T("Data/SE/Timeout.wav"), 1);
 	if (Timeout == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Timeout.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Timeout.wav)"));
 	}
 	Timeout2 = LoadSoundMemBase(_T("Data/SE/Timeout2.wav"), 1);
 	if (Timeout2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Timeout2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Timeout2.wav)"));
 	}
 	Extend = LoadSoundMemBase(_T("Data/SE/Extend.wav"), 1);
 	if (Extend == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Extend.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Extend.wav)"));
 	}
 	Bomb_Muteki = LoadSoundMemBase(_T("Data/SE/BombMUTEKI.wav"), 1);
 	if (Bomb_Muteki == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/BombMUTEKI.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/BombMUTEKI.wav)"));
 	}
 	Bonus = LoadSoundMemBase(_T("Data/SE/Bonus.wav"), 1);
 	if (Bonus == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Bonus.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Bonus.wav)"));
 	}
 	GetBomb = LoadSoundMemBase(_T("Data/SE/GetBomb.wav"), 1);
 	if (GetBomb == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/GetBomb.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/GetBomb.wav)"));
 	}
 	Bomb_DamageFloor = LoadSoundMemBase(_T("Data/SE/BombDANAMEFLOOR.wav"), 1);
 	if (Bomb_DamageFloor == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/BombDANAMEFLOOR.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/BombDANAMEFLOOR.wav)"));
 	}
 	Bomb_BarrierFloor = LoadSoundMemBase(_T("Data/SE/BombBARRIER.wav"), 1);
 	if (Bomb_BarrierFloor == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/BombBARRIER.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/BombBARRIER.wav)"));
 	}
 	Charge_Up = LoadSoundMemBase(_T("Data/SE/ChargeUp.wav"), 1);
 	if (Charge_Up == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ChargeUp.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ChargeUp.wav)"));
 	}
 	Charge_OK = LoadSoundMemBase(_T("Data/SE/ChargeOK.wav"), 1);
 	if (Charge_OK == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/ChargeOK.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/ChargeOK.wav)"));
 	}
 	Charge1 = LoadSoundMemBase(_T("Data/SE/Charge1.wav"), 10);
 	if (Charge1 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Charge1.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Charge1.wav)"));
 	}
 	Charge2 = LoadSoundMemBase(_T("Data/SE/Charge2.wav"), 10);
 	if (Charge2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/Charge2.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/Charge2.wav)"));
 	}
 	Smallexplosion = LoadSoundMemBase(_T("Data/SE/small_explosion1.wav"), 10);
 	if (Smallexplosion == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SE‚Ìƒ[ƒh‚É¸”s(Data/SE/small_explosion1.wav)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("SEã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—(Data/SE/small_explosion1.wav)"));
 	}
 	
 }
 
-//Œø‰Ê‰¹‚ÌŒvZˆ—ƒ‹[ƒv(Œø‰Ê‰¹‚ğ–Â‚ç‚·‚æ‚è‚à‘O‚ÉŒÄ‚Ô‚±‚Æ)
+//åŠ¹æœéŸ³ã®è¨ˆç®—å‡¦ç†ãƒ«ãƒ¼ãƒ—(åŠ¹æœéŸ³ã‚’é³´ã‚‰ã™ã‚ˆã‚Šã‚‚å‰ã«å‘¼ã¶ã“ã¨)
 void SoundEffect_update() {
 	for (int i = 0; i < SE_TYPE_NUM; i++) {
 		sE_playData[i] = 0;
@@ -241,7 +241,7 @@ void SoundEffect_update() {
 
 }
 
-//Œø‰Ê‰¹‚ÌÄ¶
+//åŠ¹æœéŸ³ã®å†ç”Ÿ
 void SoundEffect_Play(SE_TYPE type) {
 	switch (type)
 	{
@@ -353,7 +353,7 @@ void SoundEffect_Play(SE_TYPE type) {
 	}
 }
 
-//Œø‰Ê‰¹‚ÌÄ¶(ˆÊ’u‚Å‰¹—Ê‚ª•Ï‚í‚é‚â‚Â)(¡‚Í‹@”\‚µ‚È‚¢)
+//åŠ¹æœéŸ³ã®å†ç”Ÿ(ä½ç½®ã§éŸ³é‡ãŒå¤‰ã‚ã‚‹ã‚„ã¤)(ä»Šã¯æ©Ÿèƒ½ã—ãªã„)
 void SoundEffect_PlayPlace(SE_TYPE type, double plaxeX, double placeY) {
 	switch (type)
 	{
@@ -465,57 +465,57 @@ void SoundEffect_PlayPlace(SE_TYPE type, double plaxeX, double placeY) {
 	}
 }
 
-//Œø‰Ê‰¹‚Ìó‘Ô‚Ì•Û‘¶
+//åŠ¹æœéŸ³ã®çŠ¶æ…‹ã®ä¿å­˜
 void SoundEffect_Save() {
-	Save_data.Bomb_Muteki.Playing = CheckSoundMem(Bomb_Muteki);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	Save_data.Bomb_Muteki.Playing = CheckSoundMem(Bomb_Muteki);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (Save_data.Bomb_Muteki.Playing) {
 		Save_data.Bomb_Muteki.Place = GetSoundCurrentTime(Bomb_Muteki);
 	}
-	Save_data.Bomb_DamageFloor.Playing = CheckSoundMem(Bomb_DamageFloor);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	Save_data.Bomb_DamageFloor.Playing = CheckSoundMem(Bomb_DamageFloor);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (Save_data.Bomb_DamageFloor.Playing) {
 		Save_data.Bomb_DamageFloor.Place = GetSoundCurrentTime(Bomb_DamageFloor);
 	}
-	Save_data.Bomb_BarrierFloor.Playing = CheckSoundMem(Bomb_BarrierFloor);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	Save_data.Bomb_BarrierFloor.Playing = CheckSoundMem(Bomb_BarrierFloor);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (Save_data.Bomb_BarrierFloor.Playing) {
 		Save_data.Bomb_BarrierFloor.Place = GetSoundCurrentTime(Bomb_BarrierFloor);
 	}
-	Save_data.EnemyDeath2.Playing = CheckSoundMem(EnemyDeath2);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	Save_data.EnemyDeath2.Playing = CheckSoundMem(EnemyDeath2);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (Save_data.EnemyDeath2.Playing) {
 		Save_data.EnemyDeath2.Place = GetSoundCurrentTime(EnemyDeath2);
 	}
-	Save_data.Charge1.Playing = CheckSoundMem(Charge1);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	Save_data.Charge1.Playing = CheckSoundMem(Charge1);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (Save_data.Charge1.Playing) {
 		Save_data.Charge1.Place = GetSoundCurrentTime(Charge1);
 	}
 	Saved = 1;
 }
 
-//Œø‰Ê‰¹‚Ìó‘Ô‚Ì•œŒ³
+//åŠ¹æœéŸ³ã®çŠ¶æ…‹ã®å¾©å…ƒ
 void SoundEffect_Load() {
 	if (Saved == 0)	return;
-	if (Save_data.Bomb_Muteki.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (Save_data.Bomb_Muteki.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(Save_data.Bomb_Muteki.Place, Bomb_Muteki);
 		PlaySoundMem(Bomb_Muteki, DX_PLAYTYPE_BACK, 0);
 	}
-	if (Save_data.Bomb_DamageFloor.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (Save_data.Bomb_DamageFloor.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(Save_data.Bomb_DamageFloor.Place, Bomb_DamageFloor);
 		PlaySoundMem(Bomb_DamageFloor, DX_PLAYTYPE_BACK, 0);
 	}
-	if (Save_data.Bomb_BarrierFloor.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (Save_data.Bomb_BarrierFloor.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(Save_data.Bomb_BarrierFloor.Place, Bomb_BarrierFloor);
 		PlaySoundMem(Bomb_BarrierFloor, DX_PLAYTYPE_BACK, 0);
 	}
-	if (Save_data.EnemyDeath2.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (Save_data.EnemyDeath2.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(Save_data.EnemyDeath2.Place, EnemyDeath2);
 		PlaySoundMem(EnemyDeath2, DX_PLAYTYPE_BACK, 0);
 	}
-	if (Save_data.Charge1.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (Save_data.Charge1.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(Save_data.Charge1.Place, Charge1);
 		PlaySoundMem(Charge1, DX_PLAYTYPE_BACK, 0);
 	}
 }
 
-//Œø‰Ê‰¹‚ğ‚·‚×‚Äƒ|[ƒY‚·‚é
+//åŠ¹æœéŸ³ã‚’ã™ã¹ã¦ãƒãƒ¼ã‚ºã™ã‚‹
 void SoundEffect_AllPause() {
 	StopSoundMem(ButtonSelect);
 	StopSoundMem(ButtonDecision);
@@ -554,7 +554,7 @@ void SoundEffect_AllPause() {
 	StopSoundMem(Smallexplosion);
 }
 
-//Œø‰Ê‰¹‚Ì‰¹—Ê‚ğ‚·‚×‚Ä•ÏX‚·‚é(0`100)
+//åŠ¹æœéŸ³ã®éŸ³é‡ã‚’ã™ã¹ã¦å¤‰æ›´ã™ã‚‹(0ï½100)
 void SoundEffect_SetSEVolume(int Volume) {
 	int VolumePal = (int)(255 * (Volume / 100.));
 	SE_Volume = VolumePal;
@@ -595,12 +595,12 @@ void SoundEffect_SetSEVolume(int Volume) {
 	ChangeVolumeSoundMem(VolumePal, Smallexplosion);
 }
 
-//Œø‰Ê‰¹‚Ì‰¹—Êæ“¾(0`100)
+//åŠ¹æœéŸ³ã®éŸ³é‡å–å¾—(0ï½100)
 int SoundEffect_GetSEVolume() {
 	return (int)(100 * (SE_Volume / 255.));
 }
 
-//’·‚¢Œø‰Ê‰¹‚Ì’â~
+//é•·ã„åŠ¹æœéŸ³ã®åœæ­¢
 void SoundEffect_LongSEStop() {
 	StopSoundMem(Bomb_Muteki);
 	SetSoundCurrentTime(0, Bomb_Muteki);
@@ -612,64 +612,64 @@ void SoundEffect_LongSEStop() {
 	SetSoundCurrentTime(0, EnemyDeath2);
 }
 
-//’·‚¢Œø‰Ê‰¹‚Ìƒ|[ƒY
+//é•·ã„åŠ¹æœéŸ³ã®ãƒãƒ¼ã‚º
 void SoundEffect_LongSEPause() {
-	pause_data.Bomb_Muteki.Playing = CheckSoundMem(Bomb_Muteki);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	pause_data.Bomb_Muteki.Playing = CheckSoundMem(Bomb_Muteki);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (pause_data.Bomb_Muteki.Playing) {
 		pause_data.Bomb_Muteki.Place = GetSoundCurrentTime(Bomb_Muteki);
 		StopSoundMem(Bomb_Muteki);
 	}
-	pause_data.Bomb_DamageFloor.Playing = CheckSoundMem(Bomb_DamageFloor);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	pause_data.Bomb_DamageFloor.Playing = CheckSoundMem(Bomb_DamageFloor);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (pause_data.Bomb_DamageFloor.Playing) {
 		pause_data.Bomb_DamageFloor.Place = GetSoundCurrentTime(Bomb_DamageFloor);
 		StopSoundMem(Bomb_DamageFloor);
 	}
-	pause_data.Bomb_BarrierFloor.Playing = CheckSoundMem(Bomb_BarrierFloor);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	pause_data.Bomb_BarrierFloor.Playing = CheckSoundMem(Bomb_BarrierFloor);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (pause_data.Bomb_BarrierFloor.Playing) {
 		pause_data.Bomb_BarrierFloor.Place = GetSoundCurrentTime(Bomb_BarrierFloor);
 		StopSoundMem(Bomb_BarrierFloor);
 	}
-	pause_data.EnemyDeath2.Playing = CheckSoundMem(EnemyDeath2);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	pause_data.EnemyDeath2.Playing = CheckSoundMem(EnemyDeath2);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (pause_data.EnemyDeath2.Playing) {
 		pause_data.EnemyDeath2.Place = GetSoundCurrentTime(EnemyDeath2);
 		StopSoundMem(EnemyDeath2);
 	}
-	pause_data.Charge1.Playing = CheckSoundMem(Charge1);	//SE‚ÌÄ¶ó‘Ô‚Ì•Û‘¶
+	pause_data.Charge1.Playing = CheckSoundMem(Charge1);	//SEã®å†ç”ŸçŠ¶æ…‹ã®ä¿å­˜
 	if (pause_data.Charge1.Playing) {
 		pause_data.Charge1.Place = GetSoundCurrentTime(Charge1);
 		StopSoundMem(Charge1);
 	}
 }
 
-//’·‚¢Œø‰Ê‰¹‚ÌƒŒƒWƒ…[ƒ€
+//é•·ã„åŠ¹æœéŸ³ã®ãƒ¬ã‚¸ãƒ¥ãƒ¼ãƒ 
 void SoundEffect_LongSEResume() {
-	if (pause_data.Bomb_Muteki.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (pause_data.Bomb_Muteki.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(pause_data.Bomb_Muteki.Place, Bomb_Muteki);
 		PlaySoundMem(Bomb_Muteki, DX_PLAYTYPE_BACK, 0);
 	}
-	if (pause_data.Bomb_DamageFloor.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (pause_data.Bomb_DamageFloor.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(pause_data.Bomb_DamageFloor.Place, Bomb_DamageFloor);
 		PlaySoundMem(Bomb_DamageFloor, DX_PLAYTYPE_BACK, 0);
 	}
-	if (pause_data.Bomb_BarrierFloor.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (pause_data.Bomb_BarrierFloor.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(pause_data.Bomb_BarrierFloor.Place, Bomb_BarrierFloor);
 		PlaySoundMem(Bomb_BarrierFloor, DX_PLAYTYPE_BACK, 0);
 	}
-	if (pause_data.EnemyDeath2.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (pause_data.EnemyDeath2.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(pause_data.EnemyDeath2.Place, EnemyDeath2);
 		PlaySoundMem(EnemyDeath2, DX_PLAYTYPE_BACK, FALSE);
 	}
-	if (pause_data.Charge1.Playing) {//BGMÄ¶ó‘Ô‚Ì•œŒ³
+	if (pause_data.Charge1.Playing) {//BGMå†ç”ŸçŠ¶æ…‹ã®å¾©å…ƒ
 		SetSoundCurrentTime(pause_data.Charge1.Place, Charge1);
 		PlaySoundMem(Charge1, DX_PLAYTYPE_BACK, FALSE);
 	}
 }
 
-//‘½d‚ÅŒø‰Ê‰¹‚ÌÄ¶‚ªs‚í‚ê‚é‰Â”\«‚ª‚ ‚é‚Æ‚«‚Ég—p‚·‚éŒø‰Ê‰¹‚ÌÄ¶ŠÖ”(1Œø‰Ê‰¹‚ ‚½‚è1ƒtƒŒ[ƒ€‚Éˆê“x‚Ü‚Å‚µ‚©Ä¶ŠÖ”‚ªŒÄ‚Î‚ê‚È‚­‚È‚é)
+//å¤šé‡ã§åŠ¹æœéŸ³ã®å†ç”ŸãŒè¡Œã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã¨ãã«ä½¿ç”¨ã™ã‚‹åŠ¹æœéŸ³ã®å†ç”Ÿé–¢æ•°(1åŠ¹æœéŸ³ã‚ãŸã‚Š1ãƒ•ãƒ¬ãƒ¼ãƒ ã«ä¸€åº¦ã¾ã§ã—ã‹å†ç”Ÿé–¢æ•°ãŒå‘¼ã°ã‚Œãªããªã‚‹)
 void SoundEffect_SafePlay(SE_TYPE type) {
 	if (type < 0 || SE_TYPE_NUM <= type)	return;
-	if (sE_playData[type] == 0) {//Œø‰Ê‰¹‚ğ‚Ü‚¾–Â‚ç‚µ‚Ä‚¢‚È‚¢‚Æ‚«
+	if (sE_playData[type] == 0) {//åŠ¹æœéŸ³ã‚’ã¾ã é³´ã‚‰ã—ã¦ã„ãªã„ã¨ã
 		SoundEffect_Play(type);
 	}
-	sE_playData[type]++;//–Â‚ç‚µ‚½‰ñ”‚ÌƒJƒEƒ“ƒgƒAƒbƒv
+	sE_playData[type]++;//é³´ã‚‰ã—ãŸå›æ•°ã®ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
 }

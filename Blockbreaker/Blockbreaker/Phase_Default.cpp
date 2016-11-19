@@ -1,4 +1,4 @@
-//‹K’è‚ÌƒtƒF[ƒY
+ï»¿//è¦å®šã®ãƒ•ã‚§ãƒ¼ã‚º
 #include "MainFunc.h"
 
 Phase_Default::Phase_Default() {};

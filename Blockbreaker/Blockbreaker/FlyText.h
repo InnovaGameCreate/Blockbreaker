@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include "Enum.h"
 
 class FlyText {
 public:
-	int addFlyText(double CenterX, double Y, int limit, FONTTYPE font, unsigned int Color, TCHAR *fmt, ...);	//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì’Ç‰Á
-	void Draw();		//ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ•`‰æ‚·‚é
-	void Update();		//ƒtƒ‰ƒCƒeƒLƒXƒg‚ÌŒvZˆ—
+	int addFlyText(double CenterX, double Y, int limit, FONTTYPE font, unsigned int Color, TCHAR *fmt, ...);	//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®è¿½åŠ 
+	void Draw();		//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»ã™ã‚‹
+	void Update();		//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®è¨ˆç®—å‡¦ç†
 	FlyText();
 	~FlyText();
 private:
@@ -15,18 +15,18 @@ private:
 		Data() {
 			Enable = FALSE;
 		}
-		int Enable;			//—LŒø‚©‚Ç‚¤‚©
-		TCHAR string[100];	//•`‰æ‚·‚é•¶š—ñ
-		int fonthandle;		//•`‰æ‚·‚éƒtƒHƒ“ƒgƒnƒ“ƒhƒ‹(DXƒ‰ƒCƒuƒ‰ƒŠ)
-		unsigned int Color;	//•`‰æ‚·‚é•¶š—ñ‚ÌF
-		double x, y;		//•¶š—ñ‚ğ•`‰æ‚·‚éˆÊ’u(¶Šî€)
-		int Count;			//ƒtƒ‰ƒCƒeƒLƒXƒg‚ÌƒJƒEƒ“ƒgƒ^
-		int Limit;			//ƒtƒ‰ƒCƒeƒLƒXƒg‚ªÁ–Å‚·‚éƒJƒEƒ“ƒg”
+		int Enable;			//æœ‰åŠ¹ã‹ã©ã†ã‹
+		TCHAR string[100];	//æç”»ã™ã‚‹æ–‡å­—åˆ—
+		int fonthandle;		//æç”»ã™ã‚‹ãƒ•ã‚©ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ«(DXãƒ©ã‚¤ãƒ–ãƒ©ãƒª)
+		unsigned int Color;	//æç”»ã™ã‚‹æ–‡å­—åˆ—ã®è‰²
+		double x, y;		//æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹ä½ç½®(å·¦åŸºæº–)
+		int Count;			//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®ã‚«ã‚¦ãƒ³ãƒˆã‚¿
+		int Limit;			//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆãŒæ¶ˆæ»…ã™ã‚‹ã‚«ã‚¦ãƒ³ãƒˆæ•°
 	};
 
 	Data FlyTextData[FLYTEXT_MAXNUM];
 
 
-	void Initialize(int i);	//w’è‚µ‚½ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ‰Šú‰»
-	int isEnable(int i);	//w’è‚µ‚½ƒtƒ‰ƒCƒeƒLƒXƒg‚ª—LŒø‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‚Å—LŒø)
+	void Initialize(int i);	//æŒ‡å®šã—ãŸãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’åˆæœŸåŒ–
+	int isEnable(int i);	//æŒ‡å®šã—ãŸãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆãŒæœ‰åŠ¹ã‹ã©ã†ã‹ã®å–å¾—(TRUEã§æœ‰åŠ¹)
 };

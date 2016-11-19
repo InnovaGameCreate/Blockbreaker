@@ -1,149 +1,149 @@
-#pragma once
+﻿#pragma once
 #include "SelectItem.h"
 #include "Define.h"
 
 class Phase_GameMain : public PhaseController
 {
-public://�萔�Ƃ��̐錾
-	static const int BLOCK_SIZE = 40;			//�u���b�N�̏c���̃s�N�Z���T�C�Y
-	static const int BLOCK_WIDTHNUM = 11;		//���ۂ̃u���b�N�̉��̌�
-	static const int BLOCK_HEIGHTNUM = 24;		//���ۂ̃u���b�N�̏c�̌�
-	static const int BLOCK_PADDINGUP = 1;		//�`�悷��u���b�N�̊J�n�ʒu(��)
-	static const int BLOCK_PADDINGDOWN = 1;		//�`�悷��u���b�N�̊J�n�ʒu(��)
-	static const int BLOCK_PADDINGLEFT = 0;		//�`�悷��u���b�N�̊J�n�ʒu(��)
-	static const int BLOCK_PADDINGRIGHT = 0;	//�`�悷��u���b�N�̊J�n�ʒu(�E)
-	static const int BLOCK_WIDTHNUM_INGAME = BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT);		//��ʓ��̉��̃u���b�N�̌�
-	static const int BLOCK_HEIGHTNUM_INGAME = BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN);		//��ʓ��̏c�̃u���b�N�̌�
+public://定数とかの宣言
+	static const int BLOCK_SIZE = 40;			//ブロックの縦横のピクセルサイズ
+	static const int BLOCK_WIDTHNUM = 11;		//実際のブロックの横の個数
+	static const int BLOCK_HEIGHTNUM = 24;		//実際のブロックの縦の個数
+	static const int BLOCK_PADDINGUP = 1;		//描画するブロックの開始位置(上)
+	static const int BLOCK_PADDINGDOWN = 1;		//描画するブロックの開始位置(下)
+	static const int BLOCK_PADDINGLEFT = 0;		//描画するブロックの開始位置(左)
+	static const int BLOCK_PADDINGRIGHT = 0;	//描画するブロックの開始位置(右)
+	static const int BLOCK_WIDTHNUM_INGAME = BLOCK_WIDTHNUM - (BLOCK_PADDINGLEFT + BLOCK_PADDINGRIGHT);		//画面内の横のブロックの個数
+	static const int BLOCK_HEIGHTNUM_INGAME = BLOCK_HEIGHTNUM - (BLOCK_PADDINGUP + BLOCK_PADDINGDOWN);		//画面内の縦のブロックの個数
 
-	static const int GAMEWINDOW_PADDINGX = 70;	//�Q�[����ʂ�X�����̃Y��
-	static const int GAMEWINDOW_PADDINGY = 40;	//�Q�[����ʂ�Y�����̃Y��
-	static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//�Q�[����ʂ̉���
-	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//�Q�[����ʂ̍���
+	static const int GAMEWINDOW_PADDINGX = 70;	//ゲーム画面のX方向のズレ
+	static const int GAMEWINDOW_PADDINGY = 40;	//ゲーム画面のY方向のズレ
+	static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の横幅
+	static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
-	static const int FALLBLOCK_SIZE = 3;		//��������u���b�N�̑傫��
-	static const int GAMEOVER_BORDER = 4;		//�Q�[���I�[�o�[�ɂ���ꏊ
-	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//��������u���b�N�̒��S(�)�ʒu
-	static const int BLOCK_DELETE_LEN = 4;//�폜���邽�߂ɕK�v�ȗאڂ���u���b�N�̌�
-	static const int BLOCK_DEFAULT_VAL = 6;//�u���b�N�̏����ύڗ�
+	static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
+	static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
+	static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE/2;	//落下するブロックの中心(基準)位置
+	static const int BLOCK_DELETE_LEN = 4;//削除するために必要な隣接するブロックの個数
+	static const int BLOCK_DEFAULT_VAL = 6;//ブロックの初期積載量
 
-	//�u���b�N�̎��
+	//ブロックの種類
 	enum BLOCK_TYPE {
-		BLOCK_TYPE_NO,//�Ȃ�
-		BLOCK_TYPE_RED,//��
-		BLOCK_TYPE_BLUE,//��
-		BLOCK_TYPE_YELLOW,//��
-		BLOCK_TYPE_GREEN,//��
-		BLOCK_TYPE_PURPLE,//��
-		//�����������u���b�N��
-		BLOCK_TYPE_RED_ARROW_X,		//��(���s���)
-		BLOCK_TYPE_RED_ARROW_Y,		//��(�������)
-		BLOCK_TYPE_RED_ARROW_XY,	//��(�΂߉E��)
-		BLOCK_TYPE_RED_ARROW_XY2,	//��(�΂߉E��)
-		BLOCK_TYPE_BLUE_ARROW_X,	//��(���s���)
-		BLOCK_TYPE_BLUE_ARROW_Y,	//��(�������)
-		BLOCK_TYPE_BLUE_ARROW_XY,	//��(�΂߉E��)
-		BLOCK_TYPE_BLUE_ARROW_XY2,	//��(�΂߉E��)
-		BLOCK_TYPE_YELLOW_ARROW_X,	//��(���s���)
-		BLOCK_TYPE_YELLOW_ARROW_Y,	//��(�������)
-		BLOCK_TYPE_YELLOW_ARROW_XY,	//��(�΂߉E��)
-		BLOCK_TYPE_YELLOW_ARROW_XY2,//��(�΂߉E��)
-		BLOCK_TYPE_GREEN_ARROW_X,	//��(���s���)
-		BLOCK_TYPE_GREEN_ARROW_Y,	//��(�������)
-		BLOCK_TYPE_GREEN_ARROW_XY,	//��(�΂߉E��)
-		BLOCK_TYPE_GREEN_ARROW_XY2,	//��(�΂߉E��)
-		BLOCK_TYPE_PURPLE_ARROW_X,	//��(���s���)
-		BLOCK_TYPE_PURPLE_ARROW_Y,	//��(�������)
-		BLOCK_TYPE_PURPLE_ARROW_XY,	//��(�΂߉E��)
-		BLOCK_TYPE_PURPLE_ARROW_XY2,//��(�΂߉E��)
-		BLOCK_TYPE_TREE,		//���؂̌`�̃u���b�N�i�אڂ���S�����̂ǂ������������Ƃ��Ɉꏏ�ɏ�����j
-		BLOCK_TYPE_BLACK,		//���F�̃u���b�N�F�u���܂ŐF���킩��Ȃ����������Ƃ��Ƀ����_���ŐF�����肷��
-		BLOCK_TYPE_NOROUND,		//�g�ň͂�ꂽ�u���b�N�i�񂹂Ȃ��j
-		BLOCK_TYPE_RAINBOW,		//���F�̃u���b�N(���̃u���b�N�Ɠ����F�ɂȂ�)
-		BLOCK_TYPE_BOM,			//���e(�ⓚ���p�Ŏ��͂̃u���b�N�j��)
-		BLOCK_TYPE_2BOM,		//2���e(2�u���b�N�אڂŏ�������)
-		BLOCK_TYPE_BOM_Color,	//���F���e(�^���Ɠ��F�̃u���b�N����������)
-		BLOCK_TYPE_NUM			//�u���b�N�̎�ނ̐�(��ʊO�u���b�N)
+		BLOCK_TYPE_NO,//なし
+		BLOCK_TYPE_RED,//赤
+		BLOCK_TYPE_BLUE,//青
+		BLOCK_TYPE_YELLOW,//黄
+		BLOCK_TYPE_GREEN,//緑
+		BLOCK_TYPE_PURPLE,//紫
+		//ここから特殊ブロック↓
+		BLOCK_TYPE_RED_ARROW_X,		//赤(平行矢印)
+		BLOCK_TYPE_RED_ARROW_Y,		//赤(垂直矢印)
+		BLOCK_TYPE_RED_ARROW_XY,	//赤(斜め右上)
+		BLOCK_TYPE_RED_ARROW_XY2,	//赤(斜め右下)
+		BLOCK_TYPE_BLUE_ARROW_X,	//青(平行矢印)
+		BLOCK_TYPE_BLUE_ARROW_Y,	//青(垂直矢印)
+		BLOCK_TYPE_BLUE_ARROW_XY,	//青(斜め右上)
+		BLOCK_TYPE_BLUE_ARROW_XY2,	//青(斜め右下)
+		BLOCK_TYPE_YELLOW_ARROW_X,	//黄(平行矢印)
+		BLOCK_TYPE_YELLOW_ARROW_Y,	//黄(垂直矢印)
+		BLOCK_TYPE_YELLOW_ARROW_XY,	//黄(斜め右上)
+		BLOCK_TYPE_YELLOW_ARROW_XY2,//黄(斜め右下)
+		BLOCK_TYPE_GREEN_ARROW_X,	//緑(平行矢印)
+		BLOCK_TYPE_GREEN_ARROW_Y,	//緑(垂直矢印)
+		BLOCK_TYPE_GREEN_ARROW_XY,	//緑(斜め右上)
+		BLOCK_TYPE_GREEN_ARROW_XY2,	//緑(斜め右下)
+		BLOCK_TYPE_PURPLE_ARROW_X,	//紫(平行矢印)
+		BLOCK_TYPE_PURPLE_ARROW_Y,	//紫(垂直矢印)
+		BLOCK_TYPE_PURPLE_ARROW_XY,	//紫(斜め右上)
+		BLOCK_TYPE_PURPLE_ARROW_XY2,//紫(斜め右下)
+		BLOCK_TYPE_TREE,		//樹木の形のブロック（隣接する４方向のどこかが消えたときに一緒に消える）
+		BLOCK_TYPE_BLACK,		//黒色のブロック：置くまで色がわからない→おいたときにランダムで色が決定する
+		BLOCK_TYPE_NOROUND,		//枠で囲われたブロック（回せない）
+		BLOCK_TYPE_RAINBOW,		//虹色のブロック(下のブロックと同じ色になる)
+		BLOCK_TYPE_BOM,			//爆弾(問答無用で周囲のブロック破壊)
+		BLOCK_TYPE_2BOM,		//2爆弾(2ブロック隣接で消去する)
+		BLOCK_TYPE_BOM_Color,	//同色爆弾(真下と同色のブロックを消去する)
+		BLOCK_TYPE_NUM			//ブロックの種類の数(画面外ブロック)
 	};
 
-	//�|�[�Y�̎��
+	//ポーズの種類
 	enum PauseMode {
-		PauseMode_NO,			//�|�[�Y��ԂɂȂ��Ă��Ȃ�(�ʏ�)
-		PauseMode_NOMAL,		//�ʏ�̃|�[�Y(esc�Ń|�[�Y������)
-		PauseMode_GameOver,		//�Q�[���I�[�o�[
-		PauseMode_GameClear,	//�Q�[���N���A
-		PauseMode_NUM			//��(���N�G�X�g����)
+		PauseMode_NO,			//ポーズ状態になっていない(通常)
+		PauseMode_NOMAL,		//通常のポーズ(escでポーズするやつ)
+		PauseMode_GameOver,		//ゲームオーバー
+		PauseMode_GameClear,	//ゲームクリア
+		PauseMode_NUM			//個数(リクエスト無し)
 	};
 
-	//�u���b�N�ω����[�V�����̎��
+	//ブロック変化モーションの種類
 	enum BlockChangeMotionType {
-		BlockChangeMotionType_NO,		//���[�V��������
-		BlockChangeMotionType_NOMAL,	//�ʏ�(from����to��)
-		BlockChangeMotionType_EXPLOSION,//����(����)
-		BlockChangeMotionType_SMALL,	//�������Ȃ��ď�����
+		BlockChangeMotionType_NO,		//モーション無し
+		BlockChangeMotionType_NOMAL,	//通常(fromからtoへ)
+		BlockChangeMotionType_EXPLOSION,//爆発(消滅)
+		BlockChangeMotionType_SMALL,	//小さくなって消える
 	};
 
 private:
-	//�����Ƀ|�[�Y���j���[�\�����ɏo���I�����̃N���X���`����
+	//ここにポーズメニュー表示時に出す選択肢のクラスを定義する
 	class SelectItem_pause : public SelectItem
 	{
 	public:
-		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};//�R���X�g���N�^(�X�[�p�[�N���X�̃R���X�g���N�^�𖾎��I�ɌĂ�ł��܂�)
+		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
 	private:
-		void Event_Select(int No) override;	//�|�[�Y���j���[�̃{�^���������ꂽ�Ƃ�(�I�[�o�[���C�h)
+		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
 	};
 
 
 
-	//�ړ����[�V�����̃f�[�^
+	//移動モーションのデータ
 	struct BlockMoveMotion {
 		BlockMoveMotion() {
 			Enable = FALSE;
 		}
-		int Enable;			//�ړ����[�V�������L�����ǂ���
-		int FromX, FromY;	//�ړ������W
-		int ToX, ToY;		//�ړ�����W
-		int Count;			//�ړ��J�E���g(0�N�Z)
-		double a;			//�����x
-		double MaxSpeed;	//�ō����x
+		int Enable;			//移動モーションが有効かどうか
+		int FromX, FromY;	//移動元座標
+		int ToX, ToY;		//移動先座標
+		int Count;			//移動カウント(0起算)
+		double a;			//加速度
+		double MaxSpeed;	//最高速度
 	};
-	//�u���b�N�ω����[�V�����̃f�[�^
+	//ブロック変化モーションのデータ
 	struct BlockChangeMotion {
 		BlockChangeMotion() {
 			Type = BlockChangeMotionType_NO;
 		}
-		BlockChangeMotionType Type;	//�u���b�N�ω����[�V�����̎��
-		BLOCK_TYPE From;			//�u���b�N�ω����u���b�N
-		BLOCK_TYPE To;				//�u���b�N�ω���u���b�N
-		int Count;					//�u���b�N�ω��J�E���g(0�N�Z)
-		int Length;					//�u���b�N�ω����[�V�������s������
+		BlockChangeMotionType Type;	//ブロック変化モーションの種類
+		BLOCK_TYPE From;			//ブロック変化元ブロック
+		BLOCK_TYPE To;				//ブロック変化先ブロック
+		int Count;					//ブロック変化カウント(0起算)
+		int Length;					//ブロック変化モーションを行う時間
 	};
 	struct field_info {
-		BLOCK_TYPE color;//�u���b�N�̐F
-		int fall_flag;//���������ǂ����̃t���O
-		int move_flag;//�ړ������ǂ����̃t���O
+		BLOCK_TYPE color;//ブロックの色
+		int fall_flag;//落下中かどうかのフラグ
+		int move_flag;//移動中かどうかのフラグ
 
 
-		double DrawPlaceX, DrawPlaceY;			//�`��ʒu[�C���Q�[�����W](�}���`���ƕ`��ʒu��������肪�������̂�)
-		BlockMoveMotion blockMoveMotion;		//�������[�V����
-		BlockChangeMotion blockChangeMotion;	//�u���b�N�ω����[�V����
+		double DrawPlaceX, DrawPlaceY;			//描画位置[インゲーム座標](マルチだと描画位置がずれる問題があったので)
+		BlockMoveMotion blockMoveMotion;		//落下モーション
+		BlockChangeMotion blockChangeMotion;	//ブロック変化モーション
 	};
 
-	//�X�R�A�֌W
+	//スコア関係
 	struct Score {
 		/*
-		0:�u���b�N�̏����ɂ��X�R�A
-		1:�j������ɂ�錸�_
-		2:���̑�
+		0:ブロックの消去によるスコア
+		1:破壊光線による減点
+		2:その他
 		*/
 		int score[3];
 		Score() { init(); }
-		//�X�R�A�̏�����
+		//スコアの初期化
 		void init() {
 			for (auto &data: score) {
 				data = 0;
 			}
 		}
-		//���v�X�R�A�̎擾
+		//合計スコアの取得
 		int getScore() {
 			int sum = 0;
 			for (auto data : score) {
@@ -151,192 +151,192 @@ private:
 			}
 			return sum;
 		}
-		//�X�R�A�̉��Z
+		//スコアの加算
 		void addScore(int No, int Score) {
 			if (No < 0 || ARRAY_LENGTH(score) <= No)	return;
 			score[No] += Score;
 		}
 	};
 
-	//�Q�[���T�C�N���̎���
+	//ゲームサイクルの識別
 	enum GameCycle {
-		GameCycle_FALL,			//�u���b�N�̗���
-		GameCycle_BeforeFALL,	//�u���b�N�̗����J�n�O
-		GameCycle_Update,		//�u���b�N�̌v�Z���[�v
-		GameCycle_NUM			//�Q�[���T�C�N���̌�(�ݒ薳��)
+		GameCycle_FALL,			//ブロックの落下
+		GameCycle_BeforeFALL,	//ブロックの落下開始前
+		GameCycle_Update,		//ブロックの計算ループ
+		GameCycle_NUM			//ゲームサイクルの個数(設定無し)
 	};
 
 
-	//�����u���b�N�̏��
+	//落下ブロックの情報
 	struct FallBlockInfo {
 		FallBlockInfo() {
 			Enable = FALSE;
 			Counter = 0;
 		}
-		int Counter;			//�����u���b�N�̃J�E���^(��ɗL���ȕϐ��ł��I�I)(���̐��Ńu���b�N�����ł��Ă���̌o�߃t���[���A���̐��Ńu���b�N����������Ă���̎���)
+		int Counter;			//落下ブロックのカウンタ(常に有効な変数です！！)(負の数でブロックが消滅してからの経過フレーム、正の数でブロックが生成されてからの時間)
 
-		int Enable;				//���������ǂ���(TRUE�ŗ����u���b�N�L��)
-		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];		//�����u���b�N�{�̂̏��
+		int Enable;				//落下中かどうか(TRUEで落下ブロック有効)
+		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];		//落下ブロック本体の情報
 		
-		int PlaceX, PlaceY;		//�����u���b�N�̒��S�ʒu�̍��W(�z���1,1�̏ꏊ)
-		int FallCount;			//�����J�E���g�_�E��(0�ŗ�������)
-		int Flag_Rotate;		//��]�\���ǂ���(TRUE�ŉ�]�\)
+		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
+		int FallCount;			//落下カウントダウン(0で落下する)
+		int Flag_Rotate;		//回転可能かどうか(TRUEで回転可能)
 		
-		//�L�[���͂ɂ���Ԃ̕ۑ��p
-		int Key_FlagFirstFall;	//�����������[�h(TRUE�ŗL��)
-		int Key_LRMove;			//���E�ړ�(-1���A0�ړ������A1�E�ړ�)
-		int Key_LRRota;			//��]�ړ�(-1�����v���A0��]�����A1���v���)
+		//キー入力による状態の保存用
+		int Key_FlagFirstFall;	//高速落下モード(TRUEで有効)
+		int Key_LRMove;			//左右移動(-1左、0移動無し、1右移動)
+		int Key_LRRota;			//回転移動(-1反時計回り、0回転無し、1時計回り)
 	};
-	//�����u���b�N�̑ҋ@��̏��
+	//落下ブロックの待機列の情報
 	struct FallBlockInfo_Wait {
-		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//�u���b�N�z�u
-		int PlaceX, PlaceY;		//�����u���b�N�̒��S�ʒu�̍��W(�z���1,1�̏ꏊ)
-		int Flag_Rotate;		//��]�\���ǂ���(TRUE�ŉ�]�\)
+		BLOCK_TYPE BlockID[FALLBLOCK_SIZE][FALLBLOCK_SIZE];	//ブロック配置
+		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
+		int Flag_Rotate;		//回転可能かどうか(TRUEで回転可能)
 	};
 	
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
-	field_info Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//�v�Z��̃t�B�[���h���UseVirtualField=TRUE�Ŏg�p
+	field_info Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//計算上のフィールド情報UseVirtualField=TRUEで使用
 
-	SelectItem_pause pauseMenu = SelectItem_pause(Base_BB_getWINDOW_WIDTH()/2, 600);	//�|�[�Y���j���[�̍���
+	SelectItem_pause pauseMenu = SelectItem_pause(Base_BB_getWINDOW_WIDTH()/2, 600);	//ポーズメニューの項目
 
-	//�u���b�N�̌v�Z���[�v�Ŏg�p����ϐ�
-	int Loop_No;			//�v�Z���[�v�̂ǂ̏��������Ă��邩(-1�Ōv�Z���[�v���g�p)
-	GameCycle Loop_Next;	//�v�Z���[�v��Ɉڍs����Q�[���T�C�N��
+	//ブロックの計算ループで使用する変数
+	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
+	GameCycle Loop_Next;	//計算ループ後に移行するゲームサイクル
 
-	//�u���b�N�̑S�̈ړ��Ŏg�p����ϐ�
+	//ブロックの全体移動で使用する変数
 	BlockMoveMotion Block_AllMovedata;
 
-	//�t���C�e�L�X�g�\���N���X
+	//フライテキスト表示クラス
 	FlyText flyText;
 
-	//�X�R�A
+	//スコア
 	Score score;
 
-	int ChainCount = 0;	//�A���J�E���g
+	int ChainCount = 0;	//連鎖カウント
 
 
-	int gameWindow;	//�Q�[����ʂ�`�悷��n���h��
-	int Tex_BlockBack;				//�w�i�u���b�N(�u���b�N�̐F���Ȃ邾�����m�ɕ\�����邽�߂̔w�i�摜)
-	int Tex_BlockRED;				//�ԃu���b�N
-	int Tex_BlockRED_ARROW_X;		//�ԃu���b�N(���s���)
-	int Tex_BlockRED_ARROW_Y;		//�ԃu���b�N(�������)
-	int Tex_BlockRED_ARROW_XY;		//�ԃu���b�N(�΂߉E��)
-	int Tex_BlockRED_ARROW_XY2;		//�ԃu���b�N(�΂߉E��)
-	int Tex_BlockBLUE;				//�u���b�N
-	int Tex_BlockBLUE_ARROW_X;		//�u���b�N(���s���)
-	int Tex_BlockBLUE_ARROW_Y;		//�u���b�N(�������)
-	int Tex_BlockBLUE_ARROW_XY;		//�u���b�N(�΂߉E��)
-	int Tex_BlockBLUE_ARROW_XY2;	//�u���b�N(�΂߉E��)
-	int Tex_BlockYELLOW;			//���F�u���b�N
-	int Tex_BlockYELLOW_ARROW_X;	//���F�u���b�N(���s���)
-	int Tex_BlockYELLOW_ARROW_Y;	//���F�u���b�N(�������)
-	int Tex_BlockYELLOW_ARROW_XY;	//���F�u���b�N(�΂߉E��)
-	int Tex_BlockYELLOW_ARROW_XY2;	//���F�u���b�N(�΂߉E��)
-	int Tex_BlockGREEN;				//�΃u���b�N
-	int Tex_BlockGREEN_ARROW_X;		//�΃u���b�N(���s���)
-	int Tex_BlockGREEN_ARROW_Y;		//�΃u���b�N(�������)
-	int Tex_BlockGREEN_ARROW_XY;	//�΃u���b�N(�΂߉E��)
-	int Tex_BlockGREEN_ARROW_XY2;	//�΃u���b�N(�΂߉E��)
-	int Tex_BlockPURPLE;			//���u���b�N
-	int Tex_BlockPURPLE_ARROW_X;	//���u���b�N(���s���)
-	int Tex_BlockPURPLE_ARROW_Y;	//���u���b�N(�������)
-	int Tex_BlockPURPLE_ARROW_XY;	//���u���b�N(�΂߉E��)
-	int Tex_BlockPURPLE_ARROW_XY2;	//���u���b�N(�΂߉E��)
-	int Tex_BlockTREE;				//���؂̌`�u���b�N
-	int Tex_BlockBLACK;				//���u���b�N
-	int Tex_BlockRAINBOW;			//���F�u���b�N
-	int Tex_BlockBOMB;				//���e�u���b�N
-	int Tex_Block2BOMB;				//2���e�u���b�N
-	int Tex_BlockBOMB_Color;		//���F���e�u���b�N
-	int Tex_BlockFireEffect;		//���G�t�F�N�g�u���b�N
-	int Tex_BlockFireEffect2;		//���G�t�F�N�g�u���b�N2(�Y)
-	int Tex_BlockCenterEffect;		//��]�̒��S�ł��邱�Ƃ𕪂���悤�ɂ���G�t�F�N�g
-	int haikei;						//�w�i
-	int Tex_FieldBack;			//�t�B�[���h�w�i
+	int gameWindow;	//ゲーム画面を描画するハンドル
+	int Tex_BlockBack;				//背景ブロック(ブロックの色をなるだけ正確に表示するための背景画像)
+	int Tex_BlockRED;				//赤ブロック
+	int Tex_BlockRED_ARROW_X;		//赤ブロック(平行矢印)
+	int Tex_BlockRED_ARROW_Y;		//赤ブロック(垂直矢印)
+	int Tex_BlockRED_ARROW_XY;		//赤ブロック(斜め右上)
+	int Tex_BlockRED_ARROW_XY2;		//赤ブロック(斜め右下)
+	int Tex_BlockBLUE;				//青ブロック
+	int Tex_BlockBLUE_ARROW_X;		//青ブロック(平行矢印)
+	int Tex_BlockBLUE_ARROW_Y;		//青ブロック(垂直矢印)
+	int Tex_BlockBLUE_ARROW_XY;		//青ブロック(斜め右上)
+	int Tex_BlockBLUE_ARROW_XY2;	//青ブロック(斜め右下)
+	int Tex_BlockYELLOW;			//黄色ブロック
+	int Tex_BlockYELLOW_ARROW_X;	//黄色ブロック(平行矢印)
+	int Tex_BlockYELLOW_ARROW_Y;	//黄色ブロック(垂直矢印)
+	int Tex_BlockYELLOW_ARROW_XY;	//黄色ブロック(斜め右上)
+	int Tex_BlockYELLOW_ARROW_XY2;	//黄色ブロック(斜め右下)
+	int Tex_BlockGREEN;				//緑ブロック
+	int Tex_BlockGREEN_ARROW_X;		//緑ブロック(平行矢印)
+	int Tex_BlockGREEN_ARROW_Y;		//緑ブロック(垂直矢印)
+	int Tex_BlockGREEN_ARROW_XY;	//緑ブロック(斜め右上)
+	int Tex_BlockGREEN_ARROW_XY2;	//緑ブロック(斜め右下)
+	int Tex_BlockPURPLE;			//紫ブロック
+	int Tex_BlockPURPLE_ARROW_X;	//紫ブロック(平行矢印)
+	int Tex_BlockPURPLE_ARROW_Y;	//紫ブロック(垂直矢印)
+	int Tex_BlockPURPLE_ARROW_XY;	//紫ブロック(斜め右上)
+	int Tex_BlockPURPLE_ARROW_XY2;	//紫ブロック(斜め右下)
+	int Tex_BlockTREE;				//樹木の形ブロック
+	int Tex_BlockBLACK;				//黒ブロック
+	int Tex_BlockRAINBOW;			//虹色ブロック
+	int Tex_BlockBOMB;				//爆弾ブロック
+	int Tex_Block2BOMB;				//2爆弾ブロック
+	int Tex_BlockBOMB_Color;		//同色爆弾ブロック
+	int Tex_BlockFireEffect;		//炎エフェクトブロック
+	int Tex_BlockFireEffect2;		//炎エフェクトブロック2(炭)
+	int Tex_BlockCenterEffect;		//回転の中心であることを分かるようにするエフェクト
+	int haikei;						//背景
+	int Tex_FieldBack;			//フィールド背景
 
 	int BGM;				//BGM
 
 
-	PauseMode Flag_Pause;				//�|�[�Y��Ԃ��ǂ���(�Q�[���̐i�s�����ׂĒ�~���܂�)
-	PauseMode Flag_pauseRequest;		//�|�[�Y��Ԃ��ǂ����̃��N�G�X�g(�|�[�Y�����͂��ׂĂ̏����̍Ō�ōs������)
+	PauseMode Flag_Pause;				//ポーズ状態かどうか(ゲームの進行がすべて停止します)
+	PauseMode Flag_pauseRequest;		//ポーズ状態かどうかのリクエスト(ポーズ処理はすべての処理の最後で行うため)
 
 	
-	FallBlockInfo fallBlockInfo;			//�����u���b�N�̏��
-	FallBlockInfo_Wait waitBlockinfo[3];	//�ҋ@�u���b�N�̏��
+	FallBlockInfo fallBlockInfo;			//落下ブロックの情報
+	FallBlockInfo_Wait waitBlockinfo[3];	//待機ブロックの情報
 
-	PolygonPoints2 lay;			//�j������̃G�t�F�N�g���
-	int Count_lay;				//�j������G�t�F�N�g�̌o�ߎ���
+	PolygonPoints2 lay;			//破壊光線のエフェクト情報
+	int Count_lay;				//破壊光線エフェクトの経過時間
 
-	GameCycle gameCycle;		//�Q�[���T�C�N��
-	int gameCycleFirstCallFlag;	//�Q�[���T�C�N�����ύX���ꂽ�Ƃ���TRUE����������
+	GameCycle gameCycle;		//ゲームサイクル
+	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
-	RandomTable randomTable;	//�����e�[�u��
+	RandomTable randomTable;	//乱数テーブル
 
-	int Count_PlayTime;		//���ۂɑ�������Ă���o�߃t���[����(�|�[�Y�A�u���b�N�������ȊO�ŃJ�E���g�A�b�v���ꎞ��~����)
-	int Count_GameTime;		//�Q�[���o�߃t���[����(�|�[�Y�ŃJ�E���g�A�b�v���ꎞ��~����)
-	int Count_Time;			//�Q�[���o�߃t���[����
-	int Count_Pause;		//�|�[�Y���̃J�E���^
-	int Count_Turn;			//�o�߃^�[�����i�u���b�N�������ɉ��Z�j
+	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
+	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)
+	int Count_Time;			//ゲーム経過フレーム数
+	int Count_Pause;		//ポーズ時のカウンタ
+	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
 	void Draw();
-	void Draw_FallBlock();			//�����u���b�N�̕`��
-	void Draw_FieldBlock();			//�t�B�[���h�u���b�N�̕`��
-	void Draw_Status();				//�X�e�[�^�X�̕`��
-	void Draw_NextFallBlock();		//���̗����u���b�N�̕`��
-	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//�u���b�N��`�悷��(�C���Q�[�����W)
-	void DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale = 1);			//�e�N�X�`���𒼐ڎw�肵�ău���b�N��`�悷��(�C���Q�[�����W)
-	int Update_FieldBlock();		//�t�B�[���h�u���b�N�ׁ̍X�Ƃ����v�Z���[�v
-	int Update_MoveMotion();		//�ړ����[�V�����̍X�V(�ړ����[�V�������s��ꂽ�Ƃ���TRUE)
-	int Update_ChangeMotion();		//�ω����[�V�����̍X�V(�ω����[�V�������s��ꂽ�Ƃ���TRUE)
-	void Update_Lay_BlockDel();		//�j������G�t�F�N�g�̍X�V
-	void Update_Counter();			//�J�E���^�̃J�E���g�A�b�v
+	void Draw_FallBlock();			//落下ブロックの描画
+	void Draw_FieldBlock();			//フィールドブロックの描画
+	void Draw_Status();				//ステータスの描画
+	void Draw_NextFallBlock();		//次の落下ブロックの描画
+	void DrawBlock(double CenterX, double CenterY, BLOCK_TYPE type, double Scale = 1);	//ブロックを描画する(インゲーム座標)
+	void DrawBlock_Tex(double CenterX, double CenterY, int tex, double Scale = 1);			//テクスチャを直接指定してブロックを描画する(インゲーム座標)
+	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
+	int Update_MoveMotion();		//移動モーションの更新(移動モーションが行われたときはTRUE)
+	int Update_ChangeMotion();		//変化モーションの更新(変化モーションが行われたときはTRUE)
+	void Update_Lay_BlockDel();		//破壊光線エフェクトの更新
+	void Update_Counter();			//カウンタのカウントアップ
 	void Update();
-	void Update_Final();			//Update��ɌĂ΂��
-	int Update_FallBlock();			//�����u���b�N�̗�������(TRUE�ŗ����u���b�N�̗����I��)
+	void Update_Final();			//Update後に呼ばれる
+	int Update_FallBlock();			//落下ブロックの落下処理(TRUEで落下ブロックの落下終了)
 	void GameMain_Key();
 
-	void Block_Black_Func();		//�t�B�[���h�ɑ��݂��鍕�F�u���b�N�̐F�����肷��
-	void Block_Rainbow_Func();		//�t�B�[���h�ɑ��݂�����F�u���b�N�̐F�����肷��
-	void Block_BOMB_Func();			//�t�B�[���h�ɑ��݂��锚�e�u���b�N�𔚔j����
-	void Block_2BOMB_Func();		//�t�B�[���h�ɑ��݂���X���[���e�u���b�N�𔚔j����
-	void Block_BOMBColor_Func();	//�t�B�[���h�ɑ��݂��铯�F���e�u���b�N�𔚔j����
+	void Block_Black_Func();		//フィールドに存在する黒色ブロックの色を決定する
+	void Block_Rainbow_Func();		//フィールドに存在する虹色ブロックの色を決定する
+	void Block_BOMB_Func();			//フィールドに存在する爆弾ブロックを爆破する
+	void Block_2BOMB_Func();		//フィールドに存在するスリー爆弾ブロックを爆破する
+	void Block_BOMBColor_Func();	//フィールドに存在する同色爆弾ブロックを爆破する
 
-	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//�����u���b�N��X�������Ɉړ�(�߂�l�͎��ۂ̈ړ���)
-	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//�����u���b�N��X�������Ɉړ��\���ǂ����̎擾(�ړ��o�����<=MoveVal)
-	int FallBlock_MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//�����u���b�N��Y�������Ɉړ�(�߂�l�͎��ۂ̈ړ���)
-	int FallBlock_Rotate(int RotaVal);		//�����u���b�N����]������(��]��1�Ŏ��v����90�x)(�߂�l�͎��ۂ̉�]��)
-	void FallBlock_addField();				//�����u���b�N���t�B�[���h�u���b�N�ɕϊ�����(�܂�ݒu)
-	void Block_Gravity(int InGameOnly = TRUE);	//�t�B�[���h�u���b�N���d�͂ŗ���������(TRUE�ŃQ�[����ʓ��̂�)
-	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40, int Delay = 0);		//�t�B�[���h�u���b�N���폜����
-	int Block_Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//�w�肵�����W���w�肵���u���b�N�������ꍇ�ɍ폜
-	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//�A������t�B�[���h�u���b�N���폜����(Flag_Event��TRUE�ŏ����ɂ���Ĕ���������ʂ���������)(���������u���b�N�̐�)
-	int Block_Delete_OutScreen();//��ʊO�̃u���b�N�����ׂč폜����(���������u���b�N�̐�)
-	void under_Block();							//������u���b�N���킢�Ă���
-	void Lay_BlockDel();						//�j������Ńu���b�N��j�󂷂�
-	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField = FALSE);	//�אڂ��铯�F�u���b�N�̃J�E���g
-	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCount�Ŏg�p����}�[�J�[�e�[�u�����쐬����(�L���ȃG���A)(TRUE�ŉ��z�̖ʂ��g�p����)
-	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock = FALSE);		//�w�肵��2�̃u���b�N�����F�u���b�N���ǂ����̎擾(TRUE�œ��F)(FirstFlag��TRUE�F�̂���u���b�N�̂ݔ���)
-	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//�t�B�[���h�̃u���b�N�Ɉړ����[�V������ݒ肷��
-	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay);	//�t�B�[���h�̃u���b�N�ɕω����[�V������ݒ肷��(����P�̂Ŏg�p���Ď��̂��Ă��m��܂���)
-	void Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength, int Delay);				//�t�B�[���h�̃u���b�N�ɕω����[�V����(�ʏ�)��ݒ肷��
-	void Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength, int Delay);			//�t�B�[���h�̃u���b�N�ɕω����[�V����(�ʏ�)��ݒ肷��(�ω����w��)
-	void Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay);							//�t�B�[���h�̃u���b�N�ɕω����[�V����(����)��ݒ肷��
-	void Block_SetChangeMotion_SMALL(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay);								//�t�B�[���h�̃u���b�N�ɕω����[�V����(�������Ȃ��ď�����)��ݒ肷��
-	void setGameCycle(GameCycle gameCycle);			//�Q�[���T�C�N����ݒ肷��
-	void UpdateBlockRequest(GameCycle Next);		//�u���b�N�����X�V����悤�Ƀ��N�G�X�g
-	void Block_AllMoveRequest(int X, int Y);		//�t�B�[���h�S�̂̃u���b�N���w�肵���������ړ����郊�N�G�X�g������(�Q�[�����ꎞ��~���ē������܂�)
-	void Block_AllMove(int X, int Y);				//�t�B�[���h�S�̂̃u���b�N���w�肵���������ړ�����(��ʊO�ɏo�Ă��܂��u���b�N�͏��ł��܂�)
-	int JudgeGameOver();							//�Q�[���I�[�o�[�ɂȂ��Ă��邩�ǂ����̊m�F
-	int JudgeGameClear();							//�Q�[���N���A���ǂ����̊m�F(TRUE�Q�[���N���A)
-	int getBlockTexture(BLOCK_TYPE type);			//�u���b�N�^�C�v���e�N�X�`���n���h���̎擾
-	void Create_Wait_Block();						//�����u���b�N�̑ҋ@��̍쐬
-	BLOCK_TYPE GetRandomBlockType_FALL();			//�����_���Ńu���b�N�̎�ނ�Ԃ�
-	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//�����_���Ńu���b�N�̎�ނ�Ԃ�(�����畦���Ă���u���b�N�p)
-	void Virtualfield_Update();						//���z�t�B�[���h�����݂̃t�B�[���h�ƈ�v������
-	void setBlock_Rect(int x, int y, int w, int h);	//�w�肵���G���A�Ƀu���b�N��ݒu����(�������肪����Ȃ��悤�ɁA���㏑�������Őݒu���܂�)
-	int getBlock_Upper(int x);						//�w�肵��X���W�̈�ԏ�̃u���b�N��Y���W���擾����(�����Ă�����W�݂̂Ŕ��f)
-	int getBlock_maxUpper();						//�ő�̍����̃u���b�N��Y���W���擾����
+	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(移動出来る量<=MoveVal)
+	int FallBlock_MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+	int FallBlock_Rotate(int RotaVal);		//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
+	void FallBlock_addField();				//落下ブロックをフィールドブロックに変換する(つまり設置)
+	void Block_Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる(TRUEでゲーム画面内のみ)
+	int Block_Delete_Direct(int X, int Y, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40, int Delay = 0);		//フィールドブロックを削除する
+	int Block_Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionType PlayMotion = BlockChangeMotionType_NO, int MotionLengh = 40);	//指定した座標が指定したブロックだった場合に削除
+	int Block_Delete(int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);	//連続するフィールドブロックを削除する(Flag_EventをTRUEで消去によって発動する効果も発動する)(消去したブロックの数)
+	int Block_Delete_OutScreen();//画面外のブロックをすべて削除する(消去したブロックの数)
+	void under_Block();							//下からブロックがわいてくる
+	void Lay_BlockDel();						//破壊光線でブロックを破壊する
+	void SequenceCount(int x, int y, int ID, int n[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int *Counter, int UseVirtualField = FALSE);	//隣接する同色ブロックのカウント
+	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(TRUEで仮想の面を使用する)
+	int isSameColorBlock(BLOCK_TYPE type1, BLOCK_TYPE type2, int OnlyColorBlock = FALSE);		//指定した2個のブロックが同色ブロックかどうかの取得(TRUEで同色)(FirstFlagがTRUE色のあるブロックのみ判定)
+	void Block_SetMoveMotion(int x, int y, int FromX, int FromY, int ToX, int ToY, double a, double MaxSpeed);					//フィールドのブロックに移動モーションを設定する
+	void Block_SetChangeMotion(int x, int y, BlockChangeMotionType mtype, BLOCK_TYPE From, BLOCK_TYPE To, int MotionLength, int Delay);	//フィールドのブロックに変化モーションを設定する(これ単体で使用して事故っても知りません)
+	void Block_SetChangeMotion_NOMAL(int x, int y, BLOCK_TYPE To, int MotionLength, int Delay);				//フィールドのブロックに変化モーション(通常)を設定する
+	void Block_SetChangeMotion_NOMAL_From(int x, int y, BLOCK_TYPE from, int MotionLength, int Delay);			//フィールドのブロックに変化モーション(通常)を設定する(変化元指定)
+	void Block_SetChangeMotion_EXPLOSION(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay);							//フィールドのブロックに変化モーション(爆発)を設定する
+	void Block_SetChangeMotion_SMALL(int x, int y, int MotionLength, BLOCK_TYPE From, int Delay);								//フィールドのブロックに変化モーション(小さくなって消える)を設定する
+	void setGameCycle(GameCycle gameCycle);			//ゲームサイクルを設定する
+	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
+	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
+	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
+	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
+	int JudgeGameClear();							//ゲームクリアかどうかの確認(TRUEゲームクリア)
+	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
+	void Create_Wait_Block();						//落下ブロックの待機列の作成
+	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
+	Phase_GameMain::BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
+	void Virtualfield_Update();						//仮想フィールドを現在のフィールドと一致させる
+	void setBlock_Rect(int x, int y, int w, int h);	//指定したエリアにブロックを設置する(消去判定が入らないように、かつ上書き無しで設置します)
+	int getBlock_Upper(int x);						//指定したX座標の一番上のブロックのY座標を取得する(見えている座標のみで判断)
+	int getBlock_maxUpper();						//最大の高さのブロックのY座標を取得する
 public:
 
 
@@ -347,26 +347,26 @@ public:
 	void Finalize_Draw();
 	void Finalize_Update();
 
-	int Create_FallBlock();		//�����u���b�N�𐶐�����(�߂�l:������TRUE)
-	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL, int UseVirtualField = FALSE);			//�t�B�[���h�Ƀu���b�N��ǉ�(�폜)����(�ړ����[�V�����͍폜����܂�)
+	int Create_FallBlock();		//落下ブロックを生成する(戻り値:成功でTRUE)
+	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL, int UseVirtualField = FALSE);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
 
-	/*�ݒ�n*/
-	void Request_Pause(PauseMode pauseMode);	//�|�[�Y��Ԃ̃��N�G�X�g
-	void Delete_FallBlock();					//�����u���b�N�̖�����
+	/*設定系*/
+	void Request_Pause(PauseMode pauseMode);	//ポーズ状態のリクエスト
+	void Delete_FallBlock();					//落下ブロックの無効化
 
-	/*�擾�n*/
-	void Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double * IngameX, double * IngameY);	//�u���b�N�̍��W�H����C���Q�[���̍��W�̍��[���擾����(�֐��I�ɏo�����߁A���݂��Ȃ��͂��̃u���b�N�ʒu���v�Z�o���܂�)
-	PauseMode getPauseMode();		//�|�[�Y��Ԃ̎擾
-	int isFallBlock_Falling();		//�����u���b�N�����������ǂ����̎擾(TRUE�ŗ�����)
-	int isFallBlock_Enable();		//�����u���b�N���L�����ǂ����̎擾(TRUE�ŗL��)
-	int getFallBlock_Interval();	//�����u���b�N�̑O��̗�������̃C���^�[�o���̎擾(�����u���b�N�����݂���Ƃ���0���Ԃ�܂�)
-	int getCountPlayTime();			//���ۂɑ�������Ă���o�߃t���[�������擾����
-	int getCountGameTime();			//�Q�[���̌o�߃t���[�������擾(�N���A�Œ�~���܂�)
-	int getCountTime();				//�Q�[���̌o�߃t���[�������擾(�N���A���Ă���~���܂���)
-	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE, int UseVirtualField = FALSE);	//�w�肵�����W�̃u���b�N�̎擾(��3�����͉�ʊO���u���b�N�Ƃ��Ĕ��肷�邩�ǂ���TRUE����)(��4�����͎��ۂɕ`�悳���G���A�ȊO����ʊO�ɂ���ꍇTRUE,�u���b�N��񂪖����ʒu����ʊO�ɂ���ꍇ��FALSE��ݒ肷��)
-	int isBlock_PlayMoveMotion();		//�ړ����[�V�������̃u���b�N�����݂��邩�ǂ����̎擾(TRUE����)
-	int isBlock_PlayChangeMotion();		//�ω����[�V�������̃u���b�N�����݂��邩�ǂ����̎擾(TRUE����)
-	void Restart();						//���X�^�[�g
-	void RestoreGraphCallback();		//�t���X�N���[���ɕ��A���ɌĂ΂��
+	/*取得系*/
+	void Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double * IngameX, double * IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)
+	PauseMode getPauseMode();		//ポーズ状態の取得
+	int isFallBlock_Falling();		//落下ブロックが落下中かどうかの取得(TRUEで落下中)
+	int isFallBlock_Enable();		//落下ブロックが有効かどうかの取得(TRUEで有効)
+	int getFallBlock_Interval();	//落下ブロックの前回の落下からのインターバルの取得(落下ブロックが存在するときは0が返ります)
+	int getCountPlayTime();			//実際に操作をしている経過フレーム数を取得する
+	int getCountGameTime();			//ゲームの経過フレーム数を取得(クリアで停止します)
+	int getCountTime();				//ゲームの経過フレーム数を取得(クリアしても停止しません)
+	BLOCK_TYPE getBlockColor(int X, int Y, int useOutScreenBlock = FALSE, int InGame = TRUE, int UseVirtualField = FALSE);	//指定した座標のブロックの取得(第3引数は画面外をブロックとして判定するかどうかTRUE判定)(第4引数は実際に描画されるエリア以外を画面外にする場合TRUE,ブロック情報が無い位置を画面外にする場合はFALSEを設定する)
+	int isBlock_PlayMoveMotion();		//移動モーション中のブロックが存在するかどうかの取得(TRUE存在)
+	int isBlock_PlayChangeMotion();		//変化モーション中のブロックが存在するかどうかの取得(TRUE存在)
+	void Restart();						//リスタート
+	void RestoreGraphCallback();		//フルスクリーンに復帰時に呼ばれる
 };
 

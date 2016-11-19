@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "MainFunc.h"
 
 class Phase_TopMenu : public PhaseController
@@ -7,27 +7,27 @@ public:
 	Phase_TopMenu();
 	~Phase_TopMenu();
 
-	void Init_Draw();		//•`‰æˆ—‚Ì‰Šú‰»
-	void Init_Update();		//ŒvZˆ—‚Ì‰Šú‰»
-	void Draw();			//•`‰æˆ—
-	void Update();			//ŒvZˆ—
-	void Finalize_Draw();	//•`‰æ‚ÌI—¹ˆ—
-	void Finalize_Update();	//ŒvZ‚ÌI—¹ˆ—
+	void Init_Draw();		//æç”»å‡¦ç†ã®åˆæœŸåŒ–
+	void Init_Update();		//è¨ˆç®—å‡¦ç†ã®åˆæœŸåŒ–
+	void Draw();			//æç”»å‡¦ç†
+	void Update();			//è¨ˆç®—å‡¦ç†
+	void Finalize_Draw();	//æç”»ã®çµ‚äº†å‡¦ç†
+	void Finalize_Update();	//è¨ˆç®—ã®çµ‚äº†å‡¦ç†
 private:
-	//‚±‚±‚Éƒƒjƒ…[ƒNƒ‰ƒX‚ğ’è‹`‚·‚é
+	//ã“ã“ã«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©ã™ã‚‹
 	class SelectItem_menu : public SelectItem
 	{
 	public:
-		SelectItem_menu(int X, int Y) : SelectItem(X, Y) {};//ƒRƒ“ƒXƒgƒ‰ƒNƒ^(ƒX[ƒp[ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ–¾¦“I‚ÉŒÄ‚ñ‚Å‚¢‚Ü‚·)
+		SelectItem_menu(int X, int Y) : SelectItem(X, Y) {};//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’æ˜ç¤ºçš„ã«å‘¼ã‚“ã§ã„ã¾ã™)
 	private:
-		void Event_Select(int No) override;	//ƒ|[ƒYƒƒjƒ…[‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«(ƒI[ƒo[ƒ‰ƒCƒh)
+		void Event_Select(int No) override;	//ãƒãƒ¼ã‚ºãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ã(ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰)
 	};
 
-	SelectItem_menu menu = SelectItem_menu(Base_BB_getWINDOW_WIDTH()/2, 700);	//ƒƒjƒ…[€–ÚƒNƒ‰ƒX
+	SelectItem_menu menu = SelectItem_menu(Base_BB_getWINDOW_WIDTH()/2, 700);	//ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã‚¯ãƒ©ã‚¹
 
-	int Tex_backGround;	//”wŒi‰æ‘œ
+	int Tex_backGround;	//èƒŒæ™¯ç”»åƒ
 
 
-	void Key();				//ƒL[ˆ—
+	void Key();				//ã‚­ãƒ¼å‡¦ç†
 };
 

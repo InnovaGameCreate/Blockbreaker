@@ -1,6 +1,6 @@
-#include "MainFunc.h"
+ï»¿#include "MainFunc.h"
 
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 SelectItem::SelectItem(double x, double y)
 {
 	SelectedItem = 0;
@@ -16,7 +16,7 @@ SelectItem::SelectItem(double x, double y)
 	Centering = -1;
 }
 
-//€–Ú‚Ì’Ç‰Á
+//é …ç›®ã®è¿½åŠ 
 int SelectItem::addItem(TCHAR *str, size_t len, FONTTYPE font) {
 	int free = -1;
 	for (int i = 0; i < 20; i++) {
@@ -26,7 +26,7 @@ int SelectItem::addItem(TCHAR *str, size_t len, FONTTYPE font) {
 		}
 	}
 	if (free == -1) {
-		printLog_E(_T("—v‘f‚ªˆê”t‚Å‚·"));
+		printLog_E(_T("è¦ç´ ãŒä¸€æ¯ã§ã™"));
 		return -1;
 	}
 	_tcscpy_s(data[free].str, str);
@@ -36,60 +36,60 @@ int SelectItem::addItem(TCHAR *str, size_t len, FONTTYPE font) {
 	return 0;
 }
 
-//‘I‘ğ‚ğ—LŒøE–³Œø‚É‚·‚é(ƒL[‚Å‘€ì‚µ‚Ä€–Ú‚ğ•Ï‚¦‚ê‚È‚¢)
+//é¸æŠã‚’æœ‰åŠ¹ãƒ»ç„¡åŠ¹ã«ã™ã‚‹(ã‚­ãƒ¼ã§æ“ä½œã—ã¦é …ç›®ã‚’å¤‰ãˆã‚Œãªã„)
 void SelectItem::setSelectEnable(int b_flag) {
 	Select_Enable = (b_flag) ? true : false;
-	if (Select_Enable)	printLog_I(_T("SelectItem‚Ì‘I‘ğ‚ğy—LŒøz‚Éİ’è‚µ‚Ü‚µ‚½"));
-	else				printLog_I(_T("SelectItem‚Ì‘I‘ğ‚ğy–³Œøz‚Éİ’è‚µ‚Ü‚µ‚½"));
+	if (Select_Enable)	printLog_I(_T("SelectItemã®é¸æŠã‚’ã€æœ‰åŠ¹ã€‘ã«è¨­å®šã—ã¾ã—ãŸ"));
+	else				printLog_I(_T("SelectItemã®é¸æŠã‚’ã€ç„¡åŠ¹ã€‘ã«è¨­å®šã—ã¾ã—ãŸ"));
 }
 
-//‘I‘ğˆ©‘Ì‚ğ–³Œø‰»
+//é¸æŠè‚¢è‡ªä½“ã‚’ç„¡åŠ¹åŒ–
 void SelectItem::setEnable(int b_flag) {
 	Enable = (b_flag) ? true : false;
-	if (Enable)	printLog_I(_T("SelectItem‚ğy—LŒøz‚Éİ’è‚µ‚Ü‚µ‚½"));
-	else		printLog_I(_T("SelectItem‚ğy–³Œøz‚Éİ’è‚µ‚Ü‚µ‚½"));
+	if (Enable)	printLog_I(_T("SelectItemã‚’ã€æœ‰åŠ¹ã€‘ã«è¨­å®šã—ã¾ã—ãŸ"));
+	else		printLog_I(_T("SelectItemã‚’ã€ç„¡åŠ¹ã€‘ã«è¨­å®šã—ã¾ã—ãŸ"));
 }
 
-//‘I‘ğ‚Ìó‘Ô‚ğİ’è(0‚ÅƒXƒNƒ[ƒ‹1‚ÅƒXƒNƒ[ƒ‹‚µ‚È‚¢‚â‚Â)
+//é¸æŠã®çŠ¶æ…‹ã‚’è¨­å®š(0ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«1ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªã„ã‚„ã¤)
 void SelectItem::setScrolltype(int type) {
 	SelectType = type;
 }
 
-//“Á’è‚Ì‘I‘ğˆ‚ğ‘I‘ğ‰Â”\‚É‚·‚é‚©‚Ç‚¤‚©(true‚Å‰Â”\)
+//ç‰¹å®šã®é¸æŠè‚¢ã‚’é¸æŠå¯èƒ½ã«ã™ã‚‹ã‹ã©ã†ã‹(trueã§å¯èƒ½)
 void SelectItem::setItemEnable(bool b_Enable, int No) {
-	if (isEnableItem(No)) {//€–Ú‚ª‘¶İ‚·‚éê‡
+	if (isEnableItem(No)) {//é …ç›®ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
 		data[No].SelectEnable = (b_Enable) ? true : false;
-		if (data[No].SelectEnable == false && SelectedItem == No) {//–³Œø‚É‚µ‚½ê‡‚©‚Â‘I‘ğ‚µ‚Ä‚¢‚éê‡A‘I‘ğˆ‚ÌˆÊ’u‚ğ’²®‚·‚é
-			int num = SelectedItem + 1;//Ÿ‚Ì€–Ú‚ğ‘I‘ğ‚µ‚½‚±‚Æ‚É‚·‚é
+		if (data[No].SelectEnable == false && SelectedItem == No) {//ç„¡åŠ¹ã«ã—ãŸå ´åˆã‹ã¤é¸æŠã—ã¦ã„ã‚‹å ´åˆã€é¸æŠè‚¢ã®ä½ç½®ã‚’èª¿æ•´ã™ã‚‹
+			int num = SelectedItem + 1;//æ¬¡ã®é …ç›®ã‚’é¸æŠã—ãŸã“ã¨ã«ã™ã‚‹
 			for (; num < 20; num++) {
 				if (data[num].enable && data[num].SelectEnable)	break;
 			}
 			if (num < 20) {
-				SelectedItem = num;//€–Ú‚ª³í‚È‚ç‘I‘ğˆ‚ğ•Ï‚¦‚é
+				SelectedItem = num;//é …ç›®ãŒæ­£å¸¸ãªã‚‰é¸æŠè‚¢ã‚’å¤‰ãˆã‚‹
 				return;
 			}
-			//Ÿ‚Ì‘I‘ğˆ‚ª–³—‚¾‚Á‚½ê‡
-			num = SelectedItem - 1;//Ÿ‚Ì€–Ú‚ğ‘I‘ğ‚µ‚½‚±‚Æ‚É‚·‚é
+			//æ¬¡ã®é¸æŠè‚¢ãŒç„¡ç†ã ã£ãŸå ´åˆ
+			num = SelectedItem - 1;//æ¬¡ã®é …ç›®ã‚’é¸æŠã—ãŸã“ã¨ã«ã™ã‚‹
 			for (; num >= 0; num--) {
 				if (data[num].enable && data[num].SelectEnable)	break;
 			}
 			if (num >= 0) {
-				SelectedItem = num;//€–Ú‚ª³í‚È‚ç‘I‘ğˆ‚ğ•Ï‚¦‚é
+				SelectedItem = num;//é …ç›®ãŒæ­£å¸¸ãªã‚‰é¸æŠè‚¢ã‚’å¤‰ãˆã‚‹
 				return;
 			}
-			//Ÿ‚à‘O‚à–³—‚¾‚Á‚½ê‡
-			//ƒGƒ‰[
-			printLog_E(_T("‘I‘ğ‰Â”\ƒAƒCƒeƒ€‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½"));
+			//æ¬¡ã‚‚å‰ã‚‚ç„¡ç†ã ã£ãŸå ´åˆ
+			//ã‚¨ãƒ©ãƒ¼
+			printLog_E(_T("é¸æŠå¯èƒ½ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ"));
 		}
 	}
 }
 
-//ƒAƒCƒeƒ€‚Ì•‚ğİ’è‚·‚é
+//ã‚¢ã‚¤ãƒ†ãƒ ã®å¹…ã‚’è¨­å®šã™ã‚‹
 void SelectItem::sethaba(double haba) {
 	Haba = haba;
 }
 
-//€–Ú‚Ì’†‰›ˆÊ’u‚Ìİ’è(-1‚Å¶A0‚Å’†‰›A1‚Å‰E)
+//é …ç›®ã®ä¸­å¤®ä½ç½®ã®è¨­å®š(-1ã§å·¦ã€0ã§ä¸­å¤®ã€1ã§å³)
 void SelectItem::setCenteringMode(int centeringMode) {
 	if (centeringMode < 0) {
 		Centering = -1;
@@ -102,15 +102,15 @@ void SelectItem::setCenteringMode(int centeringMode) {
 	}
 }
 
-//€–Ú‚Ì•`‰æ
+//é …ç›®ã®æç”»
 void SelectItem::Draw() {
 	double x = X;
 	double y = Y;
-	int Count = 0;//ƒAƒCƒeƒ€‚ÌƒJƒEƒ“ƒg”
+	int Count = 0;//ã‚¢ã‚¤ãƒ†ãƒ ã®ã‚«ã‚¦ãƒ³ãƒˆæ•°
 	for (int i = 0; i < 20; i++) {
 		if (data[i].enable && data[i].SelectEnable) {
 			unsigned int color = GetColor(240, 240, 240);
-			int alpha = 128;//“§‰ß“x
+			int alpha = 128;//é€éåº¦
 			if (i == SelectedItem && Enable)	color = GetColor(224, (unsigned int)(160 * getGraph_Triangle(120)), (unsigned int)(160 * getGraph_Triangle(120)));
 			if (abs(getZettaichi(i)) == 2)							alpha = 128;
 			else if (abs(getZettaichi(i)) == 1 && SelectType == 0)	alpha = 194;
@@ -127,7 +127,7 @@ void SelectItem::Draw() {
 				Place_X = 0;
 			}
 			else if(Centering > 0){
-				//•`‰æ—\’è‚Ì•¶š—ñ‚Ì•‚ğæ“¾‚·‚é
+				//æç”»äºˆå®šã®æ–‡å­—åˆ—ã®å¹…ã‚’å–å¾—ã™ã‚‹
 				Place_X = -GetDrawStringWidthToHandle(data[i].str, ARRAY_LENGTH(data[i].str), Font_getHandle(data[i].font));
 			}
 			else {
@@ -144,18 +144,18 @@ void SelectItem::Draw() {
 	}
 }
 
-//ÀÛ‚É‘I‘ğ‚µ‚Ä‚¢‚é€–Ú‚ÆŒ»İ•`‰æ‚µ‚Ä‚¢‚é€–Ú‚Æ‚ÌÀÛ‚ÌŒ©‚½–Ú‚Ì·‚ğæ“¾(‘I‘ğ–³Œø€–Ú‚ğl—¶‚µ‚½·‚É‚È‚Á‚Ä‚¢‚é‚©æ“¾)
+//å®Ÿéš›ã«é¸æŠã—ã¦ã„ã‚‹é …ç›®ã¨ç¾åœ¨æç”»ã—ã¦ã„ã‚‹é …ç›®ã¨ã®å®Ÿéš›ã®è¦‹ãŸç›®ã®å·®ã‚’å–å¾—(é¸æŠç„¡åŠ¹é …ç›®ã‚’è€ƒæ…®ã—ãŸå·®ã«ãªã£ã¦ã„ã‚‹ã‹å–å¾—)
 int SelectItem::getZettaichi(int No) {
-	//‘I‘ğ€–Ú‚Æ‚Ìâ‘Î’l‚ÌŒvZ
-	if (No == SelectedItem)	return 0;//‘I‘ğ‚µ‚Ä‚¢‚é€–Ú‚Ìê‡‚Í·0
+	//é¸æŠé …ç›®ã¨ã®çµ¶å¯¾å€¤ã®è¨ˆç®—
+	if (No == SelectedItem)	return 0;//é¸æŠã—ã¦ã„ã‚‹é …ç›®ã®å ´åˆã¯å·®0
 	int Count = 0;
-	//‘I‘ğƒAƒCƒeƒ€‚ÌŒã‚ë•”•ª‚Ìê‡
+	//é¸æŠã‚¢ã‚¤ãƒ†ãƒ ã®å¾Œã‚éƒ¨åˆ†ã®å ´åˆ
 	for (int i = SelectedItem; i < No; i++) {
 		if (data[i].enable && data[i].SelectEnable) {
 			Count++;
 		}
 	}
-	//‘I‘ğƒAƒCƒeƒ€‚æ‚è‘O‚Ìê‡
+	//é¸æŠã‚¢ã‚¤ãƒ†ãƒ ã‚ˆã‚Šå‰ã®å ´åˆ
 	for (int i = SelectedItem - 1; i >= No; i--) {
 		if (data[i].enable && data[i].SelectEnable) {
 			Count--;
@@ -164,56 +164,56 @@ int SelectItem::getZettaichi(int No) {
 	return Count;
 }
 
-//€–Ú‚ÌXV(ƒL[”»’è‚Æ‚©)
+//é …ç›®ã®æ›´æ–°(ã‚­ãƒ¼åˆ¤å®šã¨ã‹)
 void SelectItem::Update() {
 	if (Select_Enable == false)	return;
 	if (Enable == false)		return;
 	if (getKeyBind(KEYBIND_UP) == 1) {
-		int num = SelectedItem - 1;//Ÿ‚Ì€–Ú‚ğ‘I‘ğ‚µ‚½‚±‚Æ‚É‚·‚é
+		int num = SelectedItem - 1;//æ¬¡ã®é …ç›®ã‚’é¸æŠã—ãŸã“ã¨ã«ã™ã‚‹
 		for (; num >= 0; num--) {
 			if (data[num].enable && data[num].SelectEnable)	break;
 		}
 		if (num >= 0) {
 			SoundEffect_Play(SE_TYPE_ChangeSelect);
-			SelectedItem = num;//€–Ú‚ª³í‚È‚ç‘I‘ğˆ‚ğ•Ï‚¦‚é
+			SelectedItem = num;//é …ç›®ãŒæ­£å¸¸ãªã‚‰é¸æŠè‚¢ã‚’å¤‰ãˆã‚‹
 		}
 	}
 	else if (getKeyBind(KEYBIND_DOWN) == 1) {
-		int num = SelectedItem + 1;//Ÿ‚Ì€–Ú‚ğ‘I‘ğ‚µ‚½‚±‚Æ‚É‚·‚é
+		int num = SelectedItem + 1;//æ¬¡ã®é …ç›®ã‚’é¸æŠã—ãŸã“ã¨ã«ã™ã‚‹
 		for (; num < 20; num++) {
 			if (data[num].enable && data[num].SelectEnable)	break;
 		}
 		if (num < 20) {
 			SoundEffect_Play(SE_TYPE_ChangeSelect);
-			SelectedItem = num;//€–Ú‚ª³í‚È‚ç‘I‘ğˆ‚ğ•Ï‚¦‚é
+			SelectedItem = num;//é …ç›®ãŒæ­£å¸¸ãªã‚‰é¸æŠè‚¢ã‚’å¤‰ãˆã‚‹
 		}
 	}
 	else if (getKeyBind(KEYBIND_SELECT) == 1 ) {
 		SoundEffect_Play(SE_TYPE_DecisionSelect);
-		Event_Select(SelectedItem);	//€–Ú‚ª‘I‘ğ‚³‚ê‚½‚Æ‚«‚ÌŠÖ”‚ğŒÄ‚Ô
+		Event_Select(SelectedItem);	//é …ç›®ãŒé¸æŠã•ã‚ŒãŸã¨ãã®é–¢æ•°ã‚’å‘¼ã¶
 	}
 }
 
-//‘I‘ğ‚µ‚Ä‚¢‚é€–Ú‚Ìæ“¾
+//é¸æŠã—ã¦ã„ã‚‹é …ç›®ã®å–å¾—
 int SelectItem::getSelecedtItem() {
 	return SelectedItem;
 }
 
-//€–Ú‚Ì‘I‘ğ
+//é …ç›®ã®é¸æŠ
 void SelectItem::setSelecedtItem(int No) {
 	if (isEnableItem(No)) {
 		SelectedItem = No;
-		printLog_I(_T("SelectItem‚Ì‰Šú‘I‘ğ‚ğy%dz‚Éİ’è‚µ‚Ü‚µ‚½"), SelectedItem);
+		printLog_I(_T("SelectItemã®åˆæœŸé¸æŠã‚’ã€%dã€‘ã«è¨­å®šã—ã¾ã—ãŸ"), SelectedItem);
 	}
 }
 
-//w’è‚³‚ê‚½”Ô†‚É€–Ú‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚Ìæ“¾
+//æŒ‡å®šã•ã‚ŒãŸç•ªå·ã«é …ç›®ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã®å–å¾—
 bool SelectItem::isEnableItem(int No) {
 	if (No < 0 || 20 <= No)	return false;
 	return data[No].enable;
 }
 
-//ÅŒã‚É•`‰æ‚µ‚½‚Æ‚«‚Ìƒ¿’l‚ğæ“¾
+//æœ€å¾Œã«æç”»ã—ãŸã¨ãã®Î±å€¤ã‚’å–å¾—
 int SelectItem::getItemAlpha(int No) {
 	if (isEnableItem(No)) {
 		return data[No].Alpha;

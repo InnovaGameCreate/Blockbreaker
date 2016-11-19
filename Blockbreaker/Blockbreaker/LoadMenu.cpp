@@ -1,37 +1,37 @@
-//ƒ[ƒh‰æ–ÊŠÖŒW
+ï»¿//ãƒ­ãƒ¼ãƒ‰ç”»é¢é–¢ä¿‚
 #include "MainFunc.h"
 
-static int LoadScreen;//ƒ[ƒh‰æ–Ê
-static int LoadScreen2;//ƒ[ƒh‰æ–Ê
+static int LoadScreen;//ãƒ­ãƒ¼ãƒ‰ç”»é¢
+static int LoadScreen2;//ãƒ­ãƒ¼ãƒ‰ç”»é¢
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void LoadMenu_Initialize() {
-	//ƒ[ƒh‰æ–Ê‚Ìƒ[ƒh
+	//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®ãƒ­ãƒ¼ãƒ‰
 	LoadScreen = LoadGraph(_T("Data/LoadMenu/LoadBack.png"));
 	if (LoadScreen == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("‰æ‘œƒ[ƒh¸”s(Data/LoadMenu/LoadBack.png)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ç”»åƒãƒ­ãƒ¼ãƒ‰å¤±æ•—(Data/LoadMenu/LoadBack.png)"));
 	}
-	//ƒ[ƒh‰æ–Ê‚Ìƒ[ƒh2
+	//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®ãƒ­ãƒ¼ãƒ‰2
 	LoadScreen2 = LoadGraph(_T("Data/LoadMenu/LoadBack2.png"));
 	if (LoadScreen2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("‰æ‘œƒ[ƒh¸”s(Data/LoadMenu/LoadBack2.png)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ç”»åƒãƒ­ãƒ¼ãƒ‰å¤±æ•—(Data/LoadMenu/LoadBack2.png)"));
 	}
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ƒ[ƒh‰æ–Ê‚Ì‰Šú‰»‚É¬Œ÷"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®åˆæœŸåŒ–ã«æˆåŠŸ"));
 }
 
-//ƒ[ƒh‰æ–Ê‚Ì•\¦
+//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®è¡¨ç¤º
 void LoadMenu_Draw() {
-	//ƒ[ƒh‰æ–Ê‚Ì•`‰æ
+	//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®æç”»
 	DrawGraph(0, 0, LoadScreen, 0);
 
-	DrawStringToHandle(760 + 4, 870 + 4, _T("Now Loadingc"), GetColor(30, 30, 30), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
-	DrawStringToHandle(760, 870, _T("Now Loadingc"), GetColor(0xcb, 0xff, 0x8e), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
-	ScreenFlip();		//— ‰æ–Ê‚ğ•\‰æ–Ê‚É”½‰f
+	DrawStringToHandle(760 + 4, 870 + 4, _T("Now Loadingâ€¦"), GetColor(30, 30, 30), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
+	DrawStringToHandle(760, 870, _T("Now Loadingâ€¦"), GetColor(0xcb, 0xff, 0x8e), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
+	ScreenFlip();		//è£ç”»é¢ã‚’è¡¨ç”»é¢ã«åæ˜ 
 }
 
-//ƒ[ƒh‰æ–Ê‚Ì•\¦(Å‰‚Ì‹N“®—p)
+//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®è¡¨ç¤º(æœ€åˆã®èµ·å‹•æ™‚ç”¨)
 void LoadMenu_Draw2() {
-	//ƒ[ƒh‰æ–Ê‚Ì•`‰æ
+	//ãƒ­ãƒ¼ãƒ‰ç”»é¢ã®æç”»
 	DrawGraph(0, 0, LoadScreen2, 0);
-	ScreenFlip();		//— ‰æ–Ê‚ğ•\‰æ–Ê‚É”½‰f
+	ScreenFlip();		//è£ç”»é¢ã‚’è¡¨ç”»é¢ã«åæ˜ 
 }

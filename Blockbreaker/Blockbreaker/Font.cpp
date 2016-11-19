@@ -1,50 +1,50 @@
-//ƒtƒHƒ“ƒgŠÖŒW
+ï»¿//ãƒ•ã‚©ãƒ³ãƒˆé–¢ä¿‚
 #include "MainFunc.h"
 
-static int GenJyuuGothicLHeavy_Edge25;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY25
-static int GenJyuuGothicLHeavy_Edge30;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY30
-static int GenJyuuGothicLHeavy_Edge35;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY35
-static int GenJyuuGothicLHeavy_Edge40;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY40
-static int GenJyuuGothicLHeavy_Edge50;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY50
-static int GenJyuuGothicLHeavy_Edge60;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY60
-static int GenJyuuGothicLHeavy_Edge70;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY70
-static int GenJyuuGothicLHeavy_Edge80;//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY80
+static int GenJyuuGothicLHeavy_Edge25;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º25
+static int GenJyuuGothicLHeavy_Edge30;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º30
+static int GenJyuuGothicLHeavy_Edge35;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º35
+static int GenJyuuGothicLHeavy_Edge40;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º40
+static int GenJyuuGothicLHeavy_Edge50;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º50
+static int GenJyuuGothicLHeavy_Edge60;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º60
+static int GenJyuuGothicLHeavy_Edge70;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º70
+static int GenJyuuGothicLHeavy_Edge80;//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º80
 
-static int SFSquareHeadCondensed_Edge15;//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY15
-static int SFSquareHeadCondensed_Edge25;//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY25
-static int SFSquareHeadCondensed_Edge35;//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY35
-static int SFSquareHeadCondensed_Edge45;//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY45
+static int SFSquareHeadCondensed_Edge15;//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º15
+static int SFSquareHeadCondensed_Edge25;//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º25
+static int SFSquareHeadCondensed_Edge35;//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º35
+static int SFSquareHeadCondensed_Edge45;//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º45
 
 static int LiadFlag = 0;
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void Font_init() {
 	if (LiadFlag == 0) {
-		// ********** ƒtƒHƒ“ƒg‚Ìƒ[ƒh **********
+		// ********** ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ­ãƒ¼ãƒ‰ **********
 		{
 			TCHAR *filename = _T("Data/Fonts/GenJyuuGothicL-Heavy.ttf");
-			// ƒtƒ@ƒCƒ‹‚ÌƒTƒCƒY‚ğ“¾‚é
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚µã‚¤ã‚ºã‚’å¾—ã‚‹
 			LONGLONG fsize = FileRead_size(filename);
-			if(fsize == -1)	Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ƒtƒ@ƒCƒ‹ƒTƒCƒY‚Ì“Ç‚İ‚İ‚É¸”s"));
+			if(fsize == -1)	Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã®èª­ã¿è¾¼ã¿ã«å¤±æ•—"));
 			DWORD FontFileSize = (DWORD)fsize;
-			// ƒtƒHƒ“ƒgƒtƒ@ƒCƒ‹‚ğŠJ‚­
+			// ãƒ•ã‚©ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 			int FontFileHandle = FileRead_open(filename);
-			// ƒtƒHƒ“ƒgƒf[ƒ^Ši”[—p‚Ìƒƒ‚ƒŠ—Ìˆæ‚ğŠm•Û
+			// ãƒ•ã‚©ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿æ ¼ç´ç”¨ã®ãƒ¡ãƒ¢ãƒªé ˜åŸŸã‚’ç¢ºä¿
 			void *Buffer = malloc(FontFileSize);
 			if (Buffer == NULL) {
-				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ƒƒ‚ƒŠ‚ÌŠm•Û‚É¸”s‚µ‚Ü‚µ‚½"));
+				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ¡ãƒ¢ãƒªã®ç¢ºä¿ã«å¤±æ•—ã—ã¾ã—ãŸ"));
 			}
 			else {
-				// ƒtƒHƒ“ƒgƒtƒ@ƒCƒ‹‚ğŠÛ‚²‚Æƒƒ‚ƒŠ‚É“Ç‚İ‚Ş
+				// ãƒ•ã‚©ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸¸ã”ã¨ãƒ¡ãƒ¢ãƒªã«èª­ã¿è¾¼ã‚€
 				FileRead_read(Buffer, FontFileSize, FontFileHandle);
-				//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+				//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 				FileRead_close(FontFileHandle);
-				// AddFontMemResourceExˆø”—p
+				// AddFontMemResourceExå¼•æ•°ç”¨
 				DWORD font_num = 0;
-				// ƒƒ‚ƒŠ‚É“Ç‚İ‚ñ‚¾ƒtƒHƒ“ƒgƒf[ƒ^‚ğƒVƒXƒeƒ€‚É’Ç‰Á
+				// ãƒ¡ãƒ¢ãƒªã«èª­ã¿è¾¼ã‚“ã ãƒ•ã‚©ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ã‚·ã‚¹ãƒ†ãƒ ã«è¿½åŠ 
 				if (AddFontMemResourceEx(Buffer, FontFileSize, NULL, &font_num) <= 0) {
-					// ƒtƒHƒ“ƒg“ÇƒGƒ‰[ˆ—
-					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ƒtƒHƒ“ƒg‚ğƒVƒXƒeƒ€‚É’Ç‰Áo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½"));
+					// ãƒ•ã‚©ãƒ³ãƒˆèª­è¾¼ã‚¨ãƒ©ãƒ¼å‡¦ç†
+					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ•ã‚©ãƒ³ãƒˆã‚’ã‚·ã‚¹ãƒ†ãƒ ã«è¿½åŠ å‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸ"));
 				}
 				free(Buffer);
 			}
@@ -52,71 +52,71 @@ void Font_init() {
 
 		{
 			TCHAR *filename = _T("Data/Fonts/SF_Square_Head_Condensed.ttf");
-			// ƒtƒ@ƒCƒ‹‚ÌƒTƒCƒY‚ğ“¾‚é
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚µã‚¤ã‚ºã‚’å¾—ã‚‹
 			DWORD FontFileSize = (DWORD)FileRead_size(filename);
-			// ƒtƒHƒ“ƒgƒtƒ@ƒCƒ‹‚ğŠJ‚­
+			// ãƒ•ã‚©ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 			int FontFileHandle = FileRead_open(filename);
-			// ƒtƒHƒ“ƒgƒf[ƒ^Ši”[—p‚Ìƒƒ‚ƒŠ—Ìˆæ‚ğŠm•Û
+			// ãƒ•ã‚©ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿æ ¼ç´ç”¨ã®ãƒ¡ãƒ¢ãƒªé ˜åŸŸã‚’ç¢ºä¿
 			void *Buffer = malloc(FontFileSize);
 			if (Buffer == NULL) {
-				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ƒƒ‚ƒŠ‚ÌŠm•Û‚É¸”s‚µ‚Ü‚µ‚½"));
+				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ¡ãƒ¢ãƒªã®ç¢ºä¿ã«å¤±æ•—ã—ã¾ã—ãŸ"));
 			}
 			else {
-				// ƒtƒHƒ“ƒgƒtƒ@ƒCƒ‹‚ğŠÛ‚²‚Æƒƒ‚ƒŠ‚É“Ç‚İ‚Ş
+				// ãƒ•ã‚©ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸¸ã”ã¨ãƒ¡ãƒ¢ãƒªã«èª­ã¿è¾¼ã‚€
 				FileRead_read(Buffer, FontFileSize, FontFileHandle);
-				//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+				//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 				FileRead_close(FontFileHandle);
-				// AddFontMemResourceExˆø”—p
+				// AddFontMemResourceExå¼•æ•°ç”¨
 				DWORD font_num = 0;
-				// ƒƒ‚ƒŠ‚É“Ç‚İ‚ñ‚¾ƒtƒHƒ“ƒgƒf[ƒ^‚ğƒVƒXƒeƒ€‚É’Ç‰Á
+				// ãƒ¡ãƒ¢ãƒªã«èª­ã¿è¾¼ã‚“ã ãƒ•ã‚©ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ã‚·ã‚¹ãƒ†ãƒ ã«è¿½åŠ 
 				if (AddFontMemResourceEx(Buffer, FontFileSize, NULL, &font_num) <= 0) {
-					// ƒtƒHƒ“ƒg“ÇƒGƒ‰[ˆ—
-					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ƒtƒHƒ“ƒg‚ğƒVƒXƒeƒ€‚É’Ç‰Áo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½"));
+					// ãƒ•ã‚©ãƒ³ãƒˆèª­è¾¼ã‚¨ãƒ©ãƒ¼å‡¦ç†
+					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ•ã‚©ãƒ³ãƒˆã‚’ã‚·ã‚¹ãƒ†ãƒ ã«è¿½åŠ å‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸ"));
 				}
 			}
 			free(Buffer);
 		}
 
 
-		ChangeFont(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), DX_CHARSET_DEFAULT);
+		ChangeFont(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), DX_CHARSET_DEFAULT);
 		ChangeFont(_T("SF Square Head Condensed"), DX_CHARSET_DEFAULT);
 
 		ChangeFontType(DX_FONTTYPE_EDGE);
 		LiadFlag = 1;
 	}
 
-	GenJyuuGothicLHeavy_Edge25 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 25, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge30 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 30, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge35 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 35, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge40 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 40, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge50 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge60 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 60, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge70 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
-	GenJyuuGothicLHeavy_Edge80 = CreateFontToHandle(_T("Œ¹ŒKƒSƒVƒbƒNL Heavy"), 80, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge25 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 25, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge30 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 30, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge35 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 35, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge40 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 40, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge50 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 50, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge60 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 60, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge70 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 70, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
+	GenJyuuGothicLHeavy_Edge80 = CreateFontToHandle(_T("æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavy"), 80, -1, DX_FONTTYPE_ANTIALIASING_EDGE_4X4, -1, 2, 0, -1);
 
 	SFSquareHeadCondensed_Edge15 = CreateFontToHandle(_T("SF Square Head Condensed"), 15, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge25 = CreateFontToHandle(_T("SF Square Head Condensed"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge35 = CreateFontToHandle(_T("SF Square Head Condensed"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge45 = CreateFontToHandle(_T("SF Square Head Condensed"), 45, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("Fonts‚Ì‰Šú‰»ˆ—Š®—¹"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("Fontsã®åˆæœŸåŒ–å‡¦ç†å®Œäº†"));
 
 
 }
 
-//‰e•t‚«•¶š—ñ‚Ì•`‰æ
+//å½±ä»˜ãæ–‡å­—åˆ—ã®æç”»
 void Font_DrawStringWithShadow(double x, double y, const TCHAR *String, unsigned int Color, unsigned int ShadowColor, FONTTYPE Fonttype, double padding, unsigned int EdgeColor, int VerticalFlag) {
 	DrawStringToHandle((int)(x + padding), (int)(y + padding), String, ShadowColor, Font_getHandle(Fonttype), EdgeColor, VerticalFlag);
 	DrawStringToHandle((int)x, (int)y, String, Color, Font_getHandle(Fonttype), EdgeColor, VerticalFlag);
 }
 
-//‰e•t‚«•¶š—ñ•`‰æ(X‚Ì‚İ’†Sw’è)
+//å½±ä»˜ãæ–‡å­—åˆ—æç”»(Xã®ã¿ä¸­å¿ƒæŒ‡å®š)
 void Font_DrawStringCenterWithShadow(double Center_x, double y, const TCHAR *String, unsigned int Color, unsigned int ShadowColor, FONTTYPE Fonttype, double padding, unsigned int EdgeColor, int VerticalFlag) {
 	double Width = GetDrawStringWidthToHandle(String, (int)_tcslen(String), Font_getHandle(Fonttype));
 	Width /= 2.;
 	Font_DrawStringWithShadow(Center_x - Width, y, String, Color, ShadowColor, Fonttype, padding, EdgeColor, VerticalFlag);
 }
 
-//ƒtƒHƒ“ƒg‚Ìƒnƒ“ƒhƒ‹æ“¾
+//ãƒ•ã‚©ãƒ³ãƒˆã®ãƒãƒ³ãƒ‰ãƒ«å–å¾—
 int Font_getHandle(FONTTYPE font) {
 	switch (font) {
 	case FONTTYPE_GenJyuuGothicLHeavy_Edge25:

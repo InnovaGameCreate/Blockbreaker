@@ -1,4 +1,4 @@
-//•¡”‚Ì€–Ú‚Ì’†‚©‚çˆê‚Â‚ğ‘I‚Ô‚½‚ß‚ÌƒNƒ‰ƒX(ƒI[ƒo[ƒ‰ƒCƒh‚µ‚Äg—p‚·‚é)
+ï»¿//è¤‡æ•°ã®é …ç›®ã®ä¸­ã‹ã‚‰ä¸€ã¤ã‚’é¸ã¶ãŸã‚ã®ã‚¯ãƒ©ã‚¹(ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ä½¿ç”¨ã™ã‚‹)
 #pragma once
 #include "Enum.h"
 
@@ -6,38 +6,38 @@ class SelectItem
 {
 private:
 	struct SelectItem_data {
-		TCHAR str[100];//€–Ú‚É•\¦‚³‚ê‚é•¶š
-		bool enable;//‚»‚Ì€–Ú‚ª—LŒø‚©‚Ç‚¤‚©
-		int Alpha;	//ÅŒã‚É•`‰æ‚µ‚½ƒ¿’l
-		bool SelectEnable;//‘I‘ğ‰Â”\‚©‚Ç‚¤‚©
-		FONTTYPE font;	//€–Ú‚Ì•`‰æ‚Ég—p‚·‚éƒtƒHƒ“ƒg
+		TCHAR str[100];//é …ç›®ã«è¡¨ç¤ºã•ã‚Œã‚‹æ–‡å­—
+		bool enable;//ãã®é …ç›®ãŒæœ‰åŠ¹ã‹ã©ã†ã‹
+		int Alpha;	//æœ€å¾Œã«æç”»ã—ãŸÎ±å€¤
+		bool SelectEnable;//é¸æŠå¯èƒ½ã‹ã©ã†ã‹
+		FONTTYPE font;	//é …ç›®ã®æç”»ã«ä½¿ç”¨ã™ã‚‹ãƒ•ã‚©ãƒ³ãƒˆ
 	};
 
-	double X, Y;//•\¦‚·‚éÀ•W
+	double X, Y;//è¡¨ç¤ºã™ã‚‹åº§æ¨™
 	struct SelectItem_data data[20];
-	int SelectedItem;//Œ»İ‘I‘ğ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€”Ô†
+	int SelectedItem;//ç¾åœ¨é¸æŠã—ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ç•ªå·
 	bool Select_Enable;
 	bool Enable;
 	bool isEnableItem(int No);
-	int SelectType;//‘I‘ğ‚Ìó‘Ô(0‚ÅƒXƒNƒ[ƒ‹1‚ÅƒXƒNƒ[ƒ‹‚µ‚È‚¢‚â‚Â)
+	int SelectType;//é¸æŠã®çŠ¶æ…‹(0ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«1ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªã„ã‚„ã¤)
 	double Haba;
-	int Centering;	//€–Ú‚Ì‘µ‚¦‚éˆÊ’u(-1‚Å¶A0‚Å’†‰›A1‚Å‰E)
+	int Centering;	//é …ç›®ã®æƒãˆã‚‹ä½ç½®(-1ã§å·¦ã€0ã§ä¸­å¤®ã€1ã§å³)
 	int getZettaichi(int No);
 public:
-	SelectItem(double x, double y);	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^(•\¦À•W)
-	int addItem(TCHAR *str, size_t len, FONTTYPE font = FONTTYPE_GenJyuuGothicLHeavy_Edge60);//€–Ú‚Ì’Ç‰Á(•¶š—ñA€–Ú‚ª‘I‘ğ‚³‚ê‚½‚Æ‚«A’Ç‰Á‚Ì•`‰æŠÖ”)
-	void setSelectEnable(int b_flag);	//‘I‘ğˆ‚ğ‘I‚×‚é‚æ‚¤‚É‚·‚é‚©‚Ç‚¤‚©
-	void setCenteringMode(int centeringMode);	//€–Ú‚Ì’†‰›ˆÊ’u‚Ìİ’è
+	SelectItem(double x, double y);	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(è¡¨ç¤ºåº§æ¨™)
+	int addItem(TCHAR *str, size_t len, FONTTYPE font = FONTTYPE_GenJyuuGothicLHeavy_Edge60);//é …ç›®ã®è¿½åŠ (æ–‡å­—åˆ—ã€é …ç›®ãŒé¸æŠã•ã‚ŒãŸã¨ãã€è¿½åŠ ã®æç”»é–¢æ•°)
+	void setSelectEnable(int b_flag);	//é¸æŠè‚¢ã‚’é¸ã¹ã‚‹ã‚ˆã†ã«ã™ã‚‹ã‹ã©ã†ã‹
+	void setCenteringMode(int centeringMode);	//é …ç›®ã®ä¸­å¤®ä½ç½®ã®è¨­å®š
 	void setEnable(int b_flag);
-	void setScrolltype(int type);	//‘I‘ğ‚Ìó‘Ô‚ğİ’è(0‚ÅƒXƒNƒ[ƒ‹1‚ÅƒXƒNƒ[ƒ‹‚µ‚È‚¢‚â‚Â)
+	void setScrolltype(int type);	//é¸æŠã®çŠ¶æ…‹ã‚’è¨­å®š(0ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«1ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªã„ã‚„ã¤)
 	void setItemEnable(bool b_Enable, int No);
 	void sethaba(double haba);
-	void Draw();					//•`‰æ
-	void Update();					//ŒvZ
-	int  getSelecedtItem();			//Œ»İ‘I‘ğ‚µ‚Ä‚¢‚é€–Ú‚Ìæ“¾
-	void setSelecedtItem(int No);	//€–Ú‚Ì‘I‘ğ
-	int getItemAlpha(int No);		//ÅŒã‚É•`‰æ‚µ‚½‚Æ‚«‚Ìƒ¿’l‚ğæ“¾
+	void Draw();					//æç”»
+	void Update();					//è¨ˆç®—
+	int  getSelecedtItem();			//ç¾åœ¨é¸æŠã—ã¦ã„ã‚‹é …ç›®ã®å–å¾—
+	void setSelecedtItem(int No);	//é …ç›®ã®é¸æŠ
+	int getItemAlpha(int No);		//æœ€å¾Œã«æç”»ã—ãŸã¨ãã®Î±å€¤ã‚’å–å¾—
 
-	virtual void Event_Select(int ItemNo) {};		//‘I‘ğ€–Ú‚ª‘I‘ğ‚³‚ê‚½‚Æ‚«‚ÉÀs‚³‚ê‚é
-	virtual void Event_Draw(int ItemNo) {};			//Œ»İ‘I‘ğ‚µ‚Ä‚¢‚é€–Ú‚ª•`‰æ‚³‚ê‚½‚Æ‚«‚ÉÀs‚³‚ê‚é
+	virtual void Event_Select(int ItemNo) {};		//é¸æŠé …ç›®ãŒé¸æŠã•ã‚ŒãŸã¨ãã«å®Ÿè¡Œã•ã‚Œã‚‹
+	virtual void Event_Draw(int ItemNo) {};			//ç¾åœ¨é¸æŠã—ã¦ã„ã‚‹é …ç›®ãŒæç”»ã•ã‚ŒãŸã¨ãã«å®Ÿè¡Œã•ã‚Œã‚‹
 };

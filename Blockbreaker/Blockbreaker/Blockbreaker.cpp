@@ -1,41 +1,41 @@
-//ƒƒCƒ“ŠÖ”
+ï»¿//ãƒ¡ã‚¤ãƒ³é–¢æ•°
 #include "MainFunc.h"
 
-//ƒOƒ[ƒoƒ‹•Ï”‚Ì’è‹`
+//ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®å®šç¾©
 Phase_Default phase_Default;
 Phase_GameMain phase_GameMain;
 Phase_TopMenu phase_TopMenu;
 
 static void Init_AfterDXlibInit();
 
-//ƒƒCƒ“ŠÖ”(‚±‚±‚©‚çn‚Ü‚è‚Ü‚·)
+//ãƒ¡ã‚¤ãƒ³é–¢æ•°(ã“ã“ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
 	Base_BB_Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, GAMEVERSION);
 
-	//ƒRƒ“ƒpƒCƒ‹‚È‚Ç‚ğo—Í
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ÅIƒRƒ“ƒpƒCƒ‹‚Í%s %s‚Å‚·"), _T(__DATE__), _T(__TIME__));
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ƒRƒ“ƒpƒCƒ‹‚Ég—p‚µ‚½DXƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒo[ƒWƒ‡ƒ“‚Í%s‚Å‚·"), DXLIB_VERSION_STR_T);
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ŠJ”­‚Ég—p‚µ‚Ä‚¢‚éDXƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒo[ƒWƒ‡ƒ“‚Í%s‚Å‚·"), _T("3.16f"));
+	//ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ™‚åˆ»ãªã©ã‚’å‡ºåŠ›
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("æœ€çµ‚ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ™‚åˆ»ã¯%s %sã§ã™"), _T(__DATE__), _T(__TIME__));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã«ä½¿ç”¨ã—ãŸDXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã¯%sã§ã™"), DXLIB_VERSION_STR_T);
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("é–‹ç™ºã«ä½¿ç”¨ã—ã¦ã„ã‚‹DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã¯%sã§ã™"), _T("3.16f"));
 
-	Base_BB_setFunc_InitAfterDXlibInit(Init_AfterDXlibInit);	//DXƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»Œã‚Ì‰Šú‰»ˆ—ŠÖ”‚Ì“o˜^
-	//ƒtƒF[ƒY‚Ì’è‹`
+	Base_BB_setFunc_InitAfterDXlibInit(Init_AfterDXlibInit);	//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å¾Œã®åˆæœŸåŒ–å‡¦ç†é–¢æ•°ã®ç™»éŒ²
+	//ãƒ•ã‚§ãƒ¼ã‚ºã®å®šç¾©
 	Base_BB_setFaze(FAZE_TopMenu, &phase_TopMenu);
 	Base_BB_setFaze(FAZE_GameMain, &phase_GameMain);
 
-	Base_BB_MainLoop();	//ƒƒCƒ“ƒ‹[ƒv(–³ŒÀ)
+	Base_BB_MainLoop();	//ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—(ç„¡é™)
 
 	return 0;
 }
 
-#pragma region ‚¢‚¶‚ç‚È‚­‚Ä—Ç‚¢ŠÖ”ŒQ
+#pragma region ã„ã˜ã‚‰ãªãã¦è‰¯ã„é–¢æ•°ç¾¤
 
-//DXƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»Œã‚És‚¤‰Šú‰»ˆ—
+//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å¾Œã«è¡Œã†åˆæœŸåŒ–å‡¦ç†
 static void Init_AfterDXlibInit() {
-	//‚±‚±‚ÅŠeƒ‚ƒWƒ…[ƒ‹‚Ì‰Šú‰»ˆ—‚ğs‚¤
-	SoundEffect_init();				//Œø‰Ê‰¹ŠÖŒW‚Ì‰Šú‰»
-	Font_init();					//ƒtƒHƒ“ƒgŠÖŒW‚Ì‰Šú‰»
-	ShaderBackGround_Initialize();	//ƒVƒF[ƒ_ŠÖ˜A‰Šú‰»
+	//ã“ã“ã§å„ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†
+	SoundEffect_init();				//åŠ¹æœéŸ³é–¢ä¿‚ã®åˆæœŸåŒ–
+	Font_init();					//ãƒ•ã‚©ãƒ³ãƒˆé–¢ä¿‚ã®åˆæœŸåŒ–
+	ShaderBackGround_Initialize();	//ã‚·ã‚§ãƒ¼ãƒ€é–¢é€£åˆæœŸåŒ–
 }
 
 #pragma endregion

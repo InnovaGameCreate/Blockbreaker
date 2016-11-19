@@ -1,93 +1,93 @@
-#pragma once
-//enum’è‹`
-//–½–¼‹K‘¥F"enum–¼"+_+"‘å•¶Žš‚ÅŽn‚Ü‚é—v‘f–¼"
+ï»¿#pragma once
+//enumå®šç¾©
+//å‘½åè¦å‰‡ï¼š"enumå"+_+"å¤§æ–‡å­—ã§å§‹ã¾ã‚‹è¦ç´ å"
 
-////ƒL[ƒoƒCƒ“ƒh
+////ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰
 //enum KEYBIND {
-//	KEYBIND_SELECT,			//€–Ú‚ÌŒˆ’è
-//	KEYBIND_PAUSE,			//ƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY
-//	KEYBIND_ROTAL,			//—Ž‰º‚·‚éƒuƒƒbƒN‚ð”½ŽžŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
-//	KEYBIND_ROTAR,			//—Ž‰º‚·‚éƒuƒƒbƒN‚ðŽžŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
-//	KEYBIND_UP,				//€–Ú‘I‘ð:ã
-//	KEYBIND_DOWN,			//€–Ú‘I‘ð:‰º/—Ž‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬
-//	KEYBIND_LEFT,			//€–Ú‘I‘ð:¶/—Ž‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®
-//	KEYBIND_RIGHT,			//€–Ú‘I‘ð:‰E/—Ž‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®
-//	KEYBIND_NUM				//ƒL[ƒoƒCƒ“ƒh‚Ì”
+//	KEYBIND_SELECT,			//é …ç›®ã®æ±ºå®š
+//	KEYBIND_PAUSE,			//ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º
+//	KEYBIND_ROTAL,			//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›žã‚Šã«å›žè»¢ã•ã›ã‚‹
+//	KEYBIND_ROTAR,			//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›žã‚Šã«å›žè»¢ã•ã›ã‚‹
+//	KEYBIND_UP,				//é …ç›®é¸æŠž:ä¸Š
+//	KEYBIND_DOWN,			//é …ç›®é¸æŠž:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ
+//	KEYBIND_LEFT,			//é …ç›®é¸æŠž:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•
+//	KEYBIND_RIGHT,			//é …ç›®é¸æŠž:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•
+//	KEYBIND_NUM				//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰ã®æ•°
 //};
 //
-////ƒtƒF[ƒYŠÖŒW
+////ãƒ•ã‚§ãƒ¼ã‚ºé–¢ä¿‚
 //enum FAZE {
-//	FAZE_Nothing,				//‰½‚à–³‚µ
-//	FAZE_TopMenu,				//ƒgƒbƒvƒƒjƒ…[
-//	FAZE_GameMain,				//ŽÀÛ‚ÌƒQ[ƒ€ƒvƒŒƒC‰æ–Ê
-//	FAZE_Manual,				//à–¾‘‰æ–Ê
-//	FAZE_NUM					//ƒtƒF[ƒY‚Ì”
+//	FAZE_Nothing,				//ä½•ã‚‚ç„¡ã—
+//	FAZE_TopMenu,				//ãƒˆãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+//	FAZE_GameMain,				//å®Ÿéš›ã®ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤ç”»é¢
+//	FAZE_Manual,				//èª¬æ˜Žæ›¸ç”»é¢
+//	FAZE_NUM					//ãƒ•ã‚§ãƒ¼ã‚ºã®æ•°
 //};
 //
-////ƒAƒiƒƒOƒXƒeƒBƒbƒN‚Ì‘€ìƒ‚[ƒh‚¢‚é‚©H
+////ã‚¢ãƒŠãƒ­ã‚°ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ“ä½œãƒ¢ãƒ¼ãƒ‰ã„ã‚‹ã‹ï¼Ÿ
 //enum ANALOGSTICKMODE {
-//	ANALOGSTICKMODE_NOMAL,	//Žg—p‚·‚é[“|‚µ‹ï‡‚É‰ž‚¶‚Ä‘¬‚³‚ð•ÏX‚·‚é]
-//	ANALOGSTICKMODE_VECTOR,	//Žg—p‚·‚é[Šp“x‚Ì‚ÝŽæ“¾‚µ‘¬‚³‚Íˆê’è‚É‚·‚é]
-//	ANALOGSTICKMODE_NOUSE,	//Žg—p‚µ‚È‚¢
-//	ANALOGSTICKMODE_NUM		//—v‘f‚ÌŒÂ”
+//	ANALOGSTICKMODE_NOMAL,	//ä½¿ç”¨ã™ã‚‹[å€’ã—å…·åˆã«å¿œã˜ã¦é€Ÿã•ã‚’å¤‰æ›´ã™ã‚‹]
+//	ANALOGSTICKMODE_VECTOR,	//ä½¿ç”¨ã™ã‚‹[è§’åº¦ã®ã¿å–å¾—ã—é€Ÿã•ã¯ä¸€å®šã«ã™ã‚‹]
+//	ANALOGSTICKMODE_NOUSE,	//ä½¿ç”¨ã—ãªã„
+//	ANALOGSTICKMODE_NUM		//è¦ç´ ã®å€‹æ•°
 //};
 //
 //
-////ƒtƒHƒ“ƒg‚ÌŽí—Þ
-////’Ç‰Á‚Ì–½–¼‹K‘¥F"‘å•¶Žš‚ÅŽn‚Ü‚é—v‘f–¼"‚Ì•”•ª‚Í"ƒtƒHƒ“ƒg–¼_ƒtƒHƒ“ƒg‚ÌÝ’è(ƒGƒbƒW•t‚«AƒtƒHƒ“ƒgƒTƒCƒY‚È‚Ç)"‚É‚È‚Á‚Ä‚¢‚Ü‚·
+////ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡ž
+////è¿½åŠ ã®å‘½åè¦å‰‡ï¼š"å¤§æ–‡å­—ã§å§‹ã¾ã‚‹è¦ç´ å"ã®éƒ¨åˆ†ã¯"ãƒ•ã‚©ãƒ³ãƒˆå_ãƒ•ã‚©ãƒ³ãƒˆã®è¨­å®š(ã‚¨ãƒƒã‚¸ä»˜ãã€ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºãªã©)"ã«ãªã£ã¦ã„ã¾ã™
 //enum FONTTYPE {
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge25,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY25
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge30,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY30
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge35,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY35
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge40,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY40
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge50,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY40
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge60,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY60
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge70,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY70
-//	FONTTYPE_GenJyuuGothicLHeavy_Edge80,	//Œ¹ŒKƒSƒVƒbƒNL HeavyƒGƒbƒW•t‚«ƒTƒCƒY80
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge25,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º25
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge30,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º30
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge35,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º35
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge40,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º40
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge50,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º40
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge60,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º60
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge70,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º70
+//	FONTTYPE_GenJyuuGothicLHeavy_Edge80,	//æºæ¡‘ã‚´ã‚·ãƒƒã‚¯L Heavyã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º80
 //
-//	FONTTYPE_SFSquareHeadCondensed_Edge15,	//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY15
-//	FONTTYPE_SFSquareHeadCondensed_Edge25,	//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY25
-//	FONTTYPE_SFSquareHeadCondensed_Edge35,	//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY35
-//	FONTTYPE_SFSquareHeadCondensed_Edge45,	//SF Square Head CondensedƒGƒbƒW•t‚«ƒTƒCƒY45
+//	FONTTYPE_SFSquareHeadCondensed_Edge15,	//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º15
+//	FONTTYPE_SFSquareHeadCondensed_Edge25,	//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º25
+//	FONTTYPE_SFSquareHeadCondensed_Edge35,	//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º35
+//	FONTTYPE_SFSquareHeadCondensed_Edge45,	//SF Square Head Condensedã‚¨ãƒƒã‚¸ä»˜ãã‚µã‚¤ã‚º45
 //};
 
-//Œø‰Ê‰¹‚ÌŽí—Þ
-//ƒGƒNƒXƒvƒ[ƒ‰[‚Åwavƒtƒ@ƒCƒ‹‚ðŒ©‚Ä’T‚µ‚â‚·‚¢‚æ‚¤‚É"‘å•¶Žš‚ÅŽn‚Ü‚é—v‘f–¼"‚ÍŽÀÛ‚Ìƒtƒ@ƒCƒ‹–¼‚Æˆê’v‚³‚¹‚Ä‚¢‚Ü‚·
+//åŠ¹æžœéŸ³ã®ç¨®é¡ž
+//ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ãƒ¼ã§wavãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¦‹ã¦æŽ¢ã—ã‚„ã™ã„ã‚ˆã†ã«"å¤§æ–‡å­—ã§å§‹ã¾ã‚‹è¦ç´ å"ã¯å®Ÿéš›ã®ãƒ•ã‚¡ã‚¤ãƒ«åã¨ä¸€è‡´ã•ã›ã¦ã„ã¾ã™
 enum SE_TYPE {
-	SE_TYPE_ChangeSelect,		//€–Ú‚Ì‘I‘ðŽˆ‚ðˆÚ“®‚·‚éŽž‚Ì‰¹
-	SE_TYPE_DecisionSelect,		//€–Ú‚ðŒˆ’è‚µ‚½Žž‚Ì‰¹
-	SE_TYPE_ButtonCancel,		//€–Ú‚ðƒLƒƒƒ“ƒZƒ‹‚µ‚½Žž‚Ì‰¹
-	SE_TYPE_OwnBarrier,			//Ž©•ª‚ªƒoƒŠƒA‚ð”­“®‚µ‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_OwnDeath,			//Ž©•ª‚ªŽ€–S‚µ‚½Žž‚Ì‰¹
-	SE_TYPE_Bulletfire1,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹1(˜A‘±—pH)
-	SE_TYPE_Bulletfire2,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹2(’·‚¢)
-	SE_TYPE_Bulletfire3,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹3(—é)
-	SE_TYPE_Bulletfire4,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹4(ƒŒ[ƒU[)
-	SE_TYPE_Bulletfire5,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹5(‘¾ŒÛ)
-	SE_TYPE_Bulletfire6,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹6(”½ŽË)
-	SE_TYPE_Bulletfire7,		//“G‚ª’e–‹‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹7(ƒŒ[ƒU[—\’›)
-	SE_TYPE_Shotfire,			//Ž©‹@‚ªƒVƒ‡ƒbƒg‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_Shotfire2,			//Ž©‹@‚ªƒVƒ‡ƒbƒg‚ð”­ŽË‚µ‚½‚Æ‚«‚Ì‰¹2
-	SE_TYPE_Graze,				//Ž©‹@‚ª‚©‚·‚è‚ð“ü‚ê‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_ShotHit,			//Ž©‹@‚ÌƒVƒ‡ƒbƒg‚ª“G‚É“–‚½‚Á‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_ShotHit2,			//Ž©‹@‚ÌƒVƒ‡ƒbƒg‚ª“G‚É“–‚½‚Á‚½‚Æ‚«‚Ì‰¹2
-	SE_TYPE_EnemyDeath,			//“G‚ªŽ€–S‚µ‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_EnemyDeath2,		//“G‚ªŽ€–S‚µ‚½‚Æ‚«‚Ì‰¹2
-	SE_TYPE_Pause,				//ƒ{[ƒYƒ{ƒ^ƒ“
-	SE_TYPE_Itemget,			//ƒAƒCƒeƒ€‚ðŽæ“¾‚µ‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_PowerUp,			//ƒpƒ[ƒAƒbƒv‚µ‚½‚Æ‚«‚Ì‰¹
-	SE_TYPE_Timeout,			//§ŒÀŽžŠÔ‚Ì‰¹
-	SE_TYPE_Timeout2,			//§ŒÀŽžŠÔ‚Ì‰¹2
-	SE_TYPE_Extend,				//1ƒAƒbƒv‚Ì‰¹
-	SE_TYPE_bomb_Muteki,		//–³“Gƒ{ƒ€‚Ì‰¹
-	SE_TYPE_Bonus,				//ƒ{[ƒiƒX‚Ì‰¹
-	SE_TYPE_GetBomb,			//ƒ{ƒ€Žæ“¾‚Ì‰¹
-	SE_TYPE_bomb_DamageFloor,	//ƒ_ƒ[ƒW°ƒ{ƒ€‚Ì‰¹
-	SE_TYPE_bomb_BarrierFloor,	//ƒoƒŠƒA°ƒ{ƒ€‚Ì‰¹
-	SE_TYPE_ChargeUP,			//ƒ`ƒƒ[ƒWUŒ‚‚Ì’iŠKUP‚Ì‰¹
-	SE_TYPE_ChargeOK,			//ƒ`ƒƒ[ƒWUŒ‚‚ÌƒŠƒLƒƒƒXƒgŠ®—¹‚Ì‰¹
-	SE_TYPE_Charge1,			//ƒ`ƒƒ[ƒWUŒ‚1‚ÌŒø‰Ê‰¹
-	SE_TYPE_Charge2,			//ƒ`ƒƒ[ƒWUŒ‚2‚ÌŒø‰Ê‰¹
-	SE_TYPE_Smallexplosion,		////¬”š”­‚ÌŒø‰Ê‰¹
-	SE_TYPE_NUM					//Œø‰Ê‰¹‚ÌŒÂ”(Žw’è‚µ‚½ê‡‚ÍŒø‰Ê‰¹–³‚µ)
+	SE_TYPE_ChangeSelect,		//é …ç›®ã®é¸æŠžè‚¢ã‚’ç§»å‹•ã™ã‚‹æ™‚ã®éŸ³
+	SE_TYPE_DecisionSelect,		//é …ç›®ã‚’æ±ºå®šã—ãŸæ™‚ã®éŸ³
+	SE_TYPE_ButtonCancel,		//é …ç›®ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸæ™‚ã®éŸ³
+	SE_TYPE_OwnBarrier,			//è‡ªåˆ†ãŒãƒãƒªã‚¢ã‚’ç™ºå‹•ã—ãŸã¨ãã®éŸ³
+	SE_TYPE_OwnDeath,			//è‡ªåˆ†ãŒæ­»äº¡ã—ãŸæ™‚ã®éŸ³
+	SE_TYPE_Bulletfire1,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³1(é€£ç¶šç”¨ï¼Ÿ)
+	SE_TYPE_Bulletfire2,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³2(é•·ã„)
+	SE_TYPE_Bulletfire3,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³3(éˆ´)
+	SE_TYPE_Bulletfire4,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³4(ãƒ¬ãƒ¼ã‚¶ãƒ¼)
+	SE_TYPE_Bulletfire5,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³5(å¤ªé¼“)
+	SE_TYPE_Bulletfire6,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³6(åå°„)
+	SE_TYPE_Bulletfire7,		//æ•µãŒå¼¾å¹•ã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³7(ãƒ¬ãƒ¼ã‚¶ãƒ¼äºˆå…†)
+	SE_TYPE_Shotfire,			//è‡ªæ©ŸãŒã‚·ãƒ§ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³
+	SE_TYPE_Shotfire2,			//è‡ªæ©ŸãŒã‚·ãƒ§ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã¨ãã®éŸ³2
+	SE_TYPE_Graze,				//è‡ªæ©ŸãŒã‹ã™ã‚Šã‚’å…¥ã‚ŒãŸã¨ãã®éŸ³
+	SE_TYPE_ShotHit,			//è‡ªæ©Ÿã®ã‚·ãƒ§ãƒƒãƒˆãŒæ•µã«å½“ãŸã£ãŸã¨ãã®éŸ³
+	SE_TYPE_ShotHit2,			//è‡ªæ©Ÿã®ã‚·ãƒ§ãƒƒãƒˆãŒæ•µã«å½“ãŸã£ãŸã¨ãã®éŸ³2
+	SE_TYPE_EnemyDeath,			//æ•µãŒæ­»äº¡ã—ãŸã¨ãã®éŸ³
+	SE_TYPE_EnemyDeath2,		//æ•µãŒæ­»äº¡ã—ãŸã¨ãã®éŸ³2
+	SE_TYPE_Pause,				//ãƒœãƒ¼ã‚ºãƒœã‚¿ãƒ³
+	SE_TYPE_Itemget,			//ã‚¢ã‚¤ãƒ†ãƒ ã‚’å–å¾—ã—ãŸã¨ãã®éŸ³
+	SE_TYPE_PowerUp,			//ãƒ‘ãƒ¯ãƒ¼ã‚¢ãƒƒãƒ—ã—ãŸã¨ãã®éŸ³
+	SE_TYPE_Timeout,			//åˆ¶é™æ™‚é–“ã®éŸ³
+	SE_TYPE_Timeout2,			//åˆ¶é™æ™‚é–“ã®éŸ³2
+	SE_TYPE_Extend,				//1ã‚¢ãƒƒãƒ—ã®éŸ³
+	SE_TYPE_bomb_Muteki,		//ç„¡æ•µãƒœãƒ ã®éŸ³
+	SE_TYPE_Bonus,				//ãƒœãƒ¼ãƒŠã‚¹ã®éŸ³
+	SE_TYPE_GetBomb,			//ãƒœãƒ å–å¾—ã®éŸ³
+	SE_TYPE_bomb_DamageFloor,	//ãƒ€ãƒ¡ãƒ¼ã‚¸åºŠãƒœãƒ ã®éŸ³
+	SE_TYPE_bomb_BarrierFloor,	//ãƒãƒªã‚¢åºŠãƒœãƒ ã®éŸ³
+	SE_TYPE_ChargeUP,			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒã®æ®µéšŽUPã®éŸ³
+	SE_TYPE_ChargeOK,			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒã®ãƒªã‚­ãƒ£ã‚¹ãƒˆå®Œäº†ã®éŸ³
+	SE_TYPE_Charge1,			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒ1ã®åŠ¹æžœéŸ³
+	SE_TYPE_Charge2,			//ãƒãƒ£ãƒ¼ã‚¸æ”»æ’ƒ2ã®åŠ¹æžœéŸ³
+	SE_TYPE_Smallexplosion,		////å°çˆ†ç™ºã®åŠ¹æžœéŸ³
+	SE_TYPE_NUM					//åŠ¹æžœéŸ³ã®å€‹æ•°(æŒ‡å®šã—ãŸå ´åˆã¯åŠ¹æžœéŸ³ç„¡ã—)
 };

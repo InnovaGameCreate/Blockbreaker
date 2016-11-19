@@ -1,7 +1,7 @@
-//#include "FlyText.h"
+ï»¿//#include "FlyText.h"
 #include "MainFunc.h"
 
-//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì•\¦
+//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®è¡¨ç¤º
 
 
 FlyText::FlyText() {
@@ -11,15 +11,15 @@ FlyText::FlyText() {
 FlyText::~FlyText() {
 }
 
-//w’è‚µ‚½ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ‰Šú‰»
+//æŒ‡å®šã—ãŸãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’åˆæœŸåŒ–
 void FlyText::Initialize(int num) {
 	if (isEnable(num) == FALSE)	return;
 	FlyTextData[num].Enable = FALSE;
 }
 
-//ƒtƒ‰ƒCƒeƒLƒXƒg‚Ì’Ç‰Á(–ß‚è’l‚ÍŠÇ—”Ô†,-1‚Ì‚Í¸”s)
+//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®è¿½åŠ (æˆ»ã‚Šå€¤ã¯ç®¡ç†ç•ªå·,-1ã®æ™‚ã¯å¤±æ•—)
 int FlyText::addFlyText(double CenterX, double CenterY, int limit, FONTTYPE font, unsigned int Color, TCHAR *fmt, ...) {
-	//‹ó‚¢‚Ä‚¢‚é”z—ñ‚ğ’Tõ‚·‚é
+	//ç©ºã„ã¦ã„ã‚‹é…åˆ—ã‚’æ¢ç´¢ã™ã‚‹
 	int temp = -1;
 	for (int i = 0; i < FLYTEXT_MAXNUM; i++) {
 		if (isEnable(i) == FALSE) {
@@ -28,20 +28,20 @@ int FlyText::addFlyText(double CenterX, double CenterY, int limit, FONTTYPE font
 		}
 	}
 
-	//”z—ñ‚ª’T‚µ‚«‚ê‚È‚©‚Á‚½ê‡‚Í¸”s
+	//é…åˆ—ãŒæ¢ã—ãã‚Œãªã‹ã£ãŸå ´åˆã¯å¤±æ•—
 	if (temp == -1)	return -1;
 
-	//”z—ñ‚Ì‰Šú‰»‚ğs‚¤
+	//é…åˆ—ã®åˆæœŸåŒ–ã‚’è¡Œã†
 	Initialize(temp);
 
-	//ˆø”‚Ì‘®•t‚«•¶š—ñ‚©‚ç•¶š—ñ‚ğ¶¬‚·‚é
+	//å¼•æ•°ã®æ›¸å¼ä»˜ãæ–‡å­—åˆ—ã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆã™ã‚‹
 
-	va_list arg;//ˆø”‚ğŠi”[‚·‚éêŠ
+	va_list arg;//å¼•æ•°ã‚’æ ¼ç´ã™ã‚‹å ´æ‰€
 	va_start(arg, fmt);
-	_vstprintf_s(FlyTextData[temp].string, fmt, arg);  //Printf‚ÉŠY“–‚·‚é•”•ª
+	_vstprintf_s(FlyTextData[temp].string, fmt, arg);  //Printfã«è©²å½“ã™ã‚‹éƒ¨åˆ†
 	va_end(arg);
 
-	//‚»‚Ì‘¼‚Ìİ’è‚ğ”½‰f‚·‚é
+	//ãã®ä»–ã®è¨­å®šã‚’åæ˜ ã™ã‚‹
 	FlyTextData[temp].fonthandle = Font_getHandle(font);
 	FlyTextData[temp].Color = Color;
 	FlyTextData[temp].x = CenterX;
@@ -49,18 +49,18 @@ int FlyText::addFlyText(double CenterX, double CenterY, int limit, FONTTYPE font
 	FlyTextData[temp].Count = 0;
 	FlyTextData[temp].Limit = limit;
 
-	//ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ—LŒø‚É‚·‚é
+	//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’æœ‰åŠ¹ã«ã™ã‚‹
 	FlyTextData[temp].Enable = TRUE;
 	return temp;
 }
 
-//w’è‚µ‚½ƒtƒ‰ƒCƒeƒLƒXƒg‚ª—LŒø‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‚Å—LŒø)
+//æŒ‡å®šã—ãŸãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆãŒæœ‰åŠ¹ã‹ã©ã†ã‹ã®å–å¾—(TRUEã§æœ‰åŠ¹)
 int FlyText::isEnable(int num) {
 	if (num < 0 || FLYTEXT_MAXNUM <= num)	return FALSE;
 	return FlyTextData[num].Enable;
 }
 
-//ƒtƒ‰ƒCƒeƒLƒXƒg‚ğ•`‰æ‚·‚é
+//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»ã™ã‚‹
 void FlyText::Draw() {
 	for (auto dat : FlyTextData) {
 		if (dat.Enable) {
@@ -69,8 +69,8 @@ void FlyText::Draw() {
 			int Alpha = 255;
 			if (val > 0.7)	Alpha = (int)((1 - val) / 0.3 * 255);
 
-			//’†‰›À•W‚È‚Ì‚Å‚ª‹L˜^‚³‚ê‚Ä‚¢‚é‚Ì‚ÅA•`‰æˆÊ’u‚ğC³‚·‚é
-			float x = (float)(dat.x - GetDrawStringWidthToHandle(dat.string, (int)strlenDx(dat.string), dat.fonthandle) / 2.);	//’†SÀ•W‚©‚ç¶’[‚ÌÀ•W‚É•ÏŠ·
+			//ä¸­å¤®åº§æ¨™ãªã®ã§ãŒè¨˜éŒ²ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€æç”»ä½ç½®ã‚’ä¿®æ­£ã™ã‚‹
+			float x = (float)(dat.x - GetDrawStringWidthToHandle(dat.string, (int)strlenDx(dat.string), dat.fonthandle) / 2.);	//ä¸­å¿ƒåº§æ¨™ã‹ã‚‰å·¦ç«¯ã®åº§æ¨™ã«å¤‰æ›
 			float y = (float)(dat.y - GetFontAscentToHandle(dat.fonthandle) / 2.);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
 			DrawStringFToHandle((float)x, (float)(y - val * 20), dat.string, dat.Color, dat.fonthandle);
@@ -79,13 +79,13 @@ void FlyText::Draw() {
 	}
 }
 
-//ƒtƒ‰ƒCƒeƒLƒXƒg‚ÌŒvZˆ—
+//ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã®è¨ˆç®—å‡¦ç†
 void FlyText::Update() {
 	for (auto &dat : FlyTextData) {
 		if (dat.Enable) {
-			dat.Count++;	//ƒJƒEƒ“ƒg‚ğ‰ÁZ‚·‚é
+			dat.Count++;	//ã‚«ã‚¦ãƒ³ãƒˆã‚’åŠ ç®—ã™ã‚‹
 			if (dat.Limit < dat.Count) {
-				//ŠúŒÀ‚ª—ˆ‚½ê‡‚Íƒtƒ‰ƒCƒeƒLƒXƒg‚ğ–³Œø‚É‚·‚é
+				//æœŸé™ãŒæ¥ãŸå ´åˆã¯ãƒ•ãƒ©ã‚¤ãƒ†ã‚­ã‚¹ãƒˆã‚’ç„¡åŠ¹ã«ã™ã‚‹
 				dat.Enable = FALSE;
 			}
 		}

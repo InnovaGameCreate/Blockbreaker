@@ -1,11 +1,11 @@
-//ƒgƒbƒvƒƒjƒ…[ŠÖ˜A
+ï»¿//ãƒˆãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼é–¢é€£
 
 #include "MainFunc.h"
 
 
 Phase_TopMenu::Phase_TopMenu() {
-	menu.addItem(_T("ƒXƒ^[ƒg"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	menu.addItem(_T("ƒQ[ƒ€I—¹"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	menu.addItem(_T("ã‚¹ã‚¿ãƒ¼ãƒˆ"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	menu.addItem(_T("ã‚²ãƒ¼ãƒ çµ‚äº†"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	menu.setScrolltype(1);
 	menu.sethaba(50);
 	menu.setCenteringMode(0);
@@ -13,18 +13,18 @@ Phase_TopMenu::Phase_TopMenu() {
 
 Phase_TopMenu::~Phase_TopMenu() {}
 
-//•`‰æˆ—‚Ì‰Šú‰»
+//æç”»å‡¦ç†ã®åˆæœŸåŒ–
 void Phase_TopMenu::Init_Draw() {
-	if ((Tex_backGround = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s(Data/image/colorbom.png)"));
+	if ((Tex_backGround = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿å¤±æ•—(Data/image/colorbom.png)"));
 	menu.setEnable(TRUE);
 }
 
-//ŒvZˆ—‚Ì‰Šú‰»
+//è¨ˆç®—å‡¦ç†ã®åˆæœŸåŒ–
 void Phase_TopMenu::Init_Update() {
 
 }
 
-//•`‰æˆ—
+//æç”»å‡¦ç†
 void Phase_TopMenu::Draw() {
 	
 	DrawGraph(0, 0, Tex_backGround, FALSE);
@@ -33,34 +33,34 @@ void Phase_TopMenu::Draw() {
 	menu.Draw();
 }
 
-//ŒvZˆ—
+//è¨ˆç®—å‡¦ç†
 void Phase_TopMenu::Update() {
-	Key();	//ƒL[ˆ—‚ğs‚¤
+	Key();	//ã‚­ãƒ¼å‡¦ç†ã‚’è¡Œã†
 	menu.Update();
 }
 
-//•`‰æ‚ÌI—¹ˆ—
+//æç”»ã®çµ‚äº†å‡¦ç†
 void Phase_TopMenu::Finalize_Draw() {
 
 }
 
-//ŒvZ‚ÌI—¹ˆ—
+//è¨ˆç®—ã®çµ‚äº†å‡¦ç†
 void Phase_TopMenu::Finalize_Update() {
 
 }
 
-//ƒL[ˆ—
+//ã‚­ãƒ¼å‡¦ç†
 void Phase_TopMenu::Key() {
 
 }
 
-//ƒ|[ƒYƒƒjƒ…[‚Ì€–Ú‚ª‘I‘ğ‚³‚ê‚½‚Æ‚«‚ÉÀs‚³‚ê‚é
+//ãƒãƒ¼ã‚ºãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®é …ç›®ãŒé¸æŠã•ã‚ŒãŸã¨ãã«å®Ÿè¡Œã•ã‚Œã‚‹
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
-	case 0:	//ƒQ[ƒ€ƒXƒ^[ƒg
-		Changefaze(FAZE_GameMain, THREAD_Update);//ƒtƒF[ƒY•ÏX
+	case 0:	//ã‚²ãƒ¼ãƒ ã‚¹ã‚¿ãƒ¼ãƒˆ
+		Changefaze(FAZE_GameMain, THREAD_Update);//ãƒ•ã‚§ãƒ¼ã‚ºå¤‰æ›´
 		break;
-	case 1://ƒQ[ƒ€I—¹
+	case 1://ã‚²ãƒ¼ãƒ çµ‚äº†
 		ExitGameRequest();
 		break;
 	}
