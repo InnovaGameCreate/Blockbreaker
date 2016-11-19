@@ -193,7 +193,7 @@ private:
 		int PlaceX, PlaceY;		//落下ブロックの中心位置の座標(配列の1,1の場所)
 		int Flag_Rotate;		//回転可能かどうか(TRUEで回転可能)
 	};
-
+	
 
 	field_info field[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	field_info Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//計算上のフィールド情報UseVirtualField=TRUEで使用
@@ -328,6 +328,7 @@ private:
 	void Block_AllMoveRequest(int X, int Y);		//フィールド全体のブロックを指定した分だけ移動するリクエストをする(ゲームを一時停止して動かします)
 	void Block_AllMove(int X, int Y);				//フィールド全体のブロックを指定した分だけ移動する(画面外に出てしまうブロックは消滅します)
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
+	int JudgeGameClear();							//ゲームクリアかどうかの確認(TRUEゲームクリア)
 	int getBlockTexture(BLOCK_TYPE type);			//ブロックタイプよりテクスチャハンドルの取得
 	void Create_Wait_Block();						//落下ブロックの待機列の作成
 	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す

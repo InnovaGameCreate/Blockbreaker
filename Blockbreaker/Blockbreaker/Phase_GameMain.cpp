@@ -303,6 +303,12 @@ void Phase_GameMain::Draw() {
 		pauseMenu.Draw();
 	}
 	break;
+	case PauseMode_GameClear://ゲームクリア時
+		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 300, _T("そこまで！"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+		
+		//選択肢の項目の描画
+		pauseMenu.Draw();
+		break;
 	}
 }
 
@@ -628,10 +634,6 @@ void Phase_GameMain::Update() {
 			Block_AllMove(Block_AllMovedata.ToX, Block_AllMovedata.ToY);
 			Block_AllMovedata.Enable = FALSE;//移動を無効化(Block_AllMoveしてからすること！)
 
-			////ゲームオーバーの判定を行う
-			//if (JudgeGameOver() != 0) {
-			//	PauseRequest(PauseMode_GameOver);	//ポーズリクエスト
-			//}
 
 			UpdateBlockRequest(gameCycle);	//現在のゲームサイクルに割り込む形でブロックのアップデートを入れる
 		}
@@ -894,8 +896,13 @@ int Phase_GameMain::Update_FieldBlock() {
 		if (JudgeGameOver() != 0) {
 			//ゲームオーバーラインを超えたら破壊光線でブロックを破壊する
 			//Lay_BlockDel();
-			PauseRequest(PauseMode_GameOver);
+			Request_Pause(PauseMode_GameOver);
 			//UpdateBlockRequest(GameCycle_Update);
+		}
+		else if (JudgeGameClear() == TRUE) {
+			//クリア判定を行う
+			Request_Pause(PauseMode_GameClear);
+
 		}
 
 		if (gameCycleFirstCallFlag) {
@@ -2547,6 +2554,15 @@ int Phase_GameMain::JudgeGameOver() {
 	}
 
 	return 0;
+}
+
+//ゲームクリアかどうかの確認(TRUEゲームクリア)
+int Phase_GameMain::JudgeGameClear() {
+	if (score.getScore() > 10'0000) {
+		//スコアが一定以上でクリア判定を入れる
+		return TRUE;
+	}
+	return FALSE;
 }
 
 //落下ブロックの待機列の作成
