@@ -67,10 +67,11 @@ public://定数とかの宣言
 
 	//ポーズの種類
 	enum PauseMode {
-		PauseMode_NO,		//ポーズ状態になっていない(通常)
-		PauseMode_NOMAL,	//通常の尾イーズ(escでポーズするやつ)
-		PauseMode_GameOver,	//ゲームオーバー
-		PauseMode_NUM		//個数(リクエスト無し)
+		PauseMode_NO,			//ポーズ状態になっていない(通常)
+		PauseMode_NOMAL,		//通常のポーズ(escでポーズするやつ)
+		PauseMode_GameOver,		//ゲームオーバー
+		PauseMode_GameClear,	//ゲームクリア
+		PauseMode_NUM			//個数(リクエスト無し)
 	};
 
 	//ブロック変化モーションの種類
@@ -349,8 +350,8 @@ public:
 	int add_FraldBlock(int X, int Y, BLOCK_TYPE brock_type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL, int UseVirtualField = FALSE);			//フィールドにブロックを追加(削除)する(移動モーションは削除されます)
 
 	/*設定系*/
-	void PauseRequest(PauseMode pauseMode);	//ポーズ状態のリクエスト
-	void Delete_FallBlock();				//落下ブロックの無効化
+	void Request_Pause(PauseMode pauseMode);	//ポーズ状態のリクエスト
+	void Delete_FallBlock();					//落下ブロックの無効化
 
 	/*取得系*/
 	void Convert_Ingame_FromBlock(int blockX, int blockY, double XVal, double YVal, double * IngameX, double * IngameY);	//ブロックの座標？からインゲームの座標の左端を取得する(関数的に出すため、存在しないはずのブロック位置も計算出来ます)

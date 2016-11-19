@@ -604,6 +604,9 @@ void Phase_GameMain::Update() {
 	case PauseMode_GameOver:
 		pauseMenu.Update();
 		return;
+	case PauseMode_GameClear:
+		pauseMenu.Update();
+		return;
 	}
 
 	//破壊光線エフェクトの更新
@@ -637,7 +640,7 @@ void Phase_GameMain::Update() {
 
 	switch (gameCycle) {
 	case GameCycle_FALL:
-		if (getFallBlock_Interval() > 30) {
+		if (getFallBlock_Interval() > 0) {
 			Count_Turn++;
 			Create_FallBlock();//前回の落下ブロック終了から一定時間後に落下ブロックの再出現
 		}
@@ -1093,13 +1096,13 @@ void Phase_GameMain::GameMain_Key() {
 		if (getPauseMode() == PauseMode_NOMAL) {
 			//ポーズ状態解除
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
-			PauseRequest(PauseMode_NO);	//ポーズ状態
+			Request_Pause(PauseMode_NO);	//ポーズ状態
 		}
 		else if (getPauseMode() == PauseMode_NO) {
 			//ポーズに
 			pauseMenu.setSelecedtItem(0);
 			SoundEffect_Play(SE_TYPE_Pause);
-			PauseRequest(PauseMode_NOMAL);	//ポーズ状態
+			Request_Pause(PauseMode_NOMAL);	//ポーズ状態
 		}
 	}
 
@@ -1158,7 +1161,7 @@ Phase_GameMain::PauseMode Phase_GameMain::getPauseMode() {
 }
 
 //ポーズ状態のリクエスト
-void Phase_GameMain::PauseRequest(PauseMode pauseMode) {
+void Phase_GameMain::Request_Pause(PauseMode pauseMode) {
 
 	switch (pauseMode) {
 	case PauseMode_NO:
@@ -1172,6 +1175,10 @@ void Phase_GameMain::PauseRequest(PauseMode pauseMode) {
 		break;
 	case PauseMode_GameOver:
 		printLog_I(_T("【ゲームオーバーポーズ】リクエスト"));
+		pauseMenu.setItemEnable(FALSE, 0);	//項目0を無効化
+		break;
+	case PauseMode_GameClear:
+		printLog_I(_T("【ゲームクリアポーズ】リクエスト"));
 		pauseMenu.setItemEnable(FALSE, 0);	//項目0を無効化
 		break;
 	}
@@ -2699,7 +2706,7 @@ void Phase_GameMain::Virtualfield_Update() {
 void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
 	switch (No) {
 	case 0://再開ボタン
-		phase_GameMain.PauseRequest(PauseMode_NO);
+		phase_GameMain.Request_Pause(PauseMode_NO);
 		break;
 	case 1://やり直すボタン
 		phase_GameMain.Restart();
