@@ -88,8 +88,8 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 	GetGraphSizeF(srcImage, &RealX, &RealY);
 
 	float W, H;	//実際のテクスチャの大きさ
-	W = Phase_GameMain::BLOCK_SIZE;
-	H = Phase_GameMain::BLOCK_SIZE;
+	W = BLOCK_SIZE;
+	H = BLOCK_SIZE;
 	W = RealX;
 	H = RealY;
 
@@ -119,5 +119,5 @@ void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage
 	SetDrawScreen(t);
 
 	//ブロックの描画
-	DrawRectRotaGraphFast2((int)X, (int)Y, 0, 0, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE, Phase_GameMain::BLOCK_SIZE/2, Phase_GameMain::BLOCK_SIZE / 2, 1, 0, GrHandle, TRUE, FALSE);
+	DrawRectRotaGraphFast2((int)X, (int)Y, 0, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE/2, BLOCK_SIZE / 2, 1, 0, GrHandle, TRUE, FALSE);
 }

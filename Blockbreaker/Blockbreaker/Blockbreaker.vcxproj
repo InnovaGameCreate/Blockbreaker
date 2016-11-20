@@ -273,6 +273,11 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockChangeMotion.h" />
+    <ClInclude Include="BlockMoveMotion.h" />
+    <ClInclude Include="Block_Fall.h" />
+    <ClInclude Include="Block_Field.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="FlyText.h" />
@@ -284,9 +289,15 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Tex_Block.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Blockbreaker.cpp" />
+    <ClCompile Include="BlockChangeMotion.cpp" />
+    <ClCompile Include="BlockMoveMotion.cpp" />
+    <ClCompile Include="Block_Fall.cpp" />
+    <ClCompile Include="Block_Field.cpp" />
     <ClCompile Include="FlyText.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
@@ -305,6 +316,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseDebug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Tex_Block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Dxlib1.rc" />
