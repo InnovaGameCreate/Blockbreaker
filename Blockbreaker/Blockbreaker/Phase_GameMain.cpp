@@ -1138,7 +1138,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1156,7 +1156,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1174,7 +1174,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1182,7 +1182,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1200,7 +1200,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1208,7 +1208,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 									//フライテキストの生成
 									double X, Y;
 									Block_Field::Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
-									flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+50"));
+									flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("50"));
 									score.addScore(0, 50);
 									DelCount++;
 								}
@@ -1239,7 +1239,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						//フライテキストの生成
 						double X, Y;
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+100"));
+						flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("100"));
 						score.addScore(0, 100);
 						DelCount++;
 					}
@@ -1249,7 +1249,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						//フライテキストの生成
 						double X, Y;
 						Block_Field::Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
-						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("80"));
 						score.addScore(0, 80);
 						DelCount++;//上
 					}
@@ -1257,7 +1257,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						//フライテキストの生成
 						double X, Y;
 						Block_Field::Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
-						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("80"));
 						score.addScore(0, 80);
 						DelCount++;//下
 					}
@@ -1265,7 +1265,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						//フライテキストの生成
 						double X, Y;
 						Block_Field::Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
-						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("80"));
 						score.addScore(0, 80);
 						DelCount++;//左
 					}
@@ -1273,7 +1273,7 @@ int Phase_GameMain::Block_Delete(const int Len, int Flag_Event) {
 						//フライテキストの生成
 						double X, Y;
 						Block_Field::Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
-						flyText.addFlyText(X, Y, 30, FONTTYPE_GenJyuuGothicLHeavy_Edge25, GetColor(150, 150, 150), _T("+80"));
+						flyText.addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), _T("80"));
 						score.addScore(0, 80);
 						DelCount++;//右
 					}
