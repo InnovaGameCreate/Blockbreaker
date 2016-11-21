@@ -1738,3 +1738,15 @@ Tex_Block *Phase_GameMain::getTex_Block() {
 RandomTable *Phase_GameMain::getRandomTable() {
 	return &randomTable;
 }
+
+//全体移動によるXY方向のズレを取得する
+void Phase_GameMain::getAllPadding(double *paddingX, double *paddingY) {
+	if (Block_AllMovedata.isEnable()) {
+		if (paddingX != NULL)	*paddingX = Block_AllMovedata.getPointX();
+		if (paddingY != NULL)	*paddingY = Block_AllMovedata.getPointY();
+	}
+	else {
+		if (paddingX != NULL)	*paddingX = 0;
+		if (paddingY != NULL)	*paddingY = 0;
+	}
+}

@@ -32,7 +32,21 @@ int BlockMoveMotion::Create(int fromX, int fromY, int toX, int toY, double a, do
 	Count = 0;
 
 	Enable = TRUE;
-
+	
+	//移動モーションの初回計算
+	//移動する距離の計算
+	double fX, fY, tX, tY;
+	Block_Field::Convert_Ingame_FromBlock(FromX, FromY, 0.5, 0.5, &fX, &fY);
+	Block_Field::Convert_Ingame_FromBlock(ToX, ToY, 0.5, 0.5, &tX, &tY);
+	double MD = getMoveDistance(acceleration, MaxSpeed, Count);	//現在の移動距離
+	double FMD = getDistance(fX, fY, tX, tY);			//最終的な移動距離
+	double Rota = getRotation(FromX, FromY, ToX, ToY);	//角度の計算
+														//上の計算結果より、描画座標の計算
+	ansX = fX + MD * cos(deg_to_rad(Rota));
+	ansY = fY + MD * sin(deg_to_rad(Rota));
+	if (FMD <= MD) {//移動完了
+		Enable = FALSE;//移動を無効化
+	}
 
 	return TRUE;
 }

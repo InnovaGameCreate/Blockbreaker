@@ -198,5 +198,6 @@ public:
 	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
 	Tex_Block *getTex_Block();			//テクスチャの情報の取得
 	RandomTable *getRandomTable();		//乱数表の取得
+	void getAllPadding(double * paddingX, double * paddingY);	//全体移動によるXY方向のズレを取得する
 };
 

@@ -491,6 +491,13 @@ int Block_Fall::Create_FallBlock() {
 	Key_LRRota = 0;
 	Key_FlagFirstFall = FALSE;
 
+	//•`‰æî•ñ‚ğ‘‚«Š·‚¦‚é
+	double paddingX, paddingY;
+	phase_GameMain.getAllPadding(&paddingX, &paddingY);
+	Update_DrawData(paddingX, paddingY);
+
+
+
 	//—LŒø
 	Enable = TRUE;
 
