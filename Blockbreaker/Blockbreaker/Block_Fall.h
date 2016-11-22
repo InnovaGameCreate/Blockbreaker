@@ -17,11 +17,11 @@ public:
 	void Key();		//キー処理
 	void Restart();	//リスタート(初期化)
 
-	int Create_FallBlock();	//落下ブロックを生成する(戻り値:成功でTRUE)
-	int FallBlock_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-	int getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(|移動出来る量|<=MoveVal)(つまり0で移動不可)
-	int FallBlock_MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
-	int FallBlock_Rotate(int RotaVal);										//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
+	int Create();	//落下ブロックを生成する(戻り値:成功でTRUE)
+	int MoveX(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをX軸方向に移動(戻り値は実際の移動量)
+	int getValMoveX(int MoveVal, int CollisionFieldBlock = TRUE);	//落下ブロックがX軸方向に移動可能かどうかの取得(|移動出来る量|<=MoveVal)(つまり0で移動不可)
+	int MoveY(int MoveVal, int CollisionFieldBlock = TRUE);		//落下ブロックをY軸方向に移動(戻り値は実際の移動量)
+	int Rotate(int RotaVal);										//落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
 
 	int isEnable();		//落下ブロックが落下中かどうかの取得(落下中＝有効)
 	int getInterval();	//落下ブロックのインターバルの取得(落下中の場合は-1が返ります)
@@ -52,7 +52,7 @@ private:
 	int Key_LRMove;			//左右移動(-1左、0移動無し、1右移動)
 	int Key_LRRota;			//回転移動(-1反時計回り、0回転無し、1時計回り)
 
-	void FallBlock_addField();												//落下ブロックをフィールドブロックに変換する(つまり設置)
-	void Delete_FallBlock();												//落下ブロックの無効化
-	void Create_Wait_Block();												//落下ブロックの待機列の作成
+	void setToField();												//落下ブロックをフィールドブロックに変換する(つまり設置)
+	void Delete();												//落下ブロックの無効化
+	void Create_WaitBlock();												//落下ブロックの待機列の作成
 };

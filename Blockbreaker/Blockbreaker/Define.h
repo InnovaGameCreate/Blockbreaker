@@ -36,3 +36,9 @@ static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
 static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE / 2;	//落下するブロックの中心(基準)位置
 static const int BLOCK_DELETE_LEN = 4;			//削除するために必要な隣接するブロックの個数
 static const int BLOCK_DEFAULT_VAL = 6;			//ブロックの初期積載量
+
+
+/*各スコア*/
+static const int SCORE_DEL_ARROW = 50;	//矢印ブロックによって消去された時のスコア
+static const int SCORE_DEL_NOMAL = 100;	//普通に消えた
+static const int SCORE_DEL_OPTION = 80;	//隣接ブロックとして消えた

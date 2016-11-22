@@ -15,6 +15,21 @@ Block_Fall::~Block_Fall() {
 void Block_Fall::Draw() {
 	if (!isEnable())	return;	//無効の場合は何もしない
 
+	//落下ブロックの範囲を描画する
+	if (phase_GameMain.isDebugMode()) {//デバッグが有効なとき
+		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
+			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
+				double X, Y;
+				Block_Field::Convert_Ingame_FromBlock(PlaceX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), 0, 0, &X, &Y);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 50);
+				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), TRUE);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				DrawBox((int)(X + 2), (int)(Y + 2), (int)(X + BLOCK_SIZE - 1), (int)(Y + BLOCK_SIZE - 1), GetColor(0xef, 0xb8, 0x90), FALSE);
+			}
+		}
+	}
+
+	//落下予想地点のブロックを描画する
 	for (int i = 0; i < ARRAY_LENGTH(BlockID_FallPoint); i++) {
 		//有効なブロックのみ描画処理を入れる
 		if (!BlockID_FallPoint[i].isEnable())	continue;
@@ -25,7 +40,7 @@ void Block_Fall::Draw() {
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
-	//ブロックの落下予想地点にブロックを描画する
+	//落下ブロック本体を描画する
 	for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 		int ShadowDrawDFlag = FALSE;
 		int yCount = 0;	//y方向に存在するブロックの数
@@ -87,33 +102,33 @@ int Block_Fall::Update() {
 	if (FallCount < 0)		FallCount = 0;		//落下カウントが0以下だと都合が悪いので
 	if (Key_LRMove > 0) {
 		//右移動
-		if (FallBlock_MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+		if (MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 		else							SoundEffect_Play(SE_TYPE_Graze);
 
 	}
 	if (Key_LRMove < 0) {
 		//左移動
-		if (FallBlock_MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+		if (MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 		else							SoundEffect_Play(SE_TYPE_Graze);
 	}
 	if (Key_LRRota > 0) {
 		//時計回りに回転
-		if (FallBlock_Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+		if (Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 		else							SoundEffect_Play(SE_TYPE_Graze);
 	}
 	if (Key_LRRota < 0) {
 		//反時計回りに回転
-		if (FallBlock_Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
+		if (Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
 		else							SoundEffect_Play(SE_TYPE_Graze);
 	}
 
 	if (FallCount <= 0) {//カウント0以下で落下
-		FallCount = 60;	//カウントを戻す(ここで戻さないとFallBlock_MoveY関数で移動無効と判定され、うまく動かない)
+		FallCount = 60;	//カウントを戻す(ここで戻さないとMoveY関数で移動無効と判定され、うまく動かない)
 										/*落下しようとして無理だったらカウントを0にし無効化する方針*/
-		if (FallBlock_MoveY(1) == 0) {	//落下出来なかった
+		if (MoveY(1) == 0) {	//落下出来なかった
 			FallCount = -1;	//落下カウントの無効化
 			printLog_I(_T("ブロックの落下終了"));
-			FallBlock_addField();	//フィールドに落下ブロックを設置
+			setToField();	//フィールドに落下ブロックを設置
 			SoundEffect_Play(SE_TYPE_DecisionSelect);
 			return TRUE;
 		}
@@ -159,7 +174,7 @@ void Block_Fall::Update_DrawData(double paddingX, double paddingY) {
 			if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {
 
 				//最上段のブロックのY座標を取得する
-				int ansY = phase_GameMain.getBlock_Upper(PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
+				int ansY = phase_GameMain.getField()->getUpperX(PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
 				//実際の描画座標に書き換える
 				double X, Y;
 				Block_Field::Convert_Ingame_FromBlock(PlaceX + (x - FALLBLOCK_CENTER), ansY, 0.5, 0.5, &X, &Y);
@@ -215,11 +230,11 @@ void Block_Fall::Update_DrawData(double paddingX, double paddingY) {
 //リスタート(初期化)
 void Block_Fall::Restart() {
 	//現在落下中のブロックの無効化
-	Delete_FallBlock();
+	Delete();
 
 	//ブロック待機列の再生成
 	for (int i = 0; i < ARRAY_LENGTH(waitBlockinfo); i++) {
-		Create_Wait_Block();
+		Create_WaitBlock();
 	}
 }
 
@@ -236,10 +251,10 @@ int Block_Fall::getInterval() {
 
 
 //落下ブロックをX軸方向に移動(戻り値は実際の移動量)
-int Block_Fall::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
+int Block_Fall::MoveX(int MoveVal, int CollisionFieldBlock) {
 	if (!isEnable())		return 0;	//そもそも落下中で無い時は無視
 
-	MoveVal = getFallBlockVal_MoveX(MoveVal, CollisionFieldBlock);
+	MoveVal = getValMoveX(MoveVal, CollisionFieldBlock);
 
 	//ずらしの反映
 	PlaceX += MoveVal;
@@ -248,7 +263,7 @@ int Block_Fall::FallBlock_MoveX(int MoveVal, int CollisionFieldBlock) {
 }
 
 //落下ブロックがX軸方向に移動可能かどうかの取得(|移動出来る量|<=MoveVal)(つまり0で移動不可)
-int Block_Fall::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) {
+int Block_Fall::getValMoveX(int MoveVal, int CollisionFieldBlock) {
 	if (!isEnable())		return FALSE;	//そもそも落下中で無い時は移動不可
 
 	//方針:だんだんMoveValを大きくしていく
@@ -271,7 +286,7 @@ int Block_Fall::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) {
 				if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {
 					//ブロック有りの場合、フィールドブロックとの重なりを確認する
 					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
-						if (phase_GameMain.getBlockColor(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+						if (phase_GameMain.getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 							//他のブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -279,7 +294,7 @@ int Block_Fall::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) {
 						}
 					}
 					else {
-						if (phase_GameMain.getBlockColor(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+						if (phase_GameMain.getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
 							//画面外ブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -299,7 +314,7 @@ int Block_Fall::getFallBlockVal_MoveX(int MoveVal, int CollisionFieldBlock) {
 }
 
 //落下ブロックをY軸方向に移動(戻り値は実際の移動量)
-int Block_Fall::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
+int Block_Fall::MoveY(int MoveVal, int CollisionFieldBlock) {
 	if (!isEnable())		return 0;	//そもそも落下中で無い時は無視
 
 												//方針:だんだんMoveValを大きくしていく
@@ -321,7 +336,7 @@ int Block_Fall::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
 					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
-						if (phase_GameMain.getBlockColor(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+						if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 							//他のブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -329,7 +344,7 @@ int Block_Fall::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 						}
 					}
 					else {
-						if (phase_GameMain.getBlockColor(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+						if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
 							//画面外ブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -353,7 +368,7 @@ int Block_Fall::FallBlock_MoveY(int MoveVal, int CollisionFieldBlock) {
 }
 
 //落下ブロックを回転させる(回転量1で時計回りに90度)(戻り値は実際の回転量)
-int Block_Fall::FallBlock_Rotate(int RotaVal) {
+int Block_Fall::Rotate(int RotaVal) {
 	if (!isEnable())		return 0;	//そもそも落下中で無い時は無視
 
 	if (Flag_Rotate == FALSE)	return 0;//回転が無効の場合は回転しない
@@ -390,7 +405,7 @@ int Block_Fall::FallBlock_Rotate(int RotaVal) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (RotaBlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (phase_GameMain.getBlockColor(PlaceX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+					if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -424,7 +439,7 @@ int Block_Fall::FallBlock_Rotate(int RotaVal) {
 }
 
 //落下ブロックをフィールドブロックに変換する(つまり設置)
-void Block_Fall::FallBlock_addField() {
+void Block_Fall::setToField() {
 	if (!isEnable())	return;	//そもそも有効で無い時は無視
 
 	//何も無しブロック以外はフィールドブロックに順次変換を行う
@@ -437,7 +452,7 @@ void Block_Fall::FallBlock_addField() {
 				fY = PlaceY + (y - FALLBLOCK_CENTER);
 				fB = BlockID[x][y].getBlockType();
 
-				phase_GameMain.add_FraldBlock2(fX, fY, fB);
+				phase_GameMain.getField()->add_FieldBlock(fX, fY, fB);
 
 			}
 		}
@@ -445,12 +460,12 @@ void Block_Fall::FallBlock_addField() {
 	printLog_I(_T("落下ブロックの【設置】"));
 
 	//落下ブロックの無効化処理
-	Delete_FallBlock();
+	Delete();
 
 }
 
 //落下ブロックの無効化
-void Block_Fall::Delete_FallBlock() {
+void Block_Fall::Delete() {
 	if (!isEnable())	return;	//そもそも有効で無い時は無視
 
 	Counter = 0;		//カウンタを0にもどす
@@ -460,7 +475,7 @@ void Block_Fall::Delete_FallBlock() {
 }
 
 //落下ブロックを生成する(戻り値:成功でTRUE)
-int Block_Fall::Create_FallBlock() {
+int Block_Fall::Create() {
 
 	if (isEnable()) {
 		printLog_C(_T("落下中のブロックがすでに存在するため、落下ブロックを新たに追加出来ませんでした"));
@@ -493,7 +508,7 @@ int Block_Fall::Create_FallBlock() {
 
 	//描画情報を書き換える
 	double paddingX, paddingY;
-	phase_GameMain.getAllPadding(&paddingX, &paddingY);
+	phase_GameMain.getField()->getField_Padding(&paddingX, &paddingY);
 	Update_DrawData(paddingX, paddingY);
 
 
@@ -504,13 +519,13 @@ int Block_Fall::Create_FallBlock() {
 	printLog_I(_T("落下ブロックの【新規生成】"));
 
 	//ブロック待機列を進める
-	Create_Wait_Block();
+	Create_WaitBlock();
 
 	return TRUE;
 }
 
 //落下ブロックの待機列の作成
-void Block_Fall::Create_Wait_Block() {
+void Block_Fall::Create_WaitBlock() {
 
 	//列を詰める(先頭は0)
 	for (int i = 0; i < ARRAY_LENGTH(waitBlockinfo) - 1; i++) {

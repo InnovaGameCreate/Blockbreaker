@@ -280,6 +280,7 @@
     <ClInclude Include="Block_Field.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="Field_Admin.h" />
     <ClInclude Include="FlyText.h" />
     <ClInclude Include="MainFunc.h" />
     <ClInclude Include="Phase_GameMain.h" />
@@ -298,6 +299,7 @@
     <ClCompile Include="BlockMoveMotion.cpp" />
     <ClCompile Include="Block_Fall.cpp" />
     <ClCompile Include="Block_Field.cpp" />
+    <ClCompile Include="Field_Admin.cpp" />
     <ClCompile Include="FlyText.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
