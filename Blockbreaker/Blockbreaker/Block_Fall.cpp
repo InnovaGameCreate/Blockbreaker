@@ -497,8 +497,8 @@ int Block_Fall::Create() {
 	Flag_Rotate = waitBlockinfo[0].Flag_Rotate;
 
 
-	//落下カウントを60に設定
-	FallCount = 60;
+	//落下カウントを1に設定
+	FallCount = 1;
 
 	//落下ブロックのその他の情報の初期化
 	Counter = 0;
