@@ -583,7 +583,7 @@ void Block_Fall::Create_WaitBlock() {
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][2].addBlcok(type2, TRUE);
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP + 1;
 		//printLog_D(_T("縦で上側中心パターン"));
 		break;
 	case 2://横で左中心パターン
@@ -591,7 +591,7 @@ void Block_Fall::Create_WaitBlock() {
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[2][1].addBlcok(type2, TRUE);
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP + 1;
 		//printLog_D(_T("横で左中心パターン"));
 		break;
 	case 3://横で右中心パターン
@@ -599,7 +599,7 @@ void Block_Fall::Create_WaitBlock() {
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].BlockID[1][1].addBlcok(type2, TRUE);
 
 		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceX = BLOCK_WIDTHNUM / 2;
-		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP;
+		waitBlockinfo[ARRAY_LENGTH(waitBlockinfo) - 1].PlaceY = BLOCK_PADDINGUP + 1;
 		//printLog_D(_T("横で右中心パターン"));
 		break;
 	case 4://同色爆弾の単体落下
