@@ -75,10 +75,6 @@ private:
 	void SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int * Counter, int UseVirtualField = FALSE);		//隣接する同色ブロックにマーカーを付ける
 	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(UseVirtualField=TRUEで仮想の面を使用する)
 
-
-																																				
-	double Field_Admin::Score_Scale(int len);//隣接するブロックの消す時にスコアの倍率を求める関数
-
 	
 };
 
