@@ -520,14 +520,14 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL);
+						phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
 						double X, Y;
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
+						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
 						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
 					}
 
@@ -589,6 +589,13 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	}
 
 	return DelCount;
+}
+
+//隣接するブロックの消す時にスコアの倍率を求める関数(4つで1倍)
+double Field_Admin::Score_Scale(int len) {
+
+	return 1 + (len - 4) * 0.1;
+
 }
 
 //画面外のブロックをすべて削除する(消去したブロックの数)
