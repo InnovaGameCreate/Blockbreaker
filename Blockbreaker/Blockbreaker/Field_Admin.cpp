@@ -520,7 +520,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]));
+						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
