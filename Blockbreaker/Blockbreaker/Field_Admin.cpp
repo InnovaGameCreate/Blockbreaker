@@ -513,6 +513,8 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	if (!Flag_Event) {
 		DelMotion = BlockChangeMotionType_EXPLOSION;
 	}
+
+	double DelCountScore = 0;
 	//隣接しているブロックを削除する
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
@@ -520,14 +522,15 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL);
+						phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) );
 						DelCount++;
+						DelCountScore += 1;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
 						double X, Y;
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
+						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL * (int)Score_Scale(Counter[DeleteFlag[x][y]]));
 						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
 					}
 
@@ -583,12 +586,30 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 
 	printLog_I(_T("隣接ブロックの削除計算を行いました(%dブロック)"), DelCount);
 
+	/*for (int i = 0; i < DelCountScore; i++) {
+		phase_GameMain.getScore()->addScore(0, SCORE_DEL_NOMAL * DelCountScore);
+		//フライテキストの生成
+		double X, Y;
+		TCHAR text[30];
+		Block_Field::Convert_Ingame_FromBlock(i, i, 0.5, 0.5, &X, &Y);
+		_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL + SCORE_DEL_NOMAL * ((DelCountScore - 3) * 0.1));
+		phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+
+
+	}*/
 	if (DeleteBlockFlag) {
 		//ブロックの消去判定が入れば
 		ChainCount++;	//連鎖カウントを加算する
 	}
 
 	return DelCount;
+}
+
+//隣接するブロックの消す時にスコアの倍率を求める関数
+double Field_Admin::Score_Scale(int len) {
+
+	return 1;
+
 }
 
 //画面外のブロックをすべて削除する(消去したブロックの数)
