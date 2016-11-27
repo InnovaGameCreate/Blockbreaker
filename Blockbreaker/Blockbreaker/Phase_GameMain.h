@@ -116,6 +116,7 @@ private:
 
 	void Draw();
 	void Draw_Status();				//ステータスの描画
+	void Draw_ClearScreen();		//クリア画面の追加描画
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	void Update_Counter();			//カウンタのカウントアップ
 	void Update();

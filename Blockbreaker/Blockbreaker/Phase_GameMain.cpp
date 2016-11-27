@@ -119,6 +119,13 @@ void Phase_GameMain::Draw() {
 		}
 	}
 
+	//クリア状態の時にゲーム画面を加工する
+	if (getPauseMode() == PauseMode_GameClear) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 100, 100), 1);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		GraphFilter(gameWindow, DX_GRAPH_FILTER_GAUSS, 32, 500);
+	}
 
 
 	//描画先をバックスクリーンにする
@@ -140,7 +147,6 @@ void Phase_GameMain::Draw() {
 	DrawRectGraph(GAMEWINDOW_PADDINGX, GAMEWINDOW_PADDINGY, BLOCK_PADDINGLEFT*BLOCK_SIZE, BLOCK_PADDINGUP*BLOCK_SIZE, GAMEWINDOW_WIDTH, GAMEWINDOW_HEIGHT, gameWindow, FALSE, FALSE);
 #endif
 
-
 	//デバッグ
 #ifdef _DEBUG_GAMEMAIN_
 	//マス目の番号を描画
@@ -156,7 +162,6 @@ void Phase_GameMain::Draw() {
 			GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("%2d"), i);
 	}
 #endif // _DEBUG_GAMEMAIN_
-
 
 	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
@@ -232,12 +237,36 @@ void Phase_GameMain::Draw() {
 	}
 	break;
 	case PauseMode_GameClear://ゲームクリア時
-		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 300, _T("そこまで！"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
-
-		//選択肢の項目の描画
-		pauseMenu.Draw();
+		Draw_ClearScreen();
+		
 		break;
 	}
+} 
+
+//クリア画面の追加描画
+void Phase_GameMain::Draw_ClearScreen() {
+	TCHAR tmp[100];
+	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 300, _T("そこまで！"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+
+	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 380, _T("あなたの順位は"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge30);
+
+	int Rank = 1;
+
+	_stprintf_s(tmp, _T("%d位"), Rank);
+	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 410, tmp, GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+
+
+	if (Rank <= 40) {
+		//ランクインしている場合は名前記録画面を出す
+		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, _T("______"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	}
+
+	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 380, _T("あなたの順位は"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge30);
+
+
+
+	//選択肢の項目の描画
+	pauseMenu.Draw();
 }
 
 //ステータスの描画
@@ -726,7 +755,7 @@ int Phase_GameMain::JudgeGameOver() {
 
 //ゲームクリアかどうかの確認(TRUEゲームクリア)
 int Phase_GameMain::JudgeGameClear() {
-	if (score.getScore() > 10'00) {
+	if (score.getScore() > 10'0000) {
 		//スコアが一定以上でクリア判定を入れる
 		return TRUE;
 	}
