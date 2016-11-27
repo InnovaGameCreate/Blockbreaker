@@ -755,7 +755,7 @@ int Phase_GameMain::JudgeGameOver() {
 
 //ゲームクリアかどうかの確認(TRUEゲームクリア)
 int Phase_GameMain::JudgeGameClear() {
-	if (score.getScore() > 10'0000) {
+	if (score.getScore() > 10'00) {
 		//スコアが一定以上でクリア判定を入れる
 		return TRUE;
 	}
