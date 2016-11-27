@@ -285,6 +285,7 @@
     <ClInclude Include="MainFunc.h" />
     <ClInclude Include="Phase_GameMain.h" />
     <ClInclude Include="Phase_TopMenu.h" />
+    <ClInclude Include="Ranking.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectItem.h" />
     <ClInclude Include="stdafx.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="LoadMenu.cpp" />
     <ClCompile Include="Phase_GameMain.cpp" />
     <ClCompile Include="Phase_TopMenu.cpp" />
+    <ClCompile Include="Ranking.cpp" />
     <ClCompile Include="SelectItem.cpp" />
     <ClCompile Include="ShaderBackGround.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
