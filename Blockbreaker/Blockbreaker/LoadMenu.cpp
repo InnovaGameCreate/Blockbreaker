@@ -9,14 +9,14 @@ void LoadMenu_Initialize() {
 	//ロード画面のロード
 	LoadScreen = LoadGraph(_T("Data/LoadMenu/LoadBack.png"));
 	if (LoadScreen == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("画像ロード失敗(Data/LoadMenu/LoadBack.png)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("画像ロード失敗(Data/LoadMenu/LoadBack.png)"));
 	}
 	//ロード画面のロード2
 	LoadScreen2 = LoadGraph(_T("Data/LoadMenu/LoadBack2.png"));
 	if (LoadScreen2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("画像ロード失敗(Data/LoadMenu/LoadBack2.png)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("画像ロード失敗(Data/LoadMenu/LoadBack2.png)"));
 	}
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ロード画面の初期化に成功"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ロード画面の初期化に成功"));
 }
 
 //ロード画面の表示

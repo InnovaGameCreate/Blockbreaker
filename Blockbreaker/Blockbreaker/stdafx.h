@@ -18,6 +18,7 @@
 #include <random>
 #include <functional>
 #include "Base/Base_BB_Header.h"
+#include "PrintLog.h"
 
 #include "resource.h"
 

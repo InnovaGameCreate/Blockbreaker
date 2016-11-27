@@ -257,3 +257,6 @@ paket-files/
 /Blockbreaker/Blockbreaker/Data/Shader
 /Blockbreaker/Base_BlockBreaker/
 !*.pdb
+/Blockbreaker/PrintLog
+/Blockbreaker/Blockbreaker/ReleaseM
+/Blockbreaker/Blockbreaker/DebugM

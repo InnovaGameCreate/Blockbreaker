@@ -94,7 +94,7 @@ static bool CheckDoubleJoy(int defplm, int wParam);
 //初期化
 void StartDialog_Initialize(HINSTANCE hInstance) {
 	HInstance = hInstance;
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("起動設定画面の初期化を行います"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("起動設定画面の初期化を行います"));
 	//初期値を設定する
 	dialogSetting.resolution = IDC_DSIZE_RADIO1;
 	dialogSetting.VSync = IDC_VSYNC_RADIO1;
@@ -151,11 +151,11 @@ void StartDialog_Initialize(HINSTANCE hInstance) {
 	fread(&dialogSetting, sizeof(dialogSetting), 1, fp);//セーブデータ読み出し
 
 	if (fclose(fp) == EOF) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ファイルクローズに失敗しました。(Setting.bin)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ファイルクローズに失敗しました。(Setting.bin)"));
 		return;
 	}
 	VerifySaveData();
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ゲームの起動設定を復元しました"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ゲームの起動設定を復元しました"));
 }
 
 //保存処理
@@ -171,15 +171,15 @@ static void StartDialog_Save() {
 	fwrite(&dialogSetting, sizeof(dialogSetting), 1, fp);//セーブデータ読み出し
 
 	if (fclose(fp) == EOF) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ファイルクローズに失敗しました。(Setting.bin)"));
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ファイルクローズに失敗しました。(Setting.bin)"));
 		return;
 	}
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ゲームの起動設定を保存しました"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ゲームの起動設定を保存しました"));
 }
 
 //起動設定画面の表示
 void StartDialog_Show() {
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("起動設定画面を開きます"));
+	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("起動設定画面を開きます"));
 	Dialoghandle = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_DIALOG2), NULL, (DLGPROC)DlgProc);	//ダイアログの生成+表示
 
 	ShowWindow(Dialoghandle, SW_SHOW);
@@ -1851,7 +1851,7 @@ static int *getJoySettings(int ItemID) {
 	case IDC_CHECK31:	return &dialogSetting.Joy_ENTER[2];
 	case IDC_CHECK32:	return &dialogSetting.Joy_ENTER[3];
 	default:
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_NULL, _T("ジョイパッドの設定項目が特定できませんでした(ID=%d)"), ItemID);
+		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ジョイパッドの設定項目が特定できませんでした(ID=%d)"), ItemID);
 		return NULL;
 	}
 }
