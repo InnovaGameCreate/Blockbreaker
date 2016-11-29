@@ -58,7 +58,7 @@ void Phase_TopMenu::Key() {
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
-		Changefaze(FAZE_GameMain, THREAD_Update);//フェーズ変更
+		phaseController.ChangefazeRequest(FAZE_GameMain, 0);//フェーズ変更
 		break;
 	case 1://ゲーム終了
 		ExitGameRequest();

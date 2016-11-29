@@ -37,10 +37,6 @@ void Field_Admin::Restart() {
 
 	//仮想ブロックの更新を行う
 	Virtualfield_Update();
-
-	//レーザーエフェクトの初期化
-	Count_lay = 0;
-	lay.SetpointNum(0);
 }
 
 
@@ -59,14 +55,6 @@ void Field_Admin::Draw_Block() {
 			field[x][y].Draw();
 		}
 	}
-}
-
-//レーザーエフェクト描画処理
-void Field_Admin::Draw_Lay() {
-	//破壊光線の描画
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawPolygon2D_Notexture2(&lay, GetColor(200, 200, 0), TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 //移動モーションの更新(移動モーションが行われたときはTRUE)
@@ -112,28 +100,6 @@ int Field_Admin::Update_AllMove() {
 	}
 
 	return FALSE;
-}
-
-//破壊光線エフェクトの更新
-void Field_Admin::Update_Lay() {
-	if (lay.getpointNum() == 3) {
-		Count_lay++;
-		if (Count_lay < 15) {
-			//何もしない
-		}
-		else if (Count_lay < 45) {
-			//フレーム数の割合から位置を計算する
-			lay.X[1] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
-			lay.X[2] = GAMEWINDOW_WIDTH * ((Count_lay - 15) / 30.);
-		}
-		else if (Count_lay < 55) {
-			lay.X[1] = GAMEWINDOW_WIDTH;
-			lay.X[2] = GAMEWINDOW_WIDTH;
-		}
-		else {
-			lay.SetpointNum(0);
-		}
-	}
 }
 
 //描画情報の更新
@@ -331,29 +297,6 @@ int Field_Admin::Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionTy
 	if (!Block::isSameColorBlock(type, getBlockType(X, Y), FALSE))	return FALSE;//違う色のブロックの場合は削除しない
 
 	return Delete_Direct(X, Y, PlayMotion);
-}
-
-//破壊光線でブロックを破壊する
-void Field_Admin::Delete_Lay() {
-	//レーザーのエフェクトを初期化する
-	lay.SetpointNum(3);	//三角形を設定
-	lay.X[0] = GAMEWINDOW_WIDTH / 2.;
-	lay.Y[0] = 0 + BLOCK_SIZE * BLOCK_PADDINGUP;
-	lay.X[1] = 0;
-	lay.Y[1] = BLOCK_SIZE * 3 + BLOCK_SIZE * BLOCK_PADDINGUP;
-	lay.X[2] = 0;
-	lay.Y[2] = BLOCK_SIZE * 12 + BLOCK_SIZE * BLOCK_PADDINGUP;
-	Count_lay = 0;
-
-	//エフェクト範囲のブロックを抹消する
-	for (int x = BLOCK_PADDINGLEFT; x < BLOCK_WIDTHNUM - BLOCK_PADDINGRIGHT; x++) {
-		for (int y = BLOCK_PADDINGUP + 3; y < BLOCK_PADDINGUP + 12; y++) {
-			Delete_Direct(x, y, BlockChangeMotionType_EXPLOSION, x * 2 + 15);
-		}
-	}
-
-	//スコアを減らす
-	phase_GameMain.getScore()->addScore(1, -1'0000);
 }
 
 //連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)

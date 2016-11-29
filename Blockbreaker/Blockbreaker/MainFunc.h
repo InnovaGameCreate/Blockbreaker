@@ -31,13 +31,40 @@
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //クラスのインスタンス(グローバル変数)
-extern Phase_Default phase_Default;		//デフォルトのフェーズ
 extern Phase_GameMain phase_GameMain;	//ゲームメインのフェーズ
 extern Phase_TopMenu phase_TopMenu;		//トップメニューのフェーズ
+extern SK::PhaseController phaseController;	//フェーズコントローラー
+extern SK::FpsController fpsController_Draw;	//FPSコントローラー
+extern SK::FpsController fpsController_Update;	//FPSコントローラー
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //関数群
+/*Blockbreaker.cpp*/
+extern unsigned int getKeyBind(KEYBIND kEYBIND);	//キーバインドでのキー入力情報の取得(0押してない、1押した直後)
+extern void ExitGameRequest();						//終了リクエスト
+extern unsigned int getKey(int KEYNO);				//キーの入力状態を取得する(DXライブラリで定義されているキーの番号)(戻り値：キーが押されている時間、押されていないときは0)
+extern unsigned int getJoyKey(int JoyKeyNO);		//ゲームパッド入力状態の取得(DXライブラリで定義されているキーの番号)(戻り値：キーが押されている時間、押されていないときは0)(ゲームパッド用)
+extern int gettUSEGAMEPAD();						//使用するゲームパッドの取得
+
+
+extern void setKeybind(KeyBind *keyBind);	//キーバインドの設定(NULLで規定値)
+extern void setKeybindjoy(KeyBindjoy *keyBindjoy);//キーバインド設定(ゲームパッド)(NULLで規定値を設定)
+extern void setUSEGAMEPAD(int type);		//使用するゲームパッドの設定(0で設定無し)
+extern void SetAnalogueStickMode(ANALOGSTICKMODE type);	//ゲームパッドのアナログスティックの動作方法の設定
+extern void setClearScreen(int Flag);		//画面のクリアを行うかどうか(FALSE行わない)(するとこはします)
+extern void SetWindowMode(int Mode);		//ウィンドウモードの設定(0から項目順)
+extern void SetDrawing_interval(int Mode);	//描画間隔の設定(0から項目順)
+extern void SetModeVSync(int Mode);			//垂直同期の設定(0から項目順)
+extern void SetModeClear(int Mode);			//画面消去の設定(0から項目順)
+extern void SetModeCursor(int Mode, int WinMode);	//マウスカーソルの設定(0から項目順)(ウィンドウモードの設定と同じ引数)
+extern void SetModeMultiThread(int Mode);	//マルチスレッドの設定(0から項目順)
+extern void SetTextureCut(int Mode);		//テクスチャの分割の設定(0から項目順)
+
+/*StartDialog.cpp*/
+extern void StartDialog_Initialize(HINSTANCE hInstance);	//初期化
+extern void StartDialog_Show();								//起動設定画面の表示
+
 /*SoundEffect*/
 extern void SoundEffect_init();				//初期化
 extern void SoundEffect_update();			//効果音の計算処理ループ(効果音を鳴らすよりも前に呼ぶこと)
@@ -57,4 +84,13 @@ extern void SoundEffect_SafePlay(SE_TYPE type);	//多重で効果音の再生が
 extern void ShaderBackGround_Initialize();		//シェーダ関連初期化
 extern void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage, int Effect1, int Effect2);	//シェーダを利用して消滅するブロックを描画する
 
-/*FlyText.cpp*/
+/*Font.cpp*/
+extern void Font_init();					//初期化
+extern int Font_getHandle(FONTTYPE font);	//フォントハンドルの取得
+extern void Font_DrawStringWithShadow(double x, double y, const TCHAR *String, unsigned int Color, unsigned int ShadowColor, FONTTYPE Fonttype, double padding = 3, unsigned int EdgeColor = 0U, int VerticalFlag = FALSE);					//影付き文字列の描画
+extern void Font_DrawStringCenterWithShadow(double Center_x, double y, const TCHAR *String, unsigned int Color, unsigned int ShadowColor, FONTTYPE Fonttype, double padding = 3, unsigned int EdgeColor = 0U, int VerticalFlag = FALSE);	//影付き文字列描画(Xのみ中心指定)
+
+/*LoadMenu.cpp*/
+extern void LoadMenu_Initialize();		//初期化
+extern void LoadMenu_Draw();			//ロード画面の表示
+extern void LoadMenu_Draw2();			//ロード画面の表示(最初の起動時用)

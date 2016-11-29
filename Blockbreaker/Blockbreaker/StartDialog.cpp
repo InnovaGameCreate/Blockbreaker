@@ -1,46 +1,46 @@
-ï»¿//ã‚²ãƒ¼ãƒ èµ·å‹•æ™‚ã®è¨­å®šç”»é¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°é–¢ä¿‚
+//ƒQ[ƒ€‹N“®‚Ìİ’è‰æ–Êƒ_ƒCƒAƒƒOŠÖŒW
 #include "MainFunc.h"
 
-#define WM_USER_JOYDOWN (WM_USER+1)	//ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã¨ã
+#define WM_USER_JOYDOWN (WM_USER+1)	//ƒWƒ‡ƒCƒXƒeƒBƒbƒN‚ÌƒL[‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
 
-//èµ·å‹•æ™‚ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®é …ç›®
+//‹N“®‚Ìƒ_ƒCƒAƒƒO‚Ì€–Ú
 struct DialogSetting {
-	int resolution;			//ã‚²ãƒ¼ãƒ ã®è§£åƒåº¦
-	int VSync;				//å‚ç›´åŒæœŸ
-	int Clear;				//ç”»é¢ã®æ¶ˆå»ãƒ¢ãƒ¼ãƒ‰
-	int Cursor;				//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«
-	int Thread;				//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰
-	int Texture;			//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ†å‰²
-	int Drawing_interval;	//æç”»é–“éš”
-	int analogstick;		//ã‚¢ãƒŠãƒ­ã‚°ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ“ä½œãƒ¢ãƒ¼ãƒ‰
-	bool Key_Enable;		//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰ãŒæœ‰åŠ¹ã‹ã©ã†ã‹
-	WPARAM Key_PAUSE;			//ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º
-	WPARAM Key_PAUSE2;			//ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º2
-	WPARAM Key_RotateL;		//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
-	WPARAM Key_RotateL2;		//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹2
-	WPARAM Key_RotateR;		//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
-	WPARAM Key_RotateR2;		//è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹2
-	WPARAM Key_UP;				//é …ç›®é¸æŠ:ä¸Š
-	WPARAM Key_UP2;			//é …ç›®é¸æŠ:ä¸Š2
-	WPARAM Key_DOWN;			//é …ç›®é¸æŠ:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ
-	WPARAM Key_DOWN2;			//é …ç›®é¸æŠ:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ2
-	WPARAM Key_LEFT;			//é …ç›®é¸æŠ:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•
-	WPARAM Key_LEFT2;			//é …ç›®é¸æŠ:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•2
-	WPARAM Key_ROGHT;			//é …ç›®é¸æŠ:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•
-	WPARAM Key_ROGHT2;			//é …ç›®é¸æŠ:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•2
-	unsigned int Joy_Type;	//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰å…¥åŠ›ã®ç¨®é¡
-	int Joy_ENTER[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®é …ç›®ã®æ±ºå®š
-	int Joy_PAUSE[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º
-	int Joy_RotateL[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
-	int Joy_RotateR[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
-	int Joy_UP[4];			//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®é …ç›®é¸æŠ:ä¸Š
-	int Joy_DOWN[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®é …ç›®é¸æŠ:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ
-	int Joy_LEFT[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®é …ç›®é¸æŠ:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•
-	int Joy_ROGHT[4];		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®é …ç›®é¸æŠ:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•
+	int resolution;			//ƒQ[ƒ€‚Ì‰ğ‘œ“x
+	int VSync;				//‚’¼“¯Šú
+	int Clear;				//‰æ–Ê‚ÌÁ‹ƒ‚[ƒh
+	int Cursor;				//ƒ}ƒEƒXƒJ[ƒ\ƒ‹
+	int Thread;				//ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh
+	int Texture;			//ƒeƒNƒXƒ`ƒƒ‚Ì•ªŠ„
+	int Drawing_interval;	//•`‰æŠÔŠu
+	int analogstick;		//ƒAƒiƒƒOƒXƒeƒBƒbƒN‚Ì‘€ìƒ‚[ƒh
+	bool Key_Enable;		//ƒL[ƒoƒCƒ“ƒh‚ª—LŒø‚©‚Ç‚¤‚©
+	WPARAM Key_PAUSE;			//ƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY
+	WPARAM Key_PAUSE2;			//ƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY2
+	WPARAM Key_RotateL;		//—‰º‚·‚éƒuƒƒbƒN‚ğ”½Œv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
+	WPARAM Key_RotateL2;		//—‰º‚·‚éƒuƒƒbƒN‚ğ”½Œv‰ñ‚è‚É‰ñ“]‚³‚¹‚é2
+	WPARAM Key_RotateR;		//—‰º‚·‚éƒuƒƒbƒN‚ğŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
+	WPARAM Key_RotateR2;		//—‰º‚·‚éƒuƒƒbƒN‚ğŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é2
+	WPARAM Key_UP;				//€–Ú‘I‘ğ:ã
+	WPARAM Key_UP2;			//€–Ú‘I‘ğ:ã2
+	WPARAM Key_DOWN;			//€–Ú‘I‘ğ:‰º/—‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬
+	WPARAM Key_DOWN2;			//€–Ú‘I‘ğ:‰º/—‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬2
+	WPARAM Key_LEFT;			//€–Ú‘I‘ğ:¶/—‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®
+	WPARAM Key_LEFT2;			//€–Ú‘I‘ğ:¶/—‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®2
+	WPARAM Key_ROGHT;			//€–Ú‘I‘ğ:‰E/—‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®
+	WPARAM Key_ROGHT2;			//€–Ú‘I‘ğ:‰E/—‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®2
+	unsigned int Joy_Type;	//ƒWƒ‡ƒCƒpƒbƒh“ü—Í‚Ìí—Ş
+	int Joy_ENTER[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì€–Ú‚ÌŒˆ’è
+	int Joy_PAUSE[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚ÌƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY
+	int Joy_RotateL[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì—‰º‚·‚éƒuƒƒbƒN‚ğ”½Œv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
+	int Joy_RotateR[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì—‰º‚·‚éƒuƒƒbƒN‚ğŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
+	int Joy_UP[4];			//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì€–Ú‘I‘ğ:ã
+	int Joy_DOWN[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì€–Ú‘I‘ğ:‰º/—‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬
+	int Joy_LEFT[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì€–Ú‘I‘ğ:¶/—‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®
+	int Joy_ROGHT[4];		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì€–Ú‘I‘ğ:‰E/—‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®
 };
 
 
-const HBRUSH bkColorBrush = CreateSolidBrush(RGB(255, 255, 255));//èƒŒæ™¯è‰²ã®ãƒ–ãƒ©ã‚·ã‚’ç”¨æ„ã™ã‚‹
+const HBRUSH bkColorBrush = CreateSolidBrush(RGB(255, 255, 255));//”wŒiF‚Ìƒuƒ‰ƒV‚ğ—pˆÓ‚·‚é
 
 static HINSTANCE HInstance;
 
@@ -51,17 +51,17 @@ static HWND Tab4;
 static HWND Tab5;
 static HWND Tab6;
 static HWND Tab7;
-static HWND Tab8;		//ã‚¢ãƒŠãƒ­ã‚°ã‚¹ãƒ†ã‚£ãƒƒã‚¯è¨­å®š
-static HWND Tab9;		//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®ã‚­ãƒ¼è¨­å®š
-static HWND Tab10;		//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ã‚­ãƒ¼è¨­å®š
+static HWND Tab8;		//ƒAƒiƒƒOƒXƒeƒBƒbƒNİ’è
+static HWND Tab9;		//ƒL[ƒ{[ƒh‚ÌƒL[İ’è
+static HWND Tab10;		//ƒWƒ‡ƒCƒpƒbƒh‚ÌƒL[İ’è
 
-static struct DialogSetting dialogSetting;	//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®è¨­å®š
-static HWND Dialoghandle;	//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«
-static int keyConfigType = 0;	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®šçŠ¶æ…‹(0ã§è¨­å®šç„¡ã—)
-static bool keyConfigmode = false;	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®šçŠ¶æ…‹(faseã§è¨­å®šä¸­å‡ºãªã„)
-static int joyConfigType = 0;	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®š(ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰)çŠ¶æ…‹(0ã§è¨­å®šç„¡ã—)
-static bool joyConfigmode = false;	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®š(ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰)çŠ¶æ…‹(faseã§è¨­å®šä¸­å‡ºãªã„)
-static int joyBeforeState = 0;		//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®å‰ã®çŠ¶æ…‹
+static struct DialogSetting dialogSetting;	//ƒ_ƒCƒAƒƒO‚Ìİ’è
+static HWND Dialoghandle;	//ƒ_ƒCƒAƒƒOƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹
+static int keyConfigType = 0;	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’èó‘Ô(0‚Åİ’è–³‚µ)
+static bool keyConfigmode = false;	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’èó‘Ô(fase‚Åİ’è’†o‚È‚¢)
+static int joyConfigType = 0;	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’è(ƒWƒ‡ƒCƒpƒbƒh)ó‘Ô(0‚Åİ’è–³‚µ)
+static bool joyConfigmode = false;	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’è(ƒWƒ‡ƒCƒpƒbƒh)ó‘Ô(fase‚Åİ’è’†o‚È‚¢)
+static int joyBeforeState = 0;		//ƒWƒ‡ƒCƒpƒbƒh‚Ì‘O‚Ìó‘Ô
 
 
 static HFONT SetMyFont(LPCTSTR face, int h);
@@ -91,11 +91,11 @@ static int GetBit(LPARAM Val);
 static int SetBitRight(LPARAM Val);
 static bool CheckDoubleJoy(int defplm, int wParam);
 
-//åˆæœŸåŒ–
+//‰Šú‰»
 void StartDialog_Initialize(HINSTANCE hInstance) {
 	HInstance = hInstance;
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("èµ·å‹•è¨­å®šç”»é¢ã®åˆæœŸåŒ–ã‚’è¡Œã„ã¾ã™"));
-	//åˆæœŸå€¤ã‚’è¨­å®šã™ã‚‹
+	printLog_I(_T("‹N“®İ’è‰æ–Ê‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·"));
+	//‰Šú’l‚ğİ’è‚·‚é
 	dialogSetting.resolution = IDC_DSIZE_RADIO1;
 	dialogSetting.VSync = IDC_VSYNC_RADIO1;
 	dialogSetting.Clear = IDC_CLEAR_RADIO1;
@@ -120,14 +120,14 @@ void StartDialog_Initialize(HINSTANCE hInstance) {
 	dialogSetting.Key_PAUSE = VK_ESCAPE;
 	dialogSetting.Key_PAUSE2 = VK_BACK;
 	dialogSetting.Joy_Type = 0;
-	dialogSetting.Joy_RotateL[4] = {};		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ä½ã‚·ãƒ§ãƒƒãƒˆç™ºå°„
-	dialogSetting.Joy_RotateR[4] = {};		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ä½é€Ÿç§»å‹•
-	dialogSetting.Joy_UP[4] = {};		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ä¸Šç§»å‹•
-	dialogSetting.Joy_DOWN[4] = {};		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ä¸‹ç§»å‹•
-	dialogSetting.Joy_ROGHT[4] = {};	//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®å³ç§»å‹•
-	dialogSetting.Joy_LEFT[4] = {};		//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®å·¦ç§»å‹•
-	dialogSetting.Joy_PAUSE[4] = {};	//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ãƒãƒ¼ã‚º
-	dialogSetting.Joy_ENTER[4] = {};	//å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®æ±ºå®š
+	dialogSetting.Joy_RotateL[4] = {};		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì’áƒVƒ‡ƒbƒg”­Ë
+	dialogSetting.Joy_RotateR[4] = {};		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì’á‘¬ˆÚ“®
+	dialogSetting.Joy_UP[4] = {};		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚ÌãˆÚ“®
+	dialogSetting.Joy_DOWN[4] = {};		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì‰ºˆÚ“®
+	dialogSetting.Joy_ROGHT[4] = {};	//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì‰EˆÚ“®
+	dialogSetting.Joy_LEFT[4] = {};		//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ì¶ˆÚ“®
+	dialogSetting.Joy_PAUSE[4] = {};	//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚Ìƒ|[ƒY
+	dialogSetting.Joy_ENTER[4] = {};	//“ü—ÍƒWƒ‡ƒCƒpƒbƒh‚ÌŒˆ’è
 	keyConfigType = 0;
 	keyConfigmode = false;
 	joyConfigType = 0;
@@ -140,25 +140,25 @@ void StartDialog_Initialize(HINSTANCE hInstance) {
 	}
 	CHAR ver[15];
 	size_t len = _tcslen(GAMEVERSION) + 1;
-	fread(&len, sizeof(len), 1, fp);//ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®æ–‡å­—æ•°
+	fread(&len, sizeof(len), 1, fp);//ƒo[ƒWƒ‡ƒ“‚Ì•¶š”
 	if (len > 15) {
 		if (fclose(fp) == EOF) {
 			return;
 		}
 		len = 15;
 	}
-	fread(ver, sizeof(CHAR), len, fp);//ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®æ˜è¨˜
-	fread(&dialogSetting, sizeof(dialogSetting), 1, fp);//ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã—
+	fread(ver, sizeof(CHAR), len, fp);//ƒo[ƒWƒ‡ƒ“‚Ì–¾‹L
+	fread(&dialogSetting, sizeof(dialogSetting), 1, fp);//ƒZ[ƒuƒf[ƒ^“Ç‚İo‚µ
 
 	if (fclose(fp) == EOF) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ­ãƒ¼ã‚ºã«å¤±æ•—ã—ã¾ã—ãŸã€‚(Setting.bin)"));
+		printLog_E(_T("ƒtƒ@ƒCƒ‹ƒNƒ[ƒY‚É¸”s‚µ‚Ü‚µ‚½B(Setting.bin)"));
 		return;
 	}
 	VerifySaveData();
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ã‚²ãƒ¼ãƒ ã®èµ·å‹•è¨­å®šã‚’å¾©å…ƒã—ã¾ã—ãŸ"));
+	printLog_I(_T("ƒQ[ƒ€‚Ì‹N“®İ’è‚ğ•œŒ³‚µ‚Ü‚µ‚½"));
 }
 
-//ä¿å­˜å‡¦ç†
+//•Û‘¶ˆ—
 static void StartDialog_Save() {
 	FILE* fp;
 	_tfopen_s(&fp, _T("Setting.bin"), _T("wb"));
@@ -166,21 +166,21 @@ static void StartDialog_Save() {
 		return;
 	}
 	size_t len = _tcslen(GAMEVERSION) + 1;
-	fwrite(&len, sizeof(len), 1, fp);//ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®æ–‡å­—æ•°
-	fwrite(GAMEVERSION, sizeof(CHAR), len, fp);//ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®æ˜è¨˜
-	fwrite(&dialogSetting, sizeof(dialogSetting), 1, fp);//ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã—
+	fwrite(&len, sizeof(len), 1, fp);//ƒo[ƒWƒ‡ƒ“‚Ì•¶š”
+	fwrite(GAMEVERSION, sizeof(CHAR), len, fp);//ƒo[ƒWƒ‡ƒ“‚Ì–¾‹L
+	fwrite(&dialogSetting, sizeof(dialogSetting), 1, fp);//ƒZ[ƒuƒf[ƒ^“Ç‚İo‚µ
 
 	if (fclose(fp) == EOF) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ­ãƒ¼ã‚ºã«å¤±æ•—ã—ã¾ã—ãŸã€‚(Setting.bin)"));
+		printLog_E(_T("ƒtƒ@ƒCƒ‹ƒNƒ[ƒY‚É¸”s‚µ‚Ü‚µ‚½B(Setting.bin)"));
 		return;
 	}
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ã‚²ãƒ¼ãƒ ã®èµ·å‹•è¨­å®šã‚’ä¿å­˜ã—ã¾ã—ãŸ"));
+	printLog_I(_T("ƒQ[ƒ€‚Ì‹N“®İ’è‚ğ•Û‘¶‚µ‚Ü‚µ‚½"));
 }
 
-//èµ·å‹•è¨­å®šç”»é¢ã®è¡¨ç¤º
+//‹N“®İ’è‰æ–Ê‚Ì•\¦
 void StartDialog_Show() {
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("èµ·å‹•è¨­å®šç”»é¢ã‚’é–‹ãã¾ã™"));
-	Dialoghandle = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_DIALOG2), NULL, (DLGPROC)DlgProc);	//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ç”Ÿæˆ+è¡¨ç¤º
+	printLog_I(_T("‹N“®İ’è‰æ–Ê‚ğŠJ‚«‚Ü‚·"));
+	Dialoghandle = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_DIALOG2), NULL, (DLGPROC)DlgProc);	//ƒ_ƒCƒAƒƒO‚Ì¶¬+•\¦
 
 	ShowWindow(Dialoghandle, SW_SHOW);
 
@@ -191,7 +191,7 @@ void StartDialog_Show() {
 				break;
 			}
 			if (keyConfigmode == false) {
-				if (Dialoghandle == 0 || !IsDialogMessage(Dialoghandle, &msg)) {//é€šå¸¸ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æŒ™å‹•ã‚’è¡Œã†
+				if (Dialoghandle == 0 || !IsDialogMessage(Dialoghandle, &msg)) {//’Êí‚Ìƒ_ƒCƒAƒƒO‚Ì‹““®‚ğs‚¤
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
 
@@ -200,12 +200,12 @@ void StartDialog_Show() {
 			else {
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
-				//ã‚‚ã¯ã‚„ã‚´ãƒªæŠ¼ã—ï½¥ï½¥ï½¥
+				//‚à‚Í‚âƒSƒŠ‰Ÿ‚µ¥¥¥
 				if (msg.message == WM_KEYDOWN) {
-					SendMessage(Tab9, WM_KEYDOWN, msg.wParam, msg.lParam);//ã‚¿ãƒ–8ã«å¼·åˆ¶çš„ã«ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã•ã›ã‚‹
+					SendMessage(Tab9, WM_KEYDOWN, msg.wParam, msg.lParam);//ƒ^ƒu8‚É‹­§“I‚ÉƒL[‚ğ‰Ÿ‚µ‚½ƒCƒxƒ“ƒg‚ğ‹N‚±‚³‚¹‚é
 				}
 				else if (msg.message == WM_KEYUP) {
-					SendMessage(Tab9, WM_KEYUP, msg.wParam, msg.lParam);//ã‚¿ãƒ–8ã«å¼·åˆ¶çš„ã«ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã•ã›ã‚‹
+					SendMessage(Tab9, WM_KEYUP, msg.wParam, msg.lParam);//ƒ^ƒu8‚É‹­§“I‚ÉƒL[‚ğ‰Ÿ‚µ‚½ƒCƒxƒ“ƒg‚ğ‹N‚±‚³‚¹‚é
 				}
 			}
 		}
@@ -215,46 +215,45 @@ void StartDialog_Show() {
 	}
 }
 
-//ãƒ¡ã‚¤ãƒ³ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+//ƒƒCƒ“‚Ìƒ_ƒCƒAƒƒO‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
 static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
 	{
-		//ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±
+		//ƒo[ƒWƒ‡ƒ“î•ñ
 		TCHAR txt[30] = _T("");
-		_stprintf_s(txt, _T("Ver.%s"), GAMEVERSION);//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã«æ›¸ãæ–‡å­—åˆ—(ãƒãƒ¼ã‚¸ãƒ§ãƒ³)ã®ç”Ÿæˆ
+		_stprintf_s(txt, _T("Ver.%s"), GAMEVERSION);//ƒ_ƒCƒAƒƒO‚É‘‚­•¶š—ñ(ƒo[ƒWƒ‡ƒ“)‚Ì¶¬
 		SetDlgItemText(hDlg, IDC_VERSION_STATIC, txt);
 
 
-		//ã‚¿ãƒ–ã®è¿½åŠ 
-		HWND hStatic = GetDlgItem(hDlg, IDC_TAB1);//ãªã‚“ã‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹çš„ãªã‚‚ã®ã‚’å–å¾—
+		//ƒ^ƒu‚Ì’Ç‰Á
+		HWND hStatic = GetDlgItem(hDlg, IDC_TAB1);//‚È‚ñ‚©ƒCƒ“ƒXƒ^ƒ“ƒX“I‚È‚à‚Ì‚ğæ“¾
 		NMHDR nmhdr;
 		nmhdr.hwndFrom = hDlg;
 		nmhdr.idFrom = IDC_TAB1;
 		nmhdr.code = TCN_SELCHANGE;
 		TCITEM tcitem;
 		tcitem.mask = TCIF_TEXT;//pszText
-		tcitem.dwState = TCIS_BUTTONPRESSED;//ã‚¿ãƒ–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¢ã‚¤ãƒ†ãƒ ã¯é¸æŠã•ã‚Œã¦ã„ã¾ã™ã€‚(TCM_INSERTITEMã§ã¯ç„¡è¦–ï¼Ÿ)
-		tcitem.dwStateMask = 0;//dwState ãƒ¡ãƒ³ãƒã®ã©ã®ãƒ“ãƒƒãƒˆãŒæœ‰åŠ¹ãªæƒ…å ±ã‚’å«ã‚“ã§ã„ã‚‹ã®ã‹ã‚’æŒ‡å®šã—ã¾ã™ã€‚ TCM_INSERTITEM ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã§ã¯ã“ã®ãƒ¡ãƒ³ãƒã¯ç„¡è¦–ã•ã‚Œã¾ã™ã€‚
-		tcitem.pszText = _T("åŸºæœ¬1");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
-		tcitem.cchTextMax = 3;//pszTextã®æ–‡å­—æ•°
-		tcitem.iImage = -1;//ã‚¿ãƒ–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸã‚¤ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒæ ¼ç´ã•ã‚Œã¾ã™(ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã—ãªã„å ´åˆã¯ -1)
-		tcitem.lParam = (LPARAM)&nmhdr;//ã‚¿ãƒ–ã‚¢ã‚¤ãƒ†ãƒ ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å®šç¾©ã®32ãƒ“ãƒƒãƒˆå€¤
+		tcitem.dwState = TCIS_BUTTONPRESSED;//ƒ^ƒuƒRƒ“ƒgƒ[ƒ‹ƒAƒCƒeƒ€‚Í‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚·B(TCM_INSERTITEM‚Å‚Í–³‹H)
+		tcitem.dwStateMask = 0;//dwState ƒƒ“ƒo‚Ì‚Ç‚Ìƒrƒbƒg‚ª—LŒø‚Èî•ñ‚ğŠÜ‚ñ‚Å‚¢‚é‚Ì‚©‚ğw’è‚µ‚Ü‚·B TCM_INSERTITEM ƒƒbƒZ[ƒW‚Å‚Í‚±‚Ìƒƒ“ƒo‚Í–³‹‚³‚ê‚Ü‚·B
+		tcitem.pszText = _T("Šî–{1");//ƒ^ƒu‚É•\¦‚·‚é•¶š
+		tcitem.cchTextMax = 3;//pszText‚Ì•¶š”
+		tcitem.iImage = -1;//ƒ^ƒuƒRƒ“ƒgƒ[ƒ‹‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½ƒCƒ[ƒWƒŠƒXƒg‚ÌƒCƒ“ƒfƒbƒNƒX‚ªŠi”[‚³‚ê‚Ü‚·(ƒCƒ[ƒW‚ğ•\¦‚µ‚È‚¢ê‡‚Í -1)
+		tcitem.lParam = (LPARAM)&nmhdr;//ƒ^ƒuƒAƒCƒeƒ€‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½ƒAƒvƒŠƒP[ƒVƒ‡ƒ“’è‹`‚Ì32ƒrƒbƒg’l
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)0, (LPARAM)&tcitem);
-		tcitem.pszText = _T("åŸºæœ¬2");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
+		tcitem.pszText = _T("Šî–{2");//ƒ^ƒu‚É•\¦‚·‚é•¶š
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)1, (LPARAM)&tcitem);
-		tcitem.pszText = _T("ãã®ä»–1");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
+		tcitem.pszText = _T("‚»‚Ì‘¼1");//ƒ^ƒu‚É•\¦‚·‚é•¶š
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)2, (LPARAM)&tcitem);
-		tcitem.pszText = _T("ãã®ä»–2");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
+		tcitem.pszText = _T("‚»‚Ì‘¼2");//ƒ^ƒu‚É•\¦‚·‚é•¶š
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)3, (LPARAM)&tcitem);
-		tcitem.pszText = _T("ã‚­ãƒ¼");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
+		tcitem.pszText = _T("ƒL[");//ƒ^ƒu‚É•\¦‚·‚é•¶š
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)4, (LPARAM)&tcitem);
-		tcitem.pszText = _T("ã‚­ãƒ¼2");//ã‚¿ãƒ–ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—
+		tcitem.pszText = _T("ƒL[2");//ƒ^ƒu‚É•\¦‚·‚é•¶š
 		SendMessage(hStatic, TCM_INSERTITEM, (WPARAM)(int)5, (LPARAM)&tcitem);
 
-		//å­ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ç”Ÿæˆ
-		//é¸æŠã•ã‚Œã¦ã„ã‚‹å†…å®¹ã«å¿œã˜ã¦è¡¨ç¤ºå†…å®¹ã‚’å¤‰æ›´ã™ã‚‹
+		//qƒ_ƒCƒAƒƒO‚Ì¶¬
+		//‘I‘ğ‚³‚ê‚Ä‚¢‚é“à—e‚É‰‚¶‚Ä•\¦“à—e‚ğ•ÏX‚·‚é
 		Tab1 = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_SCREENSIZE), hDlg, (DLGPROC)DlgProcTab1);
 		ShowWindow(Tab1, SW_SHOW);
 		Tab2 = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_DRAWING_INTERVAL), hDlg, (DLGPROC)DlgProcTab2);
@@ -268,8 +267,8 @@ static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 		Tab10 = CreateDialog(HInstance, MAKEINTRESOURCE(IDD_KEY2), hDlg, (DLGPROC)DlgProcTab10);
 
 
-		//æ›¸ä½“ã®å¤‰æ›´
-		HFONT hFont = SetMyFont(_T("HGæ­£æ¥·æ›¸ä½“-PRO"), 20);//HGæ­£æ¥·æ›¸ä½“-PRO
+		//‘‘Ì‚Ì•ÏX
+		HFONT hFont = SetMyFont(_T("HG³²‘‘Ì-PRO"), 20);//HG³²‘‘Ì-PRO
 		hStatic = GetDlgItem(hDlg, IDC_VERSION_STATIC);
 		SendMessage(hStatic, WM_SETFONT, (WPARAM)hFont, TRUE);
 		hStatic = GetDlgItem(hDlg, IDOK);
@@ -283,13 +282,13 @@ static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	case WM_CREATE:
 		break;
 	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK) {//OKãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ã
+		if (LOWORD(wParam) == IDOK) {//OKƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
 			DestroyWindow(Dialoghandle);
-			//ãƒ‡ãƒ¼ã‚¿ã®æ•´åˆæ€§ã®ç¢ºèª
+			//ƒf[ƒ^‚Ì®‡«‚ÌŠm”F
 			VerifySaveData();
-			//è¨­å®šã®ä¿å­˜ã‚’ã“ã“ã§è¡Œã†
+			//İ’è‚Ì•Û‘¶‚ğ‚±‚±‚Ås‚¤
 			StartDialog_Save();
-			//å„ç¨®è¨­å®šé …ç›®ã®åæ˜ 
+			//Šeíİ’è€–Ú‚Ì”½‰f
 			SetWindowMode(dialogSetting.resolution - IDC_DSIZE_RADIO1);
 			SetDrawing_interval(dialogSetting.Drawing_interval - IDC_DRAWING_INTERVAL1);
 			SetModeVSync(dialogSetting.VSync - IDC_VSYNC_RADIO1);
@@ -300,36 +299,36 @@ static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 			SetAnalogueStickMode((ANALOGSTICKMODE)(dialogSetting.analogstick - IDC_RADIO1));
 			if (dialogSetting.Key_Enable) {
 				KeyBind kb;
-				CreateKeyConfig(&kb);//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰ç”Ÿæˆ
-				setKeybind(&kb);	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®š
+				CreateKeyConfig(&kb);//ƒL[ƒoƒCƒ“ƒh¶¬
+				setKeybind(&kb);	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’è
 			}
 			else {
-				setKeybind(NULL);	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®š(è¦å®šå€¤)
+				setKeybind(NULL);	//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’è(‹K’è’l)
 			}
 			setUSEGAMEPAD(dialogSetting.Joy_Type);
 			{
 				KeyBindjoy kbj;
-				CreateKeyConfigjoy(&kbj);//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰ç”Ÿæˆ
-				setKeybindjoy(&kbj);//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®è¨­å®š
+				CreateKeyConfigjoy(&kbj);//ƒL[ƒoƒCƒ“ƒh¶¬
+				setKeybindjoy(&kbj);//ƒL[ƒRƒ“ƒtƒBƒO‚Ìİ’è
 			}
 			return 0;
 		}
 		break;
-	case WM_CLOSE://Ã—ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ã
+	case WM_CLOSE://~ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
 		exit(0);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
 
-	case WM_NOTIFY://ã‚³ãƒ¢ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‹ã‚‰ã®é€šçŸ¥(ã‚¿ãƒ–ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚ï¼Ÿ)
+	case WM_NOTIFY://ƒRƒ‚ƒ“ƒRƒ“ƒgƒ[ƒ‹‚©‚ç‚Ì’Ê’m(ƒ^ƒu‚ª•ÏX‚³‚ê‚½H)
 	{
 		switch (((NMHDR *)lParam)->code) {
 		case TCN_SELCHANGE:
-			HWND hStatic = GetDlgItem(hDlg, IDC_TAB1);//ãªã‚“ã‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹çš„ãªã‚‚ã®ã‚’å–å¾—
-			int a = TabCtrl_GetCurSel(hStatic);//ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¿ãƒ–ã®å–å¾—
-			//é¸æŠã•ã‚Œã¦ã„ã‚‹å†…å®¹ã«å¿œã˜ã¦è¡¨ç¤ºå†…å®¹ã‚’å¤‰æ›´ã™ã‚‹
-			//ã„ã£ãŸã‚“å…¨éƒ¨éš ã™
+			HWND hStatic = GetDlgItem(hDlg, IDC_TAB1);//‚È‚ñ‚©ƒCƒ“ƒXƒ^ƒ“ƒX“I‚È‚à‚Ì‚ğæ“¾
+			int a = TabCtrl_GetCurSel(hStatic);//Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒ^ƒu‚Ìæ“¾
+											   //‘I‘ğ‚³‚ê‚Ä‚¢‚é“à—e‚É‰‚¶‚Ä•\¦“à—e‚ğ•ÏX‚·‚é
+											   //‚¢‚Á‚½‚ñ‘S•”‰B‚·
 			ShowWindow(Tab1, SW_HIDE);
 			ShowWindow(Tab2, SW_HIDE);
 			ShowWindow(Tab3, SW_HIDE);
@@ -340,9 +339,8 @@ static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 			ShowWindow(Tab8, SW_HIDE);
 			ShowWindow(Tab9, SW_HIDE);
 			ShowWindow(Tab10, SW_HIDE);
-			switch (a)
-			{
-			case 0://ç”»é¢ã‚µã‚¤ã‚º
+			switch (a) {
+			case 0://‰æ–ÊƒTƒCƒY
 				ShowWindow(Tab1, SW_SHOW);
 				break;
 			case 1:
@@ -376,46 +374,45 @@ static LRESULT CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	return DefWindowProc(hDlg, msg, wParam, lParam);
 }
 
-//ãƒ•ã‚©ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
+//ƒtƒHƒ“ƒgƒf[ƒ^‚Ìì¬
 static HFONT SetMyFont(LPCTSTR face, int h) {
 	HFONT hFont;
-	hFont = CreateFont(h,    //ãƒ•ã‚©ãƒ³ãƒˆé«˜ã•
-		0,                    //æ–‡å­—å¹…
-		0,                    //ãƒ†ã‚­ã‚¹ãƒˆã®è§’åº¦
-		0,                    //ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã¨ï½˜è»¸ã¨ã®è§’åº¦
-		FW_REGULAR,            //ãƒ•ã‚©ãƒ³ãƒˆã®é‡ã•ï¼ˆå¤ªã•ï¼‰
-		FALSE,                //ã‚¤ã‚¿ãƒªãƒƒã‚¯ä½“
-		FALSE,                //ã‚¢ãƒ³ãƒ€ãƒ¼ãƒ©ã‚¤ãƒ³
-		FALSE,                //æ‰“ã¡æ¶ˆã—ç·š
-		SHIFTJIS_CHARSET,    //æ–‡å­—ã‚»ãƒƒãƒˆ
-		OUT_DEFAULT_PRECIS,    //å‡ºåŠ›ç²¾åº¦
-		CLIP_DEFAULT_PRECIS,//ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°ç²¾åº¦
-		PROOF_QUALITY,        //å‡ºåŠ›å“è³ª
-		FIXED_PITCH | FF_MODERN,//ãƒ”ãƒƒãƒã¨ãƒ•ã‚¡ãƒŸãƒªãƒ¼
-		face);    //æ›¸ä½“å
+	hFont = CreateFont(h,    //ƒtƒHƒ“ƒg‚‚³
+		0,                    //•¶š•
+		0,                    //ƒeƒLƒXƒg‚ÌŠp“x
+		0,                    //ƒx[ƒXƒ‰ƒCƒ“‚Æ‚˜²‚Æ‚ÌŠp“x
+		FW_REGULAR,            //ƒtƒHƒ“ƒg‚Ìd‚³i‘¾‚³j
+		FALSE,                //ƒCƒ^ƒŠƒbƒN‘Ì
+		FALSE,                //ƒAƒ“ƒ_[ƒ‰ƒCƒ“
+		FALSE,                //‘Å‚¿Á‚µü
+		SHIFTJIS_CHARSET,    //•¶šƒZƒbƒg
+		OUT_DEFAULT_PRECIS,    //o—Í¸“x
+		CLIP_DEFAULT_PRECIS,//ƒNƒŠƒbƒsƒ“ƒO¸“x
+		PROOF_QUALITY,        //o—Í•i¿
+		FIXED_PITCH | FF_MODERN,//ƒsƒbƒ`‚Æƒtƒ@ƒ~ƒŠ[
+		face);    //‘‘Ì–¼
 	return hFont;
 }
 
-//ç”»é¢ã‚µã‚¤ã‚ºã®ã‚„ã¤ã®ã‚„ã¤
+//‰æ–ÊƒTƒCƒY‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab1(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	HBRUSH bkColorBrush = CreateSolidBrush(RGB(255, 255, 255));//èƒŒæ™¯è‰²ã®ãƒ–ãƒ©ã‚·ã‚’ç”¨æ„ã™ã‚‹
-	switch (msg)
-	{
+	HBRUSH bkColorBrush = CreateSolidBrush(RGB(255, 255, 255));//”wŒiF‚Ìƒuƒ‰ƒV‚ğ—pˆÓ‚·‚é
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_DSIZE_RADIO1, IDC_DSIZE_RADIO5, dialogSetting.resolution);
-		{//ã‚¹ã‚³ãƒ¼ãƒ—ãŒé¢å€’ãªã®ã§ãƒ–ãƒ­ãƒƒã‚¯åŒ–
-		 //ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠã—ã¦ã„ã‚‹å€¤ã‚ˆã‚Šç”»é¢ã‚µã‚¤ã‚ºã®è¡¨ç¤º
+		{//ƒXƒR[ƒv‚ª–Ê“|‚È‚Ì‚ÅƒuƒƒbƒN‰»
+		 //ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğ‚µ‚Ä‚¢‚é’l‚æ‚è‰æ–ÊƒTƒCƒY‚Ì•\¦
 			TCHAR txt[30] = _T("");
 			int X = 0, Y = 0, Clolr = 0;
-			GetDefaultState(&X, &Y, &Clolr);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•å–å¾—
-			_stprintf_s(txt, _T("ç–‘ä¼¼ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³[%dx%d]"), X, Y);//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã«æ›¸ãæ–‡å­—åˆ—(ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º)ã®ç”Ÿæˆ
+			GetDefaultState(&X, &Y, &Clolr);//ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³æ“¾
+			_stprintf_s(txt, _T("‹^—ƒtƒ‹ƒXƒNƒŠ[ƒ“[%dx%d]"), X, Y);//ƒ_ƒCƒAƒƒO‚É‘‚­•¶š—ñ(ƒEƒBƒ“ƒhƒEƒTƒCƒY)‚Ì¶¬
 			SetDlgItemText(hDlg, IDC_DSIZE_RADIO4, txt);
 		}
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO1)) {
 			dialogSetting.resolution = IDC_DSIZE_RADIO1;
 		}
@@ -425,13 +422,13 @@ static LRESULT CALLBACK DlgProcTab1(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		else if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO3)) {
 			dialogSetting.resolution = IDC_DSIZE_RADIO3;
 		}
-		else if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO4)) {//ç–‘ä¼¼ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
+		else if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO4)) {//‹^—ƒtƒ‹ƒXƒNƒŠ[ƒ“
 			dialogSetting.resolution = IDC_DSIZE_RADIO4;
 		}
-		else if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO5)) {//ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
+		else if (IsDlgButtonChecked(hDlg, IDC_DSIZE_RADIO5)) {//ƒtƒ‹ƒXƒNƒŠ[ƒ“
 			dialogSetting.resolution = IDC_DSIZE_RADIO5;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.resolution = IDC_DSIZE_RADIO1;
 		}
 		break;
@@ -439,30 +436,30 @@ static LRESULT CALLBACK DlgProcTab1(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO3)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO4)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DSIZE_RADIO5)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -474,17 +471,16 @@ static LRESULT CALLBACK DlgProcTab1(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//æç”»é–“éš”ã®ã‚„ã¤ã®ã‚„ã¤
+//•`‰æŠÔŠu‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_DRAWING_INTERVAL1, IDC_DRAWING_INTERVAL4, dialogSetting.Drawing_interval);
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_DRAWING_INTERVAL1)) {
 			dialogSetting.Drawing_interval = IDC_DRAWING_INTERVAL1;
 		}
@@ -497,7 +493,7 @@ static LRESULT CALLBACK DlgProcTab2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		else if (IsDlgButtonChecked(hDlg, IDC_DRAWING_INTERVAL4)) {
 			dialogSetting.Drawing_interval = IDC_DRAWING_INTERVAL4;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.Drawing_interval = IDC_DRAWING_INTERVAL1;
 		}
 		break;
@@ -505,26 +501,26 @@ static LRESULT CALLBACK DlgProcTab2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_DRAWING_INTERVAL1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_DRAWING_INTERVAL1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DRAWING_INTERVAL2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DRAWING_INTERVAL3)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_DRAWING_INTERVAL4)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -536,39 +532,38 @@ static LRESULT CALLBACK DlgProcTab2(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//å‚ç›´åŒæœŸã®ã‚„ã¤ã®ã‚„ã¤
+//‚’¼“¯Šú‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_VSYNC_RADIO1, IDC_VSYNC_RADIO2, dialogSetting.VSync);
-		if (GetRefreshRate() != 60 && dialogSetting.Thread == IDC_THREAD_RADIO2) {//ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆãŒ60ä»¥å¤–ã§ã‹ã¤ã‚·ãƒ³ã‚°ãƒ«ã‚¹ãƒ¬ãƒƒãƒ‰å‹•ä½œã®æ™‚
-			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), FALSE);//å‚ç›´åŒæœŸã‚’é¸æŠä¸å¯ã«ã™ã‚‹
+		if (GetRefreshRate() != 60 && dialogSetting.Thread == IDC_THREAD_RADIO2) {//ƒfƒBƒXƒvƒŒƒC‚ÌƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒg‚ª60ˆÈŠO‚Å‚©‚ÂƒVƒ“ƒOƒ‹ƒXƒŒƒbƒh“®ì‚Ì
+			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), FALSE);//‚’¼“¯Šú‚ğ‘I‘ğ•s‰Â‚É‚·‚é
 			CheckRadioButton(hDlg, IDC_VSYNC_RADIO1, IDC_VSYNC_RADIO2, IDC_VSYNC_RADIO2);
 			dialogSetting.VSync = IDC_VSYNC_RADIO2;
 		}
 		break;
-	case WM_SHOWWINDOW://ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¯è¦–çŠ¶æ…‹ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚(å¤šåˆ†)
-		if (GetRefreshRate() != 60 && dialogSetting.Thread == IDC_THREAD_RADIO2) {//ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆãŒ60ä»¥å¤–ã§ã‹ã¤ã‚·ãƒ³ã‚°ãƒ«ã‚¹ãƒ¬ãƒƒãƒ‰å‹•ä½œã®æ™‚
-			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), FALSE);//å‚ç›´åŒæœŸã‚’é¸æŠä¸å¯ã«ã™ã‚‹
+	case WM_SHOWWINDOW://ƒEƒBƒ“ƒhƒE‚Ì‰Â‹ó‘Ô‚ª•ÏX‚³‚ê‚½(‘½•ª)
+		if (GetRefreshRate() != 60 && dialogSetting.Thread == IDC_THREAD_RADIO2) {//ƒfƒBƒXƒvƒŒƒC‚ÌƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒg‚ª60ˆÈŠO‚Å‚©‚ÂƒVƒ“ƒOƒ‹ƒXƒŒƒbƒh“®ì‚Ì
+			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), FALSE);//‚’¼“¯Šú‚ğ‘I‘ğ•s‰Â‚É‚·‚é
 			CheckRadioButton(hDlg, IDC_VSYNC_RADIO1, IDC_VSYNC_RADIO2, IDC_VSYNC_RADIO2);
 			dialogSetting.VSync = IDC_VSYNC_RADIO2;
 		}
 		else {
-			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), TRUE);//å‚ç›´åŒæœŸã‚’é¸æŠå¯ã«ã™ã‚‹
+			EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_RADIO1), TRUE);//‚’¼“¯Šú‚ğ‘I‘ğ‰Â‚É‚·‚é
 		}
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_VSYNC_RADIO1)) {
 			dialogSetting.VSync = IDC_VSYNC_RADIO1;
 		}
 		else if (IsDlgButtonChecked(hDlg, IDC_VSYNC_RADIO2)) {
 			dialogSetting.VSync = IDC_VSYNC_RADIO2;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.VSync = IDC_VSYNC_RADIO1;
 		}
 		break;
@@ -576,18 +571,18 @@ static LRESULT CALLBACK DlgProcTab3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_VSYNC_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_VSYNC_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_VSYNC_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -599,24 +594,23 @@ static LRESULT CALLBACK DlgProcTab3(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ç”»é¢æ¶ˆå»ã®ã‚„ã¤ã®ã‚„ã¤
+//‰æ–ÊÁ‹‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab4(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_CLEAR_RADIO1, IDC_CLEAR_RADIO2, dialogSetting.Clear);
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_CLEAR_RADIO1)) {
 			dialogSetting.Clear = IDC_CLEAR_RADIO1;
 		}
 		else if (IsDlgButtonChecked(hDlg, IDC_CLEAR_RADIO2)) {
 			dialogSetting.Clear = IDC_CLEAR_RADIO2;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.Clear = IDC_CLEAR_RADIO1;
 		}
 		break;
@@ -624,18 +618,18 @@ static LRESULT CALLBACK DlgProcTab4(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_CLEAR_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_CLEAR_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_CLEAR_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -647,24 +641,23 @@ static LRESULT CALLBACK DlgProcTab4(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚„ã¤ã®ã‚„ã¤
+//ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab5(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_CURSOR_RADIO1, IDC_CURSOR_RADIO2, dialogSetting.Cursor);
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_CURSOR_RADIO1)) {
 			dialogSetting.Cursor = IDC_CURSOR_RADIO1;
 		}
 		else if (IsDlgButtonChecked(hDlg, IDC_CURSOR_RADIO2)) {
 			dialogSetting.Cursor = IDC_CURSOR_RADIO2;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.Cursor = IDC_CURSOR_RADIO1;
 		}
 		break;
@@ -672,18 +665,18 @@ static LRESULT CALLBACK DlgProcTab5(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_CURSOR_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_CURSOR_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_CURSOR_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -695,24 +688,23 @@ static LRESULT CALLBACK DlgProcTab5(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ã®ã‚„ã¤ã®ã‚„ã¤
+//ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab6(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_THREAD_RADIO1, IDC_THREAD_RADIO2, dialogSetting.Thread);
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_THREAD_RADIO1)) {
 			dialogSetting.Thread = IDC_THREAD_RADIO1;
 		}
 		else if (IsDlgButtonChecked(hDlg, IDC_THREAD_RADIO2)) {
 			dialogSetting.Thread = IDC_THREAD_RADIO2;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.Thread = IDC_THREAD_RADIO1;
 		}
 		break;
@@ -720,18 +712,18 @@ static LRESULT CALLBACK DlgProcTab6(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_THREAD_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_THREAD_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_THREAD_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -743,24 +735,23 @@ static LRESULT CALLBACK DlgProcTab6(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ãƒ†ã‚¯ã‚¹ãƒãƒ£åˆ†å‰²ã®ã‚„ã¤ã®ã‚„ã¤
+//ƒeƒNƒXƒ`ƒƒ•ªŠ„‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab7(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_TEXTURE_RADIO1, IDC_TEXTURE_RADIO2, dialogSetting.Texture);
 		break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_TEXTURE_RADIO1)) {
 			dialogSetting.Texture = IDC_TEXTURE_RADIO1;
 		}
 		else if (IsDlgButtonChecked(hDlg, IDC_TEXTURE_RADIO2)) {
 			dialogSetting.Texture = IDC_TEXTURE_RADIO2;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.Texture = IDC_TEXTURE_RADIO1;
 		}
 		break;
@@ -768,18 +759,18 @@ static LRESULT CALLBACK DlgProcTab7(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_TEXTURE_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_TEXTURE_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_TEXTURE_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -791,15 +782,14 @@ static LRESULT CALLBACK DlgProcTab7(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ã‚¢ãƒŠãƒ­ã‚°ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®ã‚„ã¤ã®ã‚„ã¤
+//ƒAƒiƒƒOƒXƒeƒBƒbƒN‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
-		//é …ç›®ã®é¸æŠè‚¢ã®é¸æŠ
-		//åˆæœŸå€¤ã®è¨­å®š
+		//€–Ú‚Ì‘I‘ğˆ‚Ì‘I‘ğ
+		//‰Šú’l‚Ìİ’è
 		CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO3, dialogSetting.analogstick);
-		if (dialogSetting.Joy_Type == 0) {//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ç„¡åŠ¹ã®æ™‚
+		if (dialogSetting.Joy_Type == 0) {//ƒWƒ‡ƒCƒpƒbƒh–³Œø‚Ì
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO1), false);
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO2), false);
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO3), false);
@@ -807,7 +797,7 @@ static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		break;
 	case WM_SHOWWINDOW:
 	{
-		if (dialogSetting.Joy_Type == 0) {//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ç„¡åŠ¹ã®æ™‚
+		if (dialogSetting.Joy_Type == 0) {//ƒWƒ‡ƒCƒpƒbƒh–³Œø‚Ì
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO1), false);
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO2), false);
 			EnableWindow(GetDlgItem(hDlg, IDC_RADIO3), false);
@@ -819,7 +809,7 @@ static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		}
 	}
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
 		if (IsDlgButtonChecked(hDlg, IDC_RADIO1)) {
 			dialogSetting.analogstick = IDC_RADIO1;
 		}
@@ -829,7 +819,7 @@ static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		else if (IsDlgButtonChecked(hDlg, IDC_RADIO3)) {
 			dialogSetting.analogstick = IDC_RADIO3;
 		}
-		else {//ã©ã‚Œã§ã‚‚ãªã„ã¨ã
+		else {//‚Ç‚ê‚Å‚à‚È‚¢‚Æ‚«
 			dialogSetting.analogstick = IDC_RADIO1;
 		}
 		break;
@@ -837,22 +827,22 @@ static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_RADIO1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_RADIO1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_RADIO2)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_RADIO3)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		else if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) {
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
@@ -864,12 +854,11 @@ static LRESULT CALLBACK DlgProcTab8(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰è¨­å®šã®ã‚„ã¤ã®ã‚„ã¤
+//ƒL[ƒoƒCƒ“ƒhİ’è‚Ì‚â‚Â‚Ì‚â‚Â
 static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	//Log_print(LOG_DEBUG, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_INFORMAL, _T("%x(16é€²æ•°)"), msg);
+	//Log_print(LOG_DEBUG, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_INFORMAL, _T("%x(16i”)"), msg);
 
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
 	{
 		int state = (dialogSetting.Key_Enable) ? BST_UNCHECKED : BST_CHECKED;
@@ -906,195 +895,195 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	}
 	break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
-		if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã§ã¨ã‚Šã‚ãˆãšã‚¤ãƒ™ãƒ³ãƒˆ
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
+		if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Å‚Æ‚è‚ ‚¦‚¸ƒCƒxƒ“ƒg
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK1), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK1, ConvertVerKey(dialogSetting.Key_RotateL));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK2), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK2, ConvertVerKey(dialogSetting.Key_RotateL2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK3), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK3, ConvertVerKey(dialogSetting.Key_RotateR));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK4), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK4, ConvertVerKey(dialogSetting.Key_RotateR2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK5), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK5, ConvertVerKey(dialogSetting.Key_UP));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK6), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK6, ConvertVerKey(dialogSetting.Key_UP2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK7), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK7, ConvertVerKey(dialogSetting.Key_DOWN));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK8), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK8, ConvertVerKey(dialogSetting.Key_DOWN2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK9), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK9, ConvertVerKey(dialogSetting.Key_ROGHT));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK10), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK10, ConvertVerKey(dialogSetting.Key_ROGHT2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK11), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK11, ConvertVerKey(dialogSetting.Key_LEFT));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK12), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK12, ConvertVerKey(dialogSetting.Key_LEFT2));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK13), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK13, ConvertVerKey(dialogSetting.Key_PAUSE));
 			}
-			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+			if ((HWND)lParam != GetDlgItem(hDlg, keyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 				SendMessage(GetDlgItem(hDlg, IDC_CHECK14), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, IDC_CHECK14, ConvertVerKey(dialogSetting.Key_PAUSE2));
 			}
 		}
-		if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK1)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK1)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK1;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK1, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK1, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK2)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK2)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK2;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK2, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK2, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK3)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK3)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK3;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK3, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK3, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK4)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK4)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK4;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK4, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK4, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK5)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK5)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK5;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK5, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK5, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK6)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK6)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK6;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK6, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK6, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK7)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK7)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK7;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK7, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK7, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK8)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK8)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK8;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK8, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK8, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK9)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK9)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK9;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK9, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK9, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK10)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK10)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK10;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK10, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK10, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK11)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK11)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK11;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK11, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK11, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK12)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK12)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK12;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK12, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK12, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
-		//else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK13)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-		//	if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		//else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK13)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+		//	if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 		//		keyConfigType = IDC_CHECK13;
 		//		keyConfigmode = true;
 		//		SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-		//		SetDlgItemText(hDlg, IDC_CHECK13, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+		//		SetDlgItemText(hDlg, IDC_CHECK13, _T("“ü—Í’†¥¥¥"));
 		//		return 0;
 		//	}
 		//}
-		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK14)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-			if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+		else if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK14)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+			if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 				keyConfigType = IDC_CHECK14;
 				keyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, IDC_CHECK14, _T("å…¥åŠ›ä¸­ï½¥ï½¥ï½¥"));
+				SetDlgItemText(hDlg, IDC_CHECK14, _T("“ü—Í’†¥¥¥"));
 				return 0;
 			}
 		}
 
 		if ((HWND)lParam == GetDlgItem(hDlg, IDC_CHECK20)) {
-			dialogSetting.Key_Enable = (SendMessage(GetDlgItem(hDlg, IDC_CHECK20), BM_GETCHECK, 0, 0) == BST_UNCHECKED) ? true : false;//ãƒã‚§ãƒƒã‚¯é …ç›®ã®çŠ¶æ…‹ã®ä¿å­˜
-			//ãƒœã‚¿ãƒ³ã®æœ‰åŠ¹çŠ¶æ…‹ã®è¨­å®š
+			dialogSetting.Key_Enable = (SendMessage(GetDlgItem(hDlg, IDC_CHECK20), BM_GETCHECK, 0, 0) == BST_UNCHECKED) ? true : false;//ƒ`ƒFƒbƒN€–Ú‚Ìó‘Ô‚Ì•Û‘¶
+																																	   //ƒ{ƒ^ƒ“‚Ì—LŒøó‘Ô‚Ìİ’è
 			EnableWindow(GetDlgItem(hDlg, IDC_CHECK1), dialogSetting.Key_Enable);
 			EnableWindow(GetDlgItem(hDlg, IDC_CHECK2), dialogSetting.Key_Enable);
 			EnableWindow(GetDlgItem(hDlg, IDC_CHECK3), dialogSetting.Key_Enable);
@@ -1154,132 +1143,131 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT2)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT2)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT3)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT3)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT4)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT4)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT5)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT5)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT6)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT6)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT7)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT7)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT8)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT8)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_CHECK20)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_CHECK20)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
 	}
 	case WM_KEYDOWN:
 	{
-		int state = lParam & 0x40000000;//31ãƒ“ãƒƒãƒˆç›®ã‚’æŠœãå‡ºã—
-		if (keyConfigmode == false)	break;//ã‚­ãƒ¼å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰ã§ç„¡ã„æ™‚ã¯ä½•ã‚‚ã—ãªã„
-		if (state)	break;//ç›´å‰ã‚‚ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸçŠ¶æ…‹ãªã‚‰ç„¡è¦–
-		if (keyConfigType == 0)	break;//ã‚­ãƒ¼å…¥åŠ›ãŒçµ‚ã‚ã£ã¦ã„ã‚‹
-		if (wParam == VK_RETURN) break;//ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã‚‚ã ã‚
-		if (wParam == VK_SPACE) break;//ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã‚‚ã ã‚
-		if (wParam == VK_ADD) break;//+ã‚­ãƒ¼ã‚‚ã ã‚
-		if (wParam == VK_SHIFT) {//ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã¨ã
-			//å·¦å³ã©ã¡ã‚‰ã®ã‚­ãƒ¼ã‹åˆ¤åˆ¥ã™ã‚‹
-			if (GetKeyState(VK_LSHIFT) & 0x8000) {//å·¦ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹
-				wParam = VK_LSHIFT;//å·¦ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ãŸã“ã¨ã«ã™ã‚‹
+		int state = lParam & 0x40000000;//31ƒrƒbƒg–Ú‚ğ”²‚«o‚µ
+		if (keyConfigmode == false)	break;//ƒL[“ü—Íƒ‚[ƒh‚Å–³‚¢‚Í‰½‚à‚µ‚È‚¢
+		if (state)	break;//’¼‘O‚àƒL[‚ª‰Ÿ‚³‚ê‚½ó‘Ô‚È‚ç–³‹
+		if (keyConfigType == 0)	break;//ƒL[“ü—Í‚ªI‚í‚Á‚Ä‚¢‚é
+		if (wParam == VK_RETURN) break;//ƒGƒ“ƒ^[ƒL[‚à‚¾‚ß
+		if (wParam == VK_SPACE) break;//ƒXƒy[ƒXƒL[‚à‚¾‚ß
+		if (wParam == VK_ADD) break;//+ƒL[‚à‚¾‚ß
+		if (wParam == VK_SHIFT) {//ƒVƒtƒgƒL[‚ª‰Ÿ‚³‚ê‚½‚Æ‚«
+								 //¶‰E‚Ç‚¿‚ç‚ÌƒL[‚©”»•Ê‚·‚é
+			if (GetKeyState(VK_LSHIFT) & 0x8000) {//¶ƒVƒtƒgƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é
+				wParam = VK_LSHIFT;//¶ƒVƒtƒgƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚±‚Æ‚É‚·‚é
 			}
 			else {
-				wParam = VK_RSHIFT;//å³ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ãŸã“ã¨ã«ã™ã‚‹
+				wParam = VK_RSHIFT;//‰EƒVƒtƒgƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚±‚Æ‚É‚·‚é
 			}
 		}
 		else if (wParam == VK_CONTROL) {
-			//å·¦å³ã©ã¡ã‚‰ã®ã‚­ãƒ¼ã‹åˆ¤åˆ¥ã™ã‚‹
-			if (GetKeyState(VK_LCONTROL) & 0x8000) {//å·¦ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹
-				wParam = VK_LCONTROL;//å·¦CtrlãŒæŠ¼ã•ã‚Œã¦ã„ãŸã“ã¨ã«ã™ã‚‹
+			//¶‰E‚Ç‚¿‚ç‚ÌƒL[‚©”»•Ê‚·‚é
+			if (GetKeyState(VK_LCONTROL) & 0x8000) {//¶ƒVƒtƒgƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é
+				wParam = VK_LCONTROL;//¶Ctrl‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚±‚Æ‚É‚·‚é
 			}
 			else {
-				wParam = VK_RCONTROL;//å³CtrãŒæŠ¼ã•ã‚Œã¦ã„ãŸã“ã¨ã«ã™ã‚‹
+				wParam = VK_RCONTROL;//‰ECtr‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚±‚Æ‚É‚·‚é
 			}
 		}
-		if (CheckDouble(keyConfigType, wParam)) break;//ã‚­ãƒ¼é‡è¤‡ã‚‚ãƒ€ãƒ¡
-		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚­ãƒ¼ã«å¤‰æ›ã§ããªã„ã¨ãã¯ç„¡è¦–
+		if (CheckDouble(keyConfigType, wParam)) break;//ƒL[d•¡‚àƒ_ƒ
+		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒL[‚É•ÏŠ·‚Å‚«‚È‚¢‚Æ‚«‚Í–³‹
 		SetDlgItemText(hDlg, keyConfigType, ConvertVerKey(wParam));
 		SendMessage(GetDlgItem(hDlg, keyConfigType), BM_SETCHECK, BST_UNCHECKED, 0);
-		switch (keyConfigType)
-		{
-		case IDC_CHECK1://è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
+		switch (keyConfigType) {
+		case IDC_CHECK1://—‰º‚·‚éƒuƒƒbƒN‚ğ”½Œv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
 			dialogSetting.Key_RotateL = wParam;
 			break;
-		case IDC_CHECK2://è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’åæ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹2
+		case IDC_CHECK2://—‰º‚·‚éƒuƒƒbƒN‚ğ”½Œv‰ñ‚è‚É‰ñ“]‚³‚¹‚é2
 			dialogSetting.Key_RotateL2 = wParam;
 			break;
-		case IDC_CHECK3://è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹
+		case IDC_CHECK3://—‰º‚·‚éƒuƒƒbƒN‚ğŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é
 			dialogSetting.Key_RotateR = wParam;
 			break;
-		case IDC_CHECK4://è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ™‚è¨ˆå›ã‚Šã«å›è»¢ã•ã›ã‚‹2
+		case IDC_CHECK4://—‰º‚·‚éƒuƒƒbƒN‚ğŒv‰ñ‚è‚É‰ñ“]‚³‚¹‚é2
 			dialogSetting.Key_RotateR2 = wParam;
 			break;
-		case IDC_CHECK5://é …ç›®é¸æŠ:ä¸Š
+		case IDC_CHECK5://€–Ú‘I‘ğ:ã
 			dialogSetting.Key_UP = wParam;
 			break;
-		case IDC_CHECK6://é …ç›®é¸æŠ:ä¸Š2
+		case IDC_CHECK6://€–Ú‘I‘ğ:ã2
 			dialogSetting.Key_UP2 = wParam;
 			break;
-		case IDC_CHECK7://é …ç›®é¸æŠ:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ
+		case IDC_CHECK7://€–Ú‘I‘ğ:‰º/—‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬
 			dialogSetting.Key_DOWN = wParam;
 			break;
-		case IDC_CHECK8://é …ç›®é¸æŠ:ä¸‹/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®åŠ é€Ÿ2
+		case IDC_CHECK8://€–Ú‘I‘ğ:‰º/—‰º‚·‚éƒuƒƒbƒN‚Ì‰Á‘¬2
 			dialogSetting.Key_DOWN2 = wParam;
 			break;
-		case IDC_CHECK9://é …ç›®é¸æŠ:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•
+		case IDC_CHECK9://€–Ú‘I‘ğ:‰E/—‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®
 			dialogSetting.Key_ROGHT = wParam;
 			break;
-		case IDC_CHECK10://é …ç›®é¸æŠ:å³/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å³ç§»å‹•2
+		case IDC_CHECK10://€–Ú‘I‘ğ:‰E/—‰º‚·‚éƒuƒƒbƒN‚Ì‰EˆÚ“®2
 			dialogSetting.Key_ROGHT2 = wParam;
 			break;
-		case IDC_CHECK11://é …ç›®é¸æŠ:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•
+		case IDC_CHECK11://€–Ú‘I‘ğ:¶/—‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®
 			dialogSetting.Key_LEFT = wParam;
 			break;
-		case IDC_CHECK12://é …ç›®é¸æŠ:å·¦/è½ä¸‹ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ç§»å‹•2
+		case IDC_CHECK12://€–Ú‘I‘ğ:¶/—‰º‚·‚éƒuƒƒbƒN‚Ì¶ˆÚ“®2
 			dialogSetting.Key_LEFT2 = wParam;
 			break;
-		case IDC_CHECK13://ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º
+		case IDC_CHECK13://ƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY
 			dialogSetting.Key_PAUSE = wParam;
 			break;
-		case IDC_CHECK14://ã‚­ãƒ£ãƒ³ã‚»ãƒ«/ãƒãƒ¼ã‚º2
+		case IDC_CHECK14://ƒLƒƒƒ“ƒZƒ‹/ƒ|[ƒY2
 			dialogSetting.Key_PAUSE2 = wParam;
 			break;
 		}
@@ -1287,11 +1275,11 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 	}
 	break;
 	case WM_KEYUP:
-		if (wParam == VK_RETURN) break;//ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã‚‚ã ã‚
-		if (wParam == VK_SPACE) break;//ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã‚‚ã ã‚
-		if (wParam == VK_ADD) break;//+ã‚­ãƒ¼ã‚‚ã ã‚
-		if (CheckDouble(keyConfigType, wParam)) break;//ã‚­ãƒ¼é‡è¤‡ã‚‚ãƒ€ãƒ¡
-		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚­ãƒ¼ã«å¤‰æ›ã§ããªã„ã¨ãã¯ç„¡è¦–
+		if (wParam == VK_RETURN) break;//ƒGƒ“ƒ^[ƒL[‚à‚¾‚ß
+		if (wParam == VK_SPACE) break;//ƒXƒy[ƒXƒL[‚à‚¾‚ß
+		if (wParam == VK_ADD) break;//+ƒL[‚à‚¾‚ß
+		if (CheckDouble(keyConfigType, wParam)) break;//ƒL[d•¡‚àƒ_ƒ
+		if (ConvertVirtualKeyToKeyCode((int)wParam) == 65535)	break;//DXƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒL[‚É•ÏŠ·‚Å‚«‚È‚¢‚Æ‚«‚Í–³‹
 		SendMessage(GetDlgItem(hDlg, IDC_CHECK1), BM_SETCHECK, BST_UNCHECKED, 0);
 		SetDlgItemText(hDlg, IDC_CHECK1, ConvertVerKey(dialogSetting.Key_RotateL));
 		SendMessage(GetDlgItem(hDlg, IDC_CHECK2), BM_SETCHECK, BST_UNCHECKED, 0);
@@ -1329,21 +1317,20 @@ static LRESULT CALLBACK DlgProcTab9(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 
 }
 
-//ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰è¨­å®šã®ã‚„ã¤ã®ã‚„ã¤2
+//ƒL[ƒoƒCƒ“ƒhİ’è‚Ì‚â‚Â‚Ì‚â‚Â2
 static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
-	//Log_print(LOG_DEBUG, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_INFORMAL, _T("%x(16é€²æ•°)"), msg);
+	//Log_print(LOG_DEBUG, _T(__FILE__), _T(__FUNCTION__), __LINE__, LOG_INFORMAL, _T("%x(16i”)"), msg);
 
-	switch (msg)
-	{
+	switch (msg) {
 	case WM_INITDIALOG:
 	{
-		TCHAR cmbstr[][30] = { _T("ãƒ‘ãƒƒãƒ‰ç„¡åŠ¹"), _T("PAD1ä½¿ç”¨"), _T("PAD2ä½¿ç”¨"), _T("PAD3ä½¿ç”¨"), _T("PAD4ä½¿ç”¨"), _T("PAD5ä½¿ç”¨"), _T("PAD6ä½¿ç”¨"), _T("PAD7ä½¿ç”¨"), _T("PAD8ä½¿ç”¨"), _T("PAD9ä½¿ç”¨"), _T("PAD10ä½¿ç”¨"), _T("PAD11ä½¿ç”¨"), _T("PAD12ä½¿ç”¨"), _T("PAD13ä½¿ç”¨"), _T("PAD14ä½¿ç”¨"), _T("PAD15ä½¿ç”¨"), _T("PAD16ä½¿ç”¨") };
+		TCHAR cmbstr[][30] = { _T("ƒpƒbƒh–³Œø"), _T("PAD1g—p"), _T("PAD2g—p"), _T("PAD3g—p"), _T("PAD4g—p"), _T("PAD5g—p"), _T("PAD6g—p"), _T("PAD7g—p"), _T("PAD8g—p"), _T("PAD9g—p"), _T("PAD10g—p"), _T("PAD11g—p"), _T("PAD12g—p"), _T("PAD13g—p"), _T("PAD14g—p"), _T("PAD15g—p"), _T("PAD16g—p") };
 		for (int i = 0; i < ARRAY_LENGTH(cmbstr); i++) {
-			SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_ADDSTRING, 0, (LPARAM)cmbstr[i]);//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã«ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ ã‚’ã™ã‚‹
+			SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_ADDSTRING, 0, (LPARAM)cmbstr[i]);//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Éƒf[ƒ^‚Ì’Ç‰Á‚ğ‚·‚é
 		}
-		SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_SETCURSEL, dialogSetting.Joy_Type, 0);//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã«ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ ã‚’ã™ã‚‹
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_SETCURSEL, dialogSetting.Joy_Type, 0);//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Éƒf[ƒ^‚Ì’Ç‰Á‚ğ‚·‚é
 
-		//ãƒ‘ãƒƒãƒ‰ç„¡åŠ¹ã®å ´åˆã¯é¸æŠè‚¢ã‚’é¸ã¹ãªã„ã‚ˆã†ã«ã™ã‚‹
+																						   //ƒpƒbƒh–³Œø‚Ìê‡‚Í‘I‘ğˆ‚ğ‘I‚×‚È‚¢‚æ‚¤‚É‚·‚é
 		{
 			bool en = (dialogSetting.Joy_Type == 0) ? false : true;
 			EnableWindow(GetDlgItem(hDlg, IDC_CHECK1), en);
@@ -1380,7 +1367,7 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 			EnableWindow(GetDlgItem(hDlg, IDC_CHECK32), en);
 		}
 
-		//ç¾åœ¨ã®è¨­å®šã‚’åæ˜ ã•ã›ã‚‹
+		//Œ»İ‚Ìİ’è‚ğ”½‰f‚³‚¹‚é
 		{
 			SetDlgItemText(hDlg, IDC_CHECK1, ConvertVerJoyKey(dialogSetting.Joy_RotateL[0]));
 			SetDlgItemText(hDlg, IDC_CHECK2, ConvertVerJoyKey(dialogSetting.Joy_RotateL[1]));
@@ -1425,10 +1412,10 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 	}
 	break;
 	case WM_COMMAND:
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®ãƒã‚§ãƒƒã‚¯é …ç›®å–å¾—
-		//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã§ã¨ã‚Šã‚ãˆãšã‚¤ãƒ™ãƒ³ãƒˆ
+		//ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìƒ`ƒFƒbƒN€–Úæ“¾
+		//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Å‚Æ‚è‚ ‚¦‚¸ƒCƒxƒ“ƒg
 		if (HIWORD(wParam) == BN_CLICKED || HIWORD(wParam) == CBN_SELCHANGE) {
-			//ç¾åœ¨é¸æŠã—ã¦ã„ã‚‹ã‚‚ã®ä»¥å¤–ã®ãƒœã‚¿ãƒ³ã‚’åˆæœŸçŠ¶æ…‹ã«æˆ»ã™
+			//Œ»İ‘I‘ğ‚µ‚Ä‚¢‚é‚à‚ÌˆÈŠO‚Ìƒ{ƒ^ƒ“‚ğ‰Šúó‘Ô‚É–ß‚·
 			SetJoyNomalText(hDlg, lParam, IDC_CHECK1);
 			SetJoyNomalText(hDlg, lParam, IDC_CHECK2);
 			SetJoyNomalText(hDlg, lParam, IDC_CHECK3);
@@ -1464,7 +1451,7 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 			SetJoyNomalText(hDlg, lParam, IDC_CHECK32);
 		}
 
-		//å„ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†
+		//Šeƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒgˆ—
 		{
 			EnentJoySetButtonChange(hDlg, wParam, lParam, IDC_CHECK1);
 			EnentJoySetButtonChange(hDlg, wParam, lParam, IDC_CHECK2);
@@ -1501,10 +1488,10 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 		}
 
 		if ((HWND)lParam == GetDlgItem(hDlg, IDC_COMBO1)) {
-			if (HIWORD(wParam) == CBN_SELCHANGE) {//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠãŒå¤‰æ›´ã•ã‚ŒãŸã¨ã
-				dialogSetting.Joy_Type = (unsigned int)SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, 0, 0);//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠé …ç›®ã®å–å¾—
+			if (HIWORD(wParam) == CBN_SELCHANGE) {//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğ‚ª•ÏX‚³‚ê‚½‚Æ‚«
+				dialogSetting.Joy_Type = (unsigned int)SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_GETCURSEL, 0, 0);//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğ€–Ú‚Ìæ“¾
 
-				//ãƒ‘ãƒƒãƒ‰ç„¡åŠ¹ã®å ´åˆã¯é¸æŠè‚¢ã‚’é¸ã¹ãªã„ã‚ˆã†ã«ã™ã‚‹
+																													 //ƒpƒbƒh–³Œø‚Ìê‡‚Í‘I‘ğˆ‚ğ‘I‚×‚È‚¢‚æ‚¤‚É‚·‚é
 				{
 					bool en = (dialogSetting.Joy_Type == 0) ? false : true;
 					EnableWindow(GetDlgItem(hDlg, IDC_CHECK1), en);
@@ -1545,7 +1532,7 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 		break;
 	case WM_SHOWWINDOW:
 	{
-		//ç¾åœ¨é¸æŠã—ã¦ã„ã‚‹ã‚‚ã®ã‚‚å«ã‚ã¦ãƒœã‚¿ãƒ³ã‚’åˆæœŸçŠ¶æ…‹ã«æˆ»ã™(ç„¡ç†çŸ¢ç†é–¢æ•°å†…ã®IFåˆ†ã‚’é€šéã•ã›ã¾ã™)
+		//Œ»İ‘I‘ğ‚µ‚Ä‚¢‚é‚à‚Ì‚àŠÜ‚ß‚Äƒ{ƒ^ƒ“‚ğ‰Šúó‘Ô‚É–ß‚·(–³—–î—ŠÖ”“à‚ÌIF•ª‚ğ’Ê‰ß‚³‚¹‚Ü‚·)
 		joyConfigType = 0;
 		SetJoyNomalText(hDlg, -1, IDC_CHECK1);
 		SetJoyNomalText(hDlg, -1, IDC_CHECK2);
@@ -1591,80 +1578,80 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 	{
 		HDC hDC = (HDC)wParam;
 		HWND hCtrl = (HWND)lParam;
-		if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		if (hCtrl == GetDlgItem(hDlg, IDC_STATIC)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT1)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT1)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT2)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT2)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT3)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT3)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT4)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT4)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT5)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT5)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT6)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT6)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT7)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT7)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT8)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT8)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT9)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT9)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT10)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT10)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_CHECK20)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_CHECK20)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
-		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT11)) //ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®ID
+		else if (hCtrl == GetDlgItem(hDlg, IDC_STATICTEXT11)) //ƒ‰ƒWƒIƒ{ƒ^ƒ“‚ÌID
 		{
-			SetBkMode(hDC, TRANSPARENT);	// èƒŒæ™¯ã‚’é€é
-			return (LRESULT)bkColorBrush;	// èƒŒæ™¯è‰²ã®è‰²
+			SetBkMode(hDC, TRANSPARENT);	// ”wŒi‚ğ“§‰ß
+			return (LRESULT)bkColorBrush;	// ”wŒiF‚ÌF
 		}
 		break;
 
 	}
 	case WM_USER_JOYDOWN:
 	{
-		if (joyConfigmode == false)	break;//ã‚­ãƒ¼å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰ã§ç„¡ã„æ™‚ã¯ä½•ã‚‚ã—ãªã„
-		if (joyConfigType == 0)	break;//ã‚­ãƒ¼å…¥åŠ›ãŒçµ‚ã‚ã£ã¦ã„ã‚‹
-		CheckDoubleJoy(joyConfigType, SetBitRight(lParam));//ã‚­ãƒ¼é‡è¤‡ã¯ä¸Šæ›¸ãã™ã‚‹
-		//è¨­å®šã®è¨˜éŒ²
+		if (joyConfigmode == false)	break;//ƒL[“ü—Íƒ‚[ƒh‚Å–³‚¢‚Í‰½‚à‚µ‚È‚¢
+		if (joyConfigType == 0)	break;//ƒL[“ü—Í‚ªI‚í‚Á‚Ä‚¢‚é
+		CheckDoubleJoy(joyConfigType, SetBitRight(lParam));//ƒL[d•¡‚Íã‘‚«‚·‚é
+														   //İ’è‚Ì‹L˜^
 		int *p = getJoySettings(joyConfigType);
 		*p = SetBitRight(lParam);
 		joyConfigType = 0;
@@ -1717,34 +1704,34 @@ static LRESULT CALLBACK DlgProcTab10(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
 
 }
 
-//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°é¸æŠé …ç›®ã®ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã®æ•´åˆæ€§ã®ç¢ºèª(å‰æã¨ã—ã¦é¸æŠé …ç›®ã®IDãŒé€£ç¶šã—ã¦ã„ã‚‹)
+//ƒ_ƒCƒAƒƒO‘I‘ğ€–Ú‚ÌƒZ[ƒuƒf[ƒ^‚Ì®‡«‚ÌŠm”F(‘O’ñ‚Æ‚µ‚Ä‘I‘ğ€–Ú‚ÌID‚ª˜A‘±‚µ‚Ä‚¢‚é)
 static void VerifySaveData() {
-	//ç”»é¢ã‚µã‚¤ã‚º
+	//‰æ–ÊƒTƒCƒY
 	int No = dialogSetting.resolution - IDC_DSIZE_RADIO1;
-	if (No < 0 || (IDC_DSIZE_RADIO5 - IDC_DSIZE_RADIO1) < No)	dialogSetting.resolution = IDC_DSIZE_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//æç”»é–“éš”
+	if (No < 0 || (IDC_DSIZE_RADIO5 - IDC_DSIZE_RADIO1) < No)	dialogSetting.resolution = IDC_DSIZE_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																											//•`‰æŠÔŠu
 	No = dialogSetting.Drawing_interval - IDC_DRAWING_INTERVAL1;
-	if (No < 0 || (IDC_DRAWING_INTERVAL4 - IDC_DRAWING_INTERVAL1) < No)	dialogSetting.Drawing_interval = IDC_DRAWING_INTERVAL1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//å‚ç›´åŒæœŸ
+	if (No < 0 || (IDC_DRAWING_INTERVAL4 - IDC_DRAWING_INTERVAL1) < No)	dialogSetting.Drawing_interval = IDC_DRAWING_INTERVAL1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																															   //‚’¼“¯Šú
 	No = dialogSetting.VSync - IDC_VSYNC_RADIO1;
-	if (No < 0 || (IDC_VSYNC_RADIO2 - IDC_VSYNC_RADIO1) < No)	dialogSetting.VSync = IDC_VSYNC_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//ç”»é¢æ¶ˆå»
+	if (No < 0 || (IDC_VSYNC_RADIO2 - IDC_VSYNC_RADIO1) < No)	dialogSetting.VSync = IDC_VSYNC_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																									   //‰æ–ÊÁ‹
 	No = dialogSetting.Clear - IDC_CLEAR_RADIO1;
-	if (No < 0 || (IDC_CLEAR_RADIO2 - IDC_CLEAR_RADIO1) < No)	dialogSetting.Clear = IDC_CLEAR_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«
+	if (No < 0 || (IDC_CLEAR_RADIO2 - IDC_CLEAR_RADIO1) < No)	dialogSetting.Clear = IDC_CLEAR_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																									   //ƒ}ƒEƒXƒJ[ƒ\ƒ‹
 	No = dialogSetting.Cursor - IDC_CURSOR_RADIO1;
-	if (No < 0 || (IDC_CURSOR_RADIO2 - IDC_CURSOR_RADIO1) < No)	dialogSetting.Cursor = IDC_CURSOR_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰
+	if (No < 0 || (IDC_CURSOR_RADIO2 - IDC_CURSOR_RADIO1) < No)	dialogSetting.Cursor = IDC_CURSOR_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																										 //ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh
 	No = dialogSetting.Thread - IDC_THREAD_RADIO1;
-	if (No < 0 || (IDC_THREAD_RADIO2 - IDC_THREAD_RADIO1) < No)	dialogSetting.Thread = IDC_THREAD_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//ãƒ†ã‚¯ã‚¹ãƒãƒ£åˆ†å‰²
+	if (No < 0 || (IDC_THREAD_RADIO2 - IDC_THREAD_RADIO1) < No)	dialogSetting.Thread = IDC_THREAD_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																										 //ƒeƒNƒXƒ`ƒƒ•ªŠ„
 	No = dialogSetting.Texture - IDC_TEXTURE_RADIO1;
-	if (No < 0 || (IDC_TEXTURE_RADIO2 - IDC_TEXTURE_RADIO1) < No)	dialogSetting.Texture = IDC_TEXTURE_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
+	if (No < 0 || (IDC_TEXTURE_RADIO2 - IDC_TEXTURE_RADIO1) < No)	dialogSetting.Texture = IDC_TEXTURE_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
 	No = dialogSetting.analogstick - IDC_RADIO1;
-	if (No < 0 || (IDC_RADIO3 - IDC_RADIO1) < No)	dialogSetting.analogstick = IDC_RADIO1;//æ•´åˆæ€§ãŒåˆã£ã¦ã„ãªã„å ´åˆã¯è¦å®šå€¤ã§æ›¸ãæ›ãˆ
-	//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°
+	if (No < 0 || (IDC_RADIO3 - IDC_RADIO1) < No)	dialogSetting.analogstick = IDC_RADIO1;//®‡«‚ª‡‚Á‚Ä‚¢‚È‚¢ê‡‚Í‹K’è’l‚Å‘‚«Š·‚¦
+																						   //ƒL[ƒRƒ“ƒtƒBƒO
 	dialogSetting.Key_Enable = (dialogSetting.Key_Enable) ? true : false;
-	//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚­ãƒ¼ã«å¤‰æ›ã§ãã‚‹ã‹ã®ç¢ºèª(ä¸€å¿œé‡è¤‡ã—ã¦ã¦ã‚‚å‹•ãã®ã§ç¢ºèªã—ãªã„)
+	//DXƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒL[‚É•ÏŠ·‚Å‚«‚é‚©‚ÌŠm”F(ˆê‰d•¡‚µ‚Ä‚Ä‚à“®‚­‚Ì‚ÅŠm”F‚µ‚È‚¢)
 	{
 		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_RotateL) == 65535) {
 			dialogSetting.Key_RotateL = 'Z';
@@ -1785,16 +1772,16 @@ static void VerifySaveData() {
 		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_LEFT2) == 65535) {
 			dialogSetting.Key_LEFT2 = VK_LEFT;
 		}
-		if (dialogSetting.Key_PAUSE != VK_ESCAPE) {//ã“ã“ã¯çµ¶å¯¾ESCã‚­ãƒ¼
+		if (dialogSetting.Key_PAUSE != VK_ESCAPE) {//‚±‚±‚Íâ‘ÎESCƒL[
 			dialogSetting.Key_PAUSE = VK_ESCAPE;
 		}
 		if (ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_PAUSE2) == 65535) {
 			dialogSetting.Key_PAUSE2 = VK_ESCAPE;
 		}
 	}
-	//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰
+	//ƒWƒ‡ƒCƒpƒbƒh
 	if (dialogSetting.Joy_Type < 0 || DX_INPUT_PAD16 < dialogSetting.Joy_Type)	dialogSetting.Joy_Type = 0;
-	//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ã‚­ãƒ¼ãŒå¦¥å½“ã‹ã©ã†ã‹ã®ç¢ºèª(32ãƒ“ãƒƒãƒˆç›®ã¾ã§ä½¿ã£ã¦ã‚‹ã®ã§å³è©°ã®ã¿è¡Œã†)
+	//ƒWƒ‡ƒCƒpƒbƒh‚ÌƒL[‚ª‘Ã“–‚©‚Ç‚¤‚©‚ÌŠm”F(32ƒrƒbƒg–Ú‚Ü‚Åg‚Á‚Ä‚é‚Ì‚Å‰E‹l‚Ì‚İs‚¤)
 	{
 		for (int i = 0; i < 4; i++) dialogSetting.Joy_RotateL[i] = SetBitRight(dialogSetting.Joy_RotateL[i]);
 		for (int i = 0; i < 4; i++) dialogSetting.Joy_RotateR[i] = SetBitRight(dialogSetting.Joy_RotateR[i]);
@@ -1807,10 +1794,9 @@ static void VerifySaveData() {
 	}
 }
 
-//ãƒœã‚¿ãƒ³IDã‹ã‚‰ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰è¨­å®šé …ç›®ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
+//ƒ{ƒ^ƒ“ID‚©‚çƒWƒ‡ƒCƒpƒbƒhİ’è€–Ú‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚·‚é
 static int *getJoySettings(int ItemID) {
-	switch (ItemID)
-	{
+	switch (ItemID) {
 	case IDC_CHECK1:	return &dialogSetting.Joy_RotateL[0];
 	case IDC_CHECK2:	return &dialogSetting.Joy_RotateL[1];
 	case IDC_CHECK3:	return &dialogSetting.Joy_RotateL[2];
@@ -1851,27 +1837,27 @@ static int *getJoySettings(int ItemID) {
 	case IDC_CHECK31:	return &dialogSetting.Joy_ENTER[2];
 	case IDC_CHECK32:	return &dialogSetting.Joy_ENTER[3];
 	default:
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®è¨­å®šé …ç›®ãŒç‰¹å®šã§ãã¾ã›ã‚“ã§ã—ãŸ(ID=%d)"), ItemID);
+		printLog_E(_T("ƒWƒ‡ƒCƒpƒbƒh‚Ìİ’è€–Ú‚ª“Á’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½(ID=%d)"), ItemID);
 		return NULL;
 	}
 }
 
-//ç¾åœ¨ã®ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰è¨­å®šã§ãƒœã‚¿ãƒ³ã‚’æ›´æ–°ã™ã‚‹
+//Œ»İ‚ÌƒWƒ‡ƒCƒpƒbƒhİ’è‚Åƒ{ƒ^ƒ“‚ğXV‚·‚é
 static void SetJoyNomalText(HWND hDlg, LPARAM lParam, int ItemID) {
-	if ((HWND)lParam != GetDlgItem(hDlg, joyConfigType)) {//è‡ªèº«ã®å ´åˆã¯ç„¡è¦–ã™ã‚‹
+	if ((HWND)lParam != GetDlgItem(hDlg, joyConfigType)) {//©g‚Ìê‡‚Í–³‹‚·‚é
 		SendMessage(GetDlgItem(hDlg, ItemID), BM_SETCHECK, BST_UNCHECKED, 0);
 		SetDlgItemText(hDlg, ItemID, ConvertVerJoyKey(*getJoySettings(ItemID)));
 	}
 }
 
-//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰è¨­å®šã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ãã®ã‚¤ãƒ™ãƒ³ãƒˆ
+//ƒWƒ‡ƒCƒpƒbƒhİ’è‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«‚ÌƒCƒxƒ“ƒg
 static int EnentJoySetButtonChange(HWND hDlg, WPARAM wParam, LPARAM lParam, int ItemID) {
-	if ((HWND)lParam == GetDlgItem(hDlg, ItemID)) {//ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ™ãƒ³ãƒˆ
-		if (HIWORD(wParam) == BN_CLICKED) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ã
+	if ((HWND)lParam == GetDlgItem(hDlg, ItemID)) {//ƒ{ƒ^ƒ“‚ÌƒCƒxƒ“ƒg
+		if (HIWORD(wParam) == BN_CLICKED) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«
 			switch (SendMessage(GetDlgItem(hDlg, ItemID), BM_GETCHECK, 0, 0)) {
 			case BST_CHECKED:
 			{
-				//å…¥åŠ›çŠ¶æ…‹ã‚’çµ‚äº†ã—ã€é …ç›®ã®è¨­å®šã‚’å‰Šé™¤ã™ã‚‹
+				//“ü—Íó‘Ô‚ğI—¹‚µA€–Ú‚Ìİ’è‚ğíœ‚·‚é
 				joyConfigType = 0;
 				joyConfigmode = false;
 				int *p = getJoySettings(ItemID);
@@ -1879,12 +1865,12 @@ static int EnentJoySetButtonChange(HWND hDlg, WPARAM wParam, LPARAM lParam, int 
 				SendMessage(GetDlgItem(hDlg, ItemID), BM_SETCHECK, BST_UNCHECKED, 0);
 				SetDlgItemText(hDlg, ItemID, ConvertVerJoyKey(*p));
 			}
-				break;
+			break;
 			case BST_UNCHECKED:
 				joyConfigType = ItemID;
 				joyConfigmode = true;
 				SendMessage(GetDlgItem(hDlg, joyConfigType), BM_SETCHECK, BST_CHECKED, 0);
-				SetDlgItemText(hDlg, ItemID, _T("å…¥åŠ›ä¸­"));
+				SetDlgItemText(hDlg, ItemID, _T("“ü—Í’†"));
 				break;
 			}
 			return 1;
@@ -1893,9 +1879,9 @@ static int EnentJoySetButtonChange(HWND hDlg, WPARAM wParam, LPARAM lParam, int 
 	return 0;
 }
 
-//ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+//‰¼‘zƒL[ƒR[ƒh‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
 static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
-	//vkey[ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰]="ãã®å†…å®¹ã‚’è¡¨ã™æ–‡å­—åˆ—");
+	//vkey[‰¼‘zƒL[ƒR[ƒh]="‚»‚Ì“à—e‚ğ•\‚·•¶š—ñ");
 	WPARAM VK = VkeyCode;
 	TCHAR *vkey[500];
 
@@ -1924,11 +1910,11 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	vkey[22] = _T("[22]");
 	vkey[23] = _T("[JUNJA]");
 	vkey[24] = _T("[FINAL]");
-	vkey[25] = _T("[ALT+åŠè§’/å…¨è§’]");
+	vkey[25] = _T("[ALT+”¼Šp/‘SŠp]");
 	vkey[26] = _T("[26]");
 	vkey[27] = _T("[Esc]");
-	vkey[28] = _T("[å‰å€™è£œ]");
-	vkey[29] = _T("[ç„¡å¤‰æ›]");
+	vkey[28] = _T("[‘OŒó•â]");
+	vkey[29] = _T("[–³•ÏŠ·]");
 	vkey[30] = _T("[ACCEPT]");
 	vkey[31] = _T("[MODECHANGE]");
 	vkey[32] = _T("[SPACE]");
@@ -1990,9 +1976,9 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	vkey[88] = _T("[X]");
 	vkey[89] = _T("[Y]");
 	vkey[90] = _T("[Z]");
-	vkey[91] = _T("[L Windowsã‚­ãƒ¼]");
-	vkey[92] = _T("[R Windowsã‚­ãƒ¼]");
-	vkey[93] = _T("[ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³]");
+	vkey[91] = _T("[L WindowsƒL[]");
+	vkey[92] = _T("[R WindowsƒL[]");
+	vkey[93] = _T("[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“]");
 	vkey[94] = _T("[94]");
 	vkey[95] = _T("[95]");
 	vkey[96] = _T("[NUM 0]");
@@ -2128,7 +2114,7 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	vkey[226] = _T("[ _ ]");
 	vkey[227] = _T("[227]");
 	vkey[228] = _T("[228]");
-	vkey[229] = _T("[ã²ã‚‰ãŒãª]");
+	vkey[229] = _T("[‚Ğ‚ç‚ª‚È]");
 	vkey[230] = _T("[230]");
 	vkey[231] = _T("[231]");
 	vkey[232] = _T("[232]");
@@ -2141,9 +2127,9 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	vkey[239] = _T("[239]");
 	vkey[240] = _T("[CAPS]");
 	vkey[241] = _T("[241]");
-	vkey[242] = _T("[ã‚«ã‚¿ã‚«ãƒŠã²ã‚‰ãŒãª]");
+	vkey[242] = _T("[ƒJƒ^ƒJƒi‚Ğ‚ç‚ª‚È]");
 	vkey[243] = _T("[243]");
-	vkey[244] = _T("[åŠè§’/å…¨è§’]");
+	vkey[244] = _T("[”¼Šp/‘SŠp]");
 	vkey[245] = _T("[245]");
 	vkey[246] = _T("[ATTN]");
 	vkey[247] = _T("[CRSEL]");
@@ -2181,7 +2167,7 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	vkey[279] = _T("[279]");
 	vkey[280] = _T("[280]");
 	vkey[281] = _T("[281]");
-	vkey[282] = _T("[ã‚«ã‚¿ã‚«ãƒŠ]");
+	vkey[282] = _T("[ƒJƒ^ƒJƒi]");
 	vkey[283] = _T("[283]");
 	vkey[284] = _T("[284]");
 	vkey[285] = _T("[285]");
@@ -2405,9 +2391,9 @@ static TCHAR *ConvertVerKey(WPARAM VkeyCode) {
 	return vkey[VK];
 }
 
-//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã«å¤‰æ›
+//ƒL[ƒRƒ“ƒtƒBƒO‚É•ÏŠ·
 static void CreateKeyConfig(KeyBind *kb) {
-	//DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚­ãƒ¼ã«å¤‰æ›
+	//DXƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒL[‚É•ÏŠ·
 	kb->Key_ENTER = KEY_INPUT_RETURN;
 	kb->Key_ENTER2 = KEY_INPUT_RETURN;
 	kb->Key_PAUSE = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_PAUSE);
@@ -2426,9 +2412,9 @@ static void CreateKeyConfig(KeyBind *kb) {
 	kb->Key_RIGHT2 = ConvertVirtualKeyToKeyCode((int)dialogSetting.Key_ROGHT2);
 }
 
-//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚°ã«å¤‰æ›(ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰)
+//ƒL[ƒRƒ“ƒtƒBƒO‚É•ÏŠ·(ƒWƒ‡ƒCƒpƒbƒh)
 static void CreateKeyConfigjoy(KeyBindjoy *kb) {
-	//é…åˆ—ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹
+	//”z—ñ‚ğƒRƒs[‚·‚é
 	for (int i = 0; i < 4; i++) kb->Joy_ENTER[i] = dialogSetting.Joy_ENTER[i];
 	for (int i = 0; i < 4; i++) kb->Joy_PAUSE[i] = dialogSetting.Joy_PAUSE[i];
 	for (int i = 0; i < 4; i++) kb->Joy_RotateL[i] = dialogSetting.Joy_RotateL[i];
@@ -2439,16 +2425,15 @@ static void CreateKeyConfigjoy(KeyBindjoy *kb) {
 	for (int i = 0; i < 4; i++) kb->Joy_RIGHT[i] = dialogSetting.Joy_ROGHT[i];
 }
 
-//ãƒ‘ãƒƒãƒ‰ã®ã‚­ãƒ¼ç•ªå·ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+//ƒpƒbƒh‚ÌƒL[”Ô†‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
 static TCHAR *ConvertVerJoyKey(int JoyCode) {
 	JoyCode = SetBitRight(JoyCode);
-	switch (JoyCode)
-	{
-	case 0:					return _T("ãªã—");
-	case PAD_INPUT_DOWN:	return _T("â†“");
-	case PAD_INPUT_LEFT:	return _T("â†");
-	case PAD_INPUT_RIGHT:	return _T("â†’");
-	case PAD_INPUT_UP:		return _T("â†‘");
+	switch (JoyCode) {
+	case 0:					return _T("‚È‚µ");
+	case PAD_INPUT_DOWN:	return _T("«");
+	case PAD_INPUT_LEFT:	return _T("©");
+	case PAD_INPUT_RIGHT:	return _T("¨");
+	case PAD_INPUT_UP:		return _T("ª");
 	case PAD_INPUT_1:		return _T("1");
 	case PAD_INPUT_2:		return _T("2");
 	case PAD_INPUT_3:		return _T("3");
@@ -2478,12 +2463,12 @@ static TCHAR *ConvertVerJoyKey(int JoyCode) {
 	case PAD_INPUT_27:		return _T("27");
 	case PAD_INPUT_28:		return _T("28");
 	}
-	return _T("ä¸æ˜");
+	return _T("•s–¾");
 }
 
-//ã‚­ãƒ¼ã®é‡è¤‡ç¢ºèª(å…ƒã€…æ›¸ã„ã¦ã‚ã£ãŸã‚­ãƒ¼)(falseã§é‡è¤‡ç„¡ã—)
+//ƒL[‚Ìd•¡Šm”F(Œ³X‘‚¢‚Ä‚ ‚Á‚½ƒL[)(false‚Åd•¡–³‚µ)
 static bool CheckDouble(int defplm, WPARAM wParam) {
-	//if (keyConfigmode == false)	defplm = 0;//ã‚­ãƒ¼å…¥åŠ›çŠ¶æ…‹å‡ºãªã„ã¨ã
+	//if (keyConfigmode == false)	defplm = 0;//ƒL[“ü—Íó‘Ôo‚È‚¢‚Æ‚«
 
 	if (defplm != IDC_CHECK1 && dialogSetting.Key_RotateL == wParam)	return true;
 	if (defplm != IDC_CHECK2 && dialogSetting.Key_RotateL2 == wParam)	return true;
@@ -2503,10 +2488,10 @@ static bool CheckDouble(int defplm, WPARAM wParam) {
 	return false;
 }
 
-//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®ã‚­ãƒ¼é‡è¤‡ç¢ºèª(é‡è¤‡ã—ã¦ã„ãŸå ´åˆã¯é‡è¤‡ã—ã¦ã„ã‚‹è¨­å®šã‚’å‰Šé™¤ã—ã¾ã™)(å¤‰æ›´ã—ãŸå ´åˆtrue)
+//ƒWƒ‡ƒCƒpƒbƒh‚ÌƒL[d•¡Šm”F(d•¡‚µ‚Ä‚¢‚½ê‡‚Íd•¡‚µ‚Ä‚¢‚éİ’è‚ğíœ‚µ‚Ü‚·)(•ÏX‚µ‚½ê‡true)
 static bool CheckDoubleJoy(int defplm, int wParam) {
 	bool Changed = false;
-	//è‡ªèº«ã®ã¨é‡è¤‡ã™ã‚‹å ´åˆã‚‚é¢å€’ãªã®ã§è¨­å®šæ¶ˆå»ww
+	//©g‚Ì‚Æd•¡‚·‚éê‡‚à–Ê“|‚È‚Ì‚Åİ’èÁ‹ww
 	for (int i = 0; i < ARRAY_LENGTH(dialogSetting.Joy_RotateL); i++) {
 		if (dialogSetting.Joy_RotateL[i] == wParam) {
 			Changed = true;
@@ -2559,20 +2544,20 @@ static bool CheckDoubleJoy(int defplm, int wParam) {
 	return Changed;
 }
 
-//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒˆã®ã‚­ãƒ¼å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—ã—ã€æŠ¼ã•ã‚ŒãŸç¬é–“ã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã™ã‚‹
+//ƒWƒ‡ƒCƒpƒbƒg‚ÌƒL[“ü—Íó‘Ô‚ğæ“¾‚µA‰Ÿ‚³‚ê‚½uŠÔ‚ÉƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒW‚ğ‘—M‚·‚é
 static void joypatEvent() {
-	int state = GetJoypadInputState(dialogSetting.Joy_Type);//å…¥åŠ›çŠ¶æ…‹ã®å–å¾—
-	int ChangeVal = joyBeforeState ^ state;//æ’ä»–çš„è«–ç†å’Œã‚ˆã‚Šå¤‰åŒ–éƒ¨åˆ†ã®ãƒ“ãƒƒãƒˆã‚’å–å¾—
-	//æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ã‚’åˆ¤å®šã™ã‚‹
-	int Push = (ChangeVal & state);//å¤‰åŒ–ãŒã‚ã£ã¦ã‹ã¤ä»Šå›å–å¾—ã—ãŸã¨ãã«æŠ¼ã•ã‚Œã¦ã„ã‚‹ã‚­ãƒ¼ã®å–å¾—
-	if (Push) {//è©²å½“ã‚­ãƒ¼ãŒå­˜åœ¨ã™ã‚‹
-		SendMessage(Tab10, WM_USER_JOYDOWN, NULL, Push);//ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ãŒæŠ¼ã•ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆ(ã‚«ã‚¹ã‚¿ãƒ )ã‚’Tab10ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«é€ä¿¡
+	int state = GetJoypadInputState(dialogSetting.Joy_Type);//“ü—Íó‘Ô‚Ìæ“¾
+	int ChangeVal = joyBeforeState ^ state;//”r‘¼“I˜_—˜a‚æ‚è•Ï‰»•”•ª‚Ìƒrƒbƒg‚ğæ“¾
+										   //‰Ÿ‚³‚ê‚½ƒL[‚ğ”»’è‚·‚é
+	int Push = (ChangeVal & state);//•Ï‰»‚ª‚ ‚Á‚Ä‚©‚Â¡‰ñæ“¾‚µ‚½‚Æ‚«‚É‰Ÿ‚³‚ê‚Ä‚¢‚éƒL[‚Ìæ“¾
+	if (Push) {//ŠY“–ƒL[‚ª‘¶İ‚·‚é
+		SendMessage(Tab10, WM_USER_JOYDOWN, NULL, Push);//ƒWƒ‡ƒCƒpƒbƒh‚ª‰Ÿ‚³‚ê‚½ƒCƒxƒ“ƒg(ƒJƒXƒ^ƒ€)‚ğTab10ƒEƒBƒ“ƒhƒE‚É‘—M
 	}
-	//ç›´å‰ã®çŠ¶æ…‹ã®è¨˜éŒ²
+	//’¼‘O‚Ìó‘Ô‚Ì‹L˜^
 	joyBeforeState = state;
 }
 
-//ã‚­ãƒ¼å…¥åŠ›ãƒ“ãƒƒãƒˆåˆ—ã‹ã‚‰ä¸€ç•ªå³ã‚’å–å¾—(ç„¡ã—ã¯0ã§1åŠ ç®—)â†æ³¨æ„ï¼ï¼ï¼
+//ƒL[“ü—Íƒrƒbƒg—ñ‚©‚çˆê”Ô‰E‚ğæ“¾(–³‚µ‚Í0‚Å1‰ÁZ)©’ˆÓIII
 static int GetBit(LPARAM Val) {
 	for (int i = 0; i < sizeof(Val) * 8; i++) {
 		if (Val & 1) {
@@ -2585,7 +2570,7 @@ static int GetBit(LPARAM Val) {
 	return 0;
 }
 
-//ä¸€ç•ªå³ã®ãƒ“ãƒƒãƒˆã®ã¿æ®‹ã—ä»–ã‚’0ã§åŸ‹ã‚ã‚‹
+//ˆê”Ô‰E‚Ìƒrƒbƒg‚Ì‚İc‚µ‘¼‚ğ0‚Å–„‚ß‚é
 static int SetBitRight(LPARAM Val) {
 	int base = 1;
 	LPARAM V = GetBit(Val);

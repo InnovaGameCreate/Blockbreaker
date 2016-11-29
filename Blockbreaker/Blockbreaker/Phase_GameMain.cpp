@@ -17,6 +17,8 @@ Phase_GameMain::~Phase_GameMain() {
 
 //初期化(描画処理)
 void Phase_GameMain::Init_Draw() {
+	using SK::Math::Pot;
+
 	//ゲーム画面の生成(後でシェーダを使いたいので2のn乗のサイズで作成します)
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
 
@@ -45,7 +47,6 @@ void Phase_GameMain::RestoreGraphCallback() {
 //初期化(計算処理)
 void Phase_GameMain::Init_Update() {
 	Field.Init_Update();	//フィールド情報の初期化
-
 	Restart();	//リスタート
 }
 
@@ -88,8 +89,6 @@ void Phase_GameMain::Draw() {
 	fallBlockInfo.Draw();	//落下ブロックの描画
 
 	Field.Draw_Block();	//フィールドブロックの描画
-
-	Field.Draw_Lay();	//破壊光線の描画
 
 	
 
@@ -326,8 +325,6 @@ void Phase_GameMain::Update() {
 		return;
 	}
 
-	//破壊光線エフェクトの更新
-	Field.Update_Lay();
 	//フライテキストの更新
 	flyText.Update();
 
@@ -813,7 +810,7 @@ void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
 		phase_GameMain.Restart();
 		break;
 	case 2://終了ボタン
-		Changefaze(FAZE_TopMenu, THREAD_Update);
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
 		break;
 	default:
 		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
@@ -826,7 +823,7 @@ Tex_Block *Phase_GameMain::getTex_Block() {
 }
 
 //乱数表の取得
-RandomTable *Phase_GameMain::getRandomTable() {
+SK::RandomTable *Phase_GameMain::getRandomTable() {
 	return &randomTable;
 }
 

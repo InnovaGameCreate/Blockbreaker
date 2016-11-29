@@ -7,7 +7,7 @@
 #include "Tex_Block.h"
 #include "Field_Admin.h"
 
-class Phase_GameMain : public PhaseController
+class Phase_GameMain : public SK::Phase_
 {
 public://定数とかの宣言
 
@@ -75,7 +75,7 @@ private:
 	Field_Admin Field;	//フィールド情報
 
 
-	SelectItem_pause pauseMenu = SelectItem_pause(Base_BB_getWINDOW_WIDTH()/2, 600);	//ポーズメニューの項目
+	SelectItem_pause pauseMenu = SelectItem_pause(GAMEWINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
@@ -106,7 +106,7 @@ private:
 	GameCycle gameCycle;		//ゲームサイクル
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
-	RandomTable randomTable;	//乱数テーブル
+	SK::RandomTable randomTable;	//乱数テーブル
 
 	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
 	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)
@@ -150,8 +150,8 @@ public:
 	void RestoreGraphCallback();		//フルスクリーンに復帰時に呼ばれる
 	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
 	Tex_Block *getTex_Block();			//テクスチャの情報の取得
-	RandomTable *getRandomTable();		//乱数表の取得
-	Block_Fall *getfallBlockInfo();	//落下ブロッククラスのポインタ取得
+	SK::RandomTable *getRandomTable();		//乱数表の取得
+	Block_Fall *getfallBlockInfo();		//落下ブロッククラスのポインタ取得
 	Phase_GameMain::Score *getScore();	//スコアクラスのインスタンスの取得
 	FlyText *getFlyText();				//フライテキストのインスタンスの取得
 	Field_Admin *getField();			//フィールドブロックのインスタンスの取得

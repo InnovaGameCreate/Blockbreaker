@@ -1,6 +1,8 @@
 #pragma once
 #include "Enum.h"
 #include "Tex_Block.h"
+
+#include <string>
 //ブロックの親クラス
 
 class Block

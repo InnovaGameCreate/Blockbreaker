@@ -43,3 +43,35 @@ typedef struct {
 	int Tex_BlockFireEffect2;		//炎エフェクトブロック2(炭)
 	int Tex_BlockCenterEffect;		//回転の中心であることを分かるようにするエフェクト
 }BlockTexData;
+
+//キーバインドの設定(DXライブラリのキーコード)
+typedef struct KeyBind {
+	int Key_ENTER;			//決定キー
+	int Key_ENTER2;			//決定キー2
+	int Key_PAUSE;			//キャンセル/ポーズ
+	int Key_PAUSE2;			//キャンセル/ポーズ2
+	int Key_RotateL;		//落下するブロックを反時計回りに回転させる
+	int Key_RotateL2;		//落下するブロックを反時計回りに回転させる2
+	int Key_RotateR;		//落下するブロックを時計回りに回転させる
+	int Key_RotateR2;		//落下するブロックを時計回りに回転させる2
+	int Key_UP;				//項目選択:上
+	int Key_UP2;			//項目選択:上2
+	int Key_DOWN;			//項目選択:下/落下するブロックの加速
+	int Key_DOWN2;			//項目選択:下/落下するブロックの加速2
+	int Key_LEFT;			//項目選択:左/落下するブロックの左移動
+	int Key_LEFT2;			//項目選択:左/落下するブロックの左移動2
+	int Key_RIGHT;			//項目選択:右/落下するブロックの右移動
+	int Key_RIGHT2;			//項目選択:右/落下するブロックの右移動2
+}KeyBind;
+
+//キーバインドの設定(ゲームパッド)(DXライブラリのキーコード)
+typedef struct KeyBindjoy {
+	unsigned int Joy_ENTER[4];		//決定キー
+	unsigned int Joy_PAUSE[4];		//キャンセル/ポーズ
+	unsigned int Joy_RotateL[4];	//落下するブロックを反時計回りに回転させる
+	unsigned int Joy_RotateR[4];	//落下するブロックを時計回りに回転させる
+	unsigned int Joy_UP[4];			//項目選択:上
+	unsigned int Joy_DOWN[4];		//項目選択:下/落下するブロックの加速
+	unsigned int Joy_LEFT[4];		//項目選択:左/落下するブロックの左移動
+	unsigned int Joy_RIGHT[4];		//項目選択:右/落下するブロックの右移動
+}KeyBindjoy;

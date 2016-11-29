@@ -92,143 +92,143 @@ void SoundEffect_init() {
 
 	ButtonSelect = LoadSoundMemBase(_T("Data/SE/ChangeSelect.wav"), 1);
 	if (ButtonSelect == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ChangeSelect.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ChangeSelect.wav)"));
 	}
 	ButtonDecision = LoadSoundMemBase(_T("Data/SE/DecisionSelect.wav"), 1);
 	if (ButtonDecision == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/DecisionSelect.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/DecisionSelect.wav)"));
 	}
 	ButtonCancel = LoadSoundMemBase(_T("Data/SE/ButtonCancel.wav"), 1);
 	if (ButtonCancel == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ButtonCancel.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ButtonCancel.wav)"));
 	}
 	OwnBarrier = LoadSoundMemBase(_T("Data/SE/OwnBarrier.wav"), 1);
 	if (OwnBarrier == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/OwnBarrier.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/OwnBarrier.wav)"));
 	}
 	OwnDeath = LoadSoundMemBase(_T("Data/SE/OwnDeath.wav"), 1);
 	if (OwnDeath == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/OwnDeath.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/OwnDeath.wav)"));
 	}
 	Bulletfire1 = LoadSoundMemBase(_T("Data/SE/Bulletfire1.wav"), 1);
 	if (Bulletfire1 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire1.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire1.wav)"));
 	}
 	Bulletfire2 = LoadSoundMemBase(_T("Data/SE/Bulletfire2.wav"), 1);
 	if (Bulletfire2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire2.wav)"));
 	}
 	Bulletfire3 = LoadSoundMemBase(_T("Data/SE/Bulletfire3.wav"), 1);
 	if (Bulletfire3 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire3.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire3.wav)"));
 	}
 	Bulletfire4 = LoadSoundMemBase(_T("Data/SE/Bulletfire4.wav"), 1);
 	if (Bulletfire4 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire4.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire4.wav)"));
 	}
 	Bulletfire5 = LoadSoundMemBase(_T("Data/SE/Bulletfire5.wav"), 1);
 	if (Bulletfire5 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire5.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire5.wav)"));
 	}
 	Bulletfire6 = LoadSoundMemBase(_T("Data/SE/Bulletfire6.wav"), 1);
 	if (Bulletfire6 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire6.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire6.wav)"));
 	}
 	Bulletfire7 = LoadSoundMemBase(_T("Data/SE/Bulletfire7.wav"), 1);
 	if (Bulletfire7 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bulletfire7.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bulletfire7.wav)"));
 	}
 	Shotfire = LoadSoundMemBase(_T("Data/SE/Shotfire.wav"), 1);
 	if (Shotfire == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Shotfire.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Shotfire.wav)"));
 	}
 	Shotfire2 = LoadSoundMemBase(_T("Data/SE/Shotfire2.wav"), 1);
 	if (Shotfire2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Shotfire2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Shotfire2.wav)"));
 	}
 	Graze = LoadSoundMemBase(_T("Data/SE/Graze.wav"), 1);
 	if (Graze == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Graze.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Graze.wav)"));
 	}
 	ShotHit = LoadSoundMemBase(_T("Data/SE/ShotHit.wav"), 1);
 	if (ShotHit == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ShotHit.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ShotHit.wav)"));
 	}
 	ShotHit2 = LoadSoundMemBase(_T("Data/SE/ShotHit2.wav"), 1);
 	if (ShotHit2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ShotHit2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ShotHit2.wav)"));
 	}
 	EnemyDeath = LoadSoundMemBase(_T("Data/SE/EnemyDeath.wav"), 1);
 	if (EnemyDeath == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/EnemyDeath.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/EnemyDeath.wav)"));
 	}
 	EnemyDeath2 = LoadSoundMemBase(_T("Data/SE/EnemyDeath2.wav"), 1);
 	if (EnemyDeath2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/EnemyDeath2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/EnemyDeath2.wav)"));
 	}
 	Pause = LoadSoundMemBase(_T("Data/SE/Pause.wav"), 1);
 	if (Pause == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Pause.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Pause.wav)"));
 	}
 	Itemget = LoadSoundMemBase(_T("Data/SE/Itemget.wav"), 1);
 	if (Itemget == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Itemget.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Itemget.wav)"));
 	}
 	PowerUp = LoadSoundMemBase(_T("Data/SE/PowerUp.wav"), 1);
 	if (PowerUp == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/PowerUp.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/PowerUp.wav)"));
 	}
 	Timeout = LoadSoundMemBase(_T("Data/SE/Timeout.wav"), 1);
 	if (Timeout == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Timeout.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Timeout.wav)"));
 	}
 	Timeout2 = LoadSoundMemBase(_T("Data/SE/Timeout2.wav"), 1);
 	if (Timeout2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Timeout2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Timeout2.wav)"));
 	}
 	Extend = LoadSoundMemBase(_T("Data/SE/Extend.wav"), 1);
 	if (Extend == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Extend.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Extend.wav)"));
 	}
 	Bomb_Muteki = LoadSoundMemBase(_T("Data/SE/BombMUTEKI.wav"), 1);
 	if (Bomb_Muteki == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/BombMUTEKI.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/BombMUTEKI.wav)"));
 	}
 	Bonus = LoadSoundMemBase(_T("Data/SE/Bonus.wav"), 1);
 	if (Bonus == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Bonus.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Bonus.wav)"));
 	}
 	GetBomb = LoadSoundMemBase(_T("Data/SE/GetBomb.wav"), 1);
 	if (GetBomb == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/GetBomb.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/GetBomb.wav)"));
 	}
 	Bomb_DamageFloor = LoadSoundMemBase(_T("Data/SE/BombDANAMEFLOOR.wav"), 1);
 	if (Bomb_DamageFloor == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/BombDANAMEFLOOR.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/BombDANAMEFLOOR.wav)"));
 	}
 	Bomb_BarrierFloor = LoadSoundMemBase(_T("Data/SE/BombBARRIER.wav"), 1);
 	if (Bomb_BarrierFloor == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/BombBARRIER.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/BombBARRIER.wav)"));
 	}
 	Charge_Up = LoadSoundMemBase(_T("Data/SE/ChargeUp.wav"), 1);
 	if (Charge_Up == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ChargeUp.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ChargeUp.wav)"));
 	}
 	Charge_OK = LoadSoundMemBase(_T("Data/SE/ChargeOK.wav"), 1);
 	if (Charge_OK == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/ChargeOK.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/ChargeOK.wav)"));
 	}
 	Charge1 = LoadSoundMemBase(_T("Data/SE/Charge1.wav"), 10);
 	if (Charge1 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Charge1.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Charge1.wav)"));
 	}
 	Charge2 = LoadSoundMemBase(_T("Data/SE/Charge2.wav"), 10);
 	if (Charge2 == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/Charge2.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/Charge2.wav)"));
 	}
 	Smallexplosion = LoadSoundMemBase(_T("Data/SE/small_explosion1.wav"), 10);
 	if (Smallexplosion == -1) {
-		Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("SEのロードに失敗(Data/SE/small_explosion1.wav)"));
+		printLog_E(_T("SEのロードに失敗(Data/SE/small_explosion1.wav)"));
 	}
 	
 }

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "MainFunc.h"
 
-class Phase_TopMenu : public PhaseController
+class Phase_TopMenu : public SK::Phase_
 {
 public:
 	Phase_TopMenu();
@@ -23,7 +23,7 @@ private:
 		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
 	};
 
-	SelectItem_menu menu = SelectItem_menu(Base_BB_getWINDOW_WIDTH()/2, 700);	//メニュー項目クラス
+	SelectItem_menu menu = SelectItem_menu(GAMEWINDOW_WIDTH/2, 700);	//メニュー項目クラス
 
 	int Tex_backGround;	//背景画像
 

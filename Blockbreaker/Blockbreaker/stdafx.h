@@ -17,8 +17,12 @@
 #include <iostream>
 #include <random>
 #include <functional>
-#include "Base/Base_BB_Header.h"
-#include "PrintLog.h"
+
+#include <FpsController.h>
+#include <PhaseController.h>
+#include <PrintLog.h>
+#include <RandomTable.h>
+#include <MyMath.h>
 
 #include "resource.h"
 

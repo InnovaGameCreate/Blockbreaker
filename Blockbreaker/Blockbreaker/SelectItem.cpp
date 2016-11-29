@@ -104,6 +104,8 @@ void SelectItem::setCenteringMode(int centeringMode) {
 
 //項目の描画
 void SelectItem::Draw() {
+	using SK::Math::getGraph_Triangle;
+
 	double x = X;
 	double y = Y;
 	int Count = 0;//アイテムのカウント数
@@ -111,7 +113,9 @@ void SelectItem::Draw() {
 		if (data[i].enable && data[i].SelectEnable) {
 			unsigned int color = GetColor(240, 240, 240);
 			int alpha = 128;//透過度
-			if (i == SelectedItem && Enable)	color = GetColor(224, (unsigned int)(160 * getGraph_Triangle(120)), (unsigned int)(160 * getGraph_Triangle(120)));
+			if (i == SelectedItem && Enable)	color = GetColor(224,
+				(unsigned int)(160 * getGraph_Triangle(120, fpsController_Update.GetFrameCount())),
+				(unsigned int)(160 * getGraph_Triangle(120, fpsController_Update.GetFrameCount())) );
 			if (abs(getZettaichi(i)) == 2)							alpha = 128;
 			else if (abs(getZettaichi(i)) == 1 && SelectType == 0)	alpha = 194;
 			else if (i == SelectedItem)								alpha = 255;
