@@ -75,7 +75,7 @@ private:
 	Field_Admin Field;	//フィールド情報
 
 
-	SelectItem_pause pauseMenu = SelectItem_pause(GAMEWINDOW_WIDTH/2, 600);	//ポーズメニューの項目
+	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
 
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)

@@ -25,6 +25,8 @@ public:
 
 };
 
+static int FrameCount0 = 0;	//諸事情で必要なやつ
+static int FrameCount1 = 0;	//諸事情で必要なやつ
 
 /*キー入力関係*/
 static unsigned int stateKey[256];				//キーボードのキー
@@ -91,6 +93,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	phaseController.addFaze(FAZE_GameMain, &phase_GameMain);
 	phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
 	phaseController.setCallBack(&Phase_Proc());
+	SK::Log_SetFrame(0, &FrameCount0);
+	SK::Log_SetFrame(1, &FrameCount1);
 
 
 	/*起動設定画面の初期化と表示*/
@@ -189,6 +193,7 @@ int gettUSEGAMEPAD() {
 static unsigned __stdcall Thread_Update(void* args) {
 	SK::Log_SetThreadID(1, _T('U'));	//描画スレッドのIDを通知
 	while (TRUE) {//キーイベント処理(0でループを抜ける)
+		FrameCount1 = fpsController_Update.GetFrameCount();
 		UpdateLoop();//処理ループ
 	}
 
@@ -206,6 +211,7 @@ static void UpdateLoop() {
 // スレッド実行する関数(ゲーム描画)
 static int Thread_Draw(void* args) {
 	while (ProcessMessage() == 0) {//キーイベント処理(0でループを抜ける)
+		FrameCount0 = fpsController_Update.GetFrameCount();
 		fpsController_Draw.Update_First();
 		if (FLAG_ClearScreen) ClearDrawScreen();	//画面を消す
 		if (!phaseController.isMultiThread()) {
