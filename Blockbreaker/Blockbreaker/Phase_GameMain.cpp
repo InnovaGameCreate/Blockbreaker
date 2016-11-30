@@ -90,7 +90,7 @@ void Phase_GameMain::Draw() {
 
 	Field.Draw_Block();	//フィールドブロックの描画
 
-	
+
 
 	//フライテキストを描画する
 	flyText.Draw();
@@ -237,10 +237,10 @@ void Phase_GameMain::Draw() {
 	break;
 	case PauseMode_GameClear://ゲームクリア時
 		Draw_ClearScreen();
-		
+
 		break;
 	}
-} 
+}
 
 //クリア画面の追加描画
 void Phase_GameMain::Draw_ClearScreen() {
@@ -257,7 +257,12 @@ void Phase_GameMain::Draw_ClearScreen() {
 
 	if (Rank <= 40) {
 		//ランクインしている場合は名前記録画面を出す
-		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, _T("______"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, keyInput.getStr(), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	}
+
+	if (keyInput.isEnable()) {
+		//キーボードが有効な場合はキーボードを描画する
+		keyInput.Draw(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 540);
 	}
 
 	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 380, _T("あなたの順位は"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge30);
@@ -310,27 +315,29 @@ void Phase_GameMain::Update() {
 	Update_Counter();
 
 	GameMain_Key();	//キー処理
+					//キーボードが有効な場合はここから先には進めない
 
-	//ポーズ時の処理をしてこの先には進まない
+		//ポーズ時の処理をしてこの先には進まない
 	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
 		//選択肢の項目の更新
-		pauseMenu.Update();
+		if (!keyInput.isEnable()) pauseMenu.Update();
 		return;
 	case PauseMode_GameOver:
-		pauseMenu.Update();
+		if (!keyInput.isEnable()) pauseMenu.Update();
 		return;
 	case PauseMode_GameClear:
-		pauseMenu.Update();
+		if (!keyInput.isEnable()) pauseMenu.Update();
 		return;
 	}
+
 
 	//フライテキストの更新
 	flyText.Update();
 
 	//全体移動の更新を行い、終わった瞬間なら現在のゲームサイクルに割り込む形でゲームサイクルの更新を行う
 	if (Field.Update_AllMove())		UpdateBlockRequest(gameCycle);
-	
+
 	if (Field.getBlockMoveMotion()->isEnable())	return;//全体移動が有効な場合はここから先は処理をしない
 
 
@@ -538,7 +545,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		else if (JudgeGameClear() == TRUE) {
 			//クリア判定を行う
 			Request_Pause(PauseMode_GameClear);
-
+			Clear();
 		}
 
 		if (gameCycleFirstCallFlag) {
@@ -621,6 +628,15 @@ void Phase_GameMain::Finalize_Update() {
 
 //キー処理
 void Phase_GameMain::GameMain_Key() {
+
+	//キーボードが有効な場合はここから先には進めない
+	if (keyInput.isEnable()) {
+		//
+		keyInput.Key();
+
+		return;
+	}
+
 
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
@@ -853,4 +869,9 @@ FlyText *Phase_GameMain::getFlyText() {
 //フィールドブロックのインスタンスの取得
 Field_Admin *Phase_GameMain::getField() {
 	return &Field;
+}
+
+//クリアしたときに一度だけ実行される
+void Phase_GameMain::Clear() {
+	keyInput.Start();
 }

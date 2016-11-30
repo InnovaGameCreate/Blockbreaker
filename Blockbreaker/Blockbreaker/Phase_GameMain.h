@@ -6,6 +6,7 @@
 #include "Block_Fall.h"
 #include "Tex_Block.h"
 #include "Field_Admin.h"
+#include "KeyInput.h"
 
 class Phase_GameMain : public SK::Phase_
 {
@@ -108,6 +109,8 @@ private:
 
 	SK::RandomTable randomTable;	//乱数テーブル
 
+	KeyInput keyInput;		//キー入力クラス
+
 	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
 	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)
 	int Count_Time;			//ゲーム経過フレーム数
@@ -127,6 +130,7 @@ private:
 	void UpdateBlockRequest(GameCycle Next);		//ブロック情報を更新するようにリクエスト
 	int JudgeGameOver();							//ゲームオーバーになっているかどうかの確認
 	int JudgeGameClear();							//ゲームクリアかどうかの確認(TRUEゲームクリア)
+	void Clear();									//クリアしたときに一度だけ実行される
 public:
 
 
