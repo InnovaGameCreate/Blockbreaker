@@ -4,12 +4,16 @@
 KeyInput::KeyInput() {
 	Enable = FALSE;
 	Select = 0;
+	len = 0;
 }
 
 //キーボード動作を開始する
 void KeyInput::Start() {
 	Enable = TRUE;
 	str[0] = '\0';
+	len = 0;
+	Select = 0;
+	Select_BeforeEnter = 0;
 	for (auto &dat : str)	dat = '_';
 	str[ARRAY_LENGTH(str) - 1] = '\n';
 	printLog_I(_T("キーボードを有効にします"));
@@ -30,10 +34,19 @@ void KeyInput::Draw(int x, int y) {
 	//文字の表を作成する
 	for (int i = 0; i < ARRAY_LENGTH(ch); i++) {
 		TCHAR str[10];
-		_stprintf_s(str, _T("%c"), ch[i]);
+		if (ch[i] == '!')		_stprintf_s(str, _T("←"), ch[i]);
+		else if (ch[i] == '?')	_stprintf_s(str, _T("決定"), ch[i]);
+		else					_stprintf_s(str, _T("%c"), ch[i]);
 		unsigned int color = GetColor(100, 200, 100);
 		if (Select == i)	color = GetColor(200, 100, 100);
-		Font_DrawStringCenterWithShadow(x + 20 + ((i % 9)) * 32, y + 20 + (i / 9) * 40, str, color, GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge25);
+
+		//決定キーの場合のみ別で描画する
+		if (ch[i] == '?') {
+			Font_DrawStringCenterWithShadow(x + 150, y + 20 + (i / 9) * 40 + 15, str, color, GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge25);
+		}
+		else {
+			Font_DrawStringCenterWithShadow(x + 20 + ((i % 9)) * 32, y + 20 + (i / 9) * 40, str, color, GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge25);
+		}
 	}
 }
 
@@ -41,24 +54,61 @@ void KeyInput::Draw(int x, int y) {
 void KeyInput::Key() {
 	if (getKeyBind(KEYBIND_RIGHT) == 1) {
 		//右移動
-		if (Select / 9 == (Select + 1) / 9 && Select + 1 < ARRAY_LENGTH(ch))	Select++;
+		int Moved = Select + 1;//仮想的に移動先の座標を記録する
+		if (Select / 9 != Moved / 9 || Moved >= ARRAY_LENGTH(ch)) {
+			//行が変わる場合と、配列がオーバーする時は反対側に行く
+			Moved = (Select / 9) * 9;	//反対側に行く
+		}
+		//移動を反映させる
+		Select = Moved;
 	}
 	if (getKeyBind(KEYBIND_LEFT) == 1) {
 		//右移動
-		if (Select / 9 == (Select - 1) / 9 && Select > 0)	Select--;
+		int Moved = Select - 1;//仮想的に移動先の座標を記録する
+		if (Select / 9 != Moved / 9 || Moved < 0) {
+			Moved = ((Select / 9) * 9 + (9 - 1) < ARRAY_LENGTH(ch)) ? (Select / 9) * 9 + (9 - 1) : ARRAY_LENGTH(ch) - 1;	//反対側に行く
+		}
+		//移動を反映させる
+		Select = Moved;
 	}
 	if (getKeyBind(KEYBIND_DOWN) == 1) {
 		//下移動
-		if(Select + 9 < ARRAY_LENGTH(ch))	Select += 9;
+		int Moved = Select + 9;//仮想的に移動先の座標を記録する
+		if (Moved >= ARRAY_LENGTH(ch)) {
+			Moved = ARRAY_LENGTH(ch) - 1;
+		}
+		//移動先が決定キーの場合は移動元の場所を記録する
+		if (ch[Moved] == '?' && Moved != Select)	Select_BeforeEnter = Select;
+		Select = Moved;
+
 	}
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		//上移動
-		if (Select - 9 >= 0)				Select -= 9;
+		//移動元が決定キーの場合は移動元に戻る
+		if (ch[Select] == '?' && Select != Select_BeforeEnter) {
+			Select = Select_BeforeEnter;
+		}
+		else if (Select - 9 >= 0)				Select -= 9;
 	}
 	if (getKeyBind(KEYBIND_SELECT) == 1) {
-		if (len < ARRAY_LENGTH(str)-1) {
-			str[len] = ch[Select];
-			len++;
+		if (ch[Select] == '!') {
+			//文字の削除
+			if (len > 0) {
+				//入力文字がある場合のみ1文字削除する
+				len--;
+				str[len] = '_';
+			}
+		}
+		else if (ch[Select] == '?') {
+			//項目の決定
+			Enable = FALSE;
+		}
+		else {
+			if (len < ARRAY_LENGTH(str) - 1) {
+				//文字の追加入力
+				str[len] = ch[Select];
+				len++;
+			}
 		}
 	}
 }

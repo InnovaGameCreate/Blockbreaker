@@ -21,8 +21,11 @@ private:
 	int Select;	//現在選択しているボタン
 
 	int len;	//現在入力済みの文字数
+
+	int Select_BeforeEnter;	//決定キーに移動する前に選択されていたキー
 	
 	TCHAR str[7];//入力された文字列
 };
 
-static TCHAR ch[] = { 'A', 'B', 'C', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O' , 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+//キーボードに入力する文字列(!,?はDelキーと決定キー)
+static TCHAR ch[] = { 'A', 'B', 'C', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O' , 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '!', '?' };
