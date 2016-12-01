@@ -5,6 +5,7 @@
 
 
 FlyText::FlyText() {
+	AllDelete();
 }
 
 
@@ -90,4 +91,9 @@ void FlyText::Update() {
 			}
 		}
 	}
+}
+
+//フライテキストの全無効化
+void FlyText::AllDelete() {
+	for (auto dat : FlyTextData)	dat.Enable = FALSE;
 }

@@ -9,6 +9,21 @@ Phase_GameMain::Phase_GameMain() {
 	pauseMenu.setScrolltype(1);
 	pauseMenu.sethaba(50);
 	pauseMenu.setCenteringMode(0);
+
+	//ゲームオーバーの項目を作成
+	gameOverMenu.addItem(_T("やり直す"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameOverMenu.addItem(_T("トップメニューへ"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameOverMenu.setScrolltype(1);
+	gameOverMenu.sethaba(50);
+	gameOverMenu.setCenteringMode(0);
+
+	//ゲームクリアの項目を作成
+	gameClearMenu.addItem(_T("ランキングへ"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameClearMenu.addItem(_T("もう一度"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameClearMenu.addItem(_T("トップメニューへ"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameClearMenu.setScrolltype(1);
+	gameClearMenu.sethaba(50);
+	gameClearMenu.setCenteringMode(0);
 }
 
 
@@ -36,7 +51,10 @@ void Phase_GameMain::Init_Draw() {
 	//BGM再生
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 
-	pauseMenu.setEnable(TRUE);
+	//各メニューの選択を有効にする
+	pauseMenu.setControlEnable(TRUE);
+	gameOverMenu.setControlEnable(TRUE);
+	gameClearMenu.setControlEnable(TRUE);
 }
 
 //フルスクリーンに復帰時に呼ばれる
@@ -62,7 +80,7 @@ void Phase_GameMain::Restart() {
 	//落下中ブロックの初期化
 	fallBlockInfo.Restart();
 	score.init();//スコアの初期化
-
+	flyText.AllDelete();	//フライテキストの全消去
 	Field.Restart();	//フィールドのリスタート
 
 	//ゲームサイクルをブロック落下に設定
@@ -170,9 +188,6 @@ void Phase_GameMain::Draw() {
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		if (Count_Pause % 120 <= 80)	Font_DrawStringCenterWithShadow(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 30, _T("PAUSE"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
-
-		//選択肢の項目の描画
-		pauseMenu.Draw();
 		break;
 	case PauseMode_GameOver:
 	{
@@ -229,10 +244,6 @@ void Phase_GameMain::Draw() {
 		strY = 460 * (Count_Pause - 210) / 40.;
 		if (strY > 460)	strY = 460;
 		Font_DrawStringWithShadow(strX, (int)strY, _T("R"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge70);
-
-
-		//選択肢の項目の描画
-		pauseMenu.Draw();
 	}
 	break;
 	case PauseMode_GameClear://ゲームクリア時
@@ -240,6 +251,11 @@ void Phase_GameMain::Draw() {
 
 		break;
 	}
+
+	//メニューの選択肢を描画する
+	pauseMenu.Draw();
+	gameOverMenu.Draw();
+	gameClearMenu.Draw();
 }
 
 //クリア画面の追加描画
@@ -259,10 +275,6 @@ void Phase_GameMain::Draw_ClearScreen() {
 		//キー入力が有効な場合はキー入力の途中経過を描画する
 		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, getKeyImputStr(), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 	}
-
-
-	//選択肢の項目の描画
-	pauseMenu.Draw();
 }
 
 //ステータスの描画
@@ -311,23 +323,19 @@ void Phase_GameMain::Update() {
 
 	if (isKeyImputEnable())	return;
 
-		//ポーズ時の処理をしてこの先には進まない
-	switch (getPauseMode()) {
-	case PauseMode_NOMAL:
-		//選択肢の項目の更新
-		pauseMenu.Update();
-		return;
-	case PauseMode_GameOver:
-		pauseMenu.Update();
-		return;
-	case PauseMode_GameClear:
-		pauseMenu.Update();
-		return;
-	}
+	//各メニュー項目の処理
+	pauseMenu.Update();
+	gameOverMenu.Update();
+	gameClearMenu.Update();
+
+	//フライテキストの更新(通常ゲームプレイ時とゲームクリア時)
+	if(getPauseMode() == PauseMode_NO || getPauseMode() == PauseMode_GameClear) flyText.Update();
+
+	//ポーズ時の処理をしてこの先には進まない
+	if (getPauseMode() != PauseMode_NO) return;
+	
 
 
-	//フライテキストの更新
-	flyText.Update();
 
 	//全体移動の更新を行い、終わった瞬間なら現在のゲームサイクルに割り込む形でゲームサイクルの更新を行う
 	if (Field.Update_AllMove())		UpdateBlockRequest(gameCycle);
@@ -628,12 +636,14 @@ void Phase_GameMain::GameMain_Key() {
 			//ポーズ状態解除
 			SoundEffect_Play(SE_TYPE_ButtonCancel);
 			Request_Pause(PauseMode_NO);	//ポーズ状態
+			pauseMenu.setEnable(FALSE);		//ポーズ状態メニューの無効化
 		}
 		else if (getPauseMode() == PauseMode_NO) {
 			//ポーズに
 			pauseMenu.setSelecedtItem(0);
 			SoundEffect_Play(SE_TYPE_Pause);
 			Request_Pause(PauseMode_NOMAL);	//ポーズ状態
+			pauseMenu.setEnable(TRUE);		//ポーズ状態メニューの有効化
 		}
 	}
 
@@ -662,15 +672,13 @@ void Phase_GameMain::Request_Pause(PauseMode pauseMode) {
 		//ゲームオーバーのリクエストがある場合は上書きしない
 		if (Flag_pauseRequest == PauseMode_GameOver)	return;
 		printLog_I(_T("【通常ポーズ】リクエスト"));
-		pauseMenu.setItemEnable(TRUE, 0);	//項目0を有効
 		break;
 	case PauseMode_GameOver:
 		printLog_I(_T("【ゲームオーバーポーズ】リクエスト"));
-		pauseMenu.setItemEnable(FALSE, 0);	//項目0を無効化
+		gameOverMenu.setEnable(TRUE);
 		break;
 	case PauseMode_GameClear:
 		printLog_I(_T("【ゲームクリアポーズ】リクエスト"));
-		pauseMenu.setItemEnable(FALSE, 0);	//項目0を無効化
 		break;
 	}
 	Flag_pauseRequest = pauseMode;
@@ -801,22 +809,63 @@ BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 }
 
 //ポーズメニューのボタンが押されたとき
-void Phase_GameMain::SelectItem_pause::Event_Select(int No) {
+void Phase_GameMain::SelectItem_Pause::Event_Select(int No) {
 	switch (No) {
 	case 0://再開ボタン
 		phase_GameMain.Request_Pause(PauseMode_NO);
+		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	case 1://やり直すボタン
 		phase_GameMain.Restart();
+		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	case 2://終了ボタン
 		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	default:
 		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
 		break;
 	}
 }
+
+//ゲームオーバーのボタンが押されたとき
+void Phase_GameMain::SelectItem_GameOver::Event_Select(int No) {
+	switch (No) {
+	case 0://やり直すボタン
+		phase_GameMain.Restart();
+		setEnable(FALSE);		//メニューの無効化
+		break;
+	case 1://終了ボタン
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		setEnable(FALSE);		//メニューの無効化
+		break;
+	default:
+		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
+		break;
+	}
+}
+
+//ゲームクリアのボタンが押されたとき
+void Phase_GameMain::SelectItem_GameClear::Event_Select(int No) {
+	switch (No) {
+	case 0:
+		//ここにランキング画面への処理記述
+		break;
+	case 1://やり直すボタン
+		phase_GameMain.Restart();
+		setEnable(FALSE);		//メニューの無効化
+		break;
+	case 2://終了ボタン
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		setEnable(FALSE);		//メニューの無効化
+		break;
+	default:
+		printLog_C(_T("定義されていない選択項目が選択されたようです(%d)"), No);
+		break;
+	}
+}
+
 //テクスチャの情報の取得
 Tex_Block *Phase_GameMain::getTex_Block() {
 	return &tex_Block;
@@ -863,15 +912,14 @@ void Phase_GameMain::Clear() {
 	//ランクインしている場合はキーボードを表示する
 	if (No < 40) {
 		setKeyImputStart(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 540, &keyImputEnd);
-		pauseMenu.setEnable(FALSE);
 	}
 	else {
 		//ランク外の時は選択メニューの表示を行う
-		pauseMenu.setEnable(TRUE);
+		gameClearMenu.setEnable(TRUE);	//クリアメニューを有効にする
 	}
 }
 
 //キー入力が終了した時に呼ばれる
 void Phase_GameMain::KeyImputEnd::operator()(TCHAR *str) {
-	//pauseMenu.setEnable(TRUE);
+	P->setEnable(TRUE);
 }

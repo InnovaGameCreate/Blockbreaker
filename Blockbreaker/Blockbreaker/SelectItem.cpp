@@ -9,7 +9,8 @@ SelectItem::SelectItem(double x, double y)
 	}
 	X = x;
 	Y = y;
-	Enable = true;
+	ControlEnable = true;
+	Enable = false;
 	Select_Enable = true;
 	SelectType = 0;
 	Haba = 150;
@@ -44,9 +45,9 @@ void SelectItem::setSelectEnable(int b_flag) {
 }
 
 //選択肢自体を無効化
-void SelectItem::setEnable(int b_flag) {
-	Enable = (b_flag) ? true : false;
-	if (Enable)	printLog_I(_T("SelectItemを【有効】に設定しました"));
+void SelectItem::setControlEnable(int b_flag) {
+	ControlEnable = (b_flag) ? true : false;
+	if (ControlEnable)	printLog_I(_T("SelectItemを【有効】に設定しました"));
 	else		printLog_I(_T("SelectItemを【無効】に設定しました"));
 }
 
@@ -104,6 +105,7 @@ void SelectItem::setCenteringMode(int centeringMode) {
 
 //項目の描画
 void SelectItem::Draw() {
+	if (!isEnable())	return;
 	using SK::Math::getGraph_Triangle;
 
 	double x = X;
@@ -113,14 +115,14 @@ void SelectItem::Draw() {
 		if (data[i].enable && data[i].SelectEnable) {
 			unsigned int color = GetColor(240, 240, 240);
 			int alpha = 128;//透過度
-			if (i == SelectedItem && Enable)	color = GetColor(224,
+			if (i == SelectedItem && ControlEnable)	color = GetColor(224,
 				(unsigned int)(160 * getGraph_Triangle(120, fpsController_Update.GetFrameCount())),
 				(unsigned int)(160 * getGraph_Triangle(120, fpsController_Update.GetFrameCount())) );
 			if (abs(getZettaichi(i)) == 2)							alpha = 128;
 			else if (abs(getZettaichi(i)) == 1 && SelectType == 0)	alpha = 194;
 			else if (i == SelectedItem)								alpha = 255;
 			if (i != SelectedItem && Select_Enable == false)		alpha = 64;
-			if (Enable == false)									alpha = 128;
+			if (ControlEnable == false)									alpha = 128;
 			if (abs(getZettaichi(i)) >= 3 && SelectType == 0)		alpha = 0;
 			if (SelectType == 0)	y = Y + (getZettaichi(i) * Haba);
 			else					y = Y + (Count * Haba);
@@ -170,8 +172,9 @@ int SelectItem::getZettaichi(int No) {
 
 //項目の更新(キー判定とか)
 void SelectItem::Update() {
+	if (!isEnable())			return;
 	if (Select_Enable == false)	return;
-	if (Enable == false)		return;
+	if (ControlEnable == false)	return;
 	if (getKeyBind(KEYBIND_UP) == 1) {
 		int num = SelectedItem - 1;//次の項目を選択したことにする
 		for (; num >= 0; num--) {
@@ -223,4 +226,14 @@ int SelectItem::getItemAlpha(int No) {
 		return data[No].Alpha;
 	}
 	return 0;
+}
+
+//このモジュール自体を有効状態にするかどうかの設定
+void SelectItem::setEnable(int flag) {
+	Enable = (flag) ? true : false;
+}
+
+//このモジュール自体が有効かどうかの取得
+int SelectItem::isEnable() {
+	return (Enable) ? TRUE : FALSE;
 }

@@ -52,10 +52,28 @@ public://定数とかの宣言
 
 private:
 	//ここにポーズメニュー表示時に出す選択肢のクラスを定義する
-	class SelectItem_pause : public SelectItem
+	class SelectItem_Pause : public SelectItem
 	{
 	public:
-		SelectItem_pause(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
+		SelectItem_Pause(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
+	private:
+		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
+	};
+
+	//ゲームオーバー時
+	class SelectItem_GameOver : public SelectItem
+	{
+	public:
+		SelectItem_GameOver(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
+	private:
+		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
+	};
+
+	//ゲームクリア時
+	class SelectItem_GameClear : public SelectItem
+	{
+	public:
+		SelectItem_GameClear(int X, int Y) : SelectItem(X, Y) {};//コンストラクタ(スーパークラスのコンストラクタを明示的に呼んでいます)
 	private:
 		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
 	};
@@ -63,7 +81,12 @@ private:
 	//キー入力終了時に呼ばれるクラスの定義
 	class KeyImputEnd : public KeyInputCallback_End
 	{
+	private:
+		SelectItem_GameClear *P;
 	public:
+		KeyImputEnd(SelectItem_GameClear *p) {
+			P = p;
+		}
 		void operator()(TCHAR *str);
 	};
 
@@ -78,11 +101,14 @@ private:
 
 	Field_Admin Field;	//フィールド情報
 
-	KeyImputEnd keyImputEnd;	//キー入力が終了した時に呼ばれるクラス
 
 
-	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
+	SelectItem_Pause pauseMenu = SelectItem_Pause(WINDOW_WIDTH/2, 600);					//ポーズメニューの項目
+	SelectItem_GameOver gameOverMenu = SelectItem_GameOver(WINDOW_WIDTH / 2, 600);		//ゲームオーバーの項目
+	SelectItem_GameClear gameClearMenu = SelectItem_GameClear(WINDOW_WIDTH / 2, 600);	//ゲームクリアの項目
 
+	KeyImputEnd keyImputEnd = KeyImputEnd(&gameClearMenu);	//キー入力が終了した時に呼ばれるクラス
+	
 	//ブロックの計算ループで使用する変数
 	int Loop_No;			//計算ループのどの処理をしているか(-1で計算ループ未使用)
 	GameCycle Loop_Next;	//計算ループ後に移行するゲームサイクル
