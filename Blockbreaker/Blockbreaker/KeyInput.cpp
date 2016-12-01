@@ -8,14 +8,17 @@ KeyInput::KeyInput() {
 }
 
 //キーボード動作を開始する
-void KeyInput::Start() {
-	Enable = TRUE;
-	str[0] = '\0';
+void KeyInput::Start(int x, int y, KeyInputCallback_End *keyInputCallback_End) {
+	if (isEnable())	return;
+	DrawX = x;
+	DrawY = y;
+	KeyInput::keyInputCallback_End = keyInputCallback_End;
 	len = 0;
 	Select = 0;
 	Select_BeforeEnter = 0;
 	for (auto &dat : str)	dat = '_';
-	str[ARRAY_LENGTH(str) - 1] = '\n';
+	str[ARRAY_LENGTH(str) - 1] = '\0';
+	Enable = TRUE;
 	printLog_I(_T("キーボードを有効にします"));
 }
 
@@ -25,8 +28,10 @@ int KeyInput::isEnable() {
 }
 
 //描画
-void KeyInput::Draw(int x, int y) {
+void KeyInput::Draw() {
 	if (!isEnable())	return;
+	int x = DrawX;
+	int y = DrawY;
 
 	x -= 150;
 
@@ -34,8 +39,8 @@ void KeyInput::Draw(int x, int y) {
 	//文字の表を作成する
 	for (int i = 0; i < ARRAY_LENGTH(ch); i++) {
 		TCHAR str[10];
-		if (ch[i] == '!')		_stprintf_s(str, _T("←"), ch[i]);
-		else if (ch[i] == '?')	_stprintf_s(str, _T("決定"), ch[i]);
+		if (ch[i] == '!')		_stprintf_s(str, _T("←"));
+		else if (ch[i] == '?')	_stprintf_s(str, _T("決定"));
 		else					_stprintf_s(str, _T("%c"), ch[i]);
 		unsigned int color = GetColor(100, 200, 100);
 		if (Select == i)	color = GetColor(200, 100, 100);
@@ -51,8 +56,10 @@ void KeyInput::Draw(int x, int y) {
 }
 
 //キー操作
-void KeyInput::Key() {
-	if (getKeyBind(KEYBIND_RIGHT) == 1) {
+void KeyInput::Key(unsigned int *key) {
+	if (!isEnable())	return;
+
+	if (key[KEYBIND_RIGHT] == 1) {
 		//右移動
 		int Moved = Select + 1;//仮想的に移動先の座標を記録する
 		if (Select / 9 != Moved / 9 || Moved >= ARRAY_LENGTH(ch)) {
@@ -62,7 +69,7 @@ void KeyInput::Key() {
 		//移動を反映させる
 		Select = Moved;
 	}
-	if (getKeyBind(KEYBIND_LEFT) == 1) {
+	if (key[KEYBIND_LEFT] == 1) {
 		//右移動
 		int Moved = Select - 1;//仮想的に移動先の座標を記録する
 		if (Select / 9 != Moved / 9 || Moved < 0) {
@@ -71,7 +78,7 @@ void KeyInput::Key() {
 		//移動を反映させる
 		Select = Moved;
 	}
-	if (getKeyBind(KEYBIND_DOWN) == 1) {
+	if (key[KEYBIND_DOWN] == 1) {
 		//下移動
 		int Moved = Select + 9;//仮想的に移動先の座標を記録する
 		if (Moved >= ARRAY_LENGTH(ch)) {
@@ -82,7 +89,7 @@ void KeyInput::Key() {
 		Select = Moved;
 
 	}
-	if (getKeyBind(KEYBIND_UP) == 1) {
+	if (key[KEYBIND_UP] == 1) {
 		//上移動
 		//移動元が決定キーの場合は移動元に戻る
 		if (ch[Select] == '?' && Select != Select_BeforeEnter) {
@@ -90,7 +97,7 @@ void KeyInput::Key() {
 		}
 		else if (Select - 9 >= 0)				Select -= 9;
 	}
-	if (getKeyBind(KEYBIND_SELECT) == 1) {
+	if (key[KEYBIND_SELECT] == 1) {
 		if (ch[Select] == '!') {
 			//文字の削除
 			if (len > 0) {
@@ -102,6 +109,8 @@ void KeyInput::Key() {
 		else if (ch[Select] == '?') {
 			//項目の決定
 			Enable = FALSE;
+			//ファンクタを呼び出す
+			if(keyInputCallback_End != NULL)	keyInputCallback_End->operator()(str);
 		}
 		else {
 			if (len < ARRAY_LENGTH(str) - 1) {
@@ -115,5 +124,6 @@ void KeyInput::Key() {
 
 //入力されている文字列の取得
 TCHAR *KeyInput::getStr() {
-	return str;
+	if(isEnable())	return str;
+	else			return _T("");
 }

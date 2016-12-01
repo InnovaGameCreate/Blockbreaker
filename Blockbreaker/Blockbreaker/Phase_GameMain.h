@@ -11,10 +11,6 @@
 class Phase_GameMain : public SK::Phase_
 {
 public://定数とかの宣言
-
-
-
-
 	//ポーズの種類
 	enum PauseMode {
 		PauseMode_NO,			//ポーズ状態になっていない(通常)
@@ -64,6 +60,13 @@ private:
 		void Event_Select(int No) override;	//ポーズメニューのボタンが押されたとき(オーバーライド)
 	};
 
+	//キー入力終了時に呼ばれるクラスの定義
+	class KeyImputEnd : public KeyInputCallback_End
+	{
+	public:
+		void operator()(TCHAR *str);
+	};
+
 	//ゲームサイクルの識別
 	enum GameCycle {
 		GameCycle_FALL,			//ブロックの落下
@@ -74,6 +77,8 @@ private:
 
 
 	Field_Admin Field;	//フィールド情報
+
+	KeyImputEnd keyImputEnd;	//キー入力が終了した時に呼ばれるクラス
 
 
 	SelectItem_pause pauseMenu = SelectItem_pause(WINDOW_WIDTH/2, 600);	//ポーズメニューの項目
@@ -108,8 +113,6 @@ private:
 	int gameCycleFirstCallFlag;	//ゲームサイクルが変更されたときにTRUEが代入される
 
 	SK::RandomTable randomTable;	//乱数テーブル
-
-	KeyInput keyInput;		//キー入力クラス
 
 	int Count_PlayTime;		//実際に操作をしている経過フレーム数(ポーズ、ブロック落下時以外でカウントアップが一時停止する)
 	int Count_GameTime;		//ゲーム経過フレーム数(ポーズでカウントアップが一時停止する)

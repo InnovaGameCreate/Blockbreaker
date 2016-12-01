@@ -2,19 +2,25 @@
 //キーボードからの文字入力
 #include <tchar.h>
 
+/*キー入力のコールバック関数クラス*/
+//キー入力が終了した時に呼ばれる
+class KeyInputCallback_End {
+public:
+	virtual void operator()(TCHAR *str) = 0;
+};
 
 
 class KeyInput
 {
 public:
 	KeyInput();
-	void Start();	//キーボード動作を開始する
+	void Start(int x, int y, KeyInputCallback_End *keyInputCallback_End);	//キーボード動作を開始する
 	
-	void Draw(int x, int y);	//描画
+	void Draw();	//描画
 
-	int isEnable();		//キーボードが有効かどうかの取得
-	void Key();			//キー操作
-	TCHAR * getStr();	//入力されている文字列の取得
+	int isEnable();					//キーボードが有効かどうかの取得
+	void Key(unsigned int *key);	//キー操作
+	TCHAR * getStr();				//入力されている文字列の取得
 private:
 	int Enable;	//有効かどうか
 
@@ -23,8 +29,12 @@ private:
 	int len;	//現在入力済みの文字数
 
 	int Select_BeforeEnter;	//決定キーに移動する前に選択されていたキー
+
+	int DrawX, DrawY;	//描画位置
 	
 	TCHAR str[7];//入力された文字列
+
+	KeyInputCallback_End *keyInputCallback_End;	//キー入力が終了した時に呼ばれるファンクタ
 };
 
 //キーボードに入力する文字列(!,?はDelキーと決定キー)

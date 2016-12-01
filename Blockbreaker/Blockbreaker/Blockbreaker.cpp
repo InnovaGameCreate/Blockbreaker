@@ -32,6 +32,7 @@ static int FrameCount1 = 0;	//諸事情で必要なやつ
 static unsigned int stateKey[256];				//キーボードのキー
 static unsigned int stateKeyJoy[32];			//ゲームパッド(int型より32びっと)
 static unsigned int stateKeyBind[KEYBIND_NUM];	//キーバインドによるキー入力情報
+static KeyInput keyInput;						//キーボード表示と英語文字入力
 
 /*操作関連*/
 static KeyBind KeyBindSetting;			//キーバインド設定
@@ -173,6 +174,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 //キーバインドでのキー入力情報の取得(0押してない、1押した直後)
 unsigned int getKeyBind(KEYBIND kEYBIND) {
+	if (keyInput.isEnable()) {
+		return 0;	//キー入力が有効なときは常に0を返す
+	}
 	if (kEYBIND < 0 || KEYBIND_NUM <= kEYBIND)	return 0;
 	return stateKeyBind[kEYBIND];
 }
@@ -185,6 +189,21 @@ void ExitGameRequest() {
 //使用するゲームパッドの取得
 int gettUSEGAMEPAD() {
 	return USEGamePad;
+}
+
+//入力されているキーの取得
+TCHAR *getKeyImputStr() {
+	return keyInput.getStr();
+}
+
+//キー入力を有効にする
+void setKeyImputStart(int X, int Y, KeyInputCallback_End *keyInputCallback_End) {
+	keyInput.Start(X, Y, keyInputCallback_End);
+}
+
+//キーボード入力が有効かどうかの取得
+int isKeyImputEnable() {
+	return keyInput.isEnable();
 }
 
 #pragma region いじらなくて良い関数群
@@ -202,8 +221,9 @@ static unsigned __stdcall Thread_Update(void* args) {
 //処理ループ
 static void UpdateLoop() {
 	fpsController_Update.Update_First();
-	gpUpdateKey();		//キー取得
+	gpUpdateKey();				//キー取得	
 	phaseController.Update();	//フェーズコントローラーによる計算処理
+	keyInput.Key(stateKeyBind);	//キーボードの更新処理(キー入力処理)を入れる
 	fpsController_Update.Update_Last();
 	if (phaseController.isMultiThread())	fpsController_Update.Wait();	//マルチスレッド動作の場合は待機
 }
@@ -219,16 +239,16 @@ static int Thread_Draw(void* args) {
 		}
 		if (fpsController_Draw.GetFrameCount() % Drawing_interval == 0) {
 			phaseController.Draw();	//描画処理
+			keyInput.Draw();		//キーボードの描画処理
+#ifdef _DEBUG
+			//FPS描画
+			DrawFormatStringToHandle(0, 0, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(D):%.2f %.2fms(%.2f%%)"), fpsController_Draw.GetFPS_Average(), fpsController_Draw.GetWaitTime_Average(), fpsController_Draw.GetWaitTime_Average_Par());
+			DrawFormatStringToHandle(0, 0 + 20, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
+			int DrawStrW = GetDrawFormatStringWidthToHandle(Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
+			if (!phaseController.isMultiThread())	DrawLine(0, 31, DrawStrW, 31, GetColor(255, 255, 255), 4);
+#endif // _DEBUG
 		}
 		fpsController_Draw.Update_Last();
-#ifdef _DEBUG
-
-		//FPS描画
-		DrawFormatStringToHandle(0, 0, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(D):%.2f %.2fms(%.2f%%)"), fpsController_Draw.GetFPS_Average(), fpsController_Draw.GetWaitTime_Average(), fpsController_Draw.GetWaitTime_Average_Par());
-		DrawFormatStringToHandle(0, 0 + 20, GetColor(255, 255, 255), Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
-		int DrawStrW = GetDrawFormatStringWidthToHandle(Font_getHandle(FONTTYPE_SFSquareHeadCondensed_Edge25), _T("FPS(U):%.2f %.2fms(%.2f%%)"), fpsController_Update.GetFPS_Average(), fpsController_Update.GetWaitTime_Average(), fpsController_Update.GetWaitTime_Average_Par());
-		if (!phaseController.isMultiThread())	DrawLine(0, 31, DrawStrW, 31, GetColor(255, 255, 255), 4);
-#endif // _DEBUG
 		if (fpsController_Draw.GetFrameCount() % Drawing_interval == 0) {
 			ScreenFlip();		//裏画面を表画面に反映
 		}

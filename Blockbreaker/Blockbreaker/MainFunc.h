@@ -32,9 +32,9 @@
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //クラスのインスタンス(グローバル変数)
-extern Phase_GameMain phase_GameMain;	//ゲームメインのフェーズ
-extern Phase_TopMenu phase_TopMenu;		//トップメニューのフェーズ
-extern SK::PhaseController phaseController;	//フェーズコントローラー
+extern Phase_GameMain phase_GameMain;			//ゲームメインのフェーズ
+extern Phase_TopMenu phase_TopMenu;				//トップメニューのフェーズ
+extern SK::PhaseController phaseController;		//フェーズコントローラー
 extern SK::FpsController fpsController_Draw;	//FPSコントローラー
 extern SK::FpsController fpsController_Update;	//FPSコントローラー
 
@@ -47,6 +47,9 @@ extern void ExitGameRequest();						//終了リクエスト
 extern unsigned int getKey(int KEYNO);				//キーの入力状態を取得する(DXライブラリで定義されているキーの番号)(戻り値：キーが押されている時間、押されていないときは0)
 extern unsigned int getJoyKey(int JoyKeyNO);		//ゲームパッド入力状態の取得(DXライブラリで定義されているキーの番号)(戻り値：キーが押されている時間、押されていないときは0)(ゲームパッド用)
 extern int gettUSEGAMEPAD();						//使用するゲームパッドの取得
+extern void setKeyImputStart(int X, int Y, KeyInputCallback_End *keyInputCallback_End);//キー入力を有効にする
+extern TCHAR *getKeyImputStr();						//入力されているキーの取得
+extern int isKeyImputEnable();						//キーボード入力が有効かどうかの取得
 
 
 extern void setKeybind(KeyBind *keyBind);	//キーバインドの設定(NULLで規定値)

@@ -255,18 +255,10 @@ void Phase_GameMain::Draw_ClearScreen() {
 	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 410, tmp, GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 
 
-	if (Rank <= 40) {
-		//ランクインしている場合は名前記録画面を出す
-		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, keyInput.getStr(), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
+	if (isKeyImputEnable()) {
+		//キー入力が有効な場合はキー入力の途中経過を描画する
+		Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 450, getKeyImputStr(), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge40);
 	}
-
-	if (keyInput.isEnable()) {
-		//キーボードが有効な場合はキーボードを描画する
-		keyInput.Draw(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 540);
-	}
-
-	Font_DrawStringCenterWithShadow(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 380, _T("あなたの順位は"), GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge30);
-
 
 
 	//選択肢の項目の描画
@@ -315,19 +307,21 @@ void Phase_GameMain::Update() {
 	Update_Counter();
 
 	GameMain_Key();	//キー処理
-					//キーボードが有効な場合はここから先には進めない
+	//キーボードが有効な場合はここから先には進めない
+
+	if (isKeyImputEnable())	return;
 
 		//ポーズ時の処理をしてこの先には進まない
 	switch (getPauseMode()) {
 	case PauseMode_NOMAL:
 		//選択肢の項目の更新
-		if (!keyInput.isEnable()) pauseMenu.Update();
+		pauseMenu.Update();
 		return;
 	case PauseMode_GameOver:
-		if (!keyInput.isEnable()) pauseMenu.Update();
+		pauseMenu.Update();
 		return;
 	case PauseMode_GameClear:
-		if (!keyInput.isEnable()) pauseMenu.Update();
+		pauseMenu.Update();
 		return;
 	}
 
@@ -628,16 +622,6 @@ void Phase_GameMain::Finalize_Update() {
 
 //キー処理
 void Phase_GameMain::GameMain_Key() {
-
-	//キーボードが有効な場合はここから先には進めない
-	if (keyInput.isEnable()) {
-		//
-		keyInput.Key();
-
-		return;
-	}
-
-
 	//ポーズ処理
 	if (getKeyBind(KEYBIND_PAUSE) == 1) {
 		if (getPauseMode() == PauseMode_NOMAL) {
@@ -873,5 +857,21 @@ Field_Admin *Phase_GameMain::getField() {
 
 //クリアしたときに一度だけ実行される
 void Phase_GameMain::Clear() {
-	keyInput.Start();
+	//順位を確認する
+	int No = 1;	//仮に一位だとする
+
+	//ランクインしている場合はキーボードを表示する
+	if (No < 40) {
+		setKeyImputStart(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 540, &keyImputEnd);
+		pauseMenu.setEnable(FALSE);
+	}
+	else {
+		//ランク外の時は選択メニューの表示を行う
+		pauseMenu.setEnable(TRUE);
+	}
+}
+
+//キー入力が終了した時に呼ばれる
+void Phase_GameMain::KeyImputEnd::operator()(TCHAR *str) {
+	//pauseMenu.setEnable(TRUE);
 }
