@@ -223,6 +223,7 @@ static void UpdateLoop() {
 	fpsController_Update.Update_First();
 	gpUpdateKey();				//キー取得	
 	phaseController.Update();	//フェーズコントローラーによる計算処理
+	keyInput.Update();			//キーボードの更新処理(座標計算など)を入れる
 	keyInput.Key(stateKeyBind);	//キーボードの更新処理(キー入力処理)を入れる
 	fpsController_Update.Update_Last();
 	if (phaseController.isMultiThread())	fpsController_Update.Wait();	//マルチスレッド動作の場合は待機

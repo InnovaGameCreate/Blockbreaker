@@ -5,17 +5,20 @@ KeyInput::KeyInput() {
 	Enable = FALSE;
 	Select = 0;
 	len = 0;
+	DrawCountTotal = 0;
+	BackImage = 0;
 }
 
 //キーボード動作を開始する
 void KeyInput::Start(int x, int y, KeyInputCallback_End *keyInputCallback_End) {
 	if (isEnable())	return;
-	DrawX = x;
-	DrawY = y;
+	DrawX = (float)x;
+	DrawY = (float)y;
 	KeyInput::keyInputCallback_End = keyInputCallback_End;
 	len = 0;
 	Select = 0;
 	Select_BeforeEnter = 0;
+	UpdateCount = 0;
 	for (auto &dat : str)	dat = '_';
 	str[ARRAY_LENGTH(str) - 1] = '\0';
 	Enable = TRUE;
@@ -30,12 +33,25 @@ int KeyInput::isEnable() {
 //描画
 void KeyInput::Draw() {
 	if (!isEnable())	return;
-	int x = DrawX;
-	int y = DrawY;
+	DrawCountTotal++;	//描画カウント
+	if (DrawCountTotal == 1)	DrawFirst();	//初回描画時に実行される
+	float x = DrawX;
+	float y = DrawY;
+	int Alpha = 255;	//透過値
 
+	//中央座標を左座標に変える
 	x -= 150;
 
-	DrawBox(x, y, x + 300, y + 200, GetColor(255, 255, 255), TRUE);
+	//カウンタより描画位置Yを調整する
+	if (UpdateCount < 30) {
+		double val = UpdateCount / 30.;
+		Alpha = (int)(255 * val);
+		val = 1 - val;	//割合を反転させる
+		y = y + (float)(20 * val);
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);
+	DrawGraphF(x, y, BackImage, FALSE);
 	//文字の表を作成する
 	for (int i = 0; i < ARRAY_LENGTH(ch); i++) {
 		TCHAR str[10];
@@ -53,11 +69,19 @@ void KeyInput::Draw() {
 			Font_DrawStringCenterWithShadow(x + 20 + ((i % 9)) * 32, y + 20 + (i / 9) * 40, str, color, GetColor(10, 10, 10), FONTTYPE_GenJyuuGothicLHeavy_Edge25);
 		}
 	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+//更新処理
+void KeyInput::Update() {
+	if (!isEnable())	return;
+	UpdateCount++;
 }
 
 //キー操作
 void KeyInput::Key(unsigned int *key) {
-	if (!isEnable())	return;
+	if (!isEnable())		return;
+	if (UpdateCount < 30)	return;	//前半30フレームは出現中より何もしない
 
 	if (key[KEYBIND_RIGHT] == 1) {
 		//右移動
@@ -126,4 +150,10 @@ void KeyInput::Key(unsigned int *key) {
 TCHAR *KeyInput::getStr() {
 	if(isEnable())	return str;
 	else			return _T("");
+}
+
+//初回描画時にのみ実行される
+void KeyInput::DrawFirst() {
+	//背景テクスチャのロードを行う
+	if ((BackImage = LoadGraph(_T("Data/image/KeyBoadBack.png"))) == -1)	printLog_E(_T("ファイルのロードに失敗しました。(Data/image/KeyBoadBack.png)"));
 }

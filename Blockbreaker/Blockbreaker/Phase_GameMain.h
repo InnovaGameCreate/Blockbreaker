@@ -105,7 +105,7 @@ private:
 
 	SelectItem_Pause pauseMenu = SelectItem_Pause(WINDOW_WIDTH/2, 600);					//ポーズメニューの項目
 	SelectItem_GameOver gameOverMenu = SelectItem_GameOver(WINDOW_WIDTH / 2, 600);		//ゲームオーバーの項目
-	SelectItem_GameClear gameClearMenu = SelectItem_GameClear(WINDOW_WIDTH / 2, 600);	//ゲームクリアの項目
+	SelectItem_GameClear gameClearMenu = SelectItem_GameClear(GAMEWINDOW_PADDINGX + GAMEWINDOW_WIDTH / 2, 500);	//ゲームクリアの項目
 
 	KeyImputEnd keyImputEnd = KeyImputEnd(&gameClearMenu);	//キー入力が終了した時に呼ばれるクラス
 	

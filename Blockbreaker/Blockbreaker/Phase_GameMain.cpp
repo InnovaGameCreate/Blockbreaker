@@ -18,7 +18,7 @@ Phase_GameMain::Phase_GameMain() {
 	gameOverMenu.setCenteringMode(0);
 
 	//ゲームクリアの項目を作成
-	gameClearMenu.addItem(_T("ランキングへ"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	gameClearMenu.addItem(_T("ランキングへ"), 6, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	gameClearMenu.addItem(_T("もう一度"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	gameClearMenu.addItem(_T("トップメニューへ"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	gameClearMenu.setScrolltype(1);
