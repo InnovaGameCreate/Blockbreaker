@@ -20,7 +20,7 @@ enum FAZE {
 	FAZE_Nothing,				//何も無し
 	FAZE_TopMenu,				//トップメニュー
 	FAZE_GameMain,				//実際のゲームプレイ画面
-	FAZE_Manual,				//説明書画面
+	FAZE_Exp,					//説明書画面
 	FAZE_NUM					//フェーズの数
 };
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Phase_GameMain.h"
 #include "Phase_TopMenu.h"
+#include "Phase_exp.h"
 #include "SelectItem.h"
 #include "KeyInput.h"
 
@@ -34,6 +35,7 @@
 //クラスのインスタンス(グローバル変数)
 extern Phase_GameMain phase_GameMain;			//ゲームメインのフェーズ
 extern Phase_TopMenu phase_TopMenu;				//トップメニューのフェーズ
+extern Phase_exp pahse_exp;						//取説メニューのフェーズ
 extern SK::PhaseController phaseController;		//フェーズコントローラー
 extern SK::FpsController fpsController_Draw;	//FPSコントローラー
 extern SK::FpsController fpsController_Update;	//FPSコントローラー

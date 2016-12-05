@@ -5,10 +5,12 @@
 //グローバル変数の定義
 Phase_GameMain phase_GameMain;
 Phase_TopMenu phase_TopMenu;
+Phase_exp phase_exp;
 SK::PhaseController phaseController = SK::PhaseController(FAZE_NUM);
 //FPSコントローラー
 SK::FpsController fpsController_Draw = SK::FpsController(FPS_DRAW);
 SK::FpsController fpsController_Update = SK::FpsController(FPS_UPDATE);
+
 
 class Phase_Proc : public SK::PhaseController_Proc
 {
@@ -92,6 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//フェーズの定義と諸々設定
 	phaseController.addFaze(FAZE_TopMenu, &phase_TopMenu);
 	phaseController.addFaze(FAZE_GameMain, &phase_GameMain);
+	phaseController.addFaze(FAZE_Exp, &phase_exp);
 	phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
 	phaseController.setCallBack(&Phase_Proc());
 	SK::Log_SetFrame(0, &FrameCount0);

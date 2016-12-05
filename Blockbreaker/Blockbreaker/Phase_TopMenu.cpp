@@ -64,7 +64,7 @@ void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 		phaseController.ChangefazeRequest(FAZE_GameMain, 0);//フェーズ変更
 		break;
 	case 1://説明画面に移行
-
+		phaseController.ChangefazeRequest(FAZE_Exp, 0);
 		break;
 	case 2://ゲーム終了
 		ExitGameRequest();
