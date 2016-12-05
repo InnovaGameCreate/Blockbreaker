@@ -12,12 +12,10 @@ public:
 
 	/*基本処理*/
 	void Draw_Block();	//ブロック描画処理
-	void Draw_Lay();	//レーザーエフェクト描画処理
 	void key();			//キー処理
 	int Update_MoveMotion();	//移動モーションの更新(移動モーションが行われたときはTRUE)
 	int Update_ChangeMotion();	//変化モーションの更新(変化モーションが行われたときはTRUE)
 	int Update_AllMove();		//全体移動の更新(TRUE全体移動の更新を行った)
-	void Update_Lay();			//破壊光線エフェクトの更新
 	void Update_DrawData();		//描画情報の更新
 
 	void ChainCount_Reset();	//ブロックのチェイン数をリセットする
@@ -26,7 +24,6 @@ public:
 	int add_FieldBlock(int X, int Y, BLOCK_TYPE type, int Override = FALSE, int OutScreen = FALSE, BLOCK_TYPE *Before = NULL, int UseVirtualField = FALSE);	//フィールドにブロックを設置する
 	void add_Under();						//下からブロックがわいてくる
 	void Gravity(int InGameOnly = TRUE);	//フィールドブロックを重力で落下させる
-	void Delete_Lay();						//破壊光線でブロックを破壊する
 	int Delete_OutScreen();					//画面外のブロックをすべて削除する(消去したブロックの数)
 	int Delete_Join(const int Len = BLOCK_DELETE_LEN, int Flag_Event = TRUE);//連続するフィールドブロックを削除する(ついでに消去によって発動する効果も発動する)(消去したブロックの数)
 	void Func_Black();						//フィールドに存在する黒色ブロックの色を決定する
@@ -48,9 +45,6 @@ private:
 	Block_Field Virtualfield[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];	//計算上のフィールド情報UseVirtualField=TRUEで使用
 
 	BlockMoveMotion AllMovedata;	//ブロックの全体移動で使用する変数
-
-	PolygonPoints2 lay;				//破壊光線のエフェクト情報
-	int Count_lay;					//破壊光線エフェクトの経過時間
 
 	int ChainCount;	//ブロックの消去のチェイン数
 
@@ -74,6 +68,9 @@ private:
 	/*隣接個数計算関係*/
 	void SequenceCount(int x, int y, int ID, int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int * Counter, int UseVirtualField = FALSE);		//隣接する同色ブロックにマーカーを付ける
 	void CreateSequenceCountTable(int deleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM], int X, int Y, int W, int H, int UseVirtualField = FALSE);	//SequenceCountで使用するマーカーテーブルを作成する(有効なエリア)(UseVirtualField=TRUEで仮想の面を使用する)
+
+																																				
+	double Score_Scale(int len);//隣接するブロックの消す時にスコアの倍率を求める関数
 
 	
 };

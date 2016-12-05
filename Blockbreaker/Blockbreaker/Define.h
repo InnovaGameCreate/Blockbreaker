@@ -9,12 +9,18 @@
 //#define _DEBUG_GAMEMAIN_			//ゲームメインのデバッグ
 #endif // DEBUG
 
-
+#define PI (acos(-1.0))				//円周率
+#define PIf ((float)acos(-1.0))		//円周率(float)
 
 #define GAMEVERSION _T("0.3")		//バージョン名
 
-#define WINDOW_WIDTH (Base_BB_getWINDOW_WIDTH())
-#define WINDOW_HEIGHT (Base_BB_getWINDOW_HEIGHT())
+#define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))	//配列の長さを求める
+
+#define WINDOW_WIDTH 1280			//画面の横幅
+#define WINDOW_HEIGHT 960			//画面の高さ
+#define FPS_DRAW 60					//描画フレームレート
+#define FPS_UPDATE 60				//計算フレームレート
+#define TITLE _T("Blockbreaker")	//ウィンドウタイトル
 
 static const int BLOCK_SIZE = 40;			//ブロックの縦横のピクセルサイズ
 static const int BLOCK_WIDTHNUM = 11;		//実際のブロックの横の個数
@@ -32,11 +38,10 @@ static const int GAMEWINDOW_WIDTH = BLOCK_WIDTHNUM_INGAME*BLOCK_SIZE;	//ゲー�
 static const int GAMEWINDOW_HEIGHT = BLOCK_HEIGHTNUM_INGAME*BLOCK_SIZE;	//ゲーム画面の高さ
 
 static const int FALLBLOCK_SIZE = 3;		//落下するブロックの大きさ
-static const int GAMEOVER_BORDER = 4;		//ゲームオーバーにする場所
+static const int GAMEOVER_BORDER = 5;		//ゲームオーバーにする場所
 static const int FALLBLOCK_CENTER = FALLBLOCK_SIZE / 2;	//落下するブロックの中心(基準)位置
 static const int BLOCK_DELETE_LEN = 4;			//削除するために必要な隣接するブロックの個数
 static const int BLOCK_DEFAULT_VAL = 6;			//ブロックの初期積載量
-
 
 /*各スコア*/
 static const int SCORE_DEL_ARROW = 50;	//矢印ブロックによって消去された時のスコア

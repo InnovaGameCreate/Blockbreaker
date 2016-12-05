@@ -6,6 +6,7 @@ public:
 	int addFlyText(double CenterX, double Y, int limit, FONTTYPE font, unsigned int Color, TCHAR *fmt, ...);	//フライテキストの追加
 	void Draw();		//フライテキストを描画する
 	void Update();		//フライテキストの計算処理
+	void AllDelete();	//フライテキストの全無効化
 	FlyText();
 	~FlyText();
 private:

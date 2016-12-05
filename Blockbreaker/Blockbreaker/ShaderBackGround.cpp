@@ -65,9 +65,9 @@ static void Initialize_DeleteBlock() {
 
 //シェーダを利用して消滅するブロックを描画する
 void ShaderBackGround_DeleteBlock(double X, double Y, double place, int srcImage, int Effect1, int Effect2) {
-
+	
 	//引数のplaceをシェーダの処理に合わせて調整する
-	place = map(place, 0, 1, 1, -0.4);
+	place = SK::Math::map(place, 0, 1, 1, -0.4);
 	/*
 	placeが0の時1にする
 	1の時、-0.4にする

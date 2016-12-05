@@ -25,14 +25,14 @@ void Font_init() {
 			TCHAR *filename = _T("Data/Fonts/GenJyuuGothicL-Heavy.ttf");
 			// ファイルのサイズを得る
 			LONGLONG fsize = FileRead_size(filename);
-			if(fsize == -1)	Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("ファイルサイズの読み込みに失敗"));
+			if(fsize == -1)	printLog_E(_T("ファイルサイズの読み込みに失敗"));
 			DWORD FontFileSize = (DWORD)fsize;
 			// フォントファイルを開く
 			int FontFileHandle = FileRead_open(filename);
 			// フォントデータ格納用のメモリ領域を確保
 			void *Buffer = malloc(FontFileSize);
 			if (Buffer == NULL) {
-				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("メモリの確保に失敗しました"));
+				printLog_E(_T("メモリの確保に失敗しました"));
 			}
 			else {
 				// フォントファイルを丸ごとメモリに読み込む
@@ -44,7 +44,7 @@ void Font_init() {
 				// メモリに読み込んだフォントデータをシステムに追加
 				if (AddFontMemResourceEx(Buffer, FontFileSize, NULL, &font_num) <= 0) {
 					// フォント読込エラー処理
-					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("フォントをシステムに追加出来ませんでした"));
+					printLog_E(_T("フォントをシステムに追加出来ませんでした"));
 				}
 				free(Buffer);
 			}
@@ -59,7 +59,7 @@ void Font_init() {
 			// フォントデータ格納用のメモリ領域を確保
 			void *Buffer = malloc(FontFileSize);
 			if (Buffer == NULL) {
-				Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("メモリの確保に失敗しました"));
+				printLog_E(_T("メモリの確保に失敗しました"));
 			}
 			else {
 				// フォントファイルを丸ごとメモリに読み込む
@@ -71,7 +71,7 @@ void Font_init() {
 				// メモリに読み込んだフォントデータをシステムに追加
 				if (AddFontMemResourceEx(Buffer, FontFileSize, NULL, &font_num) <= 0) {
 					// フォント読込エラー処理
-					Log_print(Log_Type_ERROR, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("フォントをシステムに追加出来ませんでした"));
+					printLog_E(_T("フォントをシステムに追加出来ませんでした"));
 				}
 			}
 			free(Buffer);
@@ -98,7 +98,7 @@ void Font_init() {
 	SFSquareHeadCondensed_Edge25 = CreateFontToHandle(_T("SF Square Head Condensed"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge35 = CreateFontToHandle(_T("SF Square Head Condensed"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge45 = CreateFontToHandle(_T("SF Square Head Condensed"), 45, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	Log_print(Log_Type_INFORMATION, _T(__FILE__), _T(__FUNCTION__), __LINE__, 0, _T("Fontsの初期化処理完了"));
+	printLog_I(_T("Fontsの初期化処理完了"));
 
 
 }
