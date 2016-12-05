@@ -1,10 +1,12 @@
-﻿//トップメニュー関連
+﻿
+//トップメニュー関連
 
 #include "MainFunc.h"
 
 
-Phase_TopMenu::Phase_TopMenu() {
+Phase_TopMenu::Phase_TopMenu() {//要れた順番に0~ 1ずつ増える
 	menu.addItem(_T("スタート"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	menu.addItem(_T("操作方法"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	menu.addItem(_T("ゲーム終了"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	menu.setScrolltype(1);
 	menu.sethaba(50);
@@ -58,9 +60,12 @@ void Phase_TopMenu::Key() {
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
-		Changefaze(FAZE_GameMain, THREAD_Update);//フェーズ変更
+		Changefaze(FAZE_GameMain, THREAD_Update);//フェーズ
 		break;
-	case 1://ゲーム終了
+	case 1://説明画面に移行
+
+		break;
+	case 2://ゲーム終了
 		ExitGameRequest();
 		break;
 	}

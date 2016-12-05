@@ -283,6 +283,7 @@
     <ClInclude Include="Field_Admin.h" />
     <ClInclude Include="FlyText.h" />
     <ClInclude Include="MainFunc.h" />
+    <ClInclude Include="Phase_exp.h" />
     <ClInclude Include="Phase_GameMain.h" />
     <ClInclude Include="Phase_TopMenu.h" />
     <ClInclude Include="resource.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="FlyText.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
+    <ClCompile Include="Phase_exp.cpp" />
     <ClCompile Include="Phase_GameMain.cpp" />
     <ClCompile Include="Phase_TopMenu.cpp" />
     <ClCompile Include="SelectItem.cpp" />
