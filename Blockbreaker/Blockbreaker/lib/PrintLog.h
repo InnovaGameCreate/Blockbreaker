@@ -61,6 +61,7 @@ namespace SK {
 	extern void Log_setEnable(int b_flag);						//ログの出力を有効・無効にする
 	extern void Log_SetThreadID(int threadNo, TCHAR threadID);	//現在のスレッドの識別文字列を設定する
 	extern void Log_SetFrame(int threadNo, int *f);				//ログに表示するフレーム数を管理する変数へのポインタを設定する
+	extern void Log_setignore(unsigned int ignoreNo);			//無視するログの種類を設定する
 	extern const TCHAR *Log_getVersionName();					//バージョン名の取得
 	extern TCHAR *Log_getCompileDate();							//最終コンパイル日時の取得
 	extern int Log_isMultibyte();								//文字コードがマルチバイトかどうかの取得(TRUE=マルチバイト、FALSE=UNICODE)
