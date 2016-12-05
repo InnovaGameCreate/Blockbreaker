@@ -550,7 +550,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		else if (JudgeGameClear() == TRUE) {
 			//クリア判定を行う
 			Request_Pause(PauseMode_GameClear);
-
+			Clear();
 		}
 
 		if (gameCycleFirstCallFlag) {
