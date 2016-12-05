@@ -16,6 +16,7 @@ Phase_TopMenu::~Phase_TopMenu() {}
 //描画処理の初期化
 void Phase_TopMenu::Init_Draw() {
 	if ((Tex_backGround = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
+	menu.setControlEnable(TRUE);
 	menu.setEnable(TRUE);
 }
 
@@ -58,7 +59,7 @@ void Phase_TopMenu::Key() {
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
-		Changefaze(FAZE_GameMain, THREAD_Update);//フェーズ変更
+		phaseController.ChangefazeRequest(FAZE_GameMain, 0);//フェーズ変更
 		break;
 	case 1://ゲーム終了
 		ExitGameRequest();

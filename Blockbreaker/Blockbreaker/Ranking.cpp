@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "MainFunc.h"
 #include "Ranking.h"
 #include "errno.h"
 
