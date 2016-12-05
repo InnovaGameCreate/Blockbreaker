@@ -6,6 +6,7 @@
 #include "Block_Fall.h"
 #include "Tex_Block.h"
 #include "Field_Admin.h"
+#include "Ranking.h"
 
 class Phase_GameMain : public PhaseController
 {
@@ -71,6 +72,8 @@ private:
 		GameCycle_NUM			//ゲームサイクルの個数(設定無し)
 	};
 
+
+	Ranking ranking; //ランキング
 
 	Field_Admin Field;	//フィールド情報
 

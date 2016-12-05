@@ -46,6 +46,8 @@ void Phase_GameMain::RestoreGraphCallback() {
 void Phase_GameMain::Init_Update() {
 	Field.Init_Update();	//フィールド情報の初期化
 
+	ranking.File();
+
 	Restart();	//リスタート
 }
 
@@ -541,6 +543,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		else if (JudgeGameClear() == TRUE) {
 			//クリア判定を行う
 			Request_Pause(PauseMode_GameClear);
+			ranking.Add(20, _T("aiueo"));
 
 		}
 
