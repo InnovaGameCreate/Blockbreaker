@@ -884,6 +884,10 @@ Block_Fall *Phase_GameMain::getfallBlockInfo() {
 	return &fallBlockInfo;
 }
 
+Ranking *Phase_GameMain::getRanking() {
+	return &ranking;
+}
+
 //デバッグが有効かどうかの取得
 int Phase_GameMain::isDebugMode() {
 #ifdef _DEBUG_GAMEMAIN_
@@ -924,5 +928,7 @@ void Phase_GameMain::Clear() {
 
 //キー入力が終了した時に呼ばれる
 void Phase_GameMain::KeyImputEnd::operator()(TCHAR *str) {
-	P->setEnable(TRUE);
+	P->setEnable(TRUE);	//クリアメニューを有効にする
+	//入力した文字列を元にランキングに登録する
+	phase_GameMain.getRanking()->Add(phase_GameMain.getCountGameTime(), str);
 }

@@ -123,10 +123,10 @@ private:
 	//スコア
 	Score score;
 
-	int gameWindow;	//ゲーム画面を描画するハンドル
-	Tex_Block tex_Block;		//ブロックのテクスチャ
-	int haikei;						//背景
-	int Tex_FieldBack;			//フィールド背景
+	int gameWindow;			//ゲーム画面を描画するハンドル
+	Tex_Block tex_Block;	//ブロックのテクスチャ
+	int haikei;				//背景
+	int Tex_FieldBack;		//フィールド背景
 
 	int BGM;				//BGM
 
@@ -178,20 +178,21 @@ public:
 	void Request_Pause(PauseMode pauseMode);	//ポーズ状態のリクエスト
 
 	/*取得系*/
-	PauseMode getPauseMode();		//ポーズ状態の取得
-	int getCountPlayTime();			//実際に操作をしている経過フレーム数を取得する
-	int getCountGameTime();			//ゲームの経過フレーム数を取得(クリアで停止します)
-	int getCountTime();				//ゲームの経過フレーム数を取得(クリアしても停止しません)
-	void Restart();						//リスタート
-	void RestoreGraphCallback();		//フルスクリーンに復帰時に呼ばれる
-	BLOCK_TYPE GetRandomBlockType_FALL();			//ランダムでブロックの種類を返す
-	Tex_Block *getTex_Block();			//テクスチャの情報の取得
+	PauseMode getPauseMode();				//ポーズ状態の取得
+	int getCountPlayTime();					//実際に操作をしている経過フレーム数を取得する
+	int getCountGameTime();					//ゲームの経過フレーム数を取得(クリアで停止します)
+	int getCountTime();						//ゲームの経過フレーム数を取得(クリアしても停止しません)
+	void Restart();							//リスタート
+	void RestoreGraphCallback();			//フルスクリーンに復帰時に呼ばれる
+	BLOCK_TYPE GetRandomBlockType_FALL();	//ランダムでブロックの種類を返す
+	Tex_Block *getTex_Block();				//テクスチャの情報の取得
 	SK::RandomTable *getRandomTable();		//乱数表の取得
-	Block_Fall *getfallBlockInfo();		//落下ブロッククラスのポインタ取得
-	Phase_GameMain::Score *getScore();	//スコアクラスのインスタンスの取得
-	FlyText *getFlyText();				//フライテキストのインスタンスの取得
-	Field_Admin *getField();			//フィールドブロックのインスタンスの取得
-	int isDebugMode();					//デバッグが有効かどうかの取得
+	Block_Fall *getfallBlockInfo();			//落下ブロッククラスのポインタ取得
+	Phase_GameMain::Score *getScore();		//スコアクラスのインスタンスの取得
+	FlyText *getFlyText();					//フライテキストのインスタンスの取得
+	Field_Admin *getField();				//フィールドブロックのインスタンスの取得
+	int isDebugMode();						//デバッグが有効かどうかの取得
 	BLOCK_TYPE GetRandomBlockType_UNDER();	//ランダムでブロックの種類を返す(下から沸いてくるブロック用)
+	Ranking *getRanking();					//ランキングクラスのポインタを取得する
 };
 
