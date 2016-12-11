@@ -111,7 +111,15 @@ void Field_Admin::Update_DrawData() {
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			//•`‰ææ‚ÌÀ•W‚ðŒvŽZ‚·‚é(Ž€‚É‚©‚¯‚ÌêŠ‚Í¶‰E‚É—h‚ç‚·)
-			field[x][y].Update_DrawData(Field_PaddingX, Field_PaddingY, x, y);
+			//ƒQ[ƒ€ƒI[ƒo[‚ª‹ß‚¢ê‡‚Í¶‰E‚É—h‚ç‚·
+			int X = 0;
+			if (getBlockType(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
+				X += phase_GameMain.getRandomTable()->getRand(-4, 4);
+			}
+			if(getBlockType(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO){
+				X += SK::Math::getGraph_Sin((phase_GameMain.getCountTime()+y+x) * 30, 2, 0);
+			}
+			field[x][y].Update_DrawData(Field_PaddingX + X, Field_PaddingY, x, y);
 		}
 	}
 }
