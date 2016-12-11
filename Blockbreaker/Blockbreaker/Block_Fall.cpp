@@ -102,24 +102,24 @@ int Block_Fall::Update() {
 	if (FallCount < 0)		FallCount = 0;		//落下カウントが0以下だと都合が悪いので
 	if (Key_LRMove > 0) {
 		//右移動
-		if (MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
-		else							SoundEffect_Play(SE_TYPE_Graze);
+		if (MoveX(1) != 0)	SoundEffect_Play(SE_TYPE_button68);
+		else				SoundEffect_Play(SE_TYPE_Graze);
 
 	}
 	if (Key_LRMove < 0) {
 		//左移動
-		if (MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
-		else							SoundEffect_Play(SE_TYPE_Graze);
+		if (MoveX(-1) != 0)	SoundEffect_Play(SE_TYPE_button68);
+		else				SoundEffect_Play(SE_TYPE_Graze);
 	}
 	if (Key_LRRota > 0) {
 		//時計回りに回転
-		if (Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
-		else							SoundEffect_Play(SE_TYPE_Graze);
+		if (Rotate(1) != 0)	SoundEffect_Play(SE_TYPE_button68);
+		else				SoundEffect_Play(SE_TYPE_Graze);
 	}
 	if (Key_LRRota < 0) {
 		//反時計回りに回転
-		if (Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_Bulletfire2);
-		else							SoundEffect_Play(SE_TYPE_Graze);
+		if (Rotate(-1) != 0)	SoundEffect_Play(SE_TYPE_button68);
+		else					SoundEffect_Play(SE_TYPE_Graze);
 	}
 
 	if (FallCount <= 0) {//カウント0以下で落下
@@ -182,6 +182,7 @@ void Block_Fall::Update_DrawData(double paddingX, double paddingY) {
 				//フィールドのズレの部分を反映する
 				X += paddingX;
 				Y += paddingY;
+
 				//ブロックを新規登録する
 				BlockID_FallPoint[Count].addBlcok(BlockID[x][y].getBlockType(), TRUE);
 				BlockID_FallPoint[Count].Update_DrawData(X, Y);

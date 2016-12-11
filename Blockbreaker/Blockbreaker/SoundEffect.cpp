@@ -53,6 +53,7 @@ static int Charge_OK;		//チャージ攻撃のリキャスト完了の音
 static int Charge1;			//チャージ攻撃1の効果音
 static int Charge2;			//チャージ攻撃2の効果音
 static int Smallexplosion;	//小爆発
+static int button68;		//ブロックが回転したときの音
 
 static struct SE_DATA data;				//効果音の状態
 static struct SE_DATA Save_data;		//効果音の状態
@@ -230,6 +231,11 @@ void SoundEffect_init() {
 	if (Smallexplosion == -1) {
 		printLog_E(_T("SEのロードに失敗(Data/SE/small_explosion1.wav)"));
 	}
+	button68 = LoadSoundMemBase(_T("Data/SE/button68.wav"), 10);
+	if (button68 == -1) {
+		printLog_E(_T("SEのロードに失敗(Data/SE/button68.wav)"));
+	}
+	
 	
 }
 
@@ -350,6 +356,9 @@ void SoundEffect_Play(SE_TYPE type) {
 	case SE_TYPE_Smallexplosion:
 		PlaySoundMem(Smallexplosion, DX_PLAYTYPE_BACK);
 		break;
+	case SE_TYPE_button68:
+		PlaySoundMem(button68, DX_PLAYTYPE_BACK);
+		break;
 	}
 }
 
@@ -462,6 +471,9 @@ void SoundEffect_PlayPlace(SE_TYPE type, double plaxeX, double placeY) {
 	case SE_TYPE_Smallexplosion:
 		PlaySoundMem(Smallexplosion, DX_PLAYTYPE_BACK);
 		break;
+	case SE_TYPE_button68:
+		PlaySoundMem(button68, DX_PLAYTYPE_BACK);
+		break;
 	}
 }
 
@@ -552,6 +564,7 @@ void SoundEffect_AllPause() {
 	StopSoundMem(Charge1);
 	StopSoundMem(Charge2);
 	StopSoundMem(Smallexplosion);
+	StopSoundMem(button68);
 }
 
 //効果音の音量をすべて変更する(0～100)
@@ -593,6 +606,7 @@ void SoundEffect_SetSEVolume(int Volume) {
 	ChangeVolumeSoundMem(VolumePal, Charge1);
 	ChangeVolumeSoundMem(VolumePal, Charge2);
 	ChangeVolumeSoundMem(VolumePal, Smallexplosion);
+	ChangeVolumeSoundMem(VolumePal, button68);
 }
 
 //効果音の音量取得(0～100)

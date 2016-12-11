@@ -43,8 +43,8 @@ void Phase_GameMain::Init_Draw() {
 	if ((Tex_FieldBack = LoadGraph(_T("Data/image/BlockField_Back.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/BlockField_Back.png)"));
 
 
-	if ((BGM = LoadBGM(_T("Data/BGM/Happy_Halloween.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/Happy_Halloween.wav)"));
-	SetLoopTimePosSoundMem(9768, BGM);
+	if ((BGM = LoadBGM(_T("Data/BGM/otenbahime.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/otenbahime.wav)"));
+	SetLoopTimePosSoundMem(11158, BGM);
 
 	Field.Init_Draw();	//フィールド情報の初期化
 
@@ -763,7 +763,7 @@ int Phase_GameMain::JudgeGameOver() {
 
 //ゲームクリアかどうかの確認(TRUEゲームクリア)
 int Phase_GameMain::JudgeGameClear() {
-	if (score.getScore() > 10'00) {
+	if (score.getScore() > 10'0000) {
 		//スコアが一定以上でクリア判定を入れる
 		return TRUE;
 	}

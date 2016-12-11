@@ -110,7 +110,7 @@ void Field_Admin::Update_DrawData() {
 	//フィールドブロックの座標計算
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//描画先の座標を計算する
+			//描画先の座標を計算する(死にかけの場所は左右に揺らす)
 			field[x][y].Update_DrawData(Field_PaddingX, Field_PaddingY, x, y);
 		}
 	}

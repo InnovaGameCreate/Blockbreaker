@@ -88,7 +88,8 @@ enum SE_TYPE {
 	SE_TYPE_ChargeOK,			//チャージ攻撃のリキャスト完了の音
 	SE_TYPE_Charge1,			//チャージ攻撃1の効果音
 	SE_TYPE_Charge2,			//チャージ攻撃2の効果音
-	SE_TYPE_Smallexplosion,		////小爆発の効果音
+	SE_TYPE_Smallexplosion,		//小爆発の効果音
+	SE_TYPE_button68,			//ボタンが押されたときの音
 	SE_TYPE_NUM					//効果音の個数(指定した場合は効果音無し)
 };
 

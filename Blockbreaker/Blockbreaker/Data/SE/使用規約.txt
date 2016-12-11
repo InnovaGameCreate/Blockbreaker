@@ -117,3 +117,7 @@ http://www.kurage-kosho.info/system.html
 small_explosion1.wav
 http://taira-komori.jpn.org/arms01.html
 è¨îöî≠ÇP
+Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|Å|
+button68.wav
+http://www.kurage-kosho.info/system.html
+É{É^Éì68
