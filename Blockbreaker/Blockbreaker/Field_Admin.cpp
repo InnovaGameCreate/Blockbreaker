@@ -114,10 +114,10 @@ void Field_Admin::Update_DrawData() {
 			//ゲームオーバーが近い場合は左右に揺らす
 			int X = 0;
 			if (getBlockType(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				X += phase_GameMain.getRandomTable()->getRand(-4, 4);
+				X += (int)phase_GameMain.getRandomTable()->getRand(-4, 4);
 			}
 			if(getBlockType(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO){
-				X += SK::Math::getGraph_Sin((phase_GameMain.getCountTime()+y+x) * 30, 2, 0);
+				X += (int)SK::Math::getGraph_Sin((phase_GameMain.getCountTime()+y+x) * 30, 2, 0);
 			}
 			field[x][y].Update_DrawData(Field_PaddingX + X, Field_PaddingY, x, y);
 		}
