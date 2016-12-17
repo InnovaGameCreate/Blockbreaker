@@ -283,6 +283,7 @@ unsigned int getJoyKey(int JoyKeyNO) {
 			break;
 		}
 	}
+
 	if (bit <= 0)	return 0;
 	bit--;//配列は0起算なのでデクリメント
 	if (bit < 0 || ARRAY_LENGTH(stateKeyJoy) <= bit)	return 0;
