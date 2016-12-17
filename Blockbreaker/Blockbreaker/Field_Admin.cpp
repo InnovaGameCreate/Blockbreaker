@@ -465,7 +465,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 
 
 	//SK::Math::Gradation_RGB
-	int red = 255, blue = 255 - CainsScoreBonas * 100, green = 255 - CainsScoreBonas * 100;
+	int red = 255, blue = 255 - CainsScoreBonas * 100, green = 255 - CainsScoreBonas * 100;//連鎖ボーナスに伴うフォントの色変化用
 	if (blue < 0)
 		blue = 0;
 	if (green < 0)
