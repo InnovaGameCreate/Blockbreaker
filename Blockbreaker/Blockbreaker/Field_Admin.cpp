@@ -311,7 +311,7 @@ int Field_Admin::Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionTy
 int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 
 	int DeleteBlockFlag = FALSE;	//削除されたらTRUE
-
+	int CainsScoreBonas = 0;//実際にスコア計算に使う変数
 									//画面内の存在するブロックのみで計算する
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
