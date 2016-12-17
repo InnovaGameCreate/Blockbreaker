@@ -49,6 +49,10 @@ enum FONTTYPE {
 	FONTTYPE_SFSquareHeadCondensed_Edge25,	//SF Square Head Condensedエッジ付きサイズ25
 	FONTTYPE_SFSquareHeadCondensed_Edge35,	//SF Square Head Condensedエッジ付きサイズ35
 	FONTTYPE_SFSquareHeadCondensed_Edge45,	//SF Square Head Condensedエッジ付きサイズ45
+
+	FONTTYPE_The2K12_15, //Cubosエッジ付きサイズ15
+	FONTTYPE_The2K12_25, //Cubosエッジ付きサイズ25
+	FONTTYPE_The2K12_35, //Cubosエッジ付きサイズ35
 };
 
 //効果音の種類

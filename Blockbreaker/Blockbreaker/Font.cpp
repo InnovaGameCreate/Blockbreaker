@@ -15,6 +15,10 @@ static int SFSquareHeadCondensed_Edge25;//SF Square Head Condensedエッジ付�
 static int SFSquareHeadCondensed_Edge35;//SF Square Head Condensedエッジ付きサイズ35
 static int SFSquareHeadCondensed_Edge45;//SF Square Head Condensedエッジ付きサイズ45
 
+static int The2K12_15;
+static int The2K12_25;
+static int The2K12_35;
+
 static int LiadFlag = 0;
 
 //初期化
@@ -25,7 +29,7 @@ void Font_init() {
 			TCHAR *filename = _T("Data/Fonts/GenJyuuGothicL-Heavy.ttf");
 			// ファイルのサイズを得る
 			LONGLONG fsize = FileRead_size(filename);
-			if(fsize == -1)	printLog_E(_T("ファイルサイズの読み込みに失敗"));
+			if (fsize == -1)	printLog_E(_T("ファイルサイズの読み込みに失敗"));
 			DWORD FontFileSize = (DWORD)fsize;
 			// フォントファイルを開く
 			int FontFileHandle = FileRead_open(filename);
@@ -76,10 +80,35 @@ void Font_init() {
 			}
 			free(Buffer);
 		}
-
-
+		{
+			TCHAR *filename = _T("Data/Fonts/The 2K12.ttf");
+			// ファイルのサイズを得る
+			DWORD FontFileSize = (DWORD)FileRead_size(filename);
+			// フォントファイルを開く
+			int FontFileHandle = FileRead_open(filename);
+			// フォントデータ格納用のメモリ領域を確保
+			void *Buffer = malloc(FontFileSize);
+			if (Buffer == NULL) {
+				printLog_E(_T("メモリの確保に失敗しました"));
+			}
+			else {
+				// フォントファイルを丸ごとメモリに読み込む
+				FileRead_read(Buffer, FontFileSize, FontFileHandle);
+				//ファイルを閉じる
+				FileRead_close(FontFileHandle);
+				// AddFontMemResourceEx引数用
+				DWORD font_num = 0;
+				// メモリに読み込んだフォントデータをシステムに追加
+				if (AddFontMemResourceEx(Buffer, FontFileSize, NULL, &font_num) <= 0) {
+					// フォント読込エラー処理
+					printLog_E(_T("フォントをシステムに追加出来ませんでした"));
+				}
+			}
+			free(Buffer);
+		}
 		ChangeFont(_T("源桑ゴシックL Heavy"), DX_CHARSET_DEFAULT);
 		ChangeFont(_T("SF Square Head Condensed"), DX_CHARSET_DEFAULT);
+		ChangeFont(_T("The 2K12"), DX_CHARSET_DEFAULT);
 
 		ChangeFontType(DX_FONTTYPE_EDGE);
 		LiadFlag = 1;
@@ -98,6 +127,13 @@ void Font_init() {
 	SFSquareHeadCondensed_Edge25 = CreateFontToHandle(_T("SF Square Head Condensed"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge35 = CreateFontToHandle(_T("SF Square Head Condensed"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	SFSquareHeadCondensed_Edge45 = CreateFontToHandle(_T("SF Square Head Condensed"), 45, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+
+
+	
+	The2K12_15 = CreateFontToHandle(_T("The 2K12"), 15, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+	The2K12_25 = CreateFontToHandle(_T("The 2K12"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+	The2K12_35 = CreateFontToHandle(_T("The 2K12"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
+	
 	printLog_I(_T("Fontsの初期化処理完了"));
 
 
@@ -143,6 +179,12 @@ int Font_getHandle(FONTTYPE font) {
 		return SFSquareHeadCondensed_Edge35;
 	case FONTTYPE_SFSquareHeadCondensed_Edge45:
 		return SFSquareHeadCondensed_Edge45;
+	case FONTTYPE_The2K12_15:
+		return The2K12_15;
+	case FONTTYPE_The2K12_25:
+		return The2K12_25;
+	case FONTTYPE_The2K12_35:
+		return The2K12_35;
 	}
 	return 0;
 }
