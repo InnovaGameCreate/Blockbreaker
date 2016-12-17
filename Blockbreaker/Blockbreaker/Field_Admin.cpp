@@ -464,6 +464,13 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	}
 
 
+	//SK::Math::Gradation_RGB
+	int red = 255, blue = 255 - CainsScoreBonas * 100, green = 255 - CainsScoreBonas * 100;
+	if (blue < 0)
+		blue = 0;
+	if (green < 0)
+		green = 0;
+
 	BlockChangeMotionType DelMotion = BlockChangeMotionType_SMALL;
 	if (!Flag_Event) {
 		DelMotion = BlockChangeMotionType_EXPLOSION;
@@ -487,7 +494,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							Y -= 7;
 						else
 							Y += 7;
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(red, blue, green), text);
 					}
 
 					//‚Â‚¢‚Å‚É—×Ú‚·‚é÷–ØƒuƒƒbƒN‚àíœ
