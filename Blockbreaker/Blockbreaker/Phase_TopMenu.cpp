@@ -17,7 +17,7 @@ Phase_TopMenu::~Phase_TopMenu() {}
 
 //描画処理の初期化
 void Phase_TopMenu::Init_Draw() {
-	if ((Tex_backGround = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
+	if ((Tex_backGround = LoadGraph(_T("Data/image/TopMenu.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/TopMenu.png)"));
 	menu.setControlEnable(TRUE);
 	menu.setEnable(TRUE);
 }
