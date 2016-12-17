@@ -65,7 +65,7 @@ void Ranking::File() {
 		
 	}
 
-	fread(rank, sizeof(rank), 40, fp);
+	fread(rank, sizeof(rank_data), 40, fp);
 
 	fclose(fp);
 }

@@ -471,14 +471,14 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
+						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + ChainCount * 100));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
 						double X, Y;
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
+						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + ChainCount * 100));
 						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 
