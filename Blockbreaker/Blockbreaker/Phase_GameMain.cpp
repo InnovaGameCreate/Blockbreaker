@@ -488,7 +488,7 @@ int Phase_GameMain::Update_FieldBlock() {
 		break;
 	case 8://ブロックの消去判定
 
-		if (Field.Delete_Join(2) > 0) {
+		if (Field.Delete_Join() > 0) {
 			//連鎖カウントを描画する(フライテキスト)
 			if (Field.getChain() >= 2) flyText.addFlyText(GAMEWINDOW_WIDTH / 2., GAMEWINDOW_HEIGHT / 2., 60, FONTTYPE_GenJyuuGothicLHeavy_Edge60, GetColor(200, 200, 0), _T("%d連鎖！！"), Field.getChain());
 
