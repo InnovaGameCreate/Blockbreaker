@@ -362,7 +362,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -383,7 +383,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -404,7 +404,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
 									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
@@ -415,7 +415,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -436,7 +436,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
 									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
@@ -447,7 +447,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -479,7 +479,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 
 					//‚Â‚¢‚Å‚É—×Ú‚·‚éŽ÷–ØƒuƒƒbƒN‚àíœ
@@ -492,7 +492,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_OPTION);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x, y + 1, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -503,7 +503,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x - 1, y, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -514,7 +514,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x + 1, y, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -525,7 +525,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 				}
 			}
