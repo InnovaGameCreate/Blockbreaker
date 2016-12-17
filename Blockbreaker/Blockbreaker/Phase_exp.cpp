@@ -22,3 +22,8 @@ void Phase_exp::Init_Draw()
 	if (tex_exp == -1) printLog_E(_T("ファイルの読み込みの失敗[取説]"));
 	Sleep(500);
 }
+
+//終了処理(描画)
+void Phase_exp::Finalize_Draw() {
+	DeleteGraph(tex_exp);
+}
