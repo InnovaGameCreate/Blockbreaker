@@ -483,6 +483,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
+						if (x % 2 == 0)
+							Y -= 7;
+						else
+							Y += 7;
 						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 
