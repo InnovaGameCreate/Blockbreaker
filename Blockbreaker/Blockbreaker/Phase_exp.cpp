@@ -13,7 +13,9 @@ void Phase_exp::Draw()
 
 void Phase_exp::Update()
 {
-	if (getKeyBind(KEYBIND_SELECT) == 1) phaseController.ChangefazeRequest(FAZE_TopMenu,0);
+
+	//ゲームパッドかキーボードのキーが押されたときトップ画面へ戻る
+	if (getKeyBind(KEYBIND_PAUSE) == 1) phaseController.ChangefazeRequest(FAZE_TopMenu,0);
 }
 
 void Phase_exp::Init_Draw()

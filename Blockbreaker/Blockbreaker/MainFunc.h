@@ -52,6 +52,8 @@ extern int gettUSEGAMEPAD();						//使用するゲームパッドの取得
 extern void setKeyImputStart(int X, int Y, KeyInputCallback_End *keyInputCallback_End);//キー入力を有効にする
 extern TCHAR *getKeyImputStr();						//入力されているキーの取得
 extern int isKeyImputEnable();						//キーボード入力が有効かどうかの取得
+extern void PlayTopBGM();							//BGM再生
+extern void StopTopMusic();							//BGMを停止する
 
 
 extern void setKeybind(KeyBind *keyBind);	//キーバインドの設定(NULLで規定値)
