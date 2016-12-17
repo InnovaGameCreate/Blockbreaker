@@ -311,7 +311,11 @@ int Field_Admin::Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionTy
 int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 
 	int DeleteBlockFlag = FALSE;	//削除されたらTRUE
-	int CainsScoreBonas = 0;//実際にスコア計算に使う変数
+	int CainsScoreBonas = ChainCount;//実際にスコア計算に使う変数
+	if (CainsScoreBonas > 10)//連鎖スコアボーナス上限
+		CainsScoreBonas = 10;
+
+
 									//画面内の存在するブロックのみで計算する
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 	//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
@@ -460,6 +464,13 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	}
 
 
+	//SK::Math::Gradation_RGB
+	int red = 255, blue = 255 - CainsScoreBonas * 100, green = 255 - CainsScoreBonas * 100;//連鎖ボーナスに伴うフォントの色変化用
+	if (blue < 0)
+		blue = 0;
+	if (green < 0)
+		green = 0;
+
 	BlockChangeMotionType DelMotion = BlockChangeMotionType_SMALL;
 	if (!Flag_Event) {
 		DelMotion = BlockChangeMotionType_EXPLOSION;
@@ -471,15 +482,19 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + ChainCount * 100));
+						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
 						double X, Y;
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + ChainCount * 100));
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
+						if (x % 2 == 0)
+							Y -= 7;
+						else
+							Y += 7;
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(red, blue, green), text);
 					}
 
 					//ついでに隣接する樹木ブロックも削除
@@ -537,6 +552,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	if (DeleteBlockFlag) {
 		//ブロックの消去判定が入れば
 		ChainCount++;	//連鎖カウントを加算する
+		
 	}
 
 	return DelCount;

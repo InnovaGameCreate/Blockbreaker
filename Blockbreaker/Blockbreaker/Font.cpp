@@ -15,9 +15,8 @@ static int SFSquareHeadCondensed_Edge25;//SF Square Head Condensedエッジ付�
 static int SFSquareHeadCondensed_Edge35;//SF Square Head Condensedエッジ付きサイズ35
 static int SFSquareHeadCondensed_Edge45;//SF Square Head Condensedエッジ付きサイズ45
 
+static int The2K12_10;
 static int The2K12_15;
-static int The2K12_25;
-static int The2K12_35;
 
 static int LiadFlag = 0;
 
@@ -130,9 +129,8 @@ void Font_init() {
 
 
 	
+	The2K12_10 = CreateFontToHandle(_T("The 2K12"), 10, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	The2K12_15 = CreateFontToHandle(_T("The 2K12"), 15, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	The2K12_25 = CreateFontToHandle(_T("The 2K12"), 25, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
-	The2K12_35 = CreateFontToHandle(_T("The 2K12"), 35, -1, DX_FONTTYPE_EDGE, -1, 1, 0, -1);
 	
 	printLog_I(_T("Fontsの初期化処理完了"));
 
@@ -179,12 +177,10 @@ int Font_getHandle(FONTTYPE font) {
 		return SFSquareHeadCondensed_Edge35;
 	case FONTTYPE_SFSquareHeadCondensed_Edge45:
 		return SFSquareHeadCondensed_Edge45;
+	case FONTTYPE_The2K12_10:
+		return The2K12_10;
 	case FONTTYPE_The2K12_15:
 		return The2K12_15;
-	case FONTTYPE_The2K12_25:
-		return The2K12_25;
-	case FONTTYPE_The2K12_35:
-		return The2K12_35;
 	}
 	return 0;
 }
