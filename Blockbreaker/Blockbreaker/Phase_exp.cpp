@@ -18,7 +18,7 @@ void Phase_exp::Update()
 
 void Phase_exp::Init_Draw()
 {
-	tex_exp = LoadGraph(_T("Data/image/colorbom.png"));	//取説の画像貼り付けてください
+	tex_exp = LoadGraph(_T("Data/image/expWindow.png"));	//取説の画像貼り付けてください
 	if (tex_exp == -1) printLog_E(_T("ファイルの読み込みの失敗[取説]"));
 	Sleep(500);
 }
