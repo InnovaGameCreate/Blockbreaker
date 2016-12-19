@@ -6,7 +6,7 @@
 
 Phase_TopMenu::Phase_TopMenu() {//要れた順番に0~ 1ずつ増える
 	menu.addItem(_T("スタート"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
-	menu.addItem(_T("操作方法"), 4, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
+	menu.addItem(_T("特殊ブロック解説"), 8, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	menu.addItem(_T("ゲーム終了"), 5, FONTTYPE_GenJyuuGothicLHeavy_Edge50);
 	menu.setScrolltype(1);
 	menu.sethaba(50);
@@ -17,9 +17,10 @@ Phase_TopMenu::~Phase_TopMenu() {}
 
 //描画処理の初期化
 void Phase_TopMenu::Init_Draw() {
-	if ((Tex_backGround = LoadGraph(_T("Data/image/colorbom.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/colorbom.png)"));
+	if ((Tex_backGround = LoadGraph(_T("Data/image/TopMenu.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/TopMenu.png)"));
 	menu.setControlEnable(TRUE);
 	menu.setEnable(TRUE);
+	PlayTopBGM();	//BGM再生
 }
 
 //計算処理の初期化
@@ -62,6 +63,7 @@ void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
 		phaseController.ChangefazeRequest(FAZE_GameMain, 0);//フェーズ変更
+		StopTopMusic();
 		break;
 	case 1://説明画面に移行
 		phaseController.ChangefazeRequest(FAZE_Exp, 0);

@@ -49,6 +49,9 @@ enum FONTTYPE {
 	FONTTYPE_SFSquareHeadCondensed_Edge25,	//SF Square Head Condensedエッジ付きサイズ25
 	FONTTYPE_SFSquareHeadCondensed_Edge35,	//SF Square Head Condensedエッジ付きサイズ35
 	FONTTYPE_SFSquareHeadCondensed_Edge45,	//SF Square Head Condensedエッジ付きサイズ45
+
+	FONTTYPE_The2K12_10, //Cubosエッジ付きサイズ10
+	FONTTYPE_The2K12_15, //Cubosエッジ付きサイズ15
 };
 
 //効果音の種類
@@ -88,7 +91,8 @@ enum SE_TYPE {
 	SE_TYPE_ChargeOK,			//チャージ攻撃のリキャスト完了の音
 	SE_TYPE_Charge1,			//チャージ攻撃1の効果音
 	SE_TYPE_Charge2,			//チャージ攻撃2の効果音
-	SE_TYPE_Smallexplosion,		////小爆発の効果音
+	SE_TYPE_Smallexplosion,		//小爆発の効果音
+	SE_TYPE_button68,			//ボタンが押されたときの音
 	SE_TYPE_NUM					//効果音の個数(指定した場合は効果音無し)
 };
 

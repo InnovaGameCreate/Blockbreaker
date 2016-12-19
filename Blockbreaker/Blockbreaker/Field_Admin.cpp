@@ -110,8 +110,16 @@ void Field_Admin::Update_DrawData() {
 	//フィールドブロックの座標計算
 	for (int x = 0; x < BLOCK_WIDTHNUM; x++) {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
-			//描画先の座標を計算する
-			field[x][y].Update_DrawData(Field_PaddingX, Field_PaddingY, x, y);
+			//描画先の座標を計算する(死にかけの場所は左右に揺らす)
+			//ゲームオーバーが近い場合は左右に揺らす
+			int X = 0;
+			if (getBlockType(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
+				X += (int)phase_GameMain.getRandomTable()->getRand(-4, 4);
+			}
+			if(getBlockType(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO){
+				X += (int)SK::Math::getGraph_Sin((phase_GameMain.getCountTime()+y+x) * 30, 2, 0);
+			}
+			field[x][y].Update_DrawData(Field_PaddingX + X, Field_PaddingY, x, y);
 		}
 	}
 }
@@ -303,6 +311,10 @@ int Field_Admin::Delete_Color(int X, int Y, BLOCK_TYPE type, BlockChangeMotionTy
 int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 
 	int DeleteBlockFlag = FALSE;	//削除されたらTRUE
+	int CainsScoreBonas = ChainCount;//実際にスコア計算に使う変数
+	if (CainsScoreBonas > 10)//連鎖スコアボーナス上限
+		CainsScoreBonas = 10;
+
 
 									//画面内の存在するブロックのみで計算する
 	int DeleteFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
@@ -354,7 +366,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -375,7 +387,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -396,7 +408,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
 									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
@@ -407,7 +419,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -428,7 +440,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
 									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
@@ -439,7 +451,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -452,6 +464,13 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	}
 
 
+	//SK::Math::Gradation_RGB
+	int red = 255, blue = 255 - CainsScoreBonas * 100, green = 255 - CainsScoreBonas * 100;//連鎖ボーナスに伴うフォントの色変化用
+	if (blue < 0)
+		blue = 0;
+	if (green < 0)
+		green = 0;
+
 	BlockChangeMotionType DelMotion = BlockChangeMotionType_SMALL;
 	if (!Flag_Event) {
 		DelMotion = BlockChangeMotionType_EXPLOSION;
@@ -463,15 +482,19 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
+						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
 						double X, Y;
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y, 0.5, 0.5, &X, &Y);
-						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]])));
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						_stprintf_s(text, _T("%d"), (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
+						if (x % 2 == 0)
+							Y -= 7;
+						else
+							Y += 7;
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(red, blue, green), text);
 					}
 
 					//ついでに隣接する樹木ブロックも削除
@@ -484,7 +507,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_OPTION);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x, y + 1, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -495,7 +518,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x - 1, y, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -506,7 +529,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x + 1, y, BLOCK_TYPE_TREE, DelMotion)) {
 						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
@@ -517,7 +540,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_SFSquareHeadCondensed_Edge25, GetColor(150, 150, 150), text);
+						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 				}
 			}
@@ -529,6 +552,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 	if (DeleteBlockFlag) {
 		//ブロックの消去判定が入れば
 		ChainCount++;	//連鎖カウントを加算する
+		
 	}
 
 	return DelCount;

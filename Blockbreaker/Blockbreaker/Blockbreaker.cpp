@@ -59,6 +59,8 @@ static void UpdateLoop();						//処理ループ
 static int gpUpdateKey();						//キーの入力状態を更新する
 static void gpUpdateKeyBind();					//キーバインドによるキー入力状態の更新
 
+static int MusicHandle;		//トップ画面などで流れるBGMのハンドル
+
 
 //メイン関数(ここから始まります)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -160,6 +162,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LoadMenu_Draw2();		//ロード画面の描画
 
 
+	//BGMを読み込む
+	if ((MusicHandle = LoadBGM(_T("Data/BGM/an-yorokobinoshiroimichi.wav"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/BGM/an-yorokobinoshiroimichi.wav)"));
+	SetLoopSamplePosSoundMem(1101623, MusicHandle);
+
 	srand((unsigned)time(NULL));	//乱数のシード値を変更
 
 	/*各モジュールの初期化*/
@@ -207,6 +213,17 @@ void setKeyImputStart(int X, int Y, KeyInputCallback_End *keyInputCallback_End) 
 //キーボード入力が有効かどうかの取得
 int isKeyImputEnable() {
 	return keyInput.isEnable();
+}
+
+//BGMを再生する(すでに再生している場合は無視)
+void PlayTopBGM() {
+	if (CheckSoundMem(MusicHandle) == TRUE)	return;//再生中は無視
+	PlaySoundMem(MusicHandle, DX_PLAYTYPE_LOOP);
+}
+
+//BGMを停止する
+void StopTopMusic() {
+	StopSoundMem(MusicHandle);
 }
 
 #pragma region いじらなくて良い関数群
@@ -283,6 +300,7 @@ unsigned int getJoyKey(int JoyKeyNO) {
 			break;
 		}
 	}
+
 	if (bit <= 0)	return 0;
 	bit--;//配列は0起算なのでデクリメント
 	if (bit < 0 || ARRAY_LENGTH(stateKeyJoy) <= bit)	return 0;
