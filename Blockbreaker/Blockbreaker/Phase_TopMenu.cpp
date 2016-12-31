@@ -16,16 +16,11 @@ Phase_TopMenu::Phase_TopMenu() {//要れた順番に0~ 1ずつ増える
 Phase_TopMenu::~Phase_TopMenu() {}
 
 //描画処理の初期化
-void Phase_TopMenu::Init_Draw() {
+void Phase_TopMenu::Initialize(int arg) {
 	if ((Tex_backGround = LoadGraph(_T("Data/image/TopMenu.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/TopMenu.png)"));
 	menu.setControlEnable(TRUE);
 	menu.setEnable(TRUE);
 	PlayTopBGM();	//BGM再生
-}
-
-//計算処理の初期化
-void Phase_TopMenu::Init_Update() {
-
 }
 
 //描画処理
@@ -44,13 +39,8 @@ void Phase_TopMenu::Update() {
 }
 
 //描画の終了処理
-void Phase_TopMenu::Finalize_Draw() {
-
-}
-
-//計算の終了処理
-void Phase_TopMenu::Finalize_Update() {
-
+void Phase_TopMenu::Finalize() {
+	DeleteGraph(Tex_backGround);
 }
 
 //キー処理
@@ -62,11 +52,11 @@ void Phase_TopMenu::Key() {
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
-		phaseController.ChangefazeRequest(FAZE_GameMain, 0);//フェーズ変更
+		phaseController.ChangefazeRequest(FAZE_GameMain, 3000, 0);//フェーズ変更
 		StopTopMusic();
 		break;
 	case 1://説明画面に移行
-		phaseController.ChangefazeRequest(FAZE_Exp, 0);
+		phaseController.ChangefazeRequest(FAZE_Exp, 0, 0);
 		break;
 	case 2://ゲーム終了
 		ExitGameRequest();

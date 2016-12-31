@@ -9,7 +9,7 @@
 #include "Ranking.h"
 #include "KeyInput.h"
 
-class Phase_GameMain : public SK::Phase_
+class Phase_GameMain : public PCon::Phase_
 {
 public://定数とかの宣言
 	//ポーズの種類
@@ -149,13 +149,13 @@ private:
 	int Count_Pause;		//ポーズ時のカウンタ
 	int Count_Turn;			//経過ターン数（ブロック落下時に加算）
 
-	void Draw();
+	void Draw() override;
 	void Draw_Status();				//ステータスの描画
 	void Draw_ClearScreen();		//クリア画面の追加描画
 	int Update_FieldBlock();		//フィールドブロックの細々とした計算ループ
 	void Update_Counter();			//カウンタのカウントアップ
-	void Update();
-	void Update_Final();			//Update後に呼ばれる
+	void Update()override;
+	void Update_Final()override;			//Update後に呼ばれる
 	void GameMain_Key();
 
 	void setGameCycle(GameCycle gameCycle);			//ゲームサイクルを設定する
@@ -168,10 +168,8 @@ public:
 
 	Phase_GameMain();
 	~Phase_GameMain();
-	void Init_Draw();
-	void Init_Update();
-	void Finalize_Draw();
-	void Finalize_Update();
+	void Initialize(int arg)override;
+	void Finalize()override;
 
 
 	/*設定系*/

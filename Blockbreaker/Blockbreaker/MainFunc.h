@@ -36,7 +36,7 @@
 extern Phase_GameMain phase_GameMain;			//ゲームメインのフェーズ
 extern Phase_TopMenu phase_TopMenu;				//トップメニューのフェーズ
 extern Phase_exp pahse_exp;						//取説メニューのフェーズ
-extern SK::PhaseController phaseController;		//フェーズコントローラー
+extern PCon::PhaseController phaseController;	//フェーズコントローラー
 extern SK::FpsController fpsController_Draw;	//FPSコントローラー
 extern SK::FpsController fpsController_Update;	//FPSコントローラー
 
@@ -100,5 +100,5 @@ extern void Font_DrawStringCenterWithShadow(double Center_x, double y, const TCH
 
 /*LoadMenu.cpp*/
 extern void LoadMenu_Initialize();		//初期化
-extern void LoadMenu_Draw();			//ロード画面の表示
+extern void LoadMenu_Draw(int count);			//ロード画面の表示
 extern void LoadMenu_Draw2();			//ロード画面の表示(最初の起動時用)

@@ -31,8 +31,15 @@ Phase_GameMain::~Phase_GameMain() {
 }
 
 //初期化(描画処理)
-void Phase_GameMain::Init_Draw() {
+void Phase_GameMain::Initialize(int arg) {
 	using SK::Math::Pot;
+
+	Field.Init_Update();	//フィールド情報の初期化
+
+	ranking.File();
+
+	Restart();	//リスタート
+
 
 	//ゲーム画面の生成(後でシェーダを使いたいので2のn乗のサイズで作成します)
 	if ((gameWindow = MakeScreen(Pot(GAMEWINDOW_WIDTH), Pot(GAMEWINDOW_HEIGHT), FALSE)) == -1)	printLog_E(_T("ウィンドウ作成に失敗しました"));
@@ -60,15 +67,6 @@ void Phase_GameMain::Init_Draw() {
 //フルスクリーンに復帰時に呼ばれる
 void Phase_GameMain::RestoreGraphCallback() {
 
-}
-
-//初期化(計算処理)
-void Phase_GameMain::Init_Update() {
-	Field.Init_Update();	//フィールド情報の初期化
-
-	ranking.File();
-
-	Restart();	//リスタート
 }
 
 //リスタート
@@ -613,7 +611,7 @@ void Phase_GameMain::Update_Final() {
 }
 
 //終了処理(描画処理)
-void Phase_GameMain::Finalize_Draw() {
+void Phase_GameMain::Finalize() {
 	DeleteGraph(gameWindow);
 
 	tex_Block.Finalize_Draw();
@@ -623,11 +621,6 @@ void Phase_GameMain::Finalize_Draw() {
 
 
 	DeleteSoundMem(BGM);
-
-}
-
-//終了処理(計算処理)
-void Phase_GameMain::Finalize_Update() {
 
 }
 
@@ -823,7 +816,7 @@ void Phase_GameMain::SelectItem_Pause::Event_Select(int No) {
 		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	case 2://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
 		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	default:
@@ -840,7 +833,7 @@ void Phase_GameMain::SelectItem_GameOver::Event_Select(int No) {
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	case 1://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	default:
@@ -860,7 +853,7 @@ void Phase_GameMain::SelectItem_GameClear::Event_Select(int No) {
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	case 2://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
+		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	default:

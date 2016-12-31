@@ -1,18 +1,16 @@
 ﻿#pragma once
 #include "MainFunc.h"
 
-class Phase_TopMenu : public SK::Phase_
+class Phase_TopMenu : public PCon::Phase_
 {
 public:
 	Phase_TopMenu();
 	~Phase_TopMenu();
 
-	void Init_Draw();		//描画処理の初期化
-	void Init_Update();		//計算処理の初期化
-	void Draw();			//描画処理
-	void Update();			//計算処理
-	void Finalize_Draw();	//描画の終了処理
-	void Finalize_Update();	//計算の終了処理
+	void Initialize(int arg)	override;	//初期化
+	void Draw()					override;	//描画処理
+	void Update()				override;	//計算処理
+	void Finalize()				override;	//描画の終了処理
 private:
 	//ここにメニュークラスを定義する
 	class SelectItem_menu : public SelectItem
