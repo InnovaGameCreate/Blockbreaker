@@ -17,6 +17,7 @@
 
 #include <Windows.h>
 #include <process.h>
+#include <mutex>
 
 //フェーズクラスの親クラス
 namespace PCon {
@@ -69,6 +70,8 @@ namespace PCon {
 		int getTotalPhase();	//フェーズの最大数を取得
 
 		void Load();			//ロード中に実行されるロード関数(呼ばないこと！！)
+
+		void setBackLoad(int Flag);		//バックグラウンドでデータの読み込みを行うかどうかの設定(TRUEでバックでロードを行う)
 	private:
 		//設定
 		int Flag_MultiThread;	//マルチスレッド動作ならTRUE
@@ -85,11 +88,11 @@ namespace PCon {
 		int LoadDrawCount;			//ロード時の描画カウント
 
 		//状態制御関連
-		int DrawPauseRequest = FALSE;		//描画のスキップのリクエスト
-		int DrawPause = FALSE;				//描画のスキップ
+		int UpdatePauseRequest = FALSE;		//計算のスキップのリクエスト
+		int UpdatePause = FALSE;			//計算のスキップ
 
-		void Request_DrawPause();			//描画の停止を要求し、停止するまで待機する
-		void ChangefazeUpdate();			//フェーズを変更する(Update)
+		void Request_UpdatePause();			//計算の停止を要求し、停止するまで待機する
+		void ChangefazeDraw();			//フェーズを変更する(Draw)
 
 		int PhaseMaxNum;		//フェーズの最大数
 		Phase_ **Phase;			//フェーズ配列のポインタ(後に配列の先頭アドレスになる)
@@ -97,6 +100,8 @@ namespace PCon {
 		PhaseController_Proc *PhaseController_Proc;	//コールバック関数クラス
 
 		HANDLE LoadThreadhandle;	//ロードスレッドのハンドル
+
+		int BackLoad;				//バックグラウンドでデータの読み込みを行うかどうかの設定(TRUEでバックでロードを行う)
 
 		int JudgeFazeNo(int FazeNo);		//指定した値がフェーズ配列の添え字として妥当かどうかの取得(TRUE妥当)
 
