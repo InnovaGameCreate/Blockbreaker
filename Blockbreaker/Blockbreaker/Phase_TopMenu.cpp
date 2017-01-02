@@ -15,8 +15,8 @@ Phase_TopMenu::Phase_TopMenu() {//要れた順番に0~ 1ずつ増える
 
 Phase_TopMenu::~Phase_TopMenu() {}
 
-//描画処理の初期化
-void Phase_TopMenu::Initialize(int arg) {
+//初期化(描画)
+void Phase_TopMenu::Init_Draw() {
 	if ((Tex_backGround = LoadGraph(_T("Data/image/TopMenu.png"))) == -1)	printLog_E(_T("ファイルの読み込み失敗(Data/image/TopMenu.png)"));
 	menu.setControlEnable(TRUE);
 	menu.setEnable(TRUE);
@@ -39,7 +39,7 @@ void Phase_TopMenu::Update() {
 }
 
 //描画の終了処理
-void Phase_TopMenu::Finalize() {
+void Phase_TopMenu::Fin_Draw() {
 	DeleteGraph(Tex_backGround);
 }
 

@@ -9,7 +9,7 @@ public:
 	Phase_exp();
 	void Draw()					override;	//•`‰æˆ—
 	void Update()				override;	//ŒvZˆ—
-	void Initialize(int arg)	override;	//‰Šú‰»(•`‰æˆ—)
-	void Finalize()				override;	//I—¹ˆ—(•`‰æ)
+	void Init_Draw()			override;	//‰Šú‰»(•`‰æˆ—)
+	void Fin_Draw()				override;	//I—¹ˆ—(•`‰æ)
 };
 

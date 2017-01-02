@@ -168,8 +168,8 @@ public:
 
 	Phase_GameMain();
 	~Phase_GameMain();
-	void Initialize(int arg)override;
-	void Finalize()override;
+	void Init_Draw()override;	//初期化(描画処理)
+	void Fin_Draw()override;	//終了処理(描画処理)
 
 
 	/*設定系*/

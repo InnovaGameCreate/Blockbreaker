@@ -15,8 +15,8 @@ SK::FpsController fpsController_Update = SK::FpsController(FPS_UPDATE);
 class Phase_Proc : public PCon::PhaseController_Proc
 {
 public:
-	void Proc_Changefazed(int Before, int After) override{
-		printLog_I(_T("[PhaseController]%dから%dへ移行[計算スレッド]"), Before, After);
+	void Proc_Changefazed(int Before, int After, DWORD LoadTime, DWORD SetTime) override{
+		printLog_I(_T("[PhaseController]%dから%dへ移行"), Before, After);
 	}
 	void Proc_DrawPauseing(int count) override {
 		LoadMenu_Draw(count);		//ロード画面の描画

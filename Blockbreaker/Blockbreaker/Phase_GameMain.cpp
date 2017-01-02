@@ -31,7 +31,7 @@ Phase_GameMain::~Phase_GameMain() {
 }
 
 //初期化(描画処理)
-void Phase_GameMain::Initialize(int arg) {
+void Phase_GameMain::Init_Draw() {
 	using SK::Math::Pot;
 
 	Field.Init_Update();	//フィールド情報の初期化
@@ -611,7 +611,7 @@ void Phase_GameMain::Update_Final() {
 }
 
 //終了処理(描画処理)
-void Phase_GameMain::Finalize() {
+void Phase_GameMain::Fin_Draw() {
 	DeleteGraph(gameWindow);
 
 	tex_Block.Finalize_Draw();

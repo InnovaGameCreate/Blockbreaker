@@ -7,10 +7,10 @@ public:
 	Phase_TopMenu();
 	~Phase_TopMenu();
 
-	void Initialize(int arg)	override;	//初期化
+	void Init_Draw()			override;	//初期化(描画)
 	void Draw()					override;	//描画処理
 	void Update()				override;	//計算処理
-	void Finalize()				override;	//描画の終了処理
+	void Fin_Draw()				override;	//描画の終了処理(描画)
 private:
 	//ここにメニュークラスを定義する
 	class SelectItem_menu : public SelectItem
