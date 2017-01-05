@@ -4,6 +4,7 @@
 static int LoadScreen;//ロード画面
 static int LoadScreen2;//ロード画面
 
+
 //初期化
 void LoadMenu_Initialize() {
 	//ロード画面のロード
@@ -20,13 +21,24 @@ void LoadMenu_Initialize() {
 }
 
 //ロード画面の表示
-void LoadMenu_Draw() {
+void LoadMenu_Draw(int count) {
 	//ロード画面の描画
 	DrawGraph(0, 0, LoadScreen, 0);
+	TCHAR str[100];
+	switch ((count % 180)/60) {
+	case 0:
+		_stprintf_s(str, _T("Now Loading."));
+		break;
+	case 1:
+		_stprintf_s(str, _T("Now Loading.."));
+		break;
+	default:
+		_stprintf_s(str, _T("Now Loading..."));
+		break;
+	}
 
-	DrawStringToHandle(760 + 4, 870 + 4, _T("Now Loading…"), GetColor(30, 30, 30), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
-	DrawStringToHandle(760, 870, _T("Now Loading…"), GetColor(0xcb, 0xff, 0x8e), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
-	ScreenFlip();		//裏画面を表画面に反映
+	DrawStringToHandle(750 + 4, 870 + 4, str, GetColor(30, 30, 30), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
+	DrawStringToHandle(750, 870, str, GetColor(0xcb, 0xff, 0x8e), Font_getHandle(FONTTYPE_GenJyuuGothicLHeavy_Edge70));
 }
 
 //ロード画面の表示(最初の起動時用)

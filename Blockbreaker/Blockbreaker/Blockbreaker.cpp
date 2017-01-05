@@ -6,25 +6,21 @@
 Phase_GameMain phase_GameMain;
 Phase_TopMenu phase_TopMenu;
 Phase_exp phase_exp;
-SK::PhaseController phaseController = SK::PhaseController(FAZE_NUM);
+PCon::PhaseController phaseController = PCon::PhaseController(FAZE_NUM);
 //FPSコントローラー
 SK::FpsController fpsController_Draw = SK::FpsController(FPS_DRAW);
 SK::FpsController fpsController_Update = SK::FpsController(FPS_UPDATE);
 
 
-class Phase_Proc : public SK::PhaseController_Proc
+class Phase_Proc : public PCon::PhaseController_Proc
 {
 public:
-	void Proc_ChangefazeUpdated(int Before, int After) {
-		printLog_I(_T("[PhaseController]%dから%dへ移行[計算スレッド]"), Before, After);
+	void Proc_Changefazed(int Before, int After, DWORD LoadTime, DWORD SetTime) override{
+		printLog_I(_T("[PhaseController]%dから%dへ移行"), Before, After);
 	}
-	void Proc_ChangefazeDrawed(int Before, int After) {
-		printLog_I(_T("[PhaseController]%dから%dへ移行[描画スレッド]"), Before, After);
+	void Proc_DrawPauseing(int count) override {
+		LoadMenu_Draw(count);		//ロード画面の描画
 	}
-	void Proc_DrawPauseing() {
-		LoadMenu_Draw();		//ロード画面の描画
-	}
-
 };
 
 static int FrameCount0 = 0;	//諸事情で必要なやつ
@@ -97,10 +93,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	phaseController.addFaze(FAZE_TopMenu, &phase_TopMenu);
 	phaseController.addFaze(FAZE_GameMain, &phase_GameMain);
 	phaseController.addFaze(FAZE_Exp, &phase_exp);
-	phaseController.ChangefazeRequest(FAZE_TopMenu, 0);
 	phaseController.setCallBack(&Phase_Proc());
 	SK::Log_SetFrame(0, &FrameCount0);
 	SK::Log_SetFrame(1, &FrameCount1);
+
+	phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
 
 
 	/*起動設定画面の初期化と表示*/
