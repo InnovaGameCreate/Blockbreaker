@@ -24,7 +24,7 @@ void Ranking::Add(int time, TCHAR name[])
 		}
 	}
 	
-	
+	//É\Å[Ég
 	for (int i = 0; i < ARRAY_LENGTH(rank) - 1; i++) {
 		for (int j = ARRAY_LENGTH(rank) - 1; j > i; j--) {
 			if ((rank[j - 1].time > rank[j].time && rank[j].enable == TRUE && rank[j - 1].enable == TRUE) ||
