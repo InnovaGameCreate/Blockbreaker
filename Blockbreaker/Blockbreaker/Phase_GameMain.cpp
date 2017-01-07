@@ -868,7 +868,7 @@ Tex_Block *Phase_GameMain::getTex_Block() {
 }
 
 //乱数表の取得
-SK::RandomTable *Phase_GameMain::getRandomTable() {
+RandTable::RandomTable *Phase_GameMain::getRandomTable() {
 	return &randomTable;
 }
 
