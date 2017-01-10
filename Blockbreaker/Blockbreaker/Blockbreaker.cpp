@@ -57,6 +57,8 @@ static void gpUpdateKeyBind();					//キーバインドによるキー入力状�
 
 static int MusicHandle;		//トップ画面などで流れるBGMのハンドル
 
+static Phase_Proc phase_Proc;
+
 
 //メイン関数(ここから始まります)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -93,7 +95,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	phaseController.addFaze(FAZE_TopMenu, &phase_TopMenu);
 	phaseController.addFaze(FAZE_GameMain, &phase_GameMain);
 	phaseController.addFaze(FAZE_Exp, &phase_exp);
-	phaseController.setCallBack(&Phase_Proc());
+	phaseController.setCallBack(&phase_Proc);
 	SK::Log_SetFrame(0, &FrameCount0);
 	SK::Log_SetFrame(1, &FrameCount1);
 
