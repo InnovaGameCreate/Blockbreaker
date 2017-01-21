@@ -33,9 +33,6 @@
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<○>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //クラスのインスタンス(グローバル変数)
-extern Phase_GameMain phase_GameMain;			//ゲームメインのフェーズ
-extern Phase_TopMenu phase_TopMenu;				//トップメニューのフェーズ
-extern Phase_exp pahse_exp;						//取説メニューのフェーズ
 extern PCon::PhaseController phaseController;	//フェーズコントローラー
 extern SK::FpsController fpsController_Draw;	//FPSコントローラー
 extern SK::FpsController fpsController_Update;	//FPSコントローラー

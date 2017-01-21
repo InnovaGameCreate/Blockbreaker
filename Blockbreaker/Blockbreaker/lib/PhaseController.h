@@ -1,6 +1,6 @@
-#pragma once
-//ƒtƒF[ƒYƒRƒ“ƒgƒ[ƒ‰[
-//ƒ‰ƒCƒuƒ‰ƒŠ‚Ì“Ç‚İ‚İ
+ï»¿#pragma once
+//ãƒ•ã‚§ãƒ¼ã‚ºã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+//ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®èª­ã¿è¾¼ã¿
 #ifdef _DEBUG
 	#ifdef _WIN64
 		#pragma comment(lib, "PhaseControllerx64_d.lib")
@@ -18,137 +18,135 @@
 #include <Windows.h>
 #include <process.h>
 #include <mutex>
+#include <vector>
+#include <stack>
 
-//ƒtƒF[ƒYƒNƒ‰ƒX‚ÌeƒNƒ‰ƒX
+//ãƒ•ã‚§ãƒ¼ã‚ºã‚¯ãƒ©ã‚¹ã®è¦ªã‚¯ãƒ©ã‚¹
 namespace PCon {
 	class Phase_
 	{
 	private:
-		virtual void Draw();			//•`‰æˆ—
-		virtual void Update();			//ŒvZˆ—
-		virtual void Update_Final();	//UpdateŒã‚ÉŒÄ‚Î‚ê‚é
+		virtual void Draw();			//æç”»å‡¦ç†
+		virtual void Update();			//è¨ˆç®—å‡¦ç†
+		virtual void Update_Final();	//Updateå¾Œã«å‘¼ã°ã‚Œã‚‹
 	public:
-		//‰¼‘zŠÖ”
-		virtual void Initialize(int arg);	//‰Šú‰»
-		virtual void Init_Update();			//‰Šú‰»(ŒvZƒXƒŒƒbƒh)
-		virtual void Init_Draw();			//‰Šú‰»(•`‰æƒXƒŒƒbƒh)
-		virtual int Init_Draw_();			//‰Šú‰»(ƒ_ƒ~[•`‰æƒXƒŒƒbƒh)(–ß‚è’l‚ªTRUE‚ÌAƒ[ƒhI—¹‚Á‚Ä‚±‚Æ‚É‚È‚é‚Æ‚¢‚¤”ñí‚É‚â‚â‚±‚µ‚¢ŠÖ”)
-		virtual void Finalize();			//I—¹ˆ—
-		virtual void Fin_Update();			//I—¹ˆ—(ŒvZƒXƒŒƒbƒh)
-		virtual void Fin_Draw();			//I—¹ˆ—(•`‰æƒXƒŒƒbƒh)
+		//ä»®æƒ³é–¢æ•°
+		virtual void Initialize(int arg, void *arg2);	//åˆæœŸåŒ–
+		virtual void Init_Update();			//åˆæœŸåŒ–(è¨ˆç®—ã‚¹ãƒ¬ãƒƒãƒ‰)
+		virtual void Init_Draw();			//åˆæœŸåŒ–(æç”»ã‚¹ãƒ¬ãƒƒãƒ‰)
+		virtual int Init_Draw_();			//åˆæœŸåŒ–(ãƒ€ãƒŸãƒ¼æç”»ã‚¹ãƒ¬ãƒƒãƒ‰)(æˆ»ã‚Šå€¤ãŒTRUEã®æ™‚ã€ãƒ­ãƒ¼ãƒ‰çµ‚äº†ã£ã¦ã“ã¨ã«ãªã‚‹ã¨ã„ã†éå¸¸ã«ã‚„ã‚„ã“ã—ã„é–¢æ•°)
+		virtual void Finalize();			//çµ‚äº†å‡¦ç†
+		virtual void Fin_Update();			//çµ‚äº†å‡¦ç†(è¨ˆç®—ã‚¹ãƒ¬ãƒƒãƒ‰)
+		virtual void Fin_Draw();			//çµ‚äº†å‡¦ç†(æç”»ã‚¹ãƒ¬ãƒƒãƒ‰)
 
-		virtual void DrawFunc() final;	//•`‰æÛ‚ÉŒÄ‚Î‚ê‚é•`‰æŠÖ”
-		virtual void UpdateFunc() final;//•`‰æÛ‚ÉŒÄ‚Î‚ê‚é•`‰æŠÖ”
+		virtual void DrawFunc() final;	//æç”»éš›ã«å‘¼ã°ã‚Œã‚‹æç”»é–¢æ•°
+		virtual void UpdateFunc() final;//æç”»éš›ã«å‘¼ã°ã‚Œã‚‹æç”»é–¢æ•°
 	};
 
-	//ƒtƒF[ƒYƒRƒ“ƒgƒ[ƒ‰[‚ÌƒR[ƒ‹ƒoƒbƒNê—pƒNƒ‰ƒX
+	//ãƒ•ã‚§ãƒ¼ã‚ºã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å°‚ç”¨ã‚¯ãƒ©ã‚¹
 	class PhaseController_Proc
 	{
 	public:
-		virtual void Proc_Changefazed(int Before, int After, DWORD LoadTime, DWORD SetTime);	//ƒtƒF[ƒYˆÚs‚ªI—¹‚µ‚½‚Æ‚«
-		virtual void Proc_DrawPauseing(int count);				//•`‰æƒXƒŒƒbƒh‚ªˆê’â~‚µ‚Ä‚¢‚é‚Æ‚«‚É‘ã‚í‚è‚ÉÀs‚³‚ê‚é(ƒ[ƒh’†‚Æ‚©)
-		virtual void Proc_UpdatePauseing(int count);			//ŒvZƒXƒŒƒbƒh‚ªˆê’â~‚µ‚Ä‚¢‚é‚Æ‚«‚É‘ã‚í‚è‚ÉÀs‚³‚ê‚é(ƒ[ƒh’†‚Æ‚©)
+		virtual void Proc_Changefazed(int Before, int After, DWORD LoadTime, DWORD SetTime);	//ãƒ•ã‚§ãƒ¼ã‚ºç§»è¡ŒãŒçµ‚äº†ã—ãŸã¨ã
+		virtual void Proc_DrawPauseing(int count);				//æç”»ã‚¹ãƒ¬ãƒƒãƒ‰ãŒä¸€æ™‚åœæ­¢ã—ã¦ã„ã‚‹ã¨ãã«ä»£ã‚ã‚Šã«å®Ÿè¡Œã•ã‚Œã‚‹(ãƒ­ãƒ¼ãƒ‰ä¸­ã¨ã‹)
+		virtual void Proc_UpdatePauseing(int count);			//è¨ˆç®—ã‚¹ãƒ¬ãƒƒãƒ‰ãŒä¸€æ™‚åœæ­¢ã—ã¦ã„ã‚‹ã¨ãã«ä»£ã‚ã‚Šã«å®Ÿè¡Œã•ã‚Œã‚‹(ãƒ­ãƒ¼ãƒ‰ä¸­ã¨ã‹)
 	};
 
 
-	//ƒtƒF[ƒYƒRƒ“ƒgƒ[ƒ‰[‚ÌƒƒCƒ“ƒNƒ‰ƒX
+	//ãƒ•ã‚§ãƒ¼ã‚ºã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã®ãƒ¡ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹
 	class PhaseController
 	{
 	public:
-		static const int VerNo;			//ƒo[ƒWƒ‡ƒ“”Ô†
+		PhaseController();	//ãƒ•ã‚§ãƒ¼ã‚ºã®æœ€å¤§æ•°ã‚’æŒ‡å®šã—ã¦åˆæœŸåŒ–ã™ã‚‹
 
-		PhaseController(int MaxNum);	//ƒtƒF[ƒY‚ÌÅ‘å”‚ğw’è‚µ‚Ä‰Šú‰»‚·‚é
-		~PhaseController();
+		void ChangePhaseRequest(Phase_ *phaseInstance, DWORD LoadTime_Milliseconds, int arg = 0, void *arg2 = nullptr);	//ãƒ•ã‚§ãƒ¼ã‚ºå¤‰æ›´ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ã‚‹
+		void StackPhaseRequest(Phase_ *phaseInstance, DWORD LoadTime_Milliseconds, int arg = 0, void *arg2 = nullptr);	//ãƒ•ã‚§ãƒ¼ã‚ºã‚¹ã‚¿ãƒƒã‚¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ã‚‹
 
-		void ChangefazeRequest(int NO, DWORD LoadTime_Milliseconds, int arg);	//ƒtƒF[ƒY•ÏXƒŠƒNƒGƒXƒg‚ğ‘—‚é(Updateƒ‹[ƒv‚ÌÅ‰‚ÉÀs‚³‚ê‚Ü‚·)
+		void Update();	//è¨ˆç®—ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
+		void Draw();	//æç”»ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 
-		void Update();	//ŒvZƒƒCƒ“ƒ‹[ƒv
-		void Draw();	//•`‰æƒƒCƒ“ƒ‹[ƒv
+		void setCallBack(PCon::PhaseController_Proc *Ploc);	//ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
+		void setMultiThread(int Flag);	//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰å‹•ä½œã‚’è¡Œã†ã‹ã©ã†ã‹ã®è¨­å®š
+		int isMultiThread();	//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰å‹•ä½œã‚’è¡Œã†ã‹ã©ã†ã‹ã®å–å¾—
+		Phase_ *getInstance();		//ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç›´æ¥å–å¾—ã™ã‚‹(å±é™º)	
 
-		void addFaze(int FazeNo, Phase_ * phase);	//ƒtƒF[ƒY‚Ì’è‹`‚ğs‚¤
+		void Load();			//ãƒ­ãƒ¼ãƒ‰ä¸­ã«å®Ÿè¡Œã•ã‚Œã‚‹ãƒ­ãƒ¼ãƒ‰é–¢æ•°(å‘¼ã°ãªã„ã“ã¨ï¼ï¼)
 
-		void setCallBack(PCon::PhaseController_Proc *Ploc);	//ƒR[ƒ‹ƒoƒbƒNƒNƒ‰ƒX‚ğ“o˜^‚·‚é
-		void setMultiThread(int Flag);	//ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh“®ì‚ğs‚¤‚©‚Ç‚¤‚©‚Ìİ’è
-		int isMultiThread();	//ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh“®ì‚ğs‚¤‚©‚Ç‚¤‚©‚Ìæ“¾
-
-		int getCurrantPhase();	//Œ»İ‚ÌƒtƒF[ƒY‚ğæ“¾‚·‚é
-		int getTotalPhase();	//ƒtƒF[ƒY‚ÌÅ‘å”‚ğæ“¾
-
-		void Load();			//ƒ[ƒh’†‚ÉÀs‚³‚ê‚éƒ[ƒhŠÖ”(ŒÄ‚Î‚È‚¢‚±‚ÆII)
+		int getVerNo() const;			//ãƒãƒ¼ã‚¸ãƒ§ãƒ³Noã‚’å–å¾—ã™ã‚‹
 	private:
-		//ƒ[ƒh‚Ìî•ñŠi”[ƒNƒ‰ƒX
+		//ãƒ­ãƒ¼ãƒ‰æ™‚ã®æƒ…å ±æ ¼ç´ã‚¯ãƒ©ã‚¹
 		struct LoadInfomation {
 			LoadInfomation() {
 				Loading = FALSE;
 			}
-			LoadInfomation(int beforePhase, int nextPhase, DWORD loadTime, int arg) {
-				Loading = TRUE;
+			LoadInfomation(Phase_ *nextPhase, DWORD loadTime, int arg, void *arg2, unsigned int initializeCount, unsigned int finalizeCount) {
 				LoadUpdateCount = 0;
 				LoadDrawCount = 0;
-				BeforePhase = beforePhase;
 				NextPhase = nextPhase;
 				if (loadTime <= 0)	loadTime = 1;
 				LoadTime = loadTime;
 				Arg = arg;
-				Fin_FinUpdate = FALSE;
-				Fin_FinDraw = FALSE;
-				Prepar_Init = FALSE;
-				Fin_InitUpdate = FALSE;
-				Fin_InitDraw = FALSE;
-				Fin_InitDraw_ = FALSE;
+				Arg2 = arg2;
+				Fin_Update = nullptr;
+				Fin_Draw = nullptr;
+				Init_Update = nullptr;
+				Init_Draw = nullptr;
+				Init_Draw_ = nullptr;
+				InitializeCount = initializeCount;
+				FinalizeCount = finalizeCount;
+				Loading = TRUE;
 			}
-			int Loading;				//ƒ[ƒh’†‚©‚Ç‚¤‚©
-			int Fin_FinUpdate;			//ŒvZƒXƒŒƒbƒh‚ÌI—¹ˆ—‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-			int Fin_FinDraw;			//•`‰æƒXƒŒƒbƒh‚ÌI—¹ˆ—‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-			int Prepar_Init;			//‰Šú‰»ˆ—‚Ìˆê•”‚ªŠ®—¹‚µAŠeƒXƒŒƒbƒh‚Å‰Šú‰»ˆ—‚ªs‚¦‚éó‘Ô‚É‚È‚Á‚½ƒtƒ‰ƒO
-			int Fin_InitUpdate;			//ŒvZƒXƒŒƒbƒh‚Ì‰Šú‰»ˆ—‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-			int Fin_InitDraw;			//•`‰æƒXƒŒƒbƒh‚Ì‰Šú‰»ˆ—‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-			int Fin_InitDraw_;			//•`‰æƒXƒŒƒbƒh‚Ì‰Šú‰»ˆ—‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO2(‚±‚¢‚Â‚Í‚â‚â‚±‚µ‚¢)
-			int LoadUpdateCount;		//ƒ[ƒh‚ÌŒvZƒJƒEƒ“ƒg
-			int LoadDrawCount;			//ƒ[ƒh‚Ì•`‰æƒJƒEƒ“ƒg
-			int BeforePhase;			//ˆÚ“®Œ³ƒtƒF[ƒY
-			int NextPhase;				//ˆÚ“®æƒtƒF[ƒY
-			DWORD LoadTime;				//ƒ[ƒh‚É‚©‚¯‚éÅ¬ŠÔ
-			int Arg;					//ˆø”
-			DWORD StartTime;			//ŠJn
+			int Loading;					//ãƒ­ãƒ¼ãƒ‰ä¸­ã‹ã©ã†ã‹
+			Phase_ *Fin_Update;				//è¨ˆç®—ã‚¹ãƒ¬ãƒƒãƒ‰ã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ãƒã‚¤ãƒ³ã‚¿(nullã§å‡¦ç†ç„¡ã—)
+			Phase_ *Fin_Draw;				//æç”»ã‚¹ãƒ¬ãƒƒãƒ‰ã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ãƒã‚¤ãƒ³ã‚¿(nullã§å‡¦ç†ç„¡ã—)
+			Phase_ *Init_Update;			//è¨ˆç®—ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ãƒã‚¤ãƒ³ã‚¿(nullã§å‡¦ç†ç„¡ã—)
+			Phase_ *Init_Draw;				//æç”»ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ãƒã‚¤ãƒ³ã‚¿(nullã§å‡¦ç†ç„¡ã—)
+			Phase_ *Init_Draw_;				//æç”»ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ãƒã‚¤ãƒ³ã‚¿(nullã§å‡¦ç†ç„¡ã—)2(ã“ã„ã¤ã¯ã‚„ã‚„ã“ã—ã„)(ç„¡é™ãƒ­ãƒ¼ãƒ‰ã¨ã‹ã§ãã‚‹)
+			int LoadUpdateCount;			//ãƒ­ãƒ¼ãƒ‰æ™‚ã®è¨ˆç®—ã‚«ã‚¦ãƒ³ãƒˆ
+			int LoadDrawCount;				//ãƒ­ãƒ¼ãƒ‰æ™‚ã®æç”»ã‚«ã‚¦ãƒ³ãƒˆ
+			Phase_ *NextPhase;				//ç§»å‹•å…ˆãƒ•ã‚§ãƒ¼ã‚ºã®ãƒã‚¤ãƒ³ã‚¿
+			DWORD LoadTime;					//ãƒ­ãƒ¼ãƒ‰ã«ã‹ã‘ã‚‹æœ€å°æ™‚é–“
+			int Arg;						//å¼•æ•°
+			void *Arg2;						//å¼•æ•°2
+			DWORD StartTime;				//é–‹å§‹æ™‚åˆ»
+			unsigned int InitializeCount;	//åˆæœŸåŒ–ã‚’è¡Œã†å›æ•°(0ã§è¡Œã‚ãªã„)(pushã‚’ã™ã‚‹å›æ•°)
+			unsigned int FinalizeCount;		//çµ‚äº†å‡¦ç†ã‚’è¡Œã†å›æ•°(0ã§è¡Œã‚ãªã„)(popã‚’ã™ã‚‹å›æ•°)
 		};
-		//İ’è
-		int Flag_MultiThread;	//ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh“®ì‚È‚çTRUE
+		//è¨­å®š
+		int Flag_MultiThread;	//ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰å‹•ä½œãªã‚‰TRUE
 
-		//ƒtƒF[ƒYŠÖ˜A
-		int CurrantFaze;		//Œ»İ‚ÌƒtƒF[ƒY
-
-		//ƒtƒF[ƒY•ÏXƒŠƒNƒGƒXƒgŠÖ˜A
-		int Request_Faze;			//•ÏXæ‚ÌƒtƒF[ƒY(-1‚Å–³Œø)
-		DWORD Request_LoadTime;		//•ÏXæ‚ÌƒtƒF[ƒY(-1‚Å–³Œø)
-		int Request_arg;			//ˆø”
+		//ãƒ•ã‚§ãƒ¼ã‚ºé–¢é€£
+		std::stack<Phase_*, std::vector<Phase_*>> CurrantPhase;	//ãƒ•ã‚§ãƒ¼ã‚ºé…åˆ—
 
 
-		//ó‘Ô§ŒäŠÖ˜A
-		int UpdatePauseRequest = FALSE;		//ŒvZ‚ÌƒXƒLƒbƒv‚ÌƒŠƒNƒGƒXƒg
-		int UpdatePause = FALSE;			//ŒvZ‚ÌƒXƒLƒbƒv
+		//ãƒ•ã‚§ãƒ¼ã‚ºå¤‰æ›´ãƒªã‚¯ã‚¨ã‚¹ãƒˆé–¢é€£
+		Phase_* Request_Faze;			//å¤‰æ›´å…ˆã®ãƒ•ã‚§ãƒ¼ã‚º(-1ã§ç„¡åŠ¹)
+		DWORD Request_LoadTime;			//å¤‰æ›´å…ˆã®ãƒ•ã‚§ãƒ¼ã‚º(-1ã§ç„¡åŠ¹)
+		int Request_arg;				//å¼•æ•°
+		void *Request_arg2;				//å¼•æ•°2
+		int Request_InitializeCount;	//åˆæœŸåŒ–ã‚’è¡Œã†å›æ•°
+		int Request_FinalizeCount;		//çµ‚äº†å‡¦ç†ã‚’è¡Œã†å›æ•°
 
-		void Request_UpdatePause();	//ŒvZ‚Ì’â~‚ğ—v‹‚µA’â~‚·‚é‚Ü‚Å‘Ò‹@‚·‚é
-		void ChangefazeDraw();		//ƒtƒF[ƒY‚ğ•ÏX‚·‚é(Draw)
 
-		int PhaseMaxNum;		//ƒtƒF[ƒY‚ÌÅ‘å”
-		Phase_ **Phase;			//ƒtƒF[ƒY”z—ñ‚Ìƒ|ƒCƒ“ƒ^(Œã‚É”z—ñ‚Ìæ“ªƒAƒhƒŒƒX‚É‚È‚é)
-		Phase_ DefaultPhase_;	//ƒfƒtƒHƒ‹ƒg‚ÌƒtƒF[ƒY
-		PhaseController_Proc *PhaseController_Proc;	//ƒR[ƒ‹ƒoƒbƒNŠÖ”ƒNƒ‰ƒX
+		//çŠ¶æ…‹åˆ¶å¾¡é–¢é€£
+		int UpdatePauseRequest = FALSE;		//è¨ˆç®—ã®ã‚¹ã‚­ãƒƒãƒ—ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
+		int UpdatePause = FALSE;			//è¨ˆç®—ã®ã‚¹ã‚­ãƒƒãƒ—
 
-		HANDLE LoadThreadhandle;	//ƒ[ƒhƒXƒŒƒbƒh‚Ìƒnƒ“ƒhƒ‹
+		void Request_UpdatePause();			//è¨ˆç®—ã®åœæ­¢ã‚’è¦æ±‚ã—ã€åœæ­¢ã™ã‚‹ã¾ã§å¾…æ©Ÿã™ã‚‹
+		void ChangefazeDraw();				//ãƒ•ã‚§ãƒ¼ã‚ºã‚’å¤‰æ›´ã™ã‚‹(Draw)
 
-		LoadInfomation loadInfomation;	//ƒ[ƒhî•ñ
+		PhaseController_Proc *PhaseController_Proc;	//ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚¯ãƒ©ã‚¹
 
-		int JudgeFazeNo(int FazeNo);		//w’è‚µ‚½’l‚ªƒtƒF[ƒY”z—ñ‚Ì“Y‚¦š‚Æ‚µ‚Ä‘Ã“–‚©‚Ç‚¤‚©‚Ìæ“¾(TRUE‘Ã“–)
+		HANDLE LoadThreadhandle;			//ãƒ­ãƒ¼ãƒ‰ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ«
 
+		LoadInfomation loadInfomation;		//ãƒ­ãƒ¼ãƒ‰æƒ…å ±
 	};
 }
 
-/*ƒtƒF[ƒYˆÚs‚Ìè‡
-1.ˆÚsŒ³‚ÌUpdateADrawƒXƒŒƒbƒh‚ÌI—¹ˆ—ŠÖ”‚ªŒÄ‚Î‚ê‚éB(ƒtƒŠ[ƒY‚µ‚Ü‚·)
-2.‹¤’ÊI—¹ˆ—ŠÖ”‚ªƒ[ƒhê—pƒXƒŒƒbƒh‚ÅŒÄ‚Î‚ê‚éB(å‚Éƒƒ‚ƒŠ‚Ì‰ğ•úH)(ƒtƒŠ[ƒY‚µ‚Ü‚¹‚ñ)
-3.‹¤’Ê‰Šú‰»ˆ—ŠÖ”‚ªƒ[ƒhê—pƒXƒŒƒbƒh‚ÅŒÄ‚Î‚ê‚éB(å‚Éƒƒ‚ƒŠ‚Ìæ“¾H)(ƒtƒŠ[ƒY‚µ‚Ü‚¹‚ñ)
-4.ˆÚsæ‚ÌUpdateADrawƒXƒŒƒbƒh‚Ì‰Šú‰»ˆ—ŠÖ”‚ªŒÄ‚Î‚ê‚éB(ƒtƒŠ[ƒY‚µ‚Ü‚·)
-5.Å’á‚Ìƒ[ƒh‚É‚©‚¯‚éŠÔ‚ªŒo‰ß‚·‚é‚Ü‚Å‚Ü‚Å‘Ò‹@(ƒtƒŠ[ƒY‚µ‚Ü‚¹‚ñ)
+/*ãƒ•ã‚§ãƒ¼ã‚ºç§»è¡Œã®æ‰‹é †
+1.ç§»è¡Œå…ƒã®Updateã€Drawã‚¹ãƒ¬ãƒƒãƒ‰ã®çµ‚äº†å‡¦ç†é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ã€‚(ãƒ•ãƒªãƒ¼ã‚ºã—ã¾ã™)
+2.å…±é€šçµ‚äº†å‡¦ç†é–¢æ•°ãŒãƒ­ãƒ¼ãƒ‰å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã§å‘¼ã°ã‚Œã‚‹ã€‚(ä¸»ã«ãƒ¡ãƒ¢ãƒªã®è§£æ”¾ï¼Ÿ)(ãƒ•ãƒªãƒ¼ã‚ºã—ã¾ã›ã‚“)
+3.å…±é€šåˆæœŸåŒ–å‡¦ç†é–¢æ•°ãŒãƒ­ãƒ¼ãƒ‰å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã§å‘¼ã°ã‚Œã‚‹ã€‚(ä¸»ã«ãƒ¡ãƒ¢ãƒªã®å–å¾—ï¼Ÿ)(ãƒ•ãƒªãƒ¼ã‚ºã—ã¾ã›ã‚“)
+4.ç§»è¡Œå…ˆã®Updateã€Drawã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–å‡¦ç†é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ã€‚(ãƒ•ãƒªãƒ¼ã‚ºã—ã¾ã™)
+5.æœ€ä½ã®ãƒ­ãƒ¼ãƒ‰ã«ã‹ã‘ã‚‹æ™‚é–“ãŒçµŒéã™ã‚‹ã¾ã§ã¾ã§å¾…æ©Ÿ(ãƒ•ãƒªãƒ¼ã‚ºã—ã¾ã›ã‚“)
 */

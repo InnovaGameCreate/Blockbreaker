@@ -36,26 +36,26 @@ void Block_Field::Draw() {
 		//普通の変化モーション(モーション前は普通に描画されます)
 
 		//変化前のブロックを描画する
-		Block::Draw(phase_GameMain.getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), 1);
+		Block::Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), 1);
 		//変化量に応じて半透明で描画する
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(blockChangeMotion.getChangeVal() * 255));
-		Block::Draw(phase_GameMain.getTex_Block()->getTexture(blockChangeMotion.getBlockType_To()), 1);
+		Block::Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(blockChangeMotion.getBlockType_To()), 1);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		break;
 	case BlockChangeMotionType_EXPLOSION:
 		//爆発(シェーダに頑張ってもらう)
 		if (blockChangeMotion.getCount() < 0) {//モーション前は普通に描画
-			Block::Draw(phase_GameMain.getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), 1);
+			Block::Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), 1);
 		}
 		else {
 			ShaderBackGround_DeleteBlock(getDrawPlaceX(), getDrawPlaceY(), blockChangeMotion.getChangeVal()
-				, phase_GameMain.getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), phase_GameMain.getTex_Block()->getFireEffect(), phase_GameMain.getTex_Block()->getFireEffect2());
+				, ((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), ((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getFireEffect(), ((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getFireEffect2());
 		}
 		break;
 	case BlockChangeMotionType_SMALL:
 		//小さくなる(モーション前は普通に描画されます)
-		Block::Draw(phase_GameMain.getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), (float)(1 - blockChangeMotion.getChangeVal()));
+		Block::Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(blockChangeMotion.getBlockType_From()), (float)(1 - blockChangeMotion.getChangeVal()));
 
 		break;
 	}

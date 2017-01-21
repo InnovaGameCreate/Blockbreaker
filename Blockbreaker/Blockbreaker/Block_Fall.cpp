@@ -16,7 +16,7 @@ void Block_Fall::Draw() {
 	if (!isEnable())	return;	//無効の場合は何もしない
 
 	//落下ブロックの範囲を描画する
-	if (phase_GameMain.isDebugMode()) {//デバッグが有効なとき
+	if (((Phase_GameMain*)phaseController.getInstance())->isDebugMode()) {//デバッグが有効なとき
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				double X, Y;
@@ -33,7 +33,7 @@ void Block_Fall::Draw() {
 	for (int i = 0; i < ARRAY_LENGTH(BlockID_FallPoint); i++) {
 		//有効なブロックのみ描画処理を入れる
 		if (!BlockID_FallPoint[i].isEnable())	continue;
-		BlockID_FallPoint[i].Draw(phase_GameMain.getTex_Block()->getBack(), 1);
+		BlockID_FallPoint[i].Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getBack(), 1);
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 		BlockID_FallPoint[i].Draw();
@@ -50,7 +50,7 @@ void Block_Fall::Draw() {
 				//中心の場合かつ回転可能ブロックの場合
 				//float Scale = 0.9 + getGraph_Sin(fallBlockInfo.Counter*5, 0.05, 0);
 				float Scale = 1;
-				BlockID[x][y].Draw(phase_GameMain.getTex_Block()->getCenterEffect(), Scale);
+				BlockID[x][y].Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getCenterEffect(), Scale);
 			}
 		}
 	}
@@ -174,7 +174,7 @@ void Block_Fall::Update_DrawData(double paddingX, double paddingY) {
 			if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {
 
 				//最上段のブロックのY座標を取得する
-				int ansY = phase_GameMain.getField()->getUpperX(PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
+				int ansY = ((Phase_GameMain*)phaseController.getInstance())->getField()->getUpperX(PlaceX + (x - FALLBLOCK_CENTER)) - 1 - yCount;
 				//実際の描画座標に書き換える
 				double X, Y;
 				Block_Field::Convert_Ingame_FromBlock(PlaceX + (x - FALLBLOCK_CENTER), ansY, 0.5, 0.5, &X, &Y);
@@ -287,7 +287,7 @@ int Block_Fall::getValMoveX(int MoveVal, int CollisionFieldBlock) {
 				if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {
 					//ブロック有りの場合、フィールドブロックとの重なりを確認する
 					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
-						if (phase_GameMain.getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+						if (((Phase_GameMain*)phaseController.getInstance())->getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 							//他のブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -295,7 +295,7 @@ int Block_Fall::getValMoveX(int MoveVal, int CollisionFieldBlock) {
 						}
 					}
 					else {
-						if (phase_GameMain.getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+						if (((Phase_GameMain*)phaseController.getInstance())->getField()->getBlockType(pX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
 							//画面外ブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -337,7 +337,7 @@ int Block_Fall::MoveY(int MoveVal, int CollisionFieldBlock) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (BlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
 					if (CollisionFieldBlock) {//フィールドブロックとのあたり判定を有効にする場合
-						if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+						if (((Phase_GameMain*)phaseController.getInstance())->getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 							//他のブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -345,7 +345,7 @@ int Block_Fall::MoveY(int MoveVal, int CollisionFieldBlock) {
 						}
 					}
 					else {
-						if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
+						if (((Phase_GameMain*)phaseController.getInstance())->getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), pY + (y - FALLBLOCK_CENTER), TRUE) == BLOCK_TYPE_NUM) {
 							//画面外ブロックと重なっていた場合はループを抜ける
 							x = FALLBLOCK_SIZE;
 							y = FALLBLOCK_SIZE;
@@ -406,7 +406,7 @@ int Block_Fall::Rotate(int RotaVal) {
 		for (int x = 0; x < FALLBLOCK_SIZE; x++) {
 			for (int y = 0; y < FALLBLOCK_SIZE; y++) {
 				if (RotaBlockID[x][y].getBlockType() != BLOCK_TYPE_NO) {//ブロック有りの場合、ブロックの重なりを確認する
-					if (phase_GameMain.getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
+					if (((Phase_GameMain*)phaseController.getInstance())->getField()->getBlockType(PlaceX + (x - FALLBLOCK_CENTER), PlaceY + (y - FALLBLOCK_CENTER), TRUE) != BLOCK_TYPE_NO) {
 						//他のブロックと重なっていた場合はループを抜ける
 						x = FALLBLOCK_SIZE;
 						y = FALLBLOCK_SIZE;
@@ -453,7 +453,7 @@ void Block_Fall::setToField() {
 				fY = PlaceY + (y - FALLBLOCK_CENTER);
 				fB = BlockID[x][y].getBlockType();
 
-				phase_GameMain.getField()->add_FieldBlock(fX, fY, fB);
+				((Phase_GameMain*)phaseController.getInstance())->getField()->add_FieldBlock(fX, fY, fB);
 
 			}
 		}
@@ -509,7 +509,7 @@ int Block_Fall::Create() {
 
 	//描画情報を書き換える
 	double paddingX, paddingY;
-	phase_GameMain.getField()->getField_Padding(&paddingX, &paddingY);
+	((Phase_GameMain*)phaseController.getInstance())->getField()->getField_Padding(&paddingX, &paddingY);
 	Update_DrawData(paddingX, paddingY);
 
 
@@ -536,7 +536,7 @@ void Block_Fall::Create_WaitBlock() {
 
 
 	//新規に作成する落下ブロックの配置パターンを決定する(0～)
-	const int Percent = (int)(phase_GameMain.getRandomTable()->getRand(0, 100));
+	const int Percent = (int)(((Phase_GameMain*)phaseController.getInstance())->getRandomTable()->getRand(0, 100));
 	int Pattern = 0;	//ブロックのパターン
 	if (Percent < 24) {
 		Pattern = 0;
@@ -555,8 +555,8 @@ void Block_Fall::Create_WaitBlock() {
 	}
 
 	//ランダムに設置するブロックを2個決定する
-	BLOCK_TYPE type1 = phase_GameMain.GetRandomBlockType_FALL();
-	BLOCK_TYPE type2 = phase_GameMain.GetRandomBlockType_FALL();
+	BLOCK_TYPE type1 = ((Phase_GameMain*)phaseController.getInstance())->GetRandomBlockType_FALL();
+	BLOCK_TYPE type2 = ((Phase_GameMain*)phaseController.getInstance())->GetRandomBlockType_FALL();
 
 	//最後尾待機ブロックの配置を初期化する
 	for (int i = 0; i < FALLBLOCK_SIZE; i++) {

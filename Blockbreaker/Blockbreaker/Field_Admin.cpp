@@ -114,10 +114,10 @@ void Field_Admin::Update_DrawData() {
 			//ゲームオーバーが近い場合は左右に揺らす
 			int X = 0;
 			if (getBlockType(x, GAMEOVER_BORDER + 2) != BLOCK_TYPE_NO) {
-				X += (int)phase_GameMain.getRandomTable()->getRand(-4, 4);
+				X += (int)((Phase_GameMain*)phaseController.getInstance())->getRandomTable()->getRand(-4, 4);
 			}
 			if(getBlockType(x, GAMEOVER_BORDER) != BLOCK_TYPE_NO){
-				X += (int)SK::Math::getGraph_Sin((phase_GameMain.getCountTime()+y+x) * 30, 2, 0);
+				X += (int)SK::Math::getGraph_Sin((((Phase_GameMain*)phaseController.getInstance())->getCountTime()+y+x) * 30, 2, 0);
 			}
 			field[x][y].Update_DrawData(Field_PaddingX + X, Field_PaddingY, x, y);
 		}
@@ -159,7 +159,7 @@ void Field_Admin::setBlock_Rect(int x, int y, int w, int h) {
 
 			do {
 				Count = 0;
-				bt = phase_GameMain.GetRandomBlockType_UNDER();//ランダムでブロックを決定し仮想設置する
+				bt = ((Phase_GameMain*)phaseController.getInstance())->GetRandomBlockType_UNDER();//ランダムでブロックを決定し仮想設置する
 				add_FieldBlock(bl_X, bl_Y, bt, TRUE, TRUE, NULL, TRUE);
 				int BlockFlag[BLOCK_WIDTHNUM][BLOCK_HEIGHTNUM];
 				//隣接ブロック識別IDを記録する表の作成(-1未探索、BLOCK_WIDTHNUM*BLOCK_HEIGHTNUM探索から除外)
@@ -272,8 +272,8 @@ void Field_Admin::AllMove(int X, int Y) {
 	}
 
 	//落下中ブロックも移動する(画面外には行きません)
-	phase_GameMain.getfallBlockInfo()->MoveX(X, FALSE);
-	phase_GameMain.getfallBlockInfo()->MoveY(Y, FALSE);
+	((Phase_GameMain*)phaseController.getInstance())->getfallBlockInfo()->MoveX(X, FALSE);
+	((Phase_GameMain*)phaseController.getInstance())->getfallBlockInfo()->MoveY(Y, FALSE);
 
 }
 
@@ -358,7 +358,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							//左端から右端までの一列を一括消去
 							for (int i = 0; i < BLOCK_WIDTHNUM; i++) {
 								if (Delete_Direct(i, y, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -366,7 +366,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(i, y, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -379,7 +379,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							//左端から右端までの一列を一括消去
 							for (int i = 0; i < BLOCK_HEIGHTNUM; i++) {
 								if (Delete_Direct(x, i, BlockChangeMotionType_EXPLOSION, abs(y - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -387,7 +387,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x, i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -400,7 +400,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							//斜めに一括消去
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
 								if (Delete_Direct(x + i, y - i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -408,10 +408,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y + i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -419,7 +419,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -432,7 +432,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							//斜めに一括消去
 							for (int i = 0; i < max(BLOCK_HEIGHTNUM, BLOCK_WIDTHNUM); i++) {
 								if (Delete_Direct(x + i, y + i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -440,10 +440,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x + i, y + i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 								if (Delete_Direct(x - i, y - i, BlockChangeMotionType_EXPLOSION, abs(x - i) * 2)) {
-									phase_GameMain.getScore()->addScore(0, SCORE_DEL_ARROW);
+									((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_ARROW);
 									DelCount++;
 									DeleteBlockFlag = TRUE;
 									//フライテキストの生成
@@ -451,7 +451,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 									TCHAR text[30];
 									Block_Field::Convert_Ingame_FromBlock(x - i, y - i, 0.5, 0.5, &X, &Y);
 									_stprintf_s(text, _T("%d"), SCORE_DEL_ARROW);
-									phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+									((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 								}
 							}
 						}
@@ -482,7 +482,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 				if (Counter[DeleteFlag[x][y]] >= Len) {
 					//削除
 					if (Delete_Direct(x, y, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
+						((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, (int)(SCORE_DEL_NOMAL * Score_Scale(Counter[DeleteFlag[x][y]]) + CainsScoreBonas * 100));
 						DelCount++;
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
@@ -494,12 +494,12 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 							Y -= 7;
 						else
 							Y += 7;
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(red, blue, green), text);
+						((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(red, blue, green), text);
 					}
 
 					//ついでに隣接する樹木ブロックも削除
 					if (Delete_Color(x, y - 1, BLOCK_TYPE_TREE, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
+						((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_OPTION);
 						DelCount++;//上
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
@@ -507,10 +507,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y - 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_OPTION);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x, y + 1, BLOCK_TYPE_TREE, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
+						((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_OPTION);
 						DelCount++;//下
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
@@ -518,10 +518,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x, y + 1, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x - 1, y, BLOCK_TYPE_TREE, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
+						((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_OPTION);
 						DelCount++;//左
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
@@ -529,10 +529,10 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x - 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 					if (Delete_Color(x + 1, y, BLOCK_TYPE_TREE, DelMotion)) {
-						phase_GameMain.getScore()->addScore(0, SCORE_DEL_OPTION);
+						((Phase_GameMain*)phaseController.getInstance())->getScore()->addScore(0, SCORE_DEL_OPTION);
 						DelCount++;//右
 						DeleteBlockFlag = TRUE;
 						//フライテキストの生成
@@ -540,7 +540,7 @@ int Field_Admin::Delete_Join(const int Len, int Flag_Event) {
 						TCHAR text[30];
 						Block_Field::Convert_Ingame_FromBlock(x + 1, y, 0.5, 0.5, &X, &Y);
 						_stprintf_s(text, _T("%d"), SCORE_DEL_NOMAL);
-						phase_GameMain.getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
+						((Phase_GameMain*)phaseController.getInstance())->getFlyText()->addFlyText(X, Y, 30, FONTTYPE_The2K12_15, GetColor(150, 150, 150), text);
 					}
 				}
 			}
@@ -609,7 +609,7 @@ void Field_Admin::Func_Black() {
 		for (int y = 0; y < BLOCK_HEIGHTNUM; y++) {
 			if (field[x][y].getBlockType() == BLOCK_TYPE_BLACK) {//黒ブロックの時
 				//確率でブロックのIDを書き換える
-				int Val = (int)phase_GameMain.getRandomTable()->getRand(0, 100);
+				int Val = (int)((Phase_GameMain*)phaseController.getInstance())->getRandomTable()->getRand(0, 100);
 				if (Val < 20)		field[x][y].addBlcok(BLOCK_TYPE_RED, TRUE);		//赤色ブロック
 				else if (Val < 40)	field[x][y].addBlcok(BLOCK_TYPE_BLUE, TRUE);	//青色ブロック
 				else if (Val < 60)	field[x][y].addBlcok(BLOCK_TYPE_YELLOW, TRUE);	//黄色ブロック
@@ -630,7 +630,7 @@ void Field_Admin::Func_Rainbow() {
 				if (getBlockType(x, y + 1) == BLOCK_TYPE_NO) {//下にブロックが無い
 					
 					//確率でブロックのIDを書き換える
-					int Val = (int)phase_GameMain.getRandomTable()->getRand(0, 100);
+					int Val = (int)((Phase_GameMain*)phaseController.getInstance())->getRandomTable()->getRand(0, 100);
 					if (Val < 20)		field[x][y].addBlcok(BLOCK_TYPE_RED, TRUE);		//赤色ブロック
 					else if (Val < 40)	field[x][y].addBlcok(BLOCK_TYPE_BLUE, TRUE);	//青色ブロック
 					else if (Val < 60)	field[x][y].addBlcok(BLOCK_TYPE_YELLOW, TRUE);	//黄色ブロック

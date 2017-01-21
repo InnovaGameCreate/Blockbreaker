@@ -52,11 +52,11 @@ void Phase_TopMenu::Key() {
 void Phase_TopMenu::SelectItem_menu::Event_Select(int No) {
 	switch (No) {
 	case 0:	//ゲームスタート
-		phaseController.ChangefazeRequest(FAZE_GameMain, 3000, 0);//フェーズ変更
+		phaseController.ChangePhaseRequest(new Phase_GameMain(), 3000);//フェーズ変更
 		StopTopMusic();
 		break;
 	case 1://説明画面に移行
-		phaseController.ChangefazeRequest(FAZE_Exp, 0, 0);
+		phaseController.ChangePhaseRequest(new Phase_exp(), 0);
 		break;
 	case 2://ゲーム終了
 		ExitGameRequest();
