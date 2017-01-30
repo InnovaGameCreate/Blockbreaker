@@ -93,6 +93,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SK::Log_SetFrame(0, &FrameCount0);
 	SK::Log_SetFrame(1, &FrameCount1);
 
+	/**/
 	phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);	//フェーズ変更
 
 

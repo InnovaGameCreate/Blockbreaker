@@ -36,7 +36,7 @@ void Phase_GameMain::Init_Draw() {
 
 	Field.Init_Update();	//フィールド情報の初期化
 
-	ranking.File();
+	Rank.Load();
 
 	Restart();	//リスタート
 
@@ -847,6 +847,7 @@ void Phase_GameMain::SelectItem_GameClear::Event_Select(int No) {
 	switch (No) {
 	case 0:
 		//ここにランキング画面への処理記述
+		phaseController.ChangePhaseRequest(new Ranking_Draw(), 0);	//フェーズ変更
 		break;
 	case 1://やり直すボタン
 		((Phase_GameMain*)phaseController.getInstance())->Restart();
@@ -924,5 +925,5 @@ void Phase_GameMain::KeyImputEnd::operator()(TCHAR *str) {
 	P->setEnable(TRUE);	//クリアメニューを有効にする
 	//入力した文字列を元にランキングに登録する
 	Phase_GameMain* tmp = (Phase_GameMain*)phaseController.getInstance();
-	tmp->getRanking()->Add(tmp->getCountGameTime(), str);
+	Rank.Add(tmp->getCountGameTime(), str);
 }

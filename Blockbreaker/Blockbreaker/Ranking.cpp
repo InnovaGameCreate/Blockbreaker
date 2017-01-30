@@ -2,26 +2,38 @@
 #include "Ranking.h"
 #include "errno.h"
 
+static int LoadRanking;//ロード画面
+static int LoadRanking2;//ロード画面
 
-Ranking::Ranking()
+Ranking Rank;
+TCHAR str[100];
+TCHAR str2[100];
+
+
+
+/*コンストラクタ*/
+Ranking::rank_data::rank_data()
 {
-	clear_time = 0;
-
+	enable = 0;
 }
+
 void Ranking::Add(int time, TCHAR name[])
 {
-	
-	clear_time = time;
-	_stprintf(clear_name, _T("%s"), name);
+	for (int k = 0; k<ARRAY_LENGTH(rank); k++) {
+		if (rank[k].enable != TRUE) {
+			rank[k].enable = 0;
+		}
+	}
 
 	/*配列にデータを保存*/
 	for (int i = 0; i < ARRAY_LENGTH(rank); i++) {
 		if (rank[i].enable == FALSE) {/*スコアが無効のとき入れる*/
-			rank[i].time = clear_time;
-			_stprintf(rank[i].name, _T("%s"), clear_name);
+			rank[i].time = time;
+			_stprintf(rank[i].name, _T("%s"), name);
 			rank[i].enable = TRUE;
 			break;
 		}
+		printf("%s\n", rank[i].name);
 	}
 	
 	//ソート
@@ -39,9 +51,8 @@ void Ranking::Add(int time, TCHAR name[])
 
 	FILE *fp;
 	/* ファイルをテキスト書き込みモードでオープン */
-	if ((fp = fopen("ranking.a", "w")) == NULL) {
+	if ((fp = fopen("ranking", "wb")) == NULL) {
 		printf("ファイルオープンエラー\n");
-		printf("%d", errno);
 
 		return;
 	}
@@ -50,16 +61,14 @@ void Ranking::Add(int time, TCHAR name[])
 
 	fclose(fp);
 
-
-	
-
 }
 
-void Ranking::File() {
+
+void Ranking::Load() {
 	FILE *fp;
 
 	/* ファイルをテキスト読み込みモードでオープン */
-	if ((fp = fopen("ranking.a", "rb")) == NULL) {
+	if ((fp = fopen("ranking", "rb")) == NULL) {
 		printf("ファイルオープンエラー\n");
 		return;
 		
@@ -68,4 +77,48 @@ void Ranking::File() {
 	fread(rank, sizeof(rank_data), 40, fp);
 
 	fclose(fp);
+}
+
+void Ranking_Draw::Init_Draw() {
+	LoadRanking = LoadGraph(_T("Data/image/TopMenu.png"));
+	if (LoadRanking == -1) {
+		printLog_E(_T("画像ロード失敗(Data/LoadMenu/TopMenu.png)"));
+	}
+	LoadRanking2 = LoadGraph(_T("Data/image/title.png"));
+	if (LoadRanking2 == -1) {
+		printLog_E(_T("画像ロード失敗(Data/LoadMenu/title.png)"));
+	}
+}
+
+void Ranking_Draw::Draw() {
+	
+	ClearDrawScreen();
+
+	DrawGraph(0, 0, LoadRanking, 0);
+	DrawGraph(350, 0, LoadRanking2, 0);
+
+	int number;
+	TCHAR rank[20];
+
+	for (int i = 0; i < 10; i++) {
+
+		
+		_stprintf_s(rank, _T("%d"), i+1);
+
+		number = Rank.isenable(i);
+		
+		if (number == TRUE) {
+			Font_DrawStringWithShadow(400, 200 + (100 * i), str, GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+			Font_DrawStringWithShadow(800, 200 + (100 * i), str2, GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+			Font_DrawStringWithShadow(300, 200 + (100 * i), rank, GetColor(240, 240, 240), GetColor(20, 20, 20), FONTTYPE_GenJyuuGothicLHeavy_Edge60);
+		}
+	}
+
+}
+
+
+int Ranking::isenable(int num) {
+	_stprintf(str, _T("%s"), rank[num].name);
+	_stprintf_s(str2, _T("%.2f"), rank[num].time / 100.0);
+	return rank[num].enable;
 }
