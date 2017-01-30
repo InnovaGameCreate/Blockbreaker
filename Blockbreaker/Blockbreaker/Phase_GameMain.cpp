@@ -808,15 +808,15 @@ BLOCK_TYPE Phase_GameMain::GetRandomBlockType_UNDER() {
 void Phase_GameMain::SelectItem_Pause::Event_Select(int No) {
 	switch (No) {
 	case 0://再開ボタン
-		phase_GameMain.Request_Pause(PauseMode_NO);
+		((Phase_GameMain*)phaseController.getInstance())->Request_Pause(PauseMode_NO);
 		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	case 1://やり直すボタン
-		phase_GameMain.Restart();
+		((Phase_GameMain*)phaseController.getInstance())->Restart();
 		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	case 2://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
+		phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);
 		setEnable(FALSE);		//ポーズ状態メニューの無効化
 		break;
 	default:
@@ -829,11 +829,11 @@ void Phase_GameMain::SelectItem_Pause::Event_Select(int No) {
 void Phase_GameMain::SelectItem_GameOver::Event_Select(int No) {
 	switch (No) {
 	case 0://やり直すボタン
-		phase_GameMain.Restart();
+		((Phase_GameMain*)phaseController.getInstance())->Restart();
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	case 1://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
+		phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	default:
@@ -849,11 +849,11 @@ void Phase_GameMain::SelectItem_GameClear::Event_Select(int No) {
 		//ここにランキング画面への処理記述
 		break;
 	case 1://やり直すボタン
-		phase_GameMain.Restart();
+		((Phase_GameMain*)phaseController.getInstance())->Restart();
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	case 2://終了ボタン
-		phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
+		phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);
 		setEnable(FALSE);		//メニューの無効化
 		break;
 	default:
@@ -923,5 +923,6 @@ void Phase_GameMain::Clear() {
 void Phase_GameMain::KeyImputEnd::operator()(TCHAR *str) {
 	P->setEnable(TRUE);	//クリアメニューを有効にする
 	//入力した文字列を元にランキングに登録する
-	phase_GameMain.getRanking()->Add(phase_GameMain.getCountGameTime(), str);
+	Phase_GameMain* tmp = (Phase_GameMain*)phaseController.getInstance();
+	tmp->getRanking()->Add(tmp->getCountGameTime(), str);
 }

@@ -21,7 +21,7 @@ void Block::Init_Draw() {
 //描画処理
 void Block::Draw() {
 	if (color == BLOCK_TYPE_NO)	return;
-	Draw(phase_GameMain.getTex_Block()->getTexture(color), 1);
+	Draw(((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(color), 1);
 }
 
 //描画処理(詳細設定)
@@ -57,7 +57,7 @@ BLOCK_TYPE Block::getBlockType() {
 
 //現在のブロックのテクスチャハンドルを取得する
 int Block::getBlockTexture() {
-	return phase_GameMain.getTex_Block()->getTexture(color);
+	return ((Phase_GameMain*)phaseController.getInstance())->getTex_Block()->getTexture(color);
 }
 
 //ブロックを設置する

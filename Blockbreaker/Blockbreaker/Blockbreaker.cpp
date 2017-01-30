@@ -3,10 +3,7 @@
 
 
 //グローバル変数の定義
-Phase_GameMain phase_GameMain;
-Phase_TopMenu phase_TopMenu;
-Phase_exp phase_exp;
-PCon::PhaseController phaseController = PCon::PhaseController(FAZE_NUM);
+PCon::PhaseController phaseController = PCon::PhaseController();
 //FPSコントローラー
 SK::FpsController fpsController_Draw = SK::FpsController(FPS_DRAW);
 SK::FpsController fpsController_Update = SK::FpsController(FPS_UPDATE);
@@ -92,14 +89,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	setClearScreen(FALSE);	//画面消去の設定
 
 	//フェーズの定義と諸々設定
-	phaseController.addFaze(FAZE_TopMenu, &phase_TopMenu);
-	phaseController.addFaze(FAZE_GameMain, &phase_GameMain);
-	phaseController.addFaze(FAZE_Exp, &phase_exp);
 	phaseController.setCallBack(&phase_Proc);
 	SK::Log_SetFrame(0, &FrameCount0);
 	SK::Log_SetFrame(1, &FrameCount1);
 
-	phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
+	phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);	//フェーズ変更
 
 
 	/*起動設定画面の初期化と表示*/

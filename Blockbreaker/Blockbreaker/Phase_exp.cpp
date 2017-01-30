@@ -15,7 +15,7 @@ void Phase_exp::Update()
 {
 
 	//ゲームパッドかキーボードのキーが押されたときトップ画面へ戻る
-	if (getKeyBind(KEYBIND_PAUSE) == 1) phaseController.ChangefazeRequest(FAZE_TopMenu, 0, 0);
+	if (getKeyBind(KEYBIND_PAUSE) == 1) phaseController.ChangePhaseRequest(new Phase_TopMenu(), 0);
 }
 
 //初期化(描画処理)
